@@ -1,0 +1,29 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title>Radio Didou</title>
+        <link rel="icon" type="image/png" href="favicon.png" />
+        <link rel="stylesheet" type="text/css" href="radio-didou.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="description" content="Radio Didou" />
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="title-container">
+                <p id="title">Radio Didou</p>
+            </div>
+
+            <div class="player-container">
+                <audio id="player" src="http://37.59.99.228:8889/radio-didou" autoplay="autoplay"></audio>
+                <div class="player-playpause-container">
+                    <button onclick="document.getElementById('player').play()" id="close-image-playpause" ><img src="icon_play.png"></button>
+                    <button onclick="document.getElementById('player').pause()" id="close-image-playpause"><img src="icon_pause.png"></button>
+                </div>
+                <!-- <div class="player-volume-container">
+                    <button onclick="document.getElementById('player').volume += 0.1" id="close-image-volume"><img src="icon_plus.png"></button>
+                    <button onclick="document.getElementById('player').volume -= 0.1" id="close-image-volume"><img src="icon_minus.png"></button>
+                </div> -->
+            </div>
+        </div>
+    </body>
+</html>
