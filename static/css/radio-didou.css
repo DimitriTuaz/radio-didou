@@ -1,0 +1,106 @@
+body {
+    background-image:url("../images/background.png");
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title-container {
+    justify-content: center;
+    align-items: center;
+}
+
+.player-container {
+    justify-content: center;
+    align-items: center;
+}
+
+.player-playpause-container {
+    justify-content: center;
+    align-items: center;
+}
+
+.player-volume-container {
+    justify-content: center;
+    align-items: center;
+}
+
+.player-jingles-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#title {
+    font-family: helvetica;
+    font-weight: bold;
+    color: white;
+    font-size:600%;
+}
+
+#sub-title {
+    font-family: helvetica;
+    font-weight: bold;
+    color: white;
+    font-size:200%;
+}
+
+#close-image-playpause img {
+    display: block;
+    height: 130px;
+    width: 130px;
+}
+
+#close-image-playpause:hover img {
+    display: block;
+    height: 140px;
+    width: 140px;
+}
+
+#close-image-playpause:active img {
+    display: block;
+    height: 120px;
+    width: 120px;
+}
+
+#close-image-volume img {
+    display: block;
+    height: 80px;
+    width: 80px;
+}
+
+#close-image-volume:hover img {
+    display: block;
+    height: 90px;
+    width: 90px;
+}
+
+#close-image-volume:active img {
+    display: block;
+    height: 70px;
+    width: 70px;
+}
+
+#jingles-name {
+    font-family: helvetica;
+    color: white;
+    font-size:180%;
+}
+
+#jingles-name:hover {
+    font-family: helvetica;
+    color: white;
+    font-size:190%;
+}
+
+#jingles-name:active {
+    font-family: helvetica;
+    color: white;
+    font-size:170%;
+}
+
+

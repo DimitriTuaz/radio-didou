@@ -10,16 +10,22 @@ def parse_arguments():
     else:
         return sys.argv[1]
 
+class JinglesHandler(tornado.web.RequestHandler):
+    def post(self):
+        self.render("static/jingles.html")
+    get = post
 
 def make_app(root_path):
     return tornado.web.Application([
         (r"/()$", tornado.web.StaticFileHandler, {"path":root_path + "static/index.html"}),
+        (r"/jingles", JinglesHandler),
         (r"/(.*)", tornado.web.StaticFileHandler, {"path":root_path + "static/"})
     ])
 
 def signal_sigint(signal, frame):
         tornado.ioloop.IOLoop.current().stop()
         print("Server stopped")
+        exit()
 
 if __name__ == "__main__":
         root_path = parse_arguments()

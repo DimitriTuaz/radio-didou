@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+    <head>
+        <title>Radio Didou  - Jingles</title>
+        <link rel="icon" href="favicon.ico" />
+        <link rel="stylesheet" type="text/css" href="css/jingles.css">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="description" content="Oublie les cotons tiges et viens te laver les oreilles sur Radio Didou" />
+    </head>
+    <body>
+        <div class="main-container">
+            <div class="title-container">
+                <p id="sub-title">Jingles</p>
+             </div>
+
+            <div class="player-container">
+                <audio id="player-bienvenue" src="sounds/bienvenue.ogg"></audio>
+                <audio id="player-enjaille" src="sounds/enjaille.ogg"></audio>
+                <div class="player-jingles-container">
+                    <button onclick="document.getElementById('player-bienvenue').play()" id="button-jingles" ><p id="jingles-name">Bienvenue !</p></button>
+                    <button onclick="document.getElementById('player-enjaille').play()" id="button-jingles" ><p id="jingles-name">Ça s'enjaille !</p></button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

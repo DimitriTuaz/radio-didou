@@ -1,0 +1,13 @@
+@import url("radio-didou.css");
+
+button {
+    display: inline-block;
+    height: 70px;
+    width: 150px;
+    background-color: Transparent;
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 0;
+    margin: 0;
+    vertical-align: top;
+}
