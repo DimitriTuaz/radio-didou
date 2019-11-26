@@ -2,12 +2,39 @@
 
 button {
     display: inline-block;
-    height: 70px;
+    height: 150px;
     width: 150px;
     background-color: Transparent;
     border: 2px solid white;
     border-radius: 20px;
-    padding: 0;
-    margin: 0;
+    padding: 10px;
+    margin: 5px;
     vertical-align: top;
+    outline:0;
+}
+
+button:hover {
+    display: inline-block;
+    height: 150px;
+    width: 150px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 5px;
+    vertical-align: top;
+    outline:0;
+}
+
+button:active {
+    display: inline-block;
+    height: 150px;
+    width: 150px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border: 2px solid white;
+    border-radius: 20px;
+    padding: 10px;
+    margin: 5px;
+    vertical-align: top;
+    outline:0;
 }

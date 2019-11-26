@@ -91,16 +91,5 @@ body {
     font-size:180%;
 }
 
-#jingles-name:hover {
-    font-family: helvetica;
-    color: white;
-    font-size:190%;
-}
-
-#jingles-name:active {
-    font-family: helvetica;
-    color: white;
-    font-size:170%;
-}
 
 
