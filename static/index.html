@@ -6,6 +6,53 @@
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta name="description" content="Oublie les cotons tiges et viens te laver les oreilles sur Radio Didou" />
+
+        <script>
+                // Store XMLHttpRequest and the JSON file location in variables
+                var xhr = new XMLHttpRequest();
+                var url = "http://37.59.99.228:8889/status-json.xsl";
+
+                // Called whenever the readyState attribute changes
+                xhr.onreadystatechange = function() {
+
+                  // Check if fetch request is done
+                  if (xhr.readyState == 4 && xhr.status == 200) {
+
+                    // Parse the JSON string
+                    var jsonData = JSON.parse(xhr.responseText);
+
+                    showCurrentListeners(jsonData);
+                  }
+                };
+
+                // Do the HTTP call using the url variable we specified above
+                function sendRequest() {
+                    xhr.open("GET", url, true);
+                    xhr.send();
+                }
+
+                // Function that formats the string with HTML tags, then outputs the result
+                function showCurrentListeners(data) {
+                    var listeners = 0;
+                    if (data.icestats.source[0]) {
+                        listeners = data.icestats.source[0].listeners;
+                    }
+                    else {
+                        listeners = data.icestats.source.listeners;
+                    }
+                    var listenersString = "";
+                    if (listeners > 1) {
+                        listenersString = listeners + " auditeurs"
+                    }
+                    else {
+                        listenersString = listeners + " auditeur"
+                    }
+                    var output = "<p id=\"currentListeners\">" + listenersString + " actuellement</p>";
+                    document.getElementById("currentListeners").innerHTML = output;
+                }
+
+                window.setInterval(sendRequest, 1000);
+            </script>
     </head>
     <body>
         <div class="main-container">
@@ -15,15 +62,17 @@
 
             <div class="player-container">
                 <audio id="player" src="http://37.59.99.228:8889/radio-didou" autoplay="autoplay"></audio>
+                <audio id="player-h24" src="http://37.59.99.228:8889/radio-didou-h24" autoplay="autoplay"></audio>
                 <div class="player-playpause-container">
-                    <button onclick="document.getElementById('player').play()" id="close-image-playpause" ><img src="images/icon_play.png"></button>
-                    <button onclick="document.getElementById('player').pause()" id="close-image-playpause"><img src="images/icon_pause.png"></button>
+                    <button onclick="document.getElementById('player').play();document.getElementById('player-h24').play()" id="close-image-playpause" ><img src="images/icon_play.png"></button>
+                    <button onclick="document.getElementById('player').pause();document.getElementById('player-h24').pause()" id="close-image-playpause"><img src="images/icon_pause.png"></button>
                 </div>
                 <!-- <div class="player-volume-container">
                     <button onclick="document.getElementById('player').volume += 0.1" id="close-image-volume"><img src="icon_plus.png"></button>
                     <button onclick="document.getElementById('player').volume -= 0.1" id="close-image-volume"><img src="icon_minus.png"></button>
                 </div> -->
             </div>
+            <div id="currentListeners" class="current-listeners-container"></div>
         </div>
     </body>
 </html>

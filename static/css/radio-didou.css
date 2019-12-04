@@ -35,6 +35,13 @@ body {
     align-items: center;
 }
 
+.current-listeners-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+}
+
 #title {
     font-family: helvetica;
     font-weight: bold;
@@ -47,6 +54,12 @@ body {
     font-weight: bold;
     color: white;
     font-size:200%;
+}
+
+#currentListeners {
+    font-family: helvetica;
+    color: white;
+    font-size:100%;
 }
 
 #close-image-playpause img {
