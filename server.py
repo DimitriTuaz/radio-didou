@@ -8,13 +8,20 @@ import json
 spotify_api_url = 'https://api.spotify.com/v1/me/player'
 spotify_token_url = 'https://accounts.spotify.com/api/token'
 
-refresh_token = 'AQCacjGQCv1E1d3aB1-ZNsBS_RvmGzT7D_9rKsZiDc9ia2b3WzchsEQsfDJcplc8pSQbpRUPEYuQk4L6dSgSQvWT7fUUvBKnkMgyhqvwxaVfJdJYllCTSBdeGGGSNwr8bMI'
-authorization = 'M2EyNTdmMzEwNDIyNDkzYzg5NmZhYTcwYzBmODNiZjg6ZjI1OTNmY2YzY2UzNDQ2Nzg0MTM4NDEwMWIxN2FjNjQ='
+authorization = ''
+refresh_token = ''
+access_token = ''
 
-access_token = 'BQDBZxhP-2sGsbL6UZW-JSt4qtfjJ8ODg7nPwRIK59EMFb2W1-YnKHW6cI9t7J8w-LBIHVtCyrgKAVywvBLnwKgvE7Q-6jN2kzcN7ItEUsPkdjt2FVVMiSsrF8kWgno7P50Xh4MFlXYCIgccdSNGqDPJCe9E'
-
+def init_credentials():
+    global authorization
+    global refresh_token
+    with open('credential.json') as json_file:
+        data = json.load(json_file)
+        authorization = data['authorization']
+        refresh_token = data['refresh_token']
 
 def obtain_access_token():
+    global access_token
     headers = {
         'Authorization': 'Basic ' + authorization
     }
@@ -26,20 +33,22 @@ def obtain_access_token():
     response = json.loads(r.text)
     access_token = response['access_token']
 
-def get_current_playback():
+def get_current_playback(retryOnce):
+    response = None
     headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + access_token
         }
     r = requests.get(spotify_api_url, headers=headers)
-    print(r.text)
     response = json.loads(r.text)
     
-    if response['error'] != None:
-        if response['error']['status'] == 401:
-            print("Error: token expired")
+    if 'error' in response != None and retryOnce == True:
+        obtain_access_token()
+        return get_current_playback(False)
             
+    return response
+
 
 def parse_arguments():
     if len(sys.argv) < 2:
@@ -66,12 +75,13 @@ def signal_sigint(signal, frame):
         exit()
 
 if __name__ == "__main__":
-        #root_path = parse_arguments()
-        #signal.signal(signal.SIGINT, signal_sigint)
-        #app = make_app(root_path)
-        #app.listen(8888)
-        playback = get_current_playback()
-        
-        
-        #print("Server is running on http://localhost:8888")
-        #tornado.ioloop.IOLoop.current().start()
+        init_credentials()
+        playback = get_current_playback(True)
+        print(playback['item']['name'])
+
+        root_path = parse_arguments()
+        signal.signal(signal.SIGINT, signal_sigint)
+        app = make_app(root_path)
+        app.listen(8888)
+        print("Server is running on http://localhost:8888")
+        tornado.ioloop.IOLoop.current().start()
