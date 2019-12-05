@@ -107,7 +107,8 @@ function displayCurrentTrack(jsonData) {
     document.getElementById("track-container").setAttribute("onClick", "window.open(\"" + jsonData.item.external_urls.spotify + "\", \"_blank\");");
 }
 
-window.onload = sendRequestCurrentTrack;
+sendRequestCurrentTrack();
+sendRequestIcecastStatus();
 
-window.setInterval(sendRequestCurrentTrack, 5000);
+window.setInterval(sendRequestCurrentTrack, 1000);
 window.setInterval(sendRequestIcecastStatus, 1000);
