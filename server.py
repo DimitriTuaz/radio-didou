@@ -73,10 +73,16 @@ class JinglesHandler(tornado.web.RequestHandler):
         self.render("static/jingles.html")
     get = post
 
+class CurrentPlaybackHandler(tornado.web.RequestHandler):
+    global current_playback
+    def get(self):
+        self.write(current_playback)
+
 def make_app(root_path):
     return tornado.web.Application([
         (r"/()$", tornado.web.StaticFileHandler, {"path":root_path + "static/index.html"}),
         (r"/jingles", JinglesHandler),
+        (r"/currentPlayback", CurrentPlaybackHandler),
         (r"/(.*)", tornado.web.StaticFileHandler, {"path":root_path + "static/"})
     ])
 
