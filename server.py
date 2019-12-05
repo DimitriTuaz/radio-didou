@@ -4,6 +4,9 @@ import signal
 import sys
 import requests
 import json
+import time, threading
+
+WAIT_SECONDS = 5
 
 spotify_api_url = 'https://api.spotify.com/v1/me/player'
 spotify_token_url = 'https://accounts.spotify.com/api/token'
@@ -11,6 +14,8 @@ spotify_token_url = 'https://accounts.spotify.com/api/token'
 authorization = ''
 refresh_token = ''
 access_token = ''
+
+current_playback = None
 
 def init_credentials():
     global authorization
@@ -33,7 +38,8 @@ def obtain_access_token():
     response = json.loads(r.text)
     access_token = response['access_token']
 
-def get_current_playback(retryOnce):
+def obtain_current_playback(retryOnce):
+    global current_playback
     response = None
     headers = {
         'Accept': 'application/json',
@@ -44,11 +50,16 @@ def get_current_playback(retryOnce):
     response = json.loads(r.text)
     
     if 'error' in response != None and retryOnce == True:
+        print("Try to obtain token (" + time.ctime() + ")")
         obtain_access_token()
-        return get_current_playback(False)
-            
-    return response
+        obtain_current_playback(False)
+    else:
+        current_playback = response
+        print("Fetch current playback successful (" + time.ctime() + ")")
 
+def current_playback_periodic_task():
+    obtain_current_playback(True)
+    threading.Timer(WAIT_SECONDS, current_playback_periodic_task).start()
 
 def parse_arguments():
     if len(sys.argv) < 2:
@@ -75,13 +86,12 @@ def signal_sigint(signal, frame):
         exit()
 
 if __name__ == "__main__":
-        init_credentials()
-        playback = get_current_playback(True)
-        print(playback['item']['name'])
+    init_credentials()
+    current_playback_periodic_task()
 
-        root_path = parse_arguments()
-        signal.signal(signal.SIGINT, signal_sigint)
-        app = make_app(root_path)
-        app.listen(8888)
-        print("Server is running on http://localhost:8888")
-        tornado.ioloop.IOLoop.current().start()
+    root_path = parse_arguments()
+    signal.signal(signal.SIGINT, signal_sigint)
+    app = make_app(root_path)
+    app.listen(8888)
+    print("Server is running on http://localhost:8888")
+    tornado.ioloop.IOLoop.current().start()
