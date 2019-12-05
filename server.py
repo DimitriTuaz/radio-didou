@@ -7,6 +7,7 @@ import json
 import time, threading
 
 WAIT_SECONDS = 5
+execute_periodic_task = True
 
 spotify_api_url = 'https://api.spotify.com/v1/me/player'
 spotify_token_url = 'https://accounts.spotify.com/api/token'
@@ -58,8 +59,10 @@ def obtain_current_playback(retryOnce):
         print("Fetch current playback successful (" + time.ctime() + ")")
 
 def current_playback_periodic_task():
-    obtain_current_playback(True)
-    threading.Timer(WAIT_SECONDS, current_playback_periodic_task).start()
+    global execute_periodic_task
+    if execute_periodic_task == True:
+        obtain_current_playback(True)
+        threading.Timer(WAIT_SECONDS, current_playback_periodic_task).start()
 
 def parse_arguments():
     if len(sys.argv) < 2:
@@ -88,9 +91,12 @@ def make_app(root_path):
     ])
 
 def signal_sigint(signal, frame):
-        tornado.ioloop.IOLoop.current().stop()
-        print("Server stopped")
-        exit()
+    global execute_periodic_task
+    print("Stop periodic task")
+    execute_periodic_task = False
+    tornado.ioloop.IOLoop.current().stop()
+    print("Server stopped")
+    exit()
 
 if __name__ == "__main__":
     init_credentials()
