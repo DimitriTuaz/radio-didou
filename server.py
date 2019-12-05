@@ -17,9 +17,9 @@ class JinglesHandler(tornado.web.RequestHandler):
 
 def make_app():
     return tornado.web.Application([
-        (r"/()$", tornado.web.StaticFileHandler, {"static/index.html"}),
+        (r"/()$", tornado.web.StaticFileHandler, {"path": "static/index.html"}),
         (r"/jingles", JinglesHandler),
-        (r"/(.*)", tornado.web.StaticFileHandler, {"static/"})
+        (r"/(.*)", tornado.web.StaticFileHandler, {"path": "static/"})
     ])
 
 def signal_sigint(signal, frame):
