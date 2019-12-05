@@ -76,6 +76,7 @@ class JinglesHandler(tornado.web.RequestHandler):
 class CurrentPlaybackHandler(tornado.web.RequestHandler):
     global current_playback
     def get(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
         self.write(current_playback)
 
 def make_app(root_path):
