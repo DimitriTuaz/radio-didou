@@ -62,40 +62,22 @@ body {
     font-size:100%;
 }
 
-#close-image-playpause img {
+.icon-sound img {
     display: block;
     height: 130px;
     width: 130px;
 }
 
-#close-image-playpause:hover img {
+.icon-sound:hover img {
     display: block;
     height: 140px;
     width: 140px;
 }
 
-#close-image-playpause:active img {
+.icon-sound:active img {
     display: block;
     height: 120px;
     width: 120px;
-}
-
-#close-image-volume img {
-    display: block;
-    height: 80px;
-    width: 80px;
-}
-
-#close-image-volume:hover img {
-    display: block;
-    height: 90px;
-    width: 90px;
-}
-
-#close-image-volume:active img {
-    display: block;
-    height: 70px;
-    width: 70px;
 }
 
 #jingles-name {
