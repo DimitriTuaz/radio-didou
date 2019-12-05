@@ -1,40 +1,78 @@
 {
-  "device": {
-    "id": "4cc0d294c44a0709d691140db681264c370936fb",
-    "is_active": true,
-    "is_private_session": false,
-    "is_restricted": false,
-    "name": "RadioDidou",
-    "type": "Speaker",
-    "volume_percent": 100
-  },
   "shuffle_state": false,
-  "repeat_state": "context",
-  "timestamp": 1575577346698,
-  "context": {
-    "external_urls": {
-      "spotify": "https://open.spotify.com/playlist/7dzWueAHHcRhhKDykUHE70"
-    },
-    "href": "https://api.spotify.com/v1/playlists/7dzWueAHHcRhhKDykUHE70",
-    "type": "playlist",
-    "uri": "spotify:user:dimitri.tuaz:playlist:7dzWueAHHcRhhKDykUHE70"
-  },
-  "progress_ms": 156689,
   "item": {
+    "uri": "spotify:track:6Itvyf6uat9jiwgTKrMDRd",
+    "artists": [
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/3IZrrNonYELubLPJmqOci2"
+        },
+        "id": "3IZrrNonYELubLPJmqOci2",
+        "type": "artist",
+        "name": "Nancy Sinatra",
+        "uri": "spotify:artist:3IZrrNonYELubLPJmqOci2",
+        "href": "https://api.spotify.com/v1/artists/3IZrrNonYELubLPJmqOci2"
+      },
+      {
+        "external_urls": {
+          "spotify": "https://open.spotify.com/artist/2aVHDjRHRM7dcFkGwahXLG"
+        },
+        "id": "2aVHDjRHRM7dcFkGwahXLG",
+        "type": "artist",
+        "name": "Lee Hazlewood",
+        "uri": "spotify:artist:2aVHDjRHRM7dcFkGwahXLG",
+        "href": "https://api.spotify.com/v1/artists/2aVHDjRHRM7dcFkGwahXLG"
+      }
+    ],
+    "is_local": false,
     "album": {
-      "album_type": "album",
       "artists": [
         {
           "external_urls": {
-            "spotify": "https://open.spotify.com/artist/2RyY5yFlJh6jIPfMDhHgyD"
+            "spotify": "https://open.spotify.com/artist/3IZrrNonYELubLPJmqOci2"
           },
-          "href": "https://api.spotify.com/v1/artists/2RyY5yFlJh6jIPfMDhHgyD",
-          "id": "2RyY5yFlJh6jIPfMDhHgyD",
-          "name": "Professor Longhair",
+          "id": "3IZrrNonYELubLPJmqOci2",
           "type": "artist",
-          "uri": "spotify:artist:2RyY5yFlJh6jIPfMDhHgyD"
+          "name": "Nancy Sinatra",
+          "uri": "spotify:artist:3IZrrNonYELubLPJmqOci2",
+          "href": "https://api.spotify.com/v1/artists/3IZrrNonYELubLPJmqOci2"
+        },
+        {
+          "external_urls": {
+            "spotify": "https://open.spotify.com/artist/2aVHDjRHRM7dcFkGwahXLG"
+          },
+          "id": "2aVHDjRHRM7dcFkGwahXLG",
+          "type": "artist",
+          "name": "Lee Hazlewood",
+          "uri": "spotify:artist:2aVHDjRHRM7dcFkGwahXLG",
+          "href": "https://api.spotify.com/v1/artists/2aVHDjRHRM7dcFkGwahXLG"
         }
       ],
+      "type": "album",
+      "total_tracks": 11,
+      "release_date_precision": "day",
+      "release_date": "1968-01-01",
+      "images": [
+        {
+          "url": "https://i.scdn.co/image/ab67616d0000b2732a3c0fda11b85a7b00bc2c70",
+          "width": 640,
+          "height": 640
+        },
+        {
+          "url": "https://i.scdn.co/image/ab67616d00001e022a3c0fda11b85a7b00bc2c70",
+          "width": 300,
+          "height": 300
+        },
+        {
+          "url": "https://i.scdn.co/image/ab67616d000048512a3c0fda11b85a7b00bc2c70",
+          "width": 64,
+          "height": 64
+        }
+      ],
+      "uri": "spotify:album:7I7z6Lfwyc1nghsFImEhYq",
+      "external_urls": {
+        "spotify": "https://open.spotify.com/album/7I7z6Lfwyc1nghsFImEhYq"
+      },
       "available_markets": [
         "AD",
         "AE",
@@ -116,47 +154,20 @@
         "VN",
         "ZA"
       ],
-      "external_urls": {
-        "spotify": "https://open.spotify.com/album/273k6WQ2opAnxTSH6A9k1X"
-      },
-      "href": "https://api.spotify.com/v1/albums/273k6WQ2opAnxTSH6A9k1X",
-      "id": "273k6WQ2opAnxTSH6A9k1X",
-      "images": [
-        {
-          "height": 640,
-          "url": "https://i.scdn.co/image/ab67616d0000b273c55afba6828b355fb2fa0553",
-          "width": 640
-        },
-        {
-          "height": 300,
-          "url": "https://i.scdn.co/image/ab67616d00001e02c55afba6828b355fb2fa0553",
-          "width": 300
-        },
-        {
-          "height": 64,
-          "url": "https://i.scdn.co/image/ab67616d00004851c55afba6828b355fb2fa0553",
-          "width": 64
-        }
-      ],
-      "name": "Live In Germany",
-      "release_date": "2007-05-21",
-      "release_date_precision": "day",
-      "total_tracks": 11,
-      "type": "album",
-      "uri": "spotify:album:273k6WQ2opAnxTSH6A9k1X"
+      "name": "Nancy & Lee",
+      "id": "7I7z6Lfwyc1nghsFImEhYq",
+      "href": "https://api.spotify.com/v1/albums/7I7z6Lfwyc1nghsFImEhYq",
+      "album_type": "album"
     },
-    "artists": [
-      {
-        "external_urls": {
-          "spotify": "https://open.spotify.com/artist/2RyY5yFlJh6jIPfMDhHgyD"
-        },
-        "href": "https://api.spotify.com/v1/artists/2RyY5yFlJh6jIPfMDhHgyD",
-        "id": "2RyY5yFlJh6jIPfMDhHgyD",
-        "name": "Professor Longhair",
-        "type": "artist",
-        "uri": "spotify:artist:2RyY5yFlJh6jIPfMDhHgyD"
-      }
-    ],
+    "explicit": false,
+    "id": "6Itvyf6uat9jiwgTKrMDRd",
+    "name": "Lady Bird",
+    "popularity": 45,
+    "duration_ms": 182773,
+    "preview_url": "https://p.scdn.co/mp3-preview/a5a648b01e2ab1f09a1caa434163c121c1904b29?cid=3a257f310422493c896faa70c0f83bf8",
+    "external_urls": {
+      "spotify": "https://open.spotify.com/track/6Itvyf6uat9jiwgTKrMDRd"
+    },
     "available_markets": [
       "AD",
       "AE",
@@ -238,31 +249,39 @@
       "VN",
       "ZA"
     ],
-    "disc_number": 1,
-    "duration_ms": 212320,
-    "explicit": false,
-    "external_ids": {
-      "isrc": "FR6V89101069"
-    },
-    "external_urls": {
-      "spotify": "https://open.spotify.com/track/4rD1fASq8xwni5VjLB09Ub"
-    },
-    "href": "https://api.spotify.com/v1/tracks/4rD1fASq8xwni5VjLB09Ub",
-    "id": "4rD1fASq8xwni5VjLB09Ub",
-    "is_local": false,
-    "name": "Go To The Mardi Gras",
-    "popularity": 24,
-    "preview_url": "https://p.scdn.co/mp3-preview/3775b9803d5ad37bf728ad887e17fa0bbe64902d?cid=774b29d4f13844c495f206cafdad9c86",
-    "track_number": 9,
     "type": "track",
-    "uri": "spotify:track:4rD1fASq8xwni5VjLB09Ub"
+    "external_ids": {
+      "isrc": "USASE0510174"
+    },
+    "disc_number": 1,
+    "track_number": 10,
+    "href": "https://api.spotify.com/v1/tracks/6Itvyf6uat9jiwgTKrMDRd"
   },
-  "currently_playing_type": "track",
+  "device": {
+    "id": "4cc0d294c44a0709d691140db681264c370936fb",
+    "volume_percent": 100,
+    "is_active": true,
+    "is_private_session": false,
+    "name": "RadioDidou",
+    "is_restricted": false,
+    "type": "Speaker"
+  },
   "actions": {
     "disallows": {
       "toggling_repeat_track": true
     }
   },
-  "is_playing": true
+  "repeat_state": "context",
+  "is_playing": true,
+  "progress_ms": 18459,
+  "context": {
+    "external_urls": {
+      "spotify": "https://open.spotify.com/playlist/7dzWueAHHcRhhKDykUHE70"
+    },
+    "uri": "spotify:user:dimitri.tuaz:playlist:7dzWueAHHcRhhKDykUHE70",
+    "type": "playlist",
+    "href": "https://api.spotify.com/v1/playlists/7dzWueAHHcRhhKDykUHE70"
+  },
+  "currently_playing_type": "track",
+  "timestamp": 1575586041169
 }
-

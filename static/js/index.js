@@ -1,24 +1,47 @@
 // Store XMLHttpRequest and the JSON file location in variables
-var xhr = new XMLHttpRequest();
+var xhrIcecast = new XMLHttpRequest();
+var xhrTrack = new XMLHttpRequest();
 var icecastStatusUrl = "http://37.59.99.228:8889/status-json.xsl";
+/* Test URL */
+//var currentTrackJsonUrl = "http://localhost:8888/json/example_current_playback.json";
+var currentTrackJsonUrl = "http://37.59.99.228:8888/currentPlayback";
 
 // Called whenever the readyState attribute changes
-xhr.onreadystatechange = function() {
+xhrIcecast.onreadystatechange = function() {
 
   // Check if fetch request is done
-  if (xhr.readyState == 4 && xhr.status == 200) {
+  if (xhrIcecast.readyState == 4 && xhrIcecast.status == 200) {
 
     // Parse the JSON string
-    var jsonData = JSON.parse(xhr.responseText);
+    var jsonData = JSON.parse(xhrIcecast.responseText);
 
     showCurrentListeners(jsonData);
   }
 };
 
-// Do the HTTP call to get IceCast status
-function sendRequestToIcecast() {
-    xhr.open("GET", icecastStatusUrl, true);
-    xhr.send();
+// Called whenever the readyState attribute changes
+xhrTrack.onreadystatechange = function() {
+
+  // Check if fetch request is done
+  if (xhrTrack.readyState == 4 && xhrTrack.status == 200) {
+
+    // Parse the JSON string
+    var jsonData = JSON.parse(xhrTrack.responseText);
+
+    displayCurrentTrack(jsonData);
+  }
+};
+
+// Do the HTTP GET to get IceCast status
+function sendRequestIcecastStatus() {
+    xhrIcecast.open("GET", icecastStatusUrl, true);
+    xhrIcecast.send();
+}
+
+// Do the HTTP GET to get current track
+function sendRequestCurrentTrack() {
+    xhrTrack.open("GET", currentTrackJsonUrl, true);
+    xhrTrack.send();
 }
 
 // Function that formats the string with HTML tags, then outputs the result
@@ -55,4 +78,36 @@ function toggleMute(){
     document.getElementById("icon-mute").setAttribute("src", isMuted ? "images/icon_mute.png" : "images/icon_sound.png");
 }
 
-window.setInterval(sendRequestToIcecast, 1000);
+function readSingleFile(e) {
+  var file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    var contents = e.target.result;
+    displayContents(contents);
+  };
+  reader.readAsText(file);
+}
+
+function displayCurrentTrack(jsonData) {
+    var album = jsonData.item.album.name + " (" + jsonData.item.album.release_date.substring(0, 4) + ")";
+    var artists = "";
+    jsonData.item.album.artists.forEach((item, index) => {
+        artists += item.name;
+        if (index < jsonData.item.album.artists.length - 1) {
+            artists += ", ";
+        }
+    })
+    document.getElementById("track-cover").setAttribute("src", jsonData.item.album.images[1].url);
+    document.getElementById("track-title").innerHTML = "<p>" + jsonData.item.name + "</p>";
+    document.getElementById("track-artists").innerHTML = "<p>" + artists + "</p>";
+    document.getElementById("track-album").innerHTML = "<p>" + album + "</p>";
+    document.getElementById("track-container").setAttribute("onClick", "window.open(\"" + jsonData.item.external_urls.spotify + "\", \"_blank\");");
+}
+
+window.onload = sendRequestCurrentTrack;
+
+window.setInterval(sendRequestCurrentTrack, 5000);
+window.setInterval(sendRequestIcecastStatus, 1000);

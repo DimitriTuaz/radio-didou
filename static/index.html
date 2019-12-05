@@ -16,11 +16,19 @@
             </div>
 
             <div class="player-container">
-                <audio id="player" src="http://37.59.99.228:8889/radio-didou" autoplay="autoplay"></audio>
-                <audio id="player-h24" src="http://37.59.99.228:8889/radio-didou-h24" autoplay="autoplay"></audio>
-                <div class="player-playpause-container">
-                    <button onclick="play()" class="icon-sound"><img src="images/icon_play.png"></button>
-                    <button onclick="toggleMute()" class="icon-sound" ><img id="icon-mute" src="images/icon_sound.png"></button>
+                <audio id="player" src="http://37.59.99.228:8889/radio-didou"></audio>
+                <audio id="player-h24" src="http://37.59.99.228:8889/radio-didou-h24"></audio>
+                <button onclick="play()" class="icon-sound"><img src="images/icon_play.png"></button>
+                <button onclick="toggleMute()" class="icon-sound" ><img id="icon-mute" src="images/icon_sound.png"></button>
+            </div>
+            <div class="track-container" id="track-container">
+                <div class="track-cover-container">
+                    <img id="track-cover">
+                </div>
+                <div class="track-infos-container">
+                    <div id="track-title"></div>
+                    <div id="track-artists"></div>
+                    <div id="track-album"></div>
                 </div>
             </div>
             <div id="currentListeners" class="current-listeners-container"></div>
