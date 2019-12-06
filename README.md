@@ -10,6 +10,7 @@ Install Python3 : sudo apt-get install python3
 Install PIP3 : sudo apt-get install python3-pip
 
 Install Tornado : pip3 install tornado
+
 Install timeloop: pip3 install timeloop
 
 Enregistrement DNS :
