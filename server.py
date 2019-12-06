@@ -18,10 +18,10 @@ access_token = ''
 
 current_playback = None
 
-def init_credentials():
+def init_credentials(root_path):
     global authorization
     global refresh_token
-    with open('credential.json') as json_file:
+    with open(root_path + 'credential.json') as json_file:
         data = json.load(json_file)
         authorization = data['authorization']
         refresh_token = data['refresh_token']
@@ -49,7 +49,7 @@ def obtain_current_playback(retryOnce):
         }
     r = requests.get(spotify_api_url, headers=headers)
     response = json.loads(r.text)
-    
+
     if 'error' in response != None and retryOnce == True:
         print("Try to obtain token (" + time.ctime() + ")")
         obtain_access_token()
@@ -99,10 +99,9 @@ def signal_sigint(signal, frame):
     exit()
 
 if __name__ == "__main__":
-    init_credentials()
-    current_playback_periodic_task()
-
     root_path = parse_arguments()
+    init_credentials(root_path)
+    current_playback_periodic_task()
     signal.signal(signal.SIGINT, signal_sigint)
     app = make_app(root_path)
     app.listen(8888)
