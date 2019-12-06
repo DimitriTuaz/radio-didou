@@ -94,9 +94,9 @@ function readSingleFile(e) {
 function displayCurrentTrack(jsonData) {
     var album = jsonData.item.album.name + " (" + jsonData.item.album.release_date.substring(0, 4) + ")";
     var artists = "";
-    jsonData.item.album.artists.forEach((item, index) => {
+    jsonData.item.artists.forEach((item, index) => {
         artists += item.name;
-        if (index < jsonData.item.album.artists.length - 1) {
+        if (index < jsonData.item.artists.length - 1) {
             artists += ", ";
         }
     })
