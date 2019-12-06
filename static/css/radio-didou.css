@@ -1,6 +1,6 @@
 body {
     background-image:url("../images/background.png");
-    font-family: helvetica;
+    font-family: OpenSansRegular, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 .main-container {
