@@ -4,10 +4,13 @@ import signal
 import sys
 import requests
 import json
-import time, threading
+import time
+from timeloop import Timeloop
+from datetime import timedelta
 
 WAIT_SECONDS = 5
-execute_periodic_task = True
+
+tl = Timeloop()
 
 spotify_api_url = 'https://api.spotify.com/v1/me/player'
 spotify_token_url = 'https://accounts.spotify.com/api/token'
@@ -18,10 +21,14 @@ access_token = ''
 
 current_playback = None
 
-def init_credentials(root_path):
+path = ''
+
+def init():
+    global path
     global authorization
     global refresh_token
-    with open(root_path + 'credential.json') as json_file:
+    path = parse_arguments()
+    with open(path + 'credential.json') as json_file:
         data = json.load(json_file)
         authorization = data['authorization']
         refresh_token = data['refresh_token']
@@ -50,19 +57,18 @@ def obtain_current_playback(retryOnce):
     r = requests.get(spotify_api_url, headers=headers)
     response = json.loads(r.text)
 
-    if 'error' in response != None and retryOnce == True:
+    if 'error' in response != None:
         print("Try to obtain token (" + time.ctime() + ")")
         obtain_access_token()
-        obtain_current_playback(False)
+        if retryOnce == True:
+            obtain_current_playback(False)
     else:
         current_playback = response
         print("Fetch current playback successful (" + time.ctime() + ")")
 
+@tl.job(interval=timedelta(seconds=WAIT_SECONDS))
 def current_playback_periodic_task():
-    global execute_periodic_task
-    if execute_periodic_task == True:
-        obtain_current_playback(True)
-        threading.Timer(WAIT_SECONDS, current_playback_periodic_task).start()
+    obtain_current_playback(True)
 
 def parse_arguments():
     if len(sys.argv) < 2:
@@ -82,28 +88,26 @@ class CurrentPlaybackHandler(tornado.web.RequestHandler):
         self.set_header("Access-Control-Allow-Origin", "*")
         self.write(current_playback)
 
-def make_app(root_path):
+def make_app():
     return tornado.web.Application([
-        (r"/()$", tornado.web.StaticFileHandler, {"path":root_path + "static/index.html"}),
+        (r"/()$", tornado.web.StaticFileHandler, {"path":path + "static/index.html"}),
         (r"/jingles", JinglesHandler),
         (r"/currentPlayback", CurrentPlaybackHandler),
-        (r"/(.*)", tornado.web.StaticFileHandler, {"path":root_path + "static/"})
+        (r"/(.*)", tornado.web.StaticFileHandler, {"path":path + "static/"})
     ])
 
 def signal_sigint(signal, frame):
-    global execute_periodic_task
-    print("Stop periodic task")
-    execute_periodic_task = False
     tornado.ioloop.IOLoop.current().stop()
     print("Server stopped")
     exit()
 
 if __name__ == "__main__":
-    root_path = parse_arguments()
-    init_credentials(root_path)
-    current_playback_periodic_task()
+    ## INIT ##
     signal.signal(signal.SIGINT, signal_sigint)
-    app = make_app(root_path)
+    init()
+    tl.start()
+    ## START TORNADO ##
+    app = make_app()
     app.listen(8888)
     print("Server is running on http://localhost:8888")
     tornado.ioloop.IOLoop.current().start()
