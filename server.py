@@ -55,7 +55,8 @@ def obtain_current_playback(retryOnce):
         'Authorization': 'Bearer ' + access_token
         }
     r = requests.get(spotify_api_url, headers=headers)
-    response = json.loads(r.text)
+    if r.text != None:
+        response = json.loads(r.text)
 
     if 'error' in response != None:
         print("Try to obtain token (" + time.ctime() + ")")
@@ -68,7 +69,10 @@ def obtain_current_playback(retryOnce):
 
 @tl.job(interval=timedelta(seconds=WAIT_SECONDS))
 def current_playback_periodic_task():
-    obtain_current_playback(True)
+    try:
+        obtain_current_playback(True)
+    except Exception as e:
+        print(e)
 
 def parse_arguments():
     if len(sys.argv) < 2:
@@ -86,7 +90,10 @@ class CurrentPlaybackHandler(tornado.web.RequestHandler):
     global current_playback
     def get(self):
         self.set_header("Access-Control-Allow-Origin", "*")
-        self.write(current_playback)
+        if current_playback != None:
+            self.write(current_playback)
+        else:
+            self.send_error(status_code=404)
 
 def make_app():
     return tornado.web.Application([
