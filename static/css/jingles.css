@@ -11,6 +11,7 @@ button {
     margin: 5px;
     vertical-align: top;
     outline:0;
+    cursor: pointer;
 }
 
 button:hover {
@@ -24,6 +25,7 @@ button:hover {
     margin: 5px;
     vertical-align: top;
     outline:0;
+    cursor: pointer;
 }
 
 button:active {
@@ -37,6 +39,7 @@ button:active {
     margin: 5px;
     vertical-align: top;
     outline:0;
+    cursor: pointer;
 }
 
 
