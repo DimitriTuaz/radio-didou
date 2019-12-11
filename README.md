@@ -31,8 +31,13 @@ Installer darkice : sudo apt-get install darkice
 Installer spotifyd
 Ajouter une carte son virtuelle : sudo modprobe snd-aloop
 Reboot persistent : Ajouter la ligne 'snd-aloop' à /etc/modules
+Copier /config/.asoundrc dans la home du user
 Ajouter son user au group audio : sudo adduser "your_username" audio
 
 
+Liquidsoap
+Install via OPAM and add fdaak and alsa as opam package : https://www.liquidsoap.info/doc-dev/install.html#debianubuntu
+
+sudo ln -s /home/liquidsoap/.opam/system/bin/liquidsoap /usr/bin/liquidsoap
 
 
