@@ -1,15 +1,14 @@
-import { MainApplication } from './application';
-
-export { MainApplication };
+import { RadiodApplication } from './application';
 
 export async function main() {
 
-  const app = new MainApplication({
+  const app = new RadiodApplication({
     rest: {
       host: "127.0.0.1",
       port: "8888"
     }
   });
+
   await app.boot();
   await app.start();
 

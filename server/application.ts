@@ -1,38 +1,46 @@
 import { BootMixin } from '@loopback/boot';
 import { ApplicationConfig } from '@loopback/core';
 import {
-  RestExplorerBindings,
-  RestExplorerComponent,
+  RestExplorerBindings, RestExplorerComponent,
 } from '@loopback/rest-explorer';
 import { RestApplication } from '@loopback/rest';
 import path from 'path';
 import { MainSequence } from './sequence';
 
-export class MainApplication extends BootMixin(RestApplication) {
+import { BindingScope } from '@loopback/context';
+import { NowService } from './services/now.service'
+
+export class RadiodApplication extends BootMixin(RestApplication) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
 
-    // Set up the custom sequence
+    this.projectRoot = __dirname;
     this.sequence(MainSequence);
 
-    // Set up default home page
     this.static('/', path.join(__dirname, '../static'));
 
-    // Customize @loopback/rest-explorer configuration here
     this.bind(RestExplorerBindings.CONFIG).to({
-      path: '/openapi',
+      path: '/explorer'
     });
-    this.component(RestExplorerComponent);
 
-    this.projectRoot = __dirname;
-    // Customize @loopback/boot Booter Conventions here
+    this.component(RestExplorerComponent);
     this.bootOptions = {
       controllers: {
-        // Customize ControllerBooter Conventions here
         dirs: ['controllers'],
         extensions: ['.controller.js'],
         nested: true,
       },
     };
+
+    this.initNowService();
+  }
+
+  private async initNowService() {
+    this.bind('radiod.now-service')
+      .toClass(NowService)
+      .inScope(BindingScope.SINGLETON);
+
+    var service: NowService = await this.get('radiod.now-service');
+    service.start();
   }
 }
