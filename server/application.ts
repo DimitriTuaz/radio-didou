@@ -18,6 +18,7 @@ export class RadiodApplication extends BootMixin(RestApplication) {
     this.sequence(MainSequence);
 
     this.static('/', path.join(__dirname, '../static'));
+    this.static('/jingles', path.join(__dirname, '../static/jingles.html'));
 
     this.bind(RestExplorerBindings.CONFIG).to({
       path: '/explorer'
@@ -36,6 +37,7 @@ export class RadiodApplication extends BootMixin(RestApplication) {
   }
 
   private async initNowService() {
+    this.bind('radiod.now-configuration').toDynamicValue
     this.bind('radiod.now-service')
       .toClass(NowService)
       .inScope(BindingScope.SINGLETON);
