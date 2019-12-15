@@ -105,6 +105,8 @@ function displayCurrentTrack(jsonData) {
     document.getElementById("track-artists").innerHTML = "<p>" + artists + "</p>";
     document.getElementById("track-album").innerHTML = "<p>" + album + "</p>";
     document.getElementById("track-container").setAttribute("onClick", "window.open(\"" + jsonData.item.external_urls.spotify + "\", \"_blank\");");
+    document.getElementById("player").setAttribute("title", jsonData.item.name);
+    document.getElementById("player-h24").setAttribute("title", jsonData.item.name);
 }
 
 sendRequestCurrentTrack();

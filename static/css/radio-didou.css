@@ -18,6 +18,18 @@ body {
     height: 170px;
 }
 
+.maintenance-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#maintenance-img {
+    height: 150px;
+    width: 150px;
+}
+
 .player-container {
     display: flex;
     justify-content: center;
@@ -100,16 +112,20 @@ body {
     width: 83%;
 }
 
-#title {
+.title {
     font-weight: bold;
     color: white;
     font-size:600%;
 }
 
-#sub-title {
+.sub-title {
     font-weight: bold;
     color: white;
     font-size:200%;
+}
+
+.text {
+    color: white;
 }
 
 .current-listeners-container {
