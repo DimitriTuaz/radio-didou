@@ -22,13 +22,15 @@ CNAME wwww -> @
 
 Rediriger le port 80 vers le port de l'application (8888) : https://o7planning.org/fr/11363/redirection-du-port-80-443-sur-ubuntu-server-en-utilisant-iptables
 
-Start : sudo systemctl start radio-didou.service
+Enable : sudo systemctl enable radio-didou
 
 
 Spotifyd
 
-Installer darkice : sudo apt-get install darkice
+Installer darkice : sudo apt-get install darkice (not used anymore)
 Installer spotifyd
+Permettre à un service user de runner même sans session user active :
+sudo loginctl enable-linger dimitri
 Ajouter une carte son virtuelle : sudo modprobe snd-aloop
 Reboot persistent : Ajouter la ligne 'snd-aloop' à /etc/modules
 Copier /config/.asoundrc dans la home du user
@@ -39,5 +41,6 @@ Liquidsoap
 Install via OPAM and add fdaak and alsa as opam package : https://www.liquidsoap.info/doc-dev/install.html#debianubuntu
 
 sudo ln -s /home/liquidsoap/.opam/system/bin/liquidsoap /usr/bin/liquidsoap
+sudo systemctl enable liquidsoap
 
 
