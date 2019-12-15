@@ -66,7 +66,6 @@ function showCurrentListeners(data) {
 
 function play(){
     document.getElementById('player').play();
-    document.getElementById('player-h24').play()
 }
 
 var isMuted = false;
@@ -74,21 +73,7 @@ var isMuted = false;
 function toggleMute(){
     isMuted = !isMuted;
     document.getElementById("player").muted = isMuted;
-    document.getElementById("player-h24").muted = isMuted;
     document.getElementById("icon-mute").setAttribute("src", isMuted ? "images/icon_mute.png" : "images/icon_sound.png");
-}
-
-function readSingleFile(e) {
-  var file = e.target.files[0];
-  if (!file) {
-    return;
-  }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var contents = e.target.result;
-    displayContents(contents);
-  };
-  reader.readAsText(file);
 }
 
 function displayCurrentTrack(jsonData) {
@@ -106,7 +91,6 @@ function displayCurrentTrack(jsonData) {
     document.getElementById("track-album").innerHTML = "<p>" + album + "</p>";
     document.getElementById("track-container").setAttribute("onClick", "window.open(\"" + jsonData.item.external_urls.spotify + "\", \"_blank\");");
     document.getElementById("player").setAttribute("title", jsonData.item.name);
-    document.getElementById("player-h24").setAttribute("title", jsonData.item.name);
 }
 
 sendRequestCurrentTrack();
