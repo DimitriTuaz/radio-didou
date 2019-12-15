@@ -1,6 +1,7 @@
 // Store XMLHttpRequest and the JSON file location in variables
 var xhrIcecast = new XMLHttpRequest();
 var xhrTrack = new XMLHttpRequest();
+var streamUrl = "http://37.59.99.228:8889/radio-didou";
 var icecastStatusUrl = "http://37.59.99.228:8889/status-json.xsl";
 /* Test URL */
 //var currentTrackJsonUrl = "http://localhost:8888/json/example_current_playback.json";
@@ -65,6 +66,9 @@ function showCurrentListeners(data) {
 }
 
 function play(){
+    document.getElementById("player").setAttribute("src", "");
+    document.getElementById("player").setAttribute("src", streamUrl);
+    document.getElementById('player').load();
     document.getElementById('player').play();
 }
 
@@ -96,5 +100,5 @@ function displayCurrentTrack(jsonData) {
 sendRequestCurrentTrack();
 sendRequestIcecastStatus();
 
-window.setInterval(sendRequestCurrentTrack, 1000);
+window.setInterval(sendRequestCurrentTrack, 10000);
 window.setInterval(sendRequestIcecastStatus, 1000);
