@@ -1,0 +1,51 @@
+{
+  "name": "radio-didou",
+  "version": "1.0.0",
+  "description": "A friendly web radio.",
+  "keywords": [
+    "loopback-application",
+    "loopback"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.9"
+  },
+  "scripts": {
+    "build": "lb-tsc",
+    "build:watch": "lb-tsc --watch",
+    "clean": "lb-clean dist *.tsbuildinfo",
+    "pretest": "npm run clean && npm run build",
+    "migrate": "node ./dist/migrate",
+    "prestart": "npm run build",
+    "start": "node -r source-map-support/register .",
+    "prepublishOnly": "npm run test"
+  },
+  "repository": {
+    "type": "git"
+  },
+  "author": "",
+  "license": "",
+  "files": [
+    "README.md",
+    "index.js",
+    "index.d.ts",
+    "dist",
+    "server",
+    "!*/__tests__"
+  ],
+  "dependencies": {
+    "@loopback/boot": "^1.6.0",
+    "@loopback/context": "^1.25.0",
+    "@loopback/core": "^1.12.0",
+    "@loopback/openapi-v3": "^1.10.3",
+    "@loopback/rest": "^1.25.0",
+    "@loopback/rest-explorer": "^1.4.6"
+  },
+  "devDependencies": {
+    "@loopback/build": "^3.0.0",
+    "source-map-support": "^0.5.16",
+    "@loopback/testlab": "^1.10.0",
+    "@types/node": "^10.17.6",
+    "typescript": "~3.7.3"
+  }
+}
