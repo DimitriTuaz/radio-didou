@@ -38,7 +38,10 @@ Ajouter son user au group audio : sudo adduser "your_username" audio
 
 
 Liquidsoap
-Install via OPAM and add fdaak and alsa as opam package : https://www.liquidsoap.info/doc-dev/install.html#debianubuntu
+Install opam : sudo apt-get install opam
+Install ocaml via opam : https://ocaml.org/docs/install.fr.html
+/!\ if having troubles with opam swithc :  (https://github.com/ocaml/opam/issues/3827)
+Install via OPAM and add alsa as opam package : https://www.liquidsoap.info/doc-dev/install.html#debianubuntu
 
 sudo ln -s /home/liquidsoap/.opam/system/bin/liquidsoap /usr/bin/liquidsoap
 sudo systemctl enable liquidsoap
