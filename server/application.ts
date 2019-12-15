@@ -10,6 +10,8 @@ import { MainSequence } from './sequence';
 import { BindingScope } from '@loopback/context';
 import { NowService } from './services/now.service'
 
+import credential from './credential.json'
+
 export class RadiodApplication extends BootMixin(RestApplication) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
@@ -37,7 +39,7 @@ export class RadiodApplication extends BootMixin(RestApplication) {
   }
 
   private async initNowService() {
-    this.bind('radiod.now-configuration').toDynamicValue
+    this.bind('radiod.now-crendential').toDynamicValue(() => credential);
     this.bind('radiod.now-service')
       .toClass(NowService)
       .inScope(BindingScope.SINGLETON);

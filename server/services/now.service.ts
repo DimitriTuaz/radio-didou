@@ -1,4 +1,4 @@
-import { bind, BindingScope } from '@loopback/core';
+import { bind, BindingScope, inject } from '@loopback/core';
 import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic';
 import { clearIntervalAsync } from 'set-interval-async';
 import axios from 'axios';
@@ -13,11 +13,11 @@ export class NowService {
   private isRunning: boolean = false;
   private intervalID: SetIntervalAsyncTimer;
 
-  private authorization: string = 'M2EyNTdmMzEwNDIyNDkzYzg5NmZhYTcwYzBmODNiZjg6ZjI1OTNmY2YzY2UzNDQ2Nzg0MTM4NDEwMWIxN2FjNjQ=';
-  private refresh_token: string = 'AQCacjGQCv1E1d3aB1-ZNsBS_RvmGzT7D_9rKsZiDc9ia2b3WzchsEQsfDJcplc8pSQbpRUPEYuQk4L6dSgSQvWT7fUUvBKnkMgyhqvwxaVfJdJYllCTSBdeGGGSNwr8bMI';
   private access_token: string = '';
 
-  constructor() {
+  constructor(
+    @inject('radiod.now-crendential')
+    private credential: any) {
   }
 
   public getNow(): any {
@@ -50,11 +50,11 @@ export class NowService {
         url: NowService.spotify_token_url,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + this.authorization
+          'Authorization': 'Basic ' + this.credential.authorization
         },
         params: {
           grant_type: 'refresh_token',
-          refresh_token: this.refresh_token
+          refresh_token: this.credential.refresh_token
         }
       });
       const data = response.data;
