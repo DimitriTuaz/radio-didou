@@ -3,7 +3,7 @@ import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dyna
 import { clearIntervalAsync } from 'set-interval-async';
 import axios from 'axios';
 
-@bind({ scope: BindingScope.TRANSIENT })
+@bind({ scope: BindingScope.SINGLETON })
 export class NowService {
 
   public static spotify_api_url = 'https://api.spotify.com/v1/me/player';
@@ -80,7 +80,6 @@ export class NowService {
         },
       });
       this.now = response.data;
-      console.log("[NowService] obtain_current_playback succeeded")
     }
     catch (error) {
       if (retryOnce) {

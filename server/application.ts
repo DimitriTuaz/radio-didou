@@ -10,7 +10,7 @@ import { MainSequence } from './sequence';
 import { BindingScope } from '@loopback/context';
 import { NowService } from './services/now.service'
 
-import credential from './credential.json'
+import fs from 'fs'
 
 export class RadiodApplication extends BootMixin(RestApplication) {
   constructor(options: ApplicationConfig = {}) {
@@ -39,7 +39,12 @@ export class RadiodApplication extends BootMixin(RestApplication) {
   }
 
   private async initNowService() {
-    this.bind('radiod.now-crendential').toDynamicValue(() => credential);
+    this.bind('radiod.now-crendential').toDynamicValue(
+      () => {
+        let rawdata = fs.readFileSync(path.join(__dirname, '../credential.json'));
+        let data = JSON.parse(rawdata.toString());
+        return data
+      });
     this.bind('radiod.now-service')
       .toClass(NowService)
       .inScope(BindingScope.SINGLETON);
