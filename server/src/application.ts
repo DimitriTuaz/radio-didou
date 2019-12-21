@@ -19,8 +19,8 @@ export class RadiodApplication extends BootMixin(RestApplication) {
     this.projectRoot = __dirname;
     this.sequence(MainSequence);
 
-    this.static('/', path.join(__dirname, '../static'));
-    this.static('/jingles', path.join(__dirname, '../static/jingles.html'));
+    this.static('/', path.join(__dirname, '../../static'));
+    this.static('/jingles', path.join(__dirname, '../../static/jingles.html'));
 
     this.bind(RestExplorerBindings.CONFIG).to({
       path: '/explorer'
@@ -41,7 +41,7 @@ export class RadiodApplication extends BootMixin(RestApplication) {
   private async initNowService() {
     this.bind('radiod.now-crendential').toDynamicValue(
       () => {
-        let rawdata = fs.readFileSync(path.join(__dirname, '../credential.json'));
+        let rawdata = fs.readFileSync(path.join(__dirname, '../../credential.json'));
         let data = JSON.parse(rawdata.toString());
         return data
       });
