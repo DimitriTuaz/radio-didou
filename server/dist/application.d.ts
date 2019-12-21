@@ -11,6 +11,6 @@ declare const RadiodApplication_base: (new (...args: any[]) => {
 }) & typeof RestApplication;
 export declare class RadiodApplication extends RadiodApplication_base {
     constructor(options?: ApplicationConfig);
-    private initNowService;
+    init(): Promise<void>;
 }
 export {};

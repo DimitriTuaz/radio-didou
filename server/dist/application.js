@@ -29,9 +29,8 @@ class RadiodApplication extends boot_1.BootMixin(rest_1.RestApplication) {
                 nested: true,
             },
         };
-        this.initNowService();
     }
-    async initNowService() {
+    async init() {
         this.bind('radiod.now-crendential').toDynamicValue(() => {
             let rawdata = fs_1.default.readFileSync(path_1.default.join(__dirname, '../../credential.json'));
             let data = JSON.parse(rawdata.toString());

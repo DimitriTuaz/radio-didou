@@ -34,17 +34,16 @@ export class RadiodApplication extends BootMixin(RestApplication) {
         nested: true,
       },
     };
-
-    this.initNowService();
   }
 
-  private async initNowService() {
+  public async init() {
     this.bind('radiod.now-crendential').toDynamicValue(
       () => {
         let rawdata = fs.readFileSync(path.join(__dirname, '../../credential.json'));
         let data = JSON.parse(rawdata.toString());
         return data
       });
+
     this.bind('radiod.now-service')
       .toClass(NowService)
       .inScope(BindingScope.SINGLETON);
