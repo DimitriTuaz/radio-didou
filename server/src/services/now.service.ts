@@ -1,9 +1,22 @@
-import { bind, BindingScope, inject } from '@loopback/core';
+import { bind, BindingScope, inject, CoreTags } from '@loopback/core';
+import { BootBindings } from '@loopback/boot'
 import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic';
 import { clearIntervalAsync } from 'set-interval-async';
-import axios from 'axios';
 
-@bind({ scope: BindingScope.SINGLETON })
+import path from 'path';
+import axios from 'axios';
+import fs from 'fs'
+
+interface ICredential {
+  authorization: string;
+  refresh_token: string;
+  access_token: string;
+}
+
+@bind({
+  scope: BindingScope.SINGLETON,
+  tags: [CoreTags.LIFE_CYCLE_OBSERVER]
+})
 export class NowService {
 
   public static spotify_api_url = 'https://api.spotify.com/v1/me/player';
@@ -13,11 +26,11 @@ export class NowService {
   private isRunning: boolean = false;
   private intervalID: SetIntervalAsyncTimer;
 
-  private access_token: string = '';
+  private credential: ICredential;
 
   constructor(
-    @inject('radiod.now-crendential')
-    private credential: any) {
+    @inject(BootBindings.PROJECT_ROOT)
+    private project_root: any) {
   }
 
   public getNow(): any {
@@ -25,13 +38,20 @@ export class NowService {
   }
 
   public start(): void {
-    if (!this.isRunning) {
-      console.log("[NowService] started");
-      this.isRunning = true;
-      this.intervalID = setIntervalAsync(
-        async () => await this.obtain_current_playback(true),
-        3000
-      );
+    try {
+      let filePath: string = path.join(this.project_root, '../../credential.json');
+      this.credential = JSON.parse(fs.readFileSync(filePath).toString());
+      if (!this.isRunning) {
+        console.log("[NowService] started");
+        this.isRunning = true;
+        this.intervalID = setIntervalAsync(
+          async () => await this.obtain_current_playback(true),
+          3000
+        );
+      }
+    }
+    catch (e) {
+      console.log("[NowService] Error! Couldn't open the credential file")
     }
   }
 
@@ -59,7 +79,7 @@ export class NowService {
       });
       const data = response.data;
       if ('access_token' in data) {
-        this.access_token = data.access_token;
+        this.credential.access_token = data.access_token;
         console.log("[NowService] obtain_access_token succeeded")
       }
     }
@@ -76,7 +96,7 @@ export class NowService {
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + this.access_token
+          'Authorization': 'Bearer ' + this.credential.access_token
         },
       });
       this.now = response.data;

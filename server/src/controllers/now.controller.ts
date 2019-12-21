@@ -1,10 +1,10 @@
 import { get } from '@loopback/rest';
-import { inject } from '@loopback/core';
+import { service } from '@loopback/core';
 import { NowService } from '../services/now.service';
 
 export class NowController {
   constructor(
-    @inject('radiod.now-service')
+    @service(NowService)
     public service: NowService
   ) {
   }

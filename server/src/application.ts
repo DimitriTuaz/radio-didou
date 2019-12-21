@@ -1,5 +1,5 @@
 import { BootMixin } from '@loopback/boot';
-import { ApplicationConfig } from '@loopback/core';
+import { ApplicationConfig, BindingKey } from '@loopback/core';
 import {
   RestExplorerBindings, RestExplorerComponent,
 } from '@loopback/rest-explorer';
@@ -7,12 +7,10 @@ import { RestApplication } from '@loopback/rest';
 import path from 'path';
 import { MainSequence } from './sequence';
 
-import { BindingScope } from '@loopback/context';
 import { NowService } from './services/now.service'
 
-import fs from 'fs'
-
 export class RadiodApplication extends BootMixin(RestApplication) {
+
   constructor(options: ApplicationConfig = {}) {
     super(options);
 
@@ -27,6 +25,9 @@ export class RadiodApplication extends BootMixin(RestApplication) {
     });
 
     this.component(RestExplorerComponent);
+
+    this.service(NowService);
+
     this.bootOptions = {
       controllers: {
         dirs: ['controllers'],
@@ -34,21 +35,5 @@ export class RadiodApplication extends BootMixin(RestApplication) {
         nested: true,
       },
     };
-  }
-
-  public async init() {
-    this.bind('radiod.now-crendential').toDynamicValue(
-      () => {
-        let rawdata = fs.readFileSync(path.join(__dirname, '../../credential.json'));
-        let data = JSON.parse(rawdata.toString());
-        return data
-      });
-
-    this.bind('radiod.now-service')
-      .toClass(NowService)
-      .inScope(BindingScope.SINGLETON);
-
-    var service: NowService = await this.get('radiod.now-service');
-    service.start();
   }
 }
