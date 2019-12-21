@@ -30,7 +30,7 @@
     "index.js",
     "index.d.ts",
     "dist",
-    "server",
+    "src",
     "!*/__tests__"
   ],
   "dependencies": {
