@@ -14,7 +14,7 @@ export class RadiodApplication extends BootMixin(RestApplication) {
   constructor(options: ApplicationConfig = {}) {
     super(options);
 
-    this.projectRoot = __dirname;
+    this.projectRoot = path.join(__dirname, '../..');
     this.sequence(MainSequence);
 
     this.static('/', path.join(__dirname, '../../static'));

@@ -39,7 +39,7 @@ export class NowService {
 
   public start(): void {
     try {
-      let filePath: string = path.join(this.project_root, '../../credential.json');
+      let filePath: string = path.join(this.project_root, 'credential.json');
       this.credential = JSON.parse(fs.readFileSync(filePath).toString());
       if (!this.isRunning) {
         console.log("[NowService] started");
