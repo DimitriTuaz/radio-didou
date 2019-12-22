@@ -1,11 +1,12 @@
 import { bind, BindingScope, inject, CoreTags } from '@loopback/core';
-import { BootBindings } from '@loopback/boot'
 import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic';
 import { clearIntervalAsync } from 'set-interval-async';
 
 import path from 'path';
 import axios from 'axios';
 import fs from 'fs'
+
+import { RadiodBindings } from '../application';
 
 interface ICredential {
   authorization: string;
@@ -29,9 +30,8 @@ export class NowService {
   private credential: ICredential;
 
   constructor(
-    @inject(BootBindings.PROJECT_ROOT)
-    private project_root: any) {
-  }
+    @inject(RadiodBindings.PROJECT_ROOT)
+    private projectRoot: any) { }
 
   public getNow(): any {
     return this.now;
@@ -39,7 +39,7 @@ export class NowService {
 
   public start(): void {
     try {
-      let filePath: string = path.join(this.project_root, 'credential.json');
+      let filePath: string = path.join(this.projectRoot, 'credential.json');
       this.credential = JSON.parse(fs.readFileSync(filePath).toString());
       if (!this.isRunning) {
         console.log("[NowService] started");
