@@ -36,7 +36,7 @@ Configuration is in /usr/local/etc/icecast.xml
 
 Installez nodejs, npm.
 - Dans le dossier server faite npm install
-- Pour lancer le serveur faite npm run start
+- Pour lancer le serveur faite ./run.sh
 
 ### Enregistrement DNS
 
