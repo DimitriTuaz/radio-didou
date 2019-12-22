@@ -12,7 +12,7 @@ export namespace RadiodBindings {
   /**
  * Binding key for determining project root directory
  */
-  export const PROJECT_ROOT: BindingKey<string> = BindingKey.create<string>('radiod.project_root');
+  export var PROJECT_ROOT: BindingKey<string> = BindingKey.create<string>('radiod.project_root');
 }
 
 export class RadiodApplication extends BootMixin(RestApplication) {

@@ -30,7 +30,7 @@ export class NowService {
   private credential: ICredential;
 
   constructor(
-    @inject(RadiodBindings.PROJECT_ROOT)
+    @inject('radiod.project_root')
     private projectRoot: any) { }
 
   public getNow(): any {
