@@ -4,9 +4,9 @@ import { clearIntervalAsync } from 'set-interval-async';
 
 import path from 'path';
 import axios from 'axios';
-import fs from 'fs'
+import fs from 'fs';
 
-import { RadiodBindings } from '../application';
+import { RadiodBindings } from '../keys';
 
 interface ICredential {
   authorization: string;
@@ -30,7 +30,7 @@ export class NowService {
   private credential: ICredential;
 
   constructor(
-    @inject('radiod.project_root')
+    @inject(RadiodBindings.PROJECT_ROOT)
     private projectRoot: any) { }
 
   public getNow(): any {

@@ -6,14 +6,8 @@ import { RestApplication } from '@loopback/rest';
 import path from 'path';
 
 import { MainSequence } from './sequence';
+import { RadiodBindings } from './keys';
 import { NowService } from './services/now.service'
-
-export namespace RadiodBindings {
-  /**
- * Binding key for determining project root directory
- */
-  export var PROJECT_ROOT: BindingKey<string> = BindingKey.create<string>('radiod.project_root');
-}
 
 export class RadiodApplication extends BootMixin(RestApplication) {
 
@@ -28,9 +22,7 @@ export class RadiodApplication extends BootMixin(RestApplication) {
     this.static('/', path.join(__dirname, '../../static'));
     this.static('/jingles', path.join(__dirname, '../../static/jingles.html'));
 
-    this.bind(RestExplorerBindings.CONFIG).to({
-      path: '/explorer'
-    });
+    this.bind(RestExplorerBindings.CONFIG).to({ path: '/explorer' });
 
     this.component(RestExplorerComponent);
 
