@@ -52,5 +52,9 @@ Redirigez le port 80 vers le port de l'application (8888) : https://o7planning.o
 
 Enable : sudo systemctl enable radio-didou
 
+### Client setup
+
+Add semantic : https://react.semantic-ui.com/usage
+
 
 
