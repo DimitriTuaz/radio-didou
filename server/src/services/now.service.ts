@@ -2,6 +2,12 @@ import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dyna
 import { clearIntervalAsync } from 'set-interval-async';
 import { LifeCycleObserver } from '@loopback/core';
 
+export enum NowEnum {
+  None = 0,
+  Spotify = 1,
+  Deezer = 2,
+}
+
 export abstract class NowService implements LifeCycleObserver {
 
   protected abstract init(): void;
@@ -24,7 +30,7 @@ export abstract class NowService implements LifeCycleObserver {
         this.isRunning = true;
         this.intervalID = setIntervalAsync(
           async () => await this.fetch(),
-          3000
+          5000
         );
       }
     }

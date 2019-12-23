@@ -7,8 +7,8 @@ import path from 'path';
 
 import { MainSequence } from './sequence';
 import { RadiodBindings } from './keys';
-import { NowSpotify } from './now/now.spotify'
-import { NowDeezer } from './now/now.deezer';
+
+import { NowNone } from './now/now.none';
 
 export class RadiodApplication extends BootMixin(RestApplication) {
 
@@ -36,7 +36,7 @@ export class RadiodApplication extends BootMixin(RestApplication) {
     this.bind(RadiodBindings.PROJECT_ROOT).to(path.join(__dirname, '../..'));
 
     this.bind(RadiodBindings.NOW_SERVICE)
-      .toClass(NowDeezer)
+      .toClass(NowNone)
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)
       .inScope(BindingScope.SINGLETON);
   }

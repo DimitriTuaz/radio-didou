@@ -43,7 +43,7 @@ export class NowDeezer extends NowService {
       this.now = response.body;
     }
     catch (error) {
-      console.log("[NowDeezer] error in obtain_current_playback")
+      console.log("[" + this.serviceName + "] error in obtain_current_playback")
     }
   }
 }

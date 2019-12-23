@@ -47,11 +47,11 @@ export class NowSpotify extends NowService {
       const data = response.body;
       if ('access_token' in data) {
         this.credential.access_token = data.access_token;
-        console.log("[NowSpotify] obtain_access_token succeeded")
+        console.log("[" + this.serviceName + "] obtain_access_token succeeded")
       }
     }
     catch (error) {
-      console.log("[NowSpotify] error in obtain_access_token")
+      console.log("[" + this.serviceName + "] error in obtain_access_token")
     }
   }
 
@@ -70,7 +70,7 @@ export class NowSpotify extends NowService {
         await this.obtain_current_playback(false);
       }
       else {
-        console.log("[NowSpotify] error in obtain_current_playback")
+        console.log("[" + this.serviceName + "] error in obtain_current_playback")
       }
     }
   }
