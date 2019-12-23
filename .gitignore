@@ -2,5 +2,7 @@
 static/sounds
 deploy.sh
 credential.json
+credential_deezer.json
+credential_spotify.json
 asset_src
 

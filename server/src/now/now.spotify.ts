@@ -9,7 +9,7 @@ import fs from 'fs';
 import { RadiodBindings } from '../keys';
 import { NowService } from '../services';
 
-interface ICredential {
+interface ISpotifyCredential {
   authorization: string;
   refresh_token: string;
   access_token: string;
@@ -24,7 +24,7 @@ export class NowSpotify implements NowService {
   private isRunning: boolean = false;
   private intervalID: SetIntervalAsyncTimer;
 
-  private credential: ICredential;
+  private credential: ISpotifyCredential;
 
   constructor(
     @inject(RadiodBindings.PROJECT_ROOT)
@@ -36,7 +36,7 @@ export class NowSpotify implements NowService {
 
   public start(): void {
     try {
-      let filePath: string = path.join(this.projectRoot, 'credential.json');
+      let filePath: string = path.join(this.projectRoot, 'credential_spotify.json');
       this.credential = JSON.parse(fs.readFileSync(filePath).toString());
       if (!this.isRunning) {
         console.log("[NowSpotify] started");
