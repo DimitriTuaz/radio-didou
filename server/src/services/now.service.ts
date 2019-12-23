@@ -3,7 +3,7 @@ import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dyna
 import { clearIntervalAsync } from 'set-interval-async';
 
 import path from 'path';
-import axios from 'axios';
+import request from 'superagent'
 import fs from 'fs';
 
 import { RadiodBindings } from '../keys';
@@ -65,19 +65,15 @@ export class NowService {
 
   private async obtain_access_token(): Promise<void> {
     try {
-      const response = await axios({
-        method: 'post',
-        url: NowService.spotify_token_url,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + this.credential.authorization
-        },
-        params: {
+      const response = await request
+        .post(NowService.spotify_token_url)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .set('Authorization', 'Basic ' + this.credential.authorization)
+        .send({
           grant_type: 'refresh_token',
           refresh_token: this.credential.refresh_token
-        }
-      });
-      const data = response.data;
+        });
+      const data = response.body;
       if ('access_token' in data) {
         this.credential.access_token = data.access_token;
         console.log("[NowService] obtain_access_token succeeded")
@@ -90,16 +86,12 @@ export class NowService {
 
   private async obtain_current_playback(retryOnce: boolean): Promise<void> {
     try {
-      const response = await axios({
-        method: 'get',
-        url: NowService.spotify_api_url,
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + this.credential.access_token
-        },
-      });
-      this.now = response.data;
+      const response = await request
+        .get(NowService.spotify_api_url)
+        .set('Accept', 'application/json')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'Bearer ' + this.credential.access_token);
+      this.now = response.body;
     }
     catch (error) {
       if (retryOnce) {
