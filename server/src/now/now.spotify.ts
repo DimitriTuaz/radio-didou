@@ -1,6 +1,4 @@
 import { inject } from '@loopback/core';
-import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic';
-import { clearIntervalAsync } from 'set-interval-async';
 
 import path from 'path';
 import request from 'superagent'
@@ -15,49 +13,25 @@ interface ISpotifyCredential {
   access_token: string;
 }
 
-export class NowSpotify implements NowService {
+export class NowSpotify extends NowService {
 
   public static spotify_api_url = 'https://api.spotify.com/v1/me/player';
   public static spotify_token_url = 'https://accounts.spotify.com/api/token';
-
-  private now: any = {};
-  private isRunning: boolean = false;
-  private intervalID: SetIntervalAsyncTimer;
+  public serviceName = "NowSpotify";
 
   private credential: ISpotifyCredential;
 
   constructor(
     @inject(RadiodBindings.PROJECT_ROOT)
-    private projectRoot: any) { }
+    private projectRoot: any) { super() }
 
-  public getNow(): any {
-    return this.now;
+  protected init(): void {
+    let filePath: string = path.join(this.projectRoot, 'credential_spotify.json');
+    this.credential = JSON.parse(fs.readFileSync(filePath).toString());
   }
 
-  public start(): void {
-    try {
-      let filePath: string = path.join(this.projectRoot, 'credential_spotify.json');
-      this.credential = JSON.parse(fs.readFileSync(filePath).toString());
-      if (!this.isRunning) {
-        console.log("[NowSpotify] started");
-        this.isRunning = true;
-        this.intervalID = setIntervalAsync(
-          async () => await this.obtain_current_playback(true),
-          3000
-        );
-      }
-    }
-    catch (e) {
-      console.log("[NowSpotify] Error! Couldn't open the credential file")
-    }
-  }
-
-  public async stop(): Promise<void> {
-    if (this.isRunning) {
-      console.log("[NowSpotify] stopped");
-      await clearIntervalAsync(this.intervalID);
-      this.isRunning = false;
-    }
+  protected async fetch(): Promise<void> {
+    return await this.obtain_current_playback(true);
   }
 
   private async obtain_access_token(): Promise<void> {

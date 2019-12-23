@@ -1,6 +1,4 @@
 import { inject } from '@loopback/core';
-import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic';
-import { clearIntervalAsync } from 'set-interval-async';
 
 import path from 'path';
 import request from 'superagent'
@@ -15,48 +13,24 @@ interface IDeezerCredential {
   access_token: string;
 }
 
-export class NowDeezer implements NowService {
+export class NowDeezer extends NowService {
 
   public static deezer_api_url = 'https://api.deezer.com/user/me/history';
-
-  private now: any = {};
-  private isRunning: boolean = false;
-  private intervalID: SetIntervalAsyncTimer;
+  public serviceName = "NowDeezer";
 
   private credential: IDeezerCredential;
 
   constructor(
     @inject(RadiodBindings.PROJECT_ROOT)
-    private projectRoot: any) { }
+    private projectRoot: any) { super() }
 
-  public getNow(): any {
-    return this.now;
+  protected init(): void {
+    let filePath: string = path.join(this.projectRoot, 'credential_deezer.json');
+    this.credential = JSON.parse(fs.readFileSync(filePath).toString());
   }
 
-  public start(): void {
-    try {
-      let filePath: string = path.join(this.projectRoot, 'credential_deezer.json');
-      this.credential = JSON.parse(fs.readFileSync(filePath).toString());
-      if (!this.isRunning) {
-        console.log("[NowDeezer] started");
-        this.isRunning = true;
-        this.intervalID = setIntervalAsync(
-          async () => await this.obtain_current_playback(),
-          3000
-        );
-      }
-    }
-    catch (e) {
-      console.log("[NowDeezer] Error! Couldn't open the credential file")
-    }
-  }
-
-  public async stop(): Promise<void> {
-    if (this.isRunning) {
-      console.log("[NowDeezer] stopped");
-      await clearIntervalAsync(this.intervalID);
-      this.isRunning = false;
-    }
+  protected async fetch(): Promise<void> {
+    return await this.obtain_current_playback();
   }
 
   private async obtain_current_playback(): Promise<void> {
