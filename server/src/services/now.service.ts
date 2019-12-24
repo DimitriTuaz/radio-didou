@@ -70,7 +70,7 @@ export class NowService {
         url: NowService.spotify_token_url,
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Authorization': 'Basic ' + this.credential.authorization
+          'Authorization': 'Basic ' + this.credential.authorization,
         },
         params: {
           grant_type: 'refresh_token',
