@@ -54,7 +54,9 @@ Enable : sudo systemctl enable radio-didou
 
 ### Client setup
 
+Installer node, npm et yarn sur une machine debian : https://github.com/nodesource/distributions/blob/master/README.md
 Add semantic : https://react.semantic-ui.com/usage
+Dans le dossier client : 'yarn install && yarn build'
 
 
 
