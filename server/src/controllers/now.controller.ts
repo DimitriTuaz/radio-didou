@@ -14,19 +14,19 @@ export class NowController {
     @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>
   ) { }
 
-  @get('/getNow')
+  @get('/now/get')
   async getNow() {
     const service = await this.serviceGetter();
     return service.getNow();
   }
 
-  @get('/setNowService/{serviceId}')
+  @get('/now/set/{serviceId}')
   async setNowService(
-    @param.path.string('serviceId') serviceId: number,
+    @param.path.number('serviceId') serviceId: number,
   ) {
     let service = await this.serviceGetter();
     service.stop();
-    switch (Number(serviceId)) {
+    switch (serviceId) {
       case NowEnum.Spotify:
         this.serviceBinding.toClass(NowSpotify).inScope(BindingScope.SINGLETON);
         break;
