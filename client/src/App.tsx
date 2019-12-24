@@ -11,8 +11,7 @@ var ICECAST_PORT: string = ':8889'
 var NODE_PORT: string = ':8888'
 var STREAM_URL: string = SERVER_URL + ICECAST_PORT + '/radio-didou';
 var ICECAST_STATUS_URL: string = SERVER_URL + ICECAST_PORT + '/status-json.xsl';
-//var CURRENT_TRACK_URL: string = SERVER_URL + NODE_PORT + '/now';
-var CURRENT_TRACK_URL: string = "http://127.0.0.1" + NODE_PORT + '/now';
+var CURRENT_TRACK_URL: string = SERVER_URL + NODE_PORT + '/now';
 
 interface IProps {
 }
