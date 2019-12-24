@@ -12,7 +12,7 @@ var NODE_PORT: string = ':8888'
 var STREAM_URL: string = SERVER_URL + ICECAST_PORT + '/radio-didou';
 var ICECAST_STATUS_URL: string = SERVER_URL + ICECAST_PORT + '/status-json.xsl';
 //var CURRENT_TRACK_URL: string = SERVER_URL + NODE_PORT + '/now';
-var CURRENT_TRACK_URL: string = "http://192.168.43.228" + NODE_PORT + '/now';
+var CURRENT_TRACK_URL: string = "http://127.0.0.1" + NODE_PORT + '/now';
 
 interface IProps {
 }
@@ -130,32 +130,33 @@ class App extends React.Component<IProps, IState> {
   }
 
   render() {
+    const isMobile = window.innerWidth <= 500;
     return (
       <div className='main-container'>
         <Dimmer active={this.state.playing && this.state.loading}>
           <Loader className='unselectable'>Chargement...</Loader>
         </Dimmer>
-        <div className='title-container unselectable'>
-            <p className='title'>Radio Didou</p>
+        <div className={'title-container' + (isMobile ? '-mobile' : '') + 'unselectable'}>
+            <p className={'title' + (isMobile ? '-mobile' : '')}>Radio Didou</p>
         </div>
-        <div className='player-container'>
-            <button className='icon-sound' onClick={this.onPlay}><img src={icon_play} alt=''></img></button>  
-          <button className='icon-sound' onClick={this.onMute}><img src={this.state.mute ? icon_mute : icon_sound} alt=''></img></button>
+        <div className={'player-container' + (isMobile ? '-mobile' : '')}>
+          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onPlay}><img src={icon_play} alt=''></img></button>  
+          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onMute}><img src={this.state.mute ? icon_mute : icon_sound} alt=''></img></button>
         </div>
 
-        <div className='track-container' onClick={() => {window.open(this.trackUrl, '_blank')}}>
+        <div className={'track-container' + (isMobile ? '-mobile' : '')} onClick={() => {window.open(this.trackUrl, '_blank')}}>
           <div className='track-cover-container' >
-              <img className='track-cover' src={this.state.trackCover} alt=''></img>
+              <img className={'track-cover' + (isMobile ? '-mobile' : '')} src={this.state.trackCover} alt=''></img>
           </div>
-          <div className="track-infos-container">
-              <p className="track-title">{this.state.trackTitle}</p>
-              <p className="track-artists">{this.state.trackArtists}</p>
-              <p className="track-album">{this.state.trackAlbum}</p>
+          <div className={'track-infos-container' + (isMobile ? '-mobile' : '')}>
+              <p className={'track-title' + (isMobile ? '-mobile' : '')}>{this.state.trackTitle}</p>
+              <p className={'track-artists' + (isMobile ? '-mobile' : '')}>{this.state.trackArtists}</p>
+              <p className={'track-album' + (isMobile ? '-mobile' : '')}>{this.state.trackAlbum}</p>
           </div>
         </div>
 
-        <div className='auditor-container unselectable'>
-          <p className='text'>
+        <div className='current-listeners-container unselectable'>
+          <p className={'current-listeners' + (isMobile ? '-mobile' : '')}>
             {this.state.auditorCount === undefined ? '' : this.state.auditorCount + ' auditeur' + (this.state.auditorCount > 1 ? 's' : '')+' actuellement'}
           </p>
         </div>

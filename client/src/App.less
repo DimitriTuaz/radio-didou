@@ -27,6 +27,11 @@ body {
   height: 170px;
 }
 
+.title-container-mobile {
+  .title-container;
+  height: 80px;
+}
+
 .auditor-container {
   display: flex;
   justify-content: center;
@@ -56,6 +61,11 @@ body {
   height: 170px;
 }
 
+player-container-mobile {
+  .player-container;
+  height: 100px;
+}
+
 .track-container {
   display: flex;
   width: 50%;
@@ -69,6 +79,13 @@ body {
     &:active {
       background-color: rgba(255, 255, 255, 0.05);
     }
+}
+
+.track-container-mobile {
+  .track-container;
+  border-radius: 5px;
+  width: 80%;
+  height: 120px;
 }
 
 .track-cover-container {
@@ -86,10 +103,21 @@ body {
   padding: 30px 0px 10px 10px;
 }
 
+.track-infos-container-mobile {
+  .track-infos-container;
+  padding: 10px 2px 0px 0px;
+}
+
 .track-cover {
   height: 200px;
   width: 200px;
   border-radius: 3px;
+}
+
+.track-cover-mobile {
+  height: 90px;
+  width: 90px;
+  border-radius: 1px;
 }
 
 .track-title {
@@ -97,15 +125,30 @@ body {
   font-size:150%;
 }
 
+.track-title-mobile {
+  .track-title;
+  font-size: 11px;
+}
+
 .track-artists {
   color: white;
   font-size:130%;
 }
 
+.track-artists-mobile {
+  .track-artists;
+  font-size: 10px;
+}
+
 .track-album {
   color: white;
   font-style: italic;
-  font-size:110%;
+  font-size: 110%;
+}
+
+.track-album-mobile {
+  .track-album;
+  font-size: 9px;
 }
 
 .icon-sound {
@@ -119,6 +162,12 @@ body {
   margin: 0;
   vertical-align: top;
   outline:0;
+}
+
+.icon-sound-mobile {
+  .icon-sound;
+  height: 80px;
+  width: 80px;
 }
 
 .icon-sound img {
@@ -136,10 +185,30 @@ body {
     } 
 }
 
+.icon-sound-mobile img {
+  display: block;
+  height: 60px;
+  width: 60px;
+  cursor: pointer;
+    &:hover {
+      height: 63px;
+      width: 63px;
+    } 
+    &:active {
+      height: 58px;
+      width: 58px;
+    } 
+}
+
 .title {
   font-weight: bold;
   color: white;
   font-size:600%;
+}
+
+.title-mobile {
+  .title;
+  font-size:40px;
 }
 
 .sub-title {
@@ -159,9 +228,14 @@ body {
   margin-top: 15px;
 }
 
-#currentListeners {
+.current-listeners {
   color: white;
-  font-size:100%;
+  font-size:120%;
+}
+
+.current-listeners-mobile {
+  .current-listeners;
+  font-size:12px;
 }
 
 .jingles-container {
