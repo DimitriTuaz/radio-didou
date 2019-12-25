@@ -1,9 +1,10 @@
 import { BootMixin } from '@loopback/boot';
-import { ApplicationConfig, BindingScope, CoreTags } from '@loopback/core';
+import { BindingScope, CoreTags } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import { RestApplication } from '@loopback/rest';
 
 import path from 'path';
+import fs from 'fs';
 
 import { MainSequence } from './sequence';
 import { RadiodBindings } from './keys';
@@ -12,10 +13,10 @@ import { NowNone } from './now/now.none';
 
 export class RadiodApplication extends BootMixin(RestApplication) {
 
-  constructor(options: ApplicationConfig = {}) {
-    super(options);
+  constructor(rootPath: string) {
+    super(JSON.parse(fs.readFileSync(path.join(rootPath, 'config.json')).toString()));
 
-    /* Loopback BINDINGS */
+    /* LOOPBACK BINDING */
     this.projectRoot = __dirname;
     this.sequence(MainSequence);
     this.bind(RestExplorerBindings.CONFIG).to({ path: '/explorer' });
@@ -28,16 +29,15 @@ export class RadiodApplication extends BootMixin(RestApplication) {
       },
     };
 
-    /* Static BINDINGS */
-    this.static('/', path.join(__dirname, '../../client/build'));
-    this.static('/jingles', path.join(__dirname, '../../static/jingles.html'));
-
-    /* Application BINDINGS */
-    this.bind(RadiodBindings.PROJECT_ROOT).to(path.join(__dirname, '../..'));
-
+    /* APPLICATION BINDING */
+    this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
     this.bind(RadiodBindings.NOW_SERVICE)
       .toClass(NowNone)
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)
       .inScope(BindingScope.SINGLETON);
+
+    /* STATIC BINDING */
+    this.static('/', path.join(rootPath, 'client/build'));
+    this.static('/jingles', path.join(rootPath, 'static/jingles.html'));
   }
 }

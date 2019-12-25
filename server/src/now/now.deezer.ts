@@ -21,7 +21,7 @@ export class NowDeezer extends NowService {
   private credential: IDeezerCredential;
 
   constructor(
-    @inject(RadiodBindings.PROJECT_ROOT)
+    @inject(RadiodBindings.ROOT_PATH)
     private projectRoot: any) { super() }
 
   protected init(): void {

@@ -22,7 +22,7 @@ export class NowSpotify extends NowService {
   private credential: ISpotifyCredential;
 
   constructor(
-    @inject(RadiodBindings.PROJECT_ROOT)
+    @inject(RadiodBindings.ROOT_PATH)
     private projectRoot: any) { super() }
 
   protected init(): void {

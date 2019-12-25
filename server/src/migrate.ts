@@ -1,10 +1,12 @@
 import { RadiodApplication } from './application';
 
+import path from 'path';
+
 export async function migrate(args: string[]) {
   const existingSchema = args.includes('--rebuild') ? 'drop' : 'alter';
   console.log('Migrating schemas (%s existing schema)', existingSchema);
 
-  const app = new RadiodApplication();
+  const app = new RadiodApplication(path.join(__dirname, '../..'));
   await app.boot();
   await app.migrateSchema({ existingSchema });
 

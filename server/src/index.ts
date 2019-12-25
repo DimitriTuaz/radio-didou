@@ -1,13 +1,11 @@
 import { RadiodApplication } from './application';
 
+import path from 'path';
+import fs from 'fs';
+
 export async function main() {
 
-  const app = new RadiodApplication({
-    rest: {
-      host: "0.0.0.0",
-      port: "8888"
-    }
-  });
+  const app = new RadiodApplication(path.join(__dirname, '../..'));
 
   await app.boot();
   await app.start();
