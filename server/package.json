@@ -34,6 +34,7 @@
     "!*/__tests__"
   ],
   "dependencies": {
+    "@loopback/authentication": "^3.2.4",
     "@loopback/boot": "^1.6.0",
     "@loopback/context": "^1.25.0",
     "@loopback/core": "^1.12.0",
@@ -41,8 +42,8 @@
     "@loopback/rest": "^1.25.0",
     "@loopback/rest-explorer": "^1.4.6",
     "@types/set-interval-async": "^1.0.0",
-    "axios": "^0.19.0",
-    "set-interval-async": "1.0.29"
+    "set-interval-async": "1.0.29",
+    "superagent": "^5.1.3"
   },
   "devDependencies": {
     "@loopback/build": "^3.0.0",
