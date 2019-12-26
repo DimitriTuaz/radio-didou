@@ -18,7 +18,7 @@
       },
       "presentation": {
         "echo": false,
-        "reveal": "never",
+        "reveal": "silent",
         "clear": true
       },
       "problemMatcher": "$tsc-watch"
