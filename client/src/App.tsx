@@ -6,12 +6,14 @@ import icon_mute from './images/icon_mute.png'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import superagent from 'superagent'
 
-var SERVER_URL: string = 'http://37.59.99.228'
+import * as config from './config.json';
+
+var SERVER_URL: string = 'http://' + config.domain
+var ICECAST_URL: string = 'http://37.59.99.228'
 var ICECAST_PORT: string = ':8889'
-var NODE_PORT: string = ':8888'
-var STREAM_URL: string = SERVER_URL + ICECAST_PORT + '/radio-didou';
-var ICECAST_STATUS_URL: string = SERVER_URL + ICECAST_PORT + '/status-json.xsl';
-var CURRENT_TRACK_URL: string = SERVER_URL + NODE_PORT + '/now/get';
+var STREAM_URL: string = ICECAST_URL + ICECAST_PORT + '/radio-didou';
+var ICECAST_STATUS_URL: string = ICECAST_URL + ICECAST_PORT + '/status-json.xsl';
+var CURRENT_TRACK_URL: string = SERVER_URL + ':' + config.rest.port + '/now/get';
 
 interface IProps {
 }

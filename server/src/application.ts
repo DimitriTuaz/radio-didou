@@ -10,6 +10,7 @@ import { MainSequence } from './sequence';
 import { RadiodBindings } from './keys';
 
 import { NowNone } from './now/now.none';
+import { NowSpotify } from './now/now.spotify';
 
 export class RadiodApplication extends BootMixin(RestApplication) {
 
@@ -32,7 +33,7 @@ export class RadiodApplication extends BootMixin(RestApplication) {
     /* APPLICATION BINDING */
     this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
     this.bind(RadiodBindings.NOW_SERVICE)
-      .toClass(NowNone)
+      .toClass(NowSpotify)
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)
       .inScope(BindingScope.SINGLETON);
 
