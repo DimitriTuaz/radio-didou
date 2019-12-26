@@ -11,7 +11,7 @@ var ICECAST_PORT: string = ':8889'
 var NODE_PORT: string = ':8888'
 var STREAM_URL: string = SERVER_URL + ICECAST_PORT + '/radio-didou';
 var ICECAST_STATUS_URL: string = SERVER_URL + ICECAST_PORT + '/status-json.xsl';
-var CURRENT_TRACK_URL: string = SERVER_URL + NODE_PORT + '/now';
+var CURRENT_TRACK_URL: string = SERVER_URL + NODE_PORT + '/now/get';
 
 interface IProps {
 }
@@ -28,7 +28,7 @@ interface IState {
 }
 
 class App extends React.Component<IProps, IState> {
-  
+
   _isMounted: boolean = false;
   audio: HTMLAudioElement = new Audio();
   trackUrl: string = '';
