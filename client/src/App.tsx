@@ -28,9 +28,12 @@ interface IState {
 }
 
 class App extends React.Component<IProps, IState> {
-
+  
+  _isMounted: boolean = false;
   audio: HTMLAudioElement = new Audio();
   trackUrl: string = '';
+  currentTrackIntervalId: number = 0;
+  auditorCountIntervalId: number = 0;
   
   constructor(props: IProps) {
     super(props);
@@ -47,18 +50,26 @@ class App extends React.Component<IProps, IState> {
     };
 
     this.onPlaying = this.onPlaying.bind(this);
-    this.audio.onplaying = this.onPlaying;
-
     this.getCurrentTrack = this.getCurrentTrack.bind(this);
     this.getAuditorCount = this.getAuditorCount.bind(this);
-    this.getCurrentTrack();
-    this.getAuditorCount();
-    setInterval(this.getCurrentTrack, 10000)
-    setInterval(this.getAuditorCount, 1000)
-
     this.onPlay = this.onPlay.bind(this);
     this.onMute = this.onMute.bind(this);
   } 
+
+  componentDidMount() {
+    this._isMounted = true;
+    this.audio.onplaying = this.onPlaying;
+    this.getCurrentTrack();
+    this.getAuditorCount();
+    this.currentTrackIntervalId = window.setInterval(this.getCurrentTrack, 10000);
+    this.auditorCountIntervalId = window.setInterval(this.getAuditorCount, 1000);
+  }
+
+  componentWillUnmount() {
+    this._isMounted = false;
+    clearInterval(this.currentTrackIntervalId);
+    clearInterval(this.auditorCountIntervalId);
+  }
 
   getCurrentTrack() {
     superagent
@@ -66,7 +77,7 @@ class App extends React.Component<IProps, IState> {
       .set('Accept', 'application/json')
       .then(
         res => {
-          if (res.status && res.status === 200) {
+          if (res.status && res.status === 200 && this._isMounted) {
             if (res.body.item !== undefined) {
               // Add year of release for the ablum
               var album:string = res.body.item.album.name + " (" + res.body.item.album.release_date.substring(0, 4) + ")";
@@ -100,7 +111,7 @@ class App extends React.Component<IProps, IState> {
       .set('Accept', 'application/json')
       .then(
         res => {
-          if (res.status && res.status === 200) {
+          if (res.status && res.status === 200 && this._isMounted) {
             var newAuditorCount: number = 0;
             if (res.body.icestats !== undefined && res.body.icestats.source[0] !== undefined) {
               newAuditorCount = res.body.icestats.source[0].listeners;
