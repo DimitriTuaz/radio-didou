@@ -10,7 +10,7 @@
       "isBackground": true,
       "args": [
         "run",
-        "build:watch"
+        "build"
       ],
       "group": {
         "kind": "build",
@@ -25,6 +25,9 @@
     },
     {
       "label": "Run",
+      "dependsOn": [
+        "Build"
+      ],
       "type": "shell",
       "command": "node",
       "args": [

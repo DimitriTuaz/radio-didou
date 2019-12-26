@@ -1,5 +1,5 @@
 import { get, param } from '@loopback/rest';
-import { inject, Binding, CoreTags, BindingScope, Getter } from '@loopback/core';
+import { inject, Binding, BindingScope, Getter } from '@loopback/core';
 
 import { RadiodBindings } from '../keys';
 
