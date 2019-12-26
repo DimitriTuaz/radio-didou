@@ -3,10 +3,12 @@ import { inject, Binding, BindingScope, Getter } from '@loopback/core';
 
 import { RadiodBindings } from '../keys';
 
-import { NowService, NowEnum } from '../services/now.service';
+import { NowService } from '../services/now.service';
 import { NowDeezer } from '../now/now.deezer';
 import { NowSpotify } from '../now/now.spotify';
 import { NowNone } from '../now/now.none';
+
+import { NowEnum } from '../../../common/now/enum';
 
 export class NowController {
   constructor(

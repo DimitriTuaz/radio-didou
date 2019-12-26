@@ -3,8 +3,17 @@
   "extends": "@loopback/build/config/tsconfig.common.json",
   "compilerOptions": {
     "outDir": "dist",
-    "rootDir": "src"
+    "plugins": [
+      {
+        "transform": "ts-transformer-imports"
+      }
+    ]
   },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ],
   "include": [
     "src"
   ]

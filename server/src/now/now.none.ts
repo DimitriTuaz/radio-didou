@@ -1,4 +1,5 @@
-import { NowService, NowEnum } from '../services';
+import { NowService } from '../services';
+import { NowEnum } from '../../../common/now/enum';
 
 export class NowNone extends NowService {
 
