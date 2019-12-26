@@ -1,5 +1,9 @@
 module.exports = {
-  plugins: [{ plugin: require('@semantic-ui-react/craco-less') }],
+  plugins: [
+    { plugin: require('@semantic-ui-react/craco-less') },
+    { plugin: require('@dvhb/craco-extend-scope'), options: { path: './../' } },
+    { plugin: require('@dvhb/craco-extend-scope'), options: { path: './../common' } }
+  ],
   webpack: {
     alias: {
       '../../theme.config': require('path').join(
@@ -9,4 +13,3 @@ module.exports = {
     },
   },
 }
-

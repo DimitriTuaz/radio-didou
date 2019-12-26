@@ -6,7 +6,7 @@ import icon_mute from './images/icon_mute.png'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import superagent from 'superagent'
 
-import * as config from './config.json';
+import * as config from '../../config.json';
 
 var SERVER_URL: string = 'http://' + config.domain
 var ICECAST_URL: string = 'http://37.59.99.228'
