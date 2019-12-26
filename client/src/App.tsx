@@ -68,7 +68,9 @@ class App extends React.Component<IProps, IState> {
         res => {
           if (res.status && res.status === 200) {
             if (res.body.item !== undefined) {
+              // Add year of release for the ablum
               var album:string = res.body.item.album.name + " (" + res.body.item.album.release_date.substring(0, 4) + ")";
+              // There can be mutliple artists
               var artists:string = "";
               res.body.item.artists.forEach((item:any , index: number) => {
                 artists += item.name;
@@ -77,12 +79,15 @@ class App extends React.Component<IProps, IState> {
                 }
               })
               this.trackUrl = res.body.item.external_urls.spotify;
-              this.setState({
-                trackCover: res.body.item.album.images[1].url,
-                trackTitle: res.body.item.name,
-                trackArtists: artists,
-                trackAlbum: album
-              })
+              // setState only if track has changed
+              if (res.body.item.name !== this.state.trackTitle && artists !== this.state.trackArtists) {
+                this.setState({
+                  trackCover: res.body.item.album.images[1].url,
+                  trackTitle: res.body.item.name,
+                  trackArtists: artists,
+                  trackAlbum: album
+                })
+              }
             }
           }
         }
@@ -96,14 +101,21 @@ class App extends React.Component<IProps, IState> {
       .then(
         res => {
           if (res.status && res.status === 200) {
+            var newAuditorCount: number = 0;
             if (res.body.icestats !== undefined && res.body.icestats.source[0] !== undefined) {
-              this.setState({auditorCount: res.body.icestats.source[0].listeners})
+              newAuditorCount = res.body.icestats.source[0].listeners;
             }
             else if (res.body.icestats !== undefined && res.body.icestats.source !== undefined) {
-              this.setState({auditorCount: res.body.icestats.source.listeners})
+              newAuditorCount = res.body.icestats.source.listeners;
             }
             else {
               this.setState({auditorCount: undefined})
+              return;
+            }
+
+            // setState only if auditor count has changed
+            if (this.state.auditorCount !== newAuditorCount) {
+              this.setState({auditorCount: newAuditorCount});
             }
           }
         }
@@ -129,7 +141,7 @@ class App extends React.Component<IProps, IState> {
   }
 
   render() {
-    const isMobile = window.innerWidth <= 500;
+    const isMobile = window.innerWidth <= 1000;
     return (
       <div className='main-container'>
         <Dimmer active={this.state.playing && this.state.loading}>
