@@ -80,23 +80,26 @@ class App extends React.Component<IProps, IState> {
       .then(
         res => {
           if (res.status && res.status === 200 && this._isMounted) {
-            if (res.body.item !== undefined) {
+            if (res.body.song !== undefined) {
               // Add year of release for the ablum
-              var album:string = res.body.item.album.name + " (" + res.body.item.album.release_date.substring(0, 4) + ")";
+              var album:string = res.body.album;
+              if(res.body.release_date !== undefined) {
+                album += " (" + res.body.release_date.substring(0, 4) + ")";
+              }
               // There can be mutliple artists
               var artists:string = "";
-              res.body.item.artists.forEach((item:any , index: number) => {
-                artists += item.name;
-                if (index < res.body.item.artists.length - 1) {
+              res.body.artists.forEach((name:any , index: number) => {
+                artists += name;
+                if (index < res.body.artists.length - 1) {
                   artists += ", ";
                 }
               })
-              this.trackUrl = res.body.item.external_urls.spotify;
+              this.trackUrl = res.body.url;
               // setState only if track has changed
-              if (res.body.item.name !== this.state.trackTitle && artists !== this.state.trackArtists) {
+              if (res.body.song !== this.state.trackTitle && artists !== this.state.trackArtists) {
                 this.setState({
-                  trackCover: res.body.item.album.images[1].url,
-                  trackTitle: res.body.item.name,
+                  trackCover: res.body.cover,
+                  trackTitle: res.body.song,
                   trackArtists: artists,
                   trackAlbum: album
                 })

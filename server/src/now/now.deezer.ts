@@ -6,8 +6,8 @@ import fs from 'fs';
 
 import { RadiodBindings } from '../keys';
 import { NowService } from '../services';
-import { threadId } from 'worker_threads';
 import { NowEnum } from '@common/now/now.common';
+import { url } from 'inspector';
 
 interface IDeezerCredential {
   app_id: string;
@@ -51,7 +51,8 @@ export class NowDeezer extends NowService {
         song: response.body.data[0].title,
         artists: [response.body.data[0].artist.name],
         album: response.body.data[0].album.title,
-        cover: response.body.data[0].album.cover_medium
+        cover: response.body.data[0].album.cover_medium,
+        url: response.body.data[0].album.link
       }
     }
     catch (error) {

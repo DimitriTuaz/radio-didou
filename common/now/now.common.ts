@@ -11,4 +11,5 @@ export interface INow {
   album?: string;
   release_date?: string;
   cover?: string;
+  url?: string;
 }

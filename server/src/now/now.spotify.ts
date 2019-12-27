@@ -52,7 +52,8 @@ export class NowSpotify extends NowService {
         artists: Array.from(response.body.item.artists, (item: any) => item.name),
         album: response.body.item.album.name,
         release_date: response.body.item.album.release_date,
-        cover: response.body.item.album.images[1].url
+        cover: response.body.item.album.images[1].url,
+        url: response.body.item.external_urls.spotify
       }
     }
     catch (error) {
