@@ -6,7 +6,7 @@ import fs from 'fs';
 
 import { RadiodBindings } from '../keys';
 import { NowService } from '../services';
-import { NowEnum } from '@common/now/now.common';
+import { NowEnum, INow } from '@common/now/now.common';
 
 interface ISpotifyCredential {
   authorization: string;
@@ -26,13 +26,18 @@ export class NowSpotify extends NowService {
     @inject(RadiodBindings.ROOT_PATH)
     private projectRoot: any) { super() }
 
-  protected init(): void {
+  protected init(value?: INow): void {
     let filePath: string = path.join(this.projectRoot, 'credential_spotify.json');
     this.credential = JSON.parse(fs.readFileSync(filePath).toString());
-    this.now = {
-      type: NowEnum.Spotify,
-      song: '',
-      artists: [],
+    if (value != null) {
+      this.now = value;
+    }
+    else {
+      this.now = {
+        type: NowEnum.Spotify,
+        song: '',
+        artists: [],
+      }
     }
   }
 

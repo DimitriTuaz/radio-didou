@@ -27,6 +27,7 @@ export class NowController {
     @param.path.number('serviceId') serviceId: number,
   ) {
     let service = await this.serviceGetter();
+    let value = service.value();
     service.stop();
     switch (serviceId) {
       case NowEnum.Spotify:
@@ -39,6 +40,6 @@ export class NowController {
         this.serviceBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
     }
     service = await this.serviceGetter();
-    service.start();
+    service.start(value);
   }
 }

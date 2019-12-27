@@ -6,8 +6,7 @@ import fs from 'fs';
 
 import { RadiodBindings } from '../keys';
 import { NowService } from '../services';
-import { NowEnum } from '@common/now/now.common';
-import { url } from 'inspector';
+import { NowEnum, INow } from '@common/now/now.common';
 
 interface IDeezerCredential {
   app_id: string;
@@ -26,13 +25,18 @@ export class NowDeezer extends NowService {
     @inject(RadiodBindings.ROOT_PATH)
     private projectRoot: any) { super() }
 
-  protected init(): void {
+  protected init(value?: INow): void {
     let filePath: string = path.join(this.projectRoot, 'credential_deezer.json');
     this.credential = JSON.parse(fs.readFileSync(filePath).toString());
-    this.now = {
-      type: NowEnum.Deezer,
-      song: '',
-      artists: [],
+    if (value != null) {
+      this.now = value;
+    }
+    else {
+      this.now = {
+        type: NowEnum.Deezer,
+        song: '',
+        artists: [],
+      }
     }
   }
 

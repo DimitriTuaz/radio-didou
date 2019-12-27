@@ -6,24 +6,22 @@ import { INow } from '@common/now/now.common';
 
 export abstract class NowService implements LifeCycleObserver, Provider<INow> {
 
-  protected abstract init(): void;
+  protected abstract init(value?: INow): void;
   protected abstract async fetch(): Promise<void>;
   public abstract serviceName: string;
 
   protected now: INow;
-  private isRunning: boolean = false;
-  private intervalID: SetIntervalAsyncTimer;
+  private intervalID: SetIntervalAsyncTimer | null;
 
   public value(): INow {
     return this.now;
   }
 
-  public start(): void {
+  public start(value?: INow): void {
     try {
-      this.init();
-      if (!this.isRunning) {
+      this.init(value);
+      if (!this.intervalID) {
         console.log("[" + this.serviceName + "] started");
-        this.isRunning = true;
         this.intervalID = setIntervalAsync(
           async () => await this.fetch(),
           5000
@@ -36,10 +34,10 @@ export abstract class NowService implements LifeCycleObserver, Provider<INow> {
   }
 
   public async stop(): Promise<void> {
-    if (this.isRunning) {
+    if (this.intervalID) {
       console.log("[" + this.serviceName + "] stopped");
       await clearIntervalAsync(this.intervalID);
-      this.isRunning = false;
+      this.intervalID = null;
     }
   }
 }
