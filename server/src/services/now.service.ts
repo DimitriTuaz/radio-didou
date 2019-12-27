@@ -1,18 +1,19 @@
 import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dynamic';
 import { clearIntervalAsync } from 'set-interval-async';
-import { LifeCycleObserver } from '@loopback/core';
+import { LifeCycleObserver, Provider } from '@loopback/core';
+import { INow } from '@common/now/now.common';
 
-export abstract class NowService implements LifeCycleObserver {
+export abstract class NowService implements LifeCycleObserver, Provider<INow> {
 
   protected abstract init(): void;
   protected abstract async fetch(): Promise<void>;
   public abstract serviceName: string;
 
-  protected now: any = {};
+  protected now: INow;
   private isRunning: boolean = false;
   private intervalID: SetIntervalAsyncTimer;
 
-  public getNow(): any {
+  public value(): INow {
     return this.now;
   }
 

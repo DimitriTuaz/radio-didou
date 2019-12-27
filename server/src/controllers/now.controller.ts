@@ -19,7 +19,7 @@ export class NowController {
   @get('/now/get')
   async getNow() {
     const service = await this.serviceGetter();
-    return service.getNow();
+    return service.value();
   }
 
   @get('/now/set/{serviceId}')

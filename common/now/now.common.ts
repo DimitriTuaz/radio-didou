@@ -6,7 +6,9 @@ export enum NowEnum {
 
 export interface INow {
   type: NowEnum;
-  artists?: string;
-  album?: string;
   song?: string;
+  artists?: string[];
+  album?: string;
+  release_date?: string;
+  cover?: string;
 }

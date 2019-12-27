@@ -6,6 +6,8 @@ import fs from 'fs';
 
 import { RadiodBindings } from '../keys';
 import { NowService } from '../services';
+import { threadId } from 'worker_threads';
+import { NowEnum } from '@common/now/now.common';
 
 interface IDeezerCredential {
   app_id: string;
@@ -27,6 +29,9 @@ export class NowDeezer extends NowService {
   protected init(): void {
     let filePath: string = path.join(this.projectRoot, 'credential_deezer.json');
     this.credential = JSON.parse(fs.readFileSync(filePath).toString());
+    this.now = {
+      type: NowEnum.Deezer,
+    }
   }
 
   protected async fetch(): Promise<void> {
@@ -40,7 +45,14 @@ export class NowDeezer extends NowService {
         .query({ access_token: this.credential.access_token })
         .query({ output: "json" })
         .query({ limit: 1 })
-      this.now = response.body;
+
+      this.now = {
+        type: NowEnum.Deezer,
+        song: response.body.data[0].title,
+        artists: [response.body.data[0].artist.name],
+        album: response.body.data[0].album.title,
+        cover: response.body.data[0].album.cover_medium
+      }
     }
     catch (error) {
       console.log("[" + this.serviceName + "] error in obtain_current_playback")
