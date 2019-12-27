@@ -7,7 +7,7 @@ import { Dimmer, Loader } from 'semantic-ui-react'
 import superagent from 'superagent'
 
 import * as config from '../../config.json';
-import { NowEnum, INow } from '../../common/now/now.common'
+import { NowEnum, INow } from '@common/now/now.common'
 
 var SERVER_URL: string = 'http://' + config.domain
 var ICECAST_URL: string = 'http://37.59.99.228'
