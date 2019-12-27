@@ -17,7 +17,7 @@
     "pretest": "npm run clean && npm run build",
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
-    "start": "node -r source-map-support/register .",
+    "start": "node -r source-map-support/register -r tsconfig-paths/register .",
     "prepublishOnly": "npm run test"
   },
   "repository": {
@@ -44,7 +44,7 @@
     "@types/set-interval-async": "^1.0.0",
     "set-interval-async": "1.0.29",
     "superagent": "^5.1.3",
-    "ttypescript": "^1.5.8"
+    "tsconfig-paths": "^3.9.0"
   },
   "devDependencies": {
     "@loopback/build": "^3.0.0",
