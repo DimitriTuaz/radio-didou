@@ -8,7 +8,7 @@ import { NowDeezer } from '../now/now.deezer';
 import { NowSpotify } from '../now/now.spotify';
 import { NowNone } from '../now/now.none';
 
-import { NowEnum } from '@common/now/enum';
+import { NowEnum } from '@common/now/now.common';
 
 export class NowController {
   constructor(

@@ -6,12 +6,8 @@
     {
       "label": "Build",
       "type": "shell",
-      "command": "npm",
+      "command": "./build.sh",
       "isBackground": true,
-      "args": [
-        "run",
-        "build"
-      ],
       "group": {
         "kind": "build",
         "isDefault": true
@@ -40,6 +36,9 @@
       "group": {
         "kind": "test",
         "isDefault": true
+      },
+      "presentation": {
+        "clear": true
       },
       "problemMatcher": [
         "$tsc",
