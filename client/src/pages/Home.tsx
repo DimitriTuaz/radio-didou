@@ -36,7 +36,7 @@ class Home extends React.Component<IProps, IState> {
   trackUrl: string = '';
   currentTrackIntervalId: number = 0;
   auditorCountIntervalId: number = 0;
-  
+
   constructor(props: IProps) {
     super(props);
 
@@ -56,7 +56,7 @@ class Home extends React.Component<IProps, IState> {
     this.getAuditorCount = this.getAuditorCount.bind(this);
     this.onPlay = this.onPlay.bind(this);
     this.onMute = this.onMute.bind(this);
-  } 
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -82,10 +82,10 @@ class Home extends React.Component<IProps, IState> {
           if (res.status && res.status === 200 && this._isMounted) {
             if (res.body.item !== undefined) {
               // Add year of release for the ablum
-              var album:string = res.body.item.album.name + " (" + res.body.item.album.release_date.substring(0, 4) + ")";
+              var album: string = res.body.item.album.name + " (" + res.body.item.album.release_date.substring(0, 4) + ")";
               // There can be mutliple artists
-              var artists:string = "";
-              res.body.item.artists.forEach((item:any , index: number) => {
+              var artists: string = "";
+              res.body.item.artists.forEach((item: any, index: number) => {
                 artists += item.name;
                 if (index < res.body.item.artists.length - 1) {
                   artists += ", ";
@@ -100,6 +100,19 @@ class Home extends React.Component<IProps, IState> {
                   trackArtists: artists,
                   trackAlbum: album
                 })
+
+                if (navigator !== undefined && 'mediaSession' in navigator) {
+                  // Hack for TypeScript 'navigator may be undefined' warning
+                  const navigatorConst: any = navigator;
+                  navigatorConst.mediaSession.metadata = new MediaMetadata({
+                    title: res.body.item.name,
+                    artist: artists,
+                    album: album,
+                    artwork: [
+                      { src: 'res.body.item.album.images[1].url', sizes: '300x300', type: 'image/jpg' }
+                    ]
+                  });
+                }
               }
             }
           }
@@ -122,13 +135,13 @@ class Home extends React.Component<IProps, IState> {
               newAuditorCount = res.body.icestats.source.listeners;
             }
             else {
-              this.setState({auditorCount: undefined})
+              this.setState({ auditorCount: undefined })
               return;
             }
 
             // setState only if auditor count has changed
             if (this.state.auditorCount !== newAuditorCount) {
-              this.setState({auditorCount: newAuditorCount});
+              this.setState({ auditorCount: newAuditorCount });
             }
           }
         }
@@ -136,11 +149,11 @@ class Home extends React.Component<IProps, IState> {
   }
 
   onPlaying(): void {
-    this.setState({playing: true, loading: false});
+    this.setState({ playing: true, loading: false });
   }
 
   onPlay(): void {
-    this.setState({playing: true, loading: true})
+    this.setState({ playing: true, loading: true })
     // Force reloading the stream when hitting play button
     this.audio.src = '';
     this.audio.src = STREAM_URL;
@@ -150,7 +163,7 @@ class Home extends React.Component<IProps, IState> {
 
   onMute(): void {
     this.audio.muted = !this.state.mute;
-    this.setState({mute: !this.state.mute});
+    this.setState({ mute: !this.state.mute });
   }
 
   render() {
@@ -161,27 +174,27 @@ class Home extends React.Component<IProps, IState> {
           <Loader className='unselectable'>Chargement...</Loader>
         </Dimmer>
         <div className={'title-container' + (isMobile ? '-mobile' : '') + ' unselectable'}>
-            <p className={'title' + (isMobile ? '-mobile' : '')}>Radio Didou</p>
+          <p className={'title' + (isMobile ? '-mobile' : '')}>Radio Didou</p>
         </div>
         <div className={'player-container' + (isMobile ? '-mobile' : '')}>
-          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onPlay}><img src={icon_play} alt=''></img></button>  
+          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onPlay}><img src={icon_play} alt=''></img></button>
           <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onMute}><img src={this.state.mute ? icon_mute : icon_sound} alt=''></img></button>
         </div>
 
-        <div className={'track-container' + (isMobile ? '-mobile' : '')} onClick={() => {window.open(this.trackUrl, '_blank')}}>
+        <div className={'track-container' + (isMobile ? '-mobile' : '')} onClick={() => { window.open(this.trackUrl, '_blank') }}>
           <div className='track-cover-container' >
-              <img className={'track-cover' + (isMobile ? '-mobile' : '')} src={this.state.trackCover} alt=''></img>
+            <img className={'track-cover' + (isMobile ? '-mobile' : '')} src={this.state.trackCover} alt=''></img>
           </div>
           <div className={'track-infos-container' + (isMobile ? '-mobile' : '')}>
-              <p className={'track-title' + (isMobile ? '-mobile' : '')}>{this.state.trackTitle}</p>
-              <p className={'track-artists' + (isMobile ? '-mobile' : '')}>{this.state.trackArtists}</p>
-              <p className={'track-album' + (isMobile ? '-mobile' : '')}>{this.state.trackAlbum}</p>
+            <p className={'track-title' + (isMobile ? '-mobile' : '')}>{this.state.trackTitle}</p>
+            <p className={'track-artists' + (isMobile ? '-mobile' : '')}>{this.state.trackArtists}</p>
+            <p className={'track-album' + (isMobile ? '-mobile' : '')}>{this.state.trackAlbum}</p>
           </div>
         </div>
 
         <div className='current-listeners-container unselectable'>
           <p className={'current-listeners' + (isMobile ? '-mobile' : '')}>
-            {this.state.auditorCount === undefined ? '' : this.state.auditorCount + ' auditeur' + (this.state.auditorCount > 1 ? 's' : '')+' actuellement'}
+            {this.state.auditorCount === undefined ? '' : this.state.auditorCount + ' auditeur' + (this.state.auditorCount > 1 ? 's' : '') + ' actuellement'}
           </p>
         </div>
       </div>
