@@ -8,3 +8,4 @@ asset_src
 /credential_deezer.json
 /credential_spotify.json
 
+*.code-workspace
