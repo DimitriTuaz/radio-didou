@@ -39,6 +39,6 @@ export class RadiodApplication extends BootMixin(RestApplication) {
 
     /* STATIC BINDING */
     this.static('/', path.join(rootPath, 'client/build'));
-    this.static('/jingles', path.join(rootPath, 'static/jingles.html'));
+    this.static('/jingles', path.join(rootPath, 'client/build'));
   }
 }
