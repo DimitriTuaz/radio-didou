@@ -33,6 +33,8 @@
       "args": [
         "-r",
         "source-map-support/register",
+        "-r",
+        "tsconfig-paths/register",
         "."
       ],
       "group": {
