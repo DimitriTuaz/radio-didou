@@ -31,6 +31,8 @@ export class NowSpotify extends NowService {
     this.credential = JSON.parse(fs.readFileSync(filePath).toString());
     this.now = {
       type: NowEnum.Spotify,
+      song: '',
+      artists: [],
     }
   }
 

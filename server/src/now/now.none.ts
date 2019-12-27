@@ -8,6 +8,8 @@ export class NowNone extends NowService {
   protected init(): void {
     this.now = {
       type: NowEnum.None,
+      song: '',
+      artists: [],
     }
   }
   protected async fetch(): Promise<void> { }

@@ -7,6 +7,7 @@ import { Dimmer, Loader } from 'semantic-ui-react'
 import superagent from 'superagent'
 
 import * as config from '../../config.json';
+import { NowEnum, INow } from '../../common/now/now.common'
 
 var SERVER_URL: string = 'http://' + config.domain
 var ICECAST_URL: string = 'http://37.59.99.228'
@@ -36,7 +37,7 @@ class App extends React.Component<IProps, IState> {
   trackUrl: string = '';
   currentTrackIntervalId: number = 0;
   auditorCountIntervalId: number = 0;
-  
+
   constructor(props: IProps) {
     super(props);
 
@@ -56,7 +57,7 @@ class App extends React.Component<IProps, IState> {
     this.getAuditorCount = this.getAuditorCount.bind(this);
     this.onPlay = this.onPlay.bind(this);
     this.onMute = this.onMute.bind(this);
-  } 
+  }
 
   componentDidMount() {
     this._isMounted = true;
@@ -80,30 +81,35 @@ class App extends React.Component<IProps, IState> {
       .then(
         res => {
           if (res.status && res.status === 200 && this._isMounted) {
-            if (res.body.song !== undefined) {
-              // Add year of release for the ablum
-              var album:string = res.body.album;
-              if(res.body.release_date !== undefined) {
-                album += " (" + res.body.release_date.substring(0, 4) + ")";
-              }
-              // There can be mutliple artists
-              var artists:string = "";
-              res.body.artists.forEach((name:any , index: number) => {
-                artists += name;
-                if (index < res.body.artists.length - 1) {
-                  artists += ", ";
+            let now: INow = res.body;
+            let trackCover: string = now.cover ? now.cover : '';
+            let trackAlbum: string = now.album ? now.album : '';
+            let trackTitle: string = now.song;
+            let trackArtists: string = '';
+            let trackUrl: string = now.url ? now.url : '';
+
+            if (now.artists !== undefined) {
+              now.artists.forEach((name: any, index: number) => {
+                trackArtists += name;
+                if (index < now.artists.length - 1) {
+                  trackArtists += ", ";
                 }
               })
-              this.trackUrl = res.body.url;
-              // setState only if track has changed
-              if (res.body.song !== this.state.trackTitle && artists !== this.state.trackArtists) {
-                this.setState({
-                  trackCover: res.body.cover,
-                  trackTitle: res.body.song,
-                  trackArtists: artists,
-                  trackAlbum: album
-                })
-              }
+            }
+
+            if (now.release_date !== undefined) {
+              trackAlbum += " (" + now.release_date.substring(0, 4) + ")";
+            }
+
+            // setState only if track has changed
+            if (trackTitle !== this.state.trackTitle && trackArtists !== this.state.trackArtists) {
+              this.trackUrl = trackUrl;
+              this.setState({
+                trackCover: trackCover,
+                trackTitle: trackTitle,
+                trackArtists: trackArtists,
+                trackAlbum: trackAlbum,
+              });
             }
           }
         }
@@ -125,13 +131,13 @@ class App extends React.Component<IProps, IState> {
               newAuditorCount = res.body.icestats.source.listeners;
             }
             else {
-              this.setState({auditorCount: undefined})
+              this.setState({ auditorCount: undefined })
               return;
             }
 
             // setState only if auditor count has changed
             if (this.state.auditorCount !== newAuditorCount) {
-              this.setState({auditorCount: newAuditorCount});
+              this.setState({ auditorCount: newAuditorCount });
             }
           }
         }
@@ -139,11 +145,11 @@ class App extends React.Component<IProps, IState> {
   }
 
   onPlaying(): void {
-    this.setState({playing: true, loading: false});
+    this.setState({ playing: true, loading: false });
   }
 
   onPlay(): void {
-    this.setState({playing: true, loading: true})
+    this.setState({ playing: true, loading: true })
     // Force reloading the stream when hitting play button
     this.audio.src = '';
     this.audio.src = STREAM_URL;
@@ -153,7 +159,7 @@ class App extends React.Component<IProps, IState> {
 
   onMute(): void {
     this.audio.muted = !this.state.mute;
-    this.setState({mute: !this.state.mute});
+    this.setState({ mute: !this.state.mute });
   }
 
   render() {
@@ -164,27 +170,27 @@ class App extends React.Component<IProps, IState> {
           <Loader className='unselectable'>Chargement...</Loader>
         </Dimmer>
         <div className={'title-container' + (isMobile ? '-mobile' : '') + 'unselectable'}>
-            <p className={'title' + (isMobile ? '-mobile' : '')}>Radio Didou</p>
+          <p className={'title' + (isMobile ? '-mobile' : '')}>Radio Didou</p>
         </div>
         <div className={'player-container' + (isMobile ? '-mobile' : '')}>
-          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onPlay}><img src={icon_play} alt=''></img></button>  
+          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onPlay}><img src={icon_play} alt=''></img></button>
           <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onMute}><img src={this.state.mute ? icon_mute : icon_sound} alt=''></img></button>
         </div>
 
-        <div className={'track-container' + (isMobile ? '-mobile' : '')} onClick={() => {window.open(this.trackUrl, '_blank')}}>
+        <div className={'track-container' + (isMobile ? '-mobile' : '')} onClick={() => { window.open(this.trackUrl, '_blank') }}>
           <div className='track-cover-container' >
-              <img className={'track-cover' + (isMobile ? '-mobile' : '')} src={this.state.trackCover} alt=''></img>
+            <img className={'track-cover' + (isMobile ? '-mobile' : '')} src={this.state.trackCover} alt=''></img>
           </div>
           <div className={'track-infos-container' + (isMobile ? '-mobile' : '')}>
-              <p className={'track-title' + (isMobile ? '-mobile' : '')}>{this.state.trackTitle}</p>
-              <p className={'track-artists' + (isMobile ? '-mobile' : '')}>{this.state.trackArtists}</p>
-              <p className={'track-album' + (isMobile ? '-mobile' : '')}>{this.state.trackAlbum}</p>
+            <p className={'track-title' + (isMobile ? '-mobile' : '')}>{this.state.trackTitle}</p>
+            <p className={'track-artists' + (isMobile ? '-mobile' : '')}>{this.state.trackArtists}</p>
+            <p className={'track-album' + (isMobile ? '-mobile' : '')}>{this.state.trackAlbum}</p>
           </div>
         </div>
 
         <div className='current-listeners-container unselectable'>
           <p className={'current-listeners' + (isMobile ? '-mobile' : '')}>
-            {this.state.auditorCount === undefined ? '' : this.state.auditorCount + ' auditeur' + (this.state.auditorCount > 1 ? 's' : '')+' actuellement'}
+            {this.state.auditorCount === undefined ? '' : this.state.auditorCount + ' auditeur' + (this.state.auditorCount > 1 ? 's' : '') + ' actuellement'}
           </p>
         </div>
       </div>

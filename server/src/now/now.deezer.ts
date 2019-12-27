@@ -31,6 +31,8 @@ export class NowDeezer extends NowService {
     this.credential = JSON.parse(fs.readFileSync(filePath).toString());
     this.now = {
       type: NowEnum.Deezer,
+      song: '',
+      artists: [],
     }
   }
 
