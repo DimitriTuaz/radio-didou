@@ -2,6 +2,7 @@ import React from 'react';
 import '../App.less';
 import icon_play from '../images/icon_play.png'
 import icon_sound from '../images/icon_sound.png'
+import icon_sound_low from '../images/icon_sound_low.png'
 import icon_mute from '../images/icon_mute.png'
 import { Dimmer, Loader } from 'semantic-ui-react'
 import superagent from 'superagent'
@@ -20,6 +21,7 @@ interface IProps {
 
 interface IState {
   mute: boolean;
+  volume: number;
   playing: boolean;
   loading: boolean;
   trackCover?: string;
@@ -42,6 +44,7 @@ class Home extends React.Component<IProps, IState> {
 
     this.state = {
       mute: false,
+      volume: 1,
       playing: false,
       loading: false,
       trackCover: undefined,
@@ -56,6 +59,7 @@ class Home extends React.Component<IProps, IState> {
     this.getAuditorCount = this.getAuditorCount.bind(this);
     this.onPlay = this.onPlay.bind(this);
     this.onMute = this.onMute.bind(this);
+    this.onChangeVolume = this.onChangeVolume.bind(this);
   }
 
   componentDidMount() {
@@ -166,6 +170,11 @@ class Home extends React.Component<IProps, IState> {
     this.setState({ mute: !this.state.mute });
   }
 
+  onChangeVolume(e: React.FormEvent<HTMLInputElement>): void {
+    this.audio.volume = parseFloat(e.currentTarget.value);
+    this.setState({ volume: parseFloat(e.currentTarget.value)});
+  }
+
   render() {
     const isMobile = window.innerWidth <= 1000;
     return (
@@ -177,8 +186,22 @@ class Home extends React.Component<IProps, IState> {
           <p className={'title' + (isMobile ? '-mobile' : '')}>Radio Didou</p>
         </div>
         <div className={'player-container' + (isMobile ? '-mobile' : '')}>
-          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onPlay}><img src={icon_play} alt=''></img></button>
-          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onMute}><img src={this.state.mute ? icon_mute : icon_sound} alt=''></img></button>
+          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onPlay}>
+            <img src={icon_play} alt=''></img>
+          </button>
+          <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={this.onMute}>
+            <img src={this.state.mute ? icon_mute : (this.state.volume > 0.5 ? icon_sound : icon_sound_low)} alt=''></img>
+          </button>
+          <div className={'volume-slider-wrapper' + (isMobile ? '-mobile' : '')}>
+            <input
+              min={0}
+              max={1}
+              onChange={this.onChangeVolume}
+              step='any'
+              type='range'
+              value={this.state.volume}
+            />
+          </div>
         </div>
 
         <div className={'track-container' + (isMobile ? '-mobile' : '')} onClick={() => { window.open(this.trackUrl, '_blank') }}>
