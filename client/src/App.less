@@ -1,5 +1,6 @@
 body {
   background-image:url("images/background.png");
+  background-attachment: fixed;
   font-family: OpenSansRegular, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
@@ -243,6 +244,20 @@ player-container-mobile {
   font-size:12px;
 }
 
+.jingles-section {
+  color: white;
+  font-size:120%;
+  margin-top: 20px;
+  margin-bottom: 0px;
+}
+
+.jingles-section-mobile {
+  .jingles-section;
+  font-size: 12px;
+  margin-top: 10px;
+  margin-bottom: 0px;
+}
+
 .jingles-container {
   display: flex;
   flex-direction: column;
@@ -274,5 +289,15 @@ player-container-mobile {
     &:active { 
       background-color: rgba(0, 0, 0, 0.2);
     }
+}
+
+.jingles-button-mobile {
+  .jingles-button;
+  font-size:8px;
+  height: 70px;
+  width: 70px;
+  border-radius: 5px;
+  padding: 4px;
+  margin: 2px;
 }
 

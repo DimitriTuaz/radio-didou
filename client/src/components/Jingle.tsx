@@ -24,9 +24,10 @@ class Jingle extends React.Component<IProps, IState> {
     }
 
     render() {
+        const isMobile = window.innerWidth <= 1000;
         return(
             <div>
-                <button onClick={this.play} className="jingles-button">{this.props.display}</button>
+                <button onClick={this.play} className={'jingles-button' + (isMobile ? '-mobile' : '')}>{this.props.display}</button>
             </div>
         );
     }
