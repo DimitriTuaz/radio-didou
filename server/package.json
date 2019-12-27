@@ -11,7 +11,7 @@
     "node": ">=8.9"
   },
   "scripts": {
-    "build": "lb-tsc",
+    "build": "tsc -p ../common && lb-tsc",
     "build:watch": "lb-tsc --watch",
     "clean": "lb-clean dist *.tsbuildinfo",
     "pretest": "npm run clean && npm run build",
