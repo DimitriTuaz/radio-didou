@@ -11,8 +11,9 @@ import { RadiodBindings } from './keys';
 
 import { NowNone } from './now/now.none';
 import { NowSpotify } from './now/now.spotify';
+import { RepositoryMixin } from '@loopback/repository';
 
-export class RadiodApplication extends BootMixin(RestApplication) {
+export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
   constructor(rootPath: string) {
     super(JSON.parse(fs.readFileSync(path.join(rootPath, 'config.json')).toString()));

@@ -39,9 +39,11 @@
     "@loopback/context": "^1.25.0",
     "@loopback/core": "^1.12.0",
     "@loopback/openapi-v3": "^1.10.3",
+    "@loopback/repository": "^1.16.0",
     "@loopback/rest": "^1.25.0",
     "@loopback/rest-explorer": "^1.4.6",
     "@types/set-interval-async": "^1.0.0",
+    "loopback-connector-mongodb": "^4.2.0",
     "set-interval-async": "1.0.29",
     "superagent": "^5.1.3",
     "tsconfig-paths": "^3.9.0"
