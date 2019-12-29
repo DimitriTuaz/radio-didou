@@ -70,7 +70,7 @@ export class NowController {
   }
 
 
-  @post('/now/add', {
+  @get('/now/{serviceId}/callback', {
     responses: {
       '200': {
         description: 'Credential model instance',
@@ -79,18 +79,14 @@ export class NowController {
     },
   })
   async create(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Credential, {
-            title: 'NewCredential',
-            exclude: ['id'],
-          }),
-        },
-      },
-    })
-    credential: Omit<Credential, 'id'>,
+    @param.path.number('serviceId') serviceId: number,
+    @param.query.string('code') code: string
   ): Promise<Credential> {
+    let credential: Credential = new Credential({
+      name: 'paeolo',
+      type: serviceId,
+      token: code
+    });
     return this.credentialRepository.create(credential);
   }
 
