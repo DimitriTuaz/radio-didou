@@ -90,7 +90,7 @@ export class NowController {
     return this.credentialRepository.create(credential);
   }
 
-  @del('/now/delete/{id}', {
+  @get('/now/delete/{id}', {
     responses: {
       '204': {
         description: 'Credential DELETE success',
