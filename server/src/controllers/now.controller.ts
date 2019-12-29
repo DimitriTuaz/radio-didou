@@ -27,25 +27,31 @@ export class NowController {
     return service.value();
   }
 
-  @get('/now/set/{serviceId}')
+  @get('/now/set/{credentialId}')
   async setNowService(
-    @param.path.number('serviceId') serviceId: number,
+    @param.path.string('credentialId') credentialId: string,
   ) {
-    let service = await this.serviceGetter();
-    let value = service.value();
-    service.stop();
-    switch (serviceId) {
-      case NowEnum.Spotify:
-        this.serviceBinding.toClass(NowSpotify).inScope(BindingScope.SINGLETON);
-        break;
-      case NowEnum.Deezer:
-        this.serviceBinding.toClass(NowDeezer).inScope(BindingScope.SINGLETON);
-        break;
-      default:
-        this.serviceBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
+    try {
+      let credential: Credential = await this.credentialRepository.findById(credentialId);
+      let service = await this.serviceGetter();
+      let value = service.value();
+      service.stop();
+      console.log(credential.token);
+      switch (credential.type) {
+        case NowEnum.Spotify:
+          this.serviceBinding.toClass(NowSpotify).inScope(BindingScope.SINGLETON);
+          break;
+        case NowEnum.Deezer:
+          this.serviceBinding.toClass(NowDeezer).inScope(BindingScope.SINGLETON);
+          break;
+        default:
+          this.serviceBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
+      }
+      service = await this.serviceGetter();
+      service.start(value);
+    } catch (e) {
+      console.log(e);
     }
-    service = await this.serviceGetter();
-    service.start(value);
   }
 
   @get('/now/show', {
