@@ -3,23 +3,22 @@ import {Entity, model, property} from '@loopback/repository';
 @model()
 export class Credential extends Entity {
   @property({
-    type: 'number',
+    type: 'string',
     id: true,
     generated: true,
   })
-  id?: number;
+  id?: string;
+
+  @property({
+    type: 'string',
+  })
+  userId?: string;
 
   @property({
     type: 'string',
     required: true,
   })
   name: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  token: string;
 
   @property({
     type: 'number',
@@ -29,9 +28,10 @@ export class Credential extends Entity {
   type: number;
 
   @property({
-    type: 'number',
+    type: 'string',
+    required: true,
   })
-  userID?: number;
+  token: string;
 
 
   constructor(data?: Partial<Credential>) {
