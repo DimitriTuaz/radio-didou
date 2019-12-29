@@ -1,4 +1,4 @@
-import { get, param } from '@loopback/rest';
+import { get, param, getModelSchemaRef, getFilterSchemaFor, post, requestBody, del } from '@loopback/rest';
 import { inject, Binding, BindingScope, Getter } from '@loopback/core';
 
 import { RadiodBindings } from '../keys';
@@ -9,9 +9,14 @@ import { NowSpotify } from '../now/now.spotify';
 import { NowNone } from '../now/now.none';
 
 import { NowEnum } from '@common/now/now.common';
+import { Filter, repository } from '@loopback/repository';
+
+import { CredentialRepository } from '../repositories/credential.repository';
+import { Credential } from '../models/credential.model';
 
 export class NowController {
   constructor(
+    @repository(CredentialRepository) public credentialRepository: CredentialRepository,
     @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
     @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>
   ) { }
@@ -41,5 +46,62 @@ export class NowController {
     }
     service = await this.serviceGetter();
     service.start(value);
+  }
+
+  @get('/now/show', {
+    responses: {
+      '200': {
+        description: 'Array of Credential model instances',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(Credential, { includeRelations: true }),
+            },
+          },
+        },
+      },
+    },
+  })
+  async find(
+    @param.query.object('filter', getFilterSchemaFor(Credential)) filter?: Filter<Credential>,
+  ): Promise<Credential[]> {
+    return this.credentialRepository.find(filter);
+  }
+
+
+  @post('/now/add', {
+    responses: {
+      '200': {
+        description: 'Credential model instance',
+        content: { 'application/json': { schema: getModelSchemaRef(Credential) } },
+      },
+    },
+  })
+  async create(
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(Credential, {
+            title: 'NewCredential',
+            exclude: ['id'],
+          }),
+        },
+      },
+    })
+    credential: Omit<Credential, 'id'>,
+  ): Promise<Credential> {
+    return this.credentialRepository.create(credential);
+  }
+
+  @del('/now/delete/{id}', {
+    responses: {
+      '204': {
+        description: 'Credential DELETE success',
+      },
+    },
+  })
+  async deleteById(@param.path.string('id') id: string): Promise<void> {
+    await this.credentialRepository.deleteById(id);
   }
 }
