@@ -53,14 +53,16 @@ export class NowSpotify extends NowService {
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer ' + this.credential.access_token);
 
-      this.now = {
-        type: NowEnum.Spotify,
-        song: response.body.item.name,
-        artists: Array.from(response.body.item.artists, (item: any) => item.name),
-        album: response.body.item.album.name,
-        release_date: response.body.item.album.release_date,
-        cover: response.body.item.album.images[1].url,
-        url: response.body.item.external_urls.spotify
+      if (response.body.item != undefined) {
+        this.now = {
+          type: NowEnum.Spotify,
+          song: response.body.item.name,
+          artists: Array.from(response.body.item.artists, (item: any) => item.name),
+          album: response.body.item.album.name,
+          release_date: response.body.item.album.release_date,
+          cover: response.body.item.album.images[1].url,
+          url: response.body.item.external_urls.spotify
+        }
       }
     }
     catch (error) {
