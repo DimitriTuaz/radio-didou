@@ -119,7 +119,8 @@ export class NowController {
       .set('Authorization', 'Basic ' + authorization)
       .send({
         grant_type: 'authorization_code',
-        code: code
+        code: code,
+        redirect_uri: 'http://localhost:8888/now/1/callback'
       });
     return response.body.refresh_token;
   }
