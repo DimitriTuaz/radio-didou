@@ -12,6 +12,7 @@ import { RadiodBindings } from './keys';
 import { NowNone } from './now/now.none';
 import { NowSpotify } from './now/now.spotify';
 import { RepositoryMixin } from '@loopback/repository';
+import { NowDeezer } from './now/now.deezer';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -34,7 +35,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     /* APPLICATION BINDING */
     this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
     this.bind(RadiodBindings.NOW_SERVICE)
-      .toClass(NowSpotify)
+      .toClass(NowDeezer)
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)
       .inScope(BindingScope.SINGLETON);
 

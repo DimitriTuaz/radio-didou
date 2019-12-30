@@ -7,6 +7,7 @@ import fs from 'fs';
 import { RadiodBindings } from '../keys';
 import { NowService } from '../services';
 import { NowEnum, INow } from '@common/now/now.common';
+import { RepositoryMixin } from '@loopback/repository';
 
 interface IDeezerCredential {
   app_id: string;
@@ -52,13 +53,15 @@ export class NowDeezer extends NowService {
         .query({ output: "json" })
         .query({ limit: 1 })
 
-      this.now = {
-        type: NowEnum.Deezer,
-        song: response.body.data[0].title,
-        artists: [response.body.data[0].artist.name],
-        album: response.body.data[0].album.title,
-        cover: response.body.data[0].album.cover_medium,
-        url: response.body.data[0].album.link
+      if (response.body.data != undefined) {
+        this.now = {
+          type: NowEnum.Deezer,
+          song: response.body.data[0].title,
+          artists: [response.body.data[0].artist.name],
+          album: response.body.data[0].album.title,
+          cover: response.body.data[0].album.cover_medium,
+          url: response.body.data[0].album.link
+        }
       }
     }
     catch (error) {
