@@ -1,34 +1,25 @@
 import { inject } from '@loopback/core';
 
-import path from 'path';
 import request from 'superagent'
-import fs from 'fs';
 
 import { RadiodBindings } from '../keys';
 import { NowService } from '../services';
 import { NowEnum, INow } from '@common/now/now.common';
-import { RepositoryMixin } from '@loopback/repository';
-
-interface IDeezerCredential {
-  app_id: string;
-  secret: string;
-  access_token: string;
-}
 
 export class NowDeezer extends NowService {
 
   public static deezer_api_url = 'https://api.deezer.com/user/me/history';
   public serviceName = "NowDeezer";
 
-  private credential: IDeezerCredential;
+  private access_token: string;
 
   constructor(
-    @inject(RadiodBindings.ROOT_PATH)
-    private projectRoot: any) { super() }
+    @inject(RadiodBindings.API_KEY) private apiKey: any) { super() }
 
-  protected init(value?: INow): void {
-    let filePath: string = path.join(this.projectRoot, 'credential_deezer.json');
-    this.credential = JSON.parse(fs.readFileSync(filePath).toString());
+  protected init(value?: INow, token?: string): void {
+    if (token != null) {
+      this.access_token = token;
+    }
     if (value != null) {
       this.now = value;
     }
@@ -49,7 +40,7 @@ export class NowDeezer extends NowService {
     try {
       const response = await request
         .get(NowDeezer.deezer_api_url)
-        .query({ access_token: this.credential.access_token })
+        .query({ access_token: this.access_token })
         .query({ output: "json" })
         .query({ limit: 1 })
 

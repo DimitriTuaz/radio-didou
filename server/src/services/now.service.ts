@@ -6,7 +6,7 @@ import { INow } from '@common/now/now.common';
 
 export abstract class NowService implements LifeCycleObserver, Provider<INow> {
 
-  protected abstract init(value?: INow): void;
+  protected abstract init(value?: INow, token?: string): void;
   protected abstract async fetch(): Promise<void>;
   public abstract serviceName: string;
 

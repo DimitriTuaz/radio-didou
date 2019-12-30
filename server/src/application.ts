@@ -36,14 +36,15 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
 
     this.bind(RadiodBindings.API_KEY).toDynamicValue(() => {
-      return fs.readFileSync(path.join(rootPath, 'api_key.json')).toString()
+      return JSON.parse(
+        fs.readFileSync(path.join(rootPath, 'api_key.json')).toString()
+      )
     });
 
     this.bind(RadiodBindings.NOW_SERVICE)
-      .toClass(NowDeezer)
+      .toClass(NowNone)
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)
       .inScope(BindingScope.SINGLETON);
-
 
     /* STATIC BINDING */
     this.static('/', path.join(rootPath, 'client/build'));
