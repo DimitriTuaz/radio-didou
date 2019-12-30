@@ -8,7 +8,8 @@ import { NowEnum, INow } from '@common/now/now.common';
 
 export class NowDeezer extends NowService {
 
-  public static deezer_api_url = 'https://api.deezer.com/user/me/history';
+  public static history_url = 'https://api.deezer.com/user/me/history';
+  public static auth_url = 'https://connect.deezer.com/oauth/access_token.php';
   public serviceName = "NowDeezer";
 
   private access_token: string;
@@ -39,7 +40,7 @@ export class NowDeezer extends NowService {
   private async obtain_current_playback(): Promise<void> {
     try {
       const response = await request
-        .get(NowDeezer.deezer_api_url)
+        .get(NowDeezer.history_url)
         .query({ access_token: this.access_token })
         .query({ output: "json" })
         .query({ limit: 1 })

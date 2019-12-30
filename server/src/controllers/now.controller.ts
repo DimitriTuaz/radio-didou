@@ -1,4 +1,4 @@
-import { get, param, getModelSchemaRef, getFilterSchemaFor, post, requestBody, del } from '@loopback/rest';
+import { get, param, getModelSchemaRef, getFilterSchemaFor } from '@loopback/rest';
 import { inject, Binding, BindingScope, Getter } from '@loopback/core';
 
 import { RadiodBindings } from '../keys';
@@ -13,9 +13,11 @@ import { Filter, repository } from '@loopback/repository';
 
 import { CredentialRepository } from '../repositories/credential.repository';
 import { Credential } from '../models/credential.model';
+import request = require('superagent');
 
 export class NowController {
   constructor(
+    @inject(RadiodBindings.API_KEY) private apiKey: any,
     @repository(CredentialRepository) public credentialRepository: CredentialRepository,
     @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
     @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>
@@ -36,7 +38,6 @@ export class NowController {
       let service = await this.serviceGetter();
       let value = service.value();
       service.stop();
-      console.log(credential.token);
       switch (credential.type) {
         case NowEnum.Spotify:
           this.serviceBinding.toClass(NowSpotify).inScope(BindingScope.SINGLETON);
@@ -48,7 +49,7 @@ export class NowController {
           this.serviceBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
       }
       service = await this.serviceGetter();
-      service.start(value);
+      service.start(value, credential.token);
     } catch (e) {
       console.log(e);
     }
@@ -75,7 +76,6 @@ export class NowController {
     return this.credentialRepository.find(filter);
   }
 
-
   @get('/now/{serviceId}/callback', {
     responses: {
       '200': {
@@ -88,12 +88,40 @@ export class NowController {
     @param.path.number('serviceId') serviceId: number,
     @param.query.string('code') code: string
   ): Promise<Credential> {
-    let credential: Credential = new Credential({
-      name: 'paeolo',
+    let name: string = '';
+    let token: string = '';
+    switch (serviceId) {
+      case NowEnum.Spotify: {
+        const authorization = new Buffer(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
+          .toString('base64');
+        const response = await request
+          .post(NowSpotify.token_url)
+          .set('Content-Type', 'application/x-www-form-urlencoded')
+          .set('Authorization', 'Basic ' + authorization)
+          .send({
+            redirect_uri: 'http://localhost:8888/now/1/callback',
+            code: code,
+            grant_type: 'authorization_code'
+          });
+        name = 'Spotify Auth';
+        token = response.body.refresh_token;
+      }
+      case NowEnum.Deezer: {
+        const response = await request
+          .get(NowDeezer.auth_url)
+          .query({ app_id: this.apiKey.deezer.app_id })
+          .query({ secret: this.apiKey.deezer.secret })
+          .query({ code: code })
+          .query({ output: "json" });
+        name = 'Deezer Auth';
+        token = response.body.access_token;
+      }
+    }
+    return this.credentialRepository.create(new Credential({
+      name: name,
       type: serviceId,
-      token: code
-    });
-    return this.credentialRepository.create(credential);
+      token: token
+    }));
   }
 
   @get('/now/delete/{id}', {

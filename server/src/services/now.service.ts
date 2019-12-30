@@ -17,7 +17,7 @@ export abstract class NowService implements LifeCycleObserver, Provider<INow> {
     return this.now;
   }
 
-  public start(value?: INow): void {
+  public start(value?: INow, token?: string): void {
     try {
       this.init(value);
       if (!this.intervalID) {

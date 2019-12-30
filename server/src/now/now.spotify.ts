@@ -8,8 +8,9 @@ import { NowEnum, INow } from '@common/now/now.common';
 
 export class NowSpotify extends NowService {
 
-  public static spotify_api_url = 'https://api.spotify.com/v1/me/player';
-  public static spotify_token_url = 'https://accounts.spotify.com/api/token';
+  public static player_url = 'https://api.spotify.com/v1/me/player';
+  public static token_url = 'https://accounts.spotify.com/api/token';
+
   public serviceName = "NowSpotify";
 
   private access_token: string;
@@ -41,7 +42,7 @@ export class NowSpotify extends NowService {
   private async obtain_current_playback(retryOnce: boolean): Promise<void> {
     try {
       const response = await request
-        .get(NowSpotify.spotify_api_url)
+        .get(NowSpotify.player_url)
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer ' + this.access_token);
@@ -75,7 +76,7 @@ export class NowSpotify extends NowService {
         .toString('base64');
 
       const response = await request
-        .post(NowSpotify.spotify_token_url)
+        .post(NowSpotify.token_url)
         .set('Content-Type', 'application/x-www-form-urlencoded')
         .set('Authorization', 'Basic ' + authorization)
         .send({
