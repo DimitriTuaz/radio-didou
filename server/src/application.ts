@@ -10,9 +10,7 @@ import { MainSequence } from './sequence';
 import { RadiodBindings } from './keys';
 
 import { NowNone } from './now/now.none';
-import { NowSpotify } from './now/now.spotify';
 import { RepositoryMixin } from '@loopback/repository';
-import { NowDeezer } from './now/now.deezer';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -34,13 +32,17 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     /* APPLICATION BINDING */
     this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
+    this.bind(RadiodBindings.CONFIG).toDynamicValue(() => {
+      return JSON.parse(
+        fs.readFileSync(path.join(rootPath, 'config.json')).toString()
+      )
+    });
 
     this.bind(RadiodBindings.API_KEY).toDynamicValue(() => {
       return JSON.parse(
         fs.readFileSync(path.join(rootPath, 'api_key.json')).toString()
       )
     });
-
     this.bind(RadiodBindings.NOW_SERVICE)
       .toClass(NowNone)
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)

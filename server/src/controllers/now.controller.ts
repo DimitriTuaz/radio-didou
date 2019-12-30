@@ -1,5 +1,5 @@
 import { get, param, getModelSchemaRef, getFilterSchemaFor } from '@loopback/rest';
-import { inject, Binding, BindingScope, Getter } from '@loopback/core';
+import { inject, Binding, BindingScope, Getter, bind } from '@loopback/core';
 
 import { RadiodBindings } from '../keys';
 
@@ -16,9 +16,11 @@ import { Credential } from '../models/credential.model';
 
 import request = require('superagent');
 
+@bind({ scope: BindingScope.SINGLETON })
 export class NowController {
   constructor(
     @inject(RadiodBindings.API_KEY) private apiKey: any,
+    @inject(RadiodBindings.CONFIG) private config: any,
     @repository(CredentialRepository) public credentialRepository: CredentialRepository,
     @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
     @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>
@@ -120,7 +122,7 @@ export class NowController {
       .send({
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: 'http://localhost:8888/now/1/callback'
+        redirect_uri: 'http://' + this.config.domain + ':' + this.config.rest.port + '/now/1/callback'
       });
     return response.body.refresh_token;
   }
