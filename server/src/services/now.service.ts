@@ -19,7 +19,7 @@ export abstract class NowService implements LifeCycleObserver, Provider<INow> {
 
   public start(value?: INow, token?: string): void {
     try {
-      this.init(value);
+      this.init(value, token);
       if (!this.intervalID) {
         console.log("[" + this.serviceName + "] started");
         this.intervalID = setIntervalAsync(

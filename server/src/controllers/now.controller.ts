@@ -13,6 +13,7 @@ import { Filter, repository } from '@loopback/repository';
 
 import { CredentialRepository } from '../repositories/credential.repository';
 import { Credential } from '../models/credential.model';
+
 import request = require('superagent');
 
 export class NowController {
@@ -91,30 +92,14 @@ export class NowController {
     let name: string = '';
     let token: string = '';
     switch (serviceId) {
-      case NowEnum.Spotify: {
-        const authorization = new Buffer(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
-          .toString('base64');
-        const response = await request
-          .post(NowSpotify.token_url)
-          .set('Content-Type', 'application/x-www-form-urlencoded')
-          .set('Authorization', 'Basic ' + authorization)
-          .send({
-            redirect_uri: 'http://localhost:8888/now/1/callback',
-            code: code,
-            grant_type: 'authorization_code'
-          });
+      case NowEnum.Spotify:
         name = 'Spotify Auth';
-        token = response.body.refresh_token;
-      }
+        token = await this.obtainSpotifyToken(code);
+        break;
       case NowEnum.Deezer: {
-        const response = await request
-          .get(NowDeezer.auth_url)
-          .query({ app_id: this.apiKey.deezer.app_id })
-          .query({ secret: this.apiKey.deezer.secret })
-          .query({ code: code })
-          .query({ output: "json" });
         name = 'Deezer Auth';
-        token = response.body.access_token;
+        token = await this.obtainDeezerToken(code);
+        break;
       }
     }
     return this.credentialRepository.create(new Credential({
@@ -122,6 +107,31 @@ export class NowController {
       type: serviceId,
       token: token
     }));
+  }
+
+  private async obtainSpotifyToken(code: string) {
+    const authorization = new Buffer(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
+      .toString('base64');
+    const response = await request
+      .post(NowSpotify.token_url)
+      .set('Accept', 'application/json')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Authorization', 'Basic ' + authorization)
+      .send({
+        grant_type: 'authorization_code',
+        code: code
+      });
+    return response.body.refresh_token;
+  }
+
+  private async obtainDeezerToken(code: string) {
+    const response = await request
+      .get(NowDeezer.auth_url)
+      .query({ app_id: this.apiKey.deezer.app_id })
+      .query({ secret: this.apiKey.deezer.secret })
+      .query({ code: code })
+      .query({ output: "json" });
+    return response.body.access_token;
   }
 
   @get('/now/delete/{id}', {
