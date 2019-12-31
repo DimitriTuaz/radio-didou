@@ -1,7 +1,7 @@
 import { get, param, getModelSchemaRef, getFilterSchemaFor } from '@loopback/rest';
 import { inject, Binding, BindingScope, Getter, bind } from '@loopback/core';
 
-import { RadiodBindings } from '../keys';
+import { RadiodBindings, RadiodKeys } from '../keys';
 
 import { NowService } from '../services/now.service';
 import { NowDeezer } from '../now/now.deezer';
@@ -11,6 +11,8 @@ import { NowNone } from '../now/now.none';
 import { NowEnum } from '@common/now/now.common';
 import { Filter, repository } from '@loopback/repository';
 
+import { ConfigurationRepository } from '../repositories/configuration.repository';
+import { Configuration } from '../models/configuration.model';
 import { CredentialRepository } from '../repositories/credential.repository';
 import { Credential } from '../models/credential.model';
 
@@ -22,6 +24,7 @@ export class NowController {
     @inject(RadiodBindings.API_KEY) private apiKey: any,
     @inject(RadiodBindings.CONFIG) private config: any,
     @repository(CredentialRepository) public credentialRepository: CredentialRepository,
+    @repository(ConfigurationRepository) public configurationRepository: ConfigurationRepository,
     @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
     @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>
   ) { }
@@ -38,6 +41,10 @@ export class NowController {
   ) {
     try {
       let credential: Credential = await this.credentialRepository.findById(credentialId);
+      await this.configurationRepository.create(new Configuration({
+        key: RadiodKeys.DEFAULT_CREDENTIAL,
+        value: credential.id
+      }))
       let service = await this.serviceGetter();
       let value = service.value();
       service.stop();

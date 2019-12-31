@@ -7,3 +7,7 @@ export namespace RadiodBindings {
   export const API_KEY = BindingKey.create<any>('radiod.api-key');
   export const NOW_SERVICE = BindingKey.create<NowService>('radiod.now-service');
 }
+
+export namespace RadiodKeys {
+  export const DEFAULT_CREDENTIAL = 'default_credential'
+}
