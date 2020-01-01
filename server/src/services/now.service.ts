@@ -35,7 +35,7 @@ export abstract class NowService implements LifeCycleObserver, Provider<INow> {
             const response = await request
               .get(this.icecastURL)
               .set('Accept', 'application/json');
-            this.now.listeners = response.body.source.listeners;
+            this.now.listeners = response.body.icestats.source.listeners;
           },
           5000
         );
