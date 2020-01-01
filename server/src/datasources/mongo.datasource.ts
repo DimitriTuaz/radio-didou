@@ -5,7 +5,7 @@ import {
   ValueOrPromise,
 } from '@loopback/core';
 import { juggler } from '@loopback/repository';
-import config from './mongo.datasource.config.json';
+import config from '../../../mongo.config.json';
 
 @lifeCycleObserver('datasource')
 export class MongoDataSource extends juggler.DataSource
