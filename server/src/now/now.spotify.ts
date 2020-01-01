@@ -18,7 +18,10 @@ export class NowSpotify extends NowService {
   private refresh_token: string;
 
   constructor(
-    @inject(RadiodBindings.API_KEY) private apiKey: any) { super() }
+    @inject(RadiodBindings.CONFIG) private configuration: any,
+    @inject(RadiodBindings.API_KEY) private apiKey: any) {
+    super(configuration)
+  }
 
   protected init(value?: INow, token?: string): void {
     if (token != null) {
@@ -30,6 +33,7 @@ export class NowSpotify extends NowService {
     else {
       this.now = {
         type: NowEnum.Spotify,
+        listeners: 0,
         song: '',
         artists: [],
       }
@@ -51,6 +55,7 @@ export class NowSpotify extends NowService {
       if (response.body.item != undefined) {
         this.now = {
           type: NowEnum.Spotify,
+          listeners: this.now.listeners,
           song: response.body.item.name,
           artists: Array.from(response.body.item.artists, (item: any) => item.name),
           album: response.body.item.album.name,

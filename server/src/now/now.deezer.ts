@@ -17,7 +17,10 @@ export class NowDeezer extends NowService {
   private access_token: string;
 
   constructor(
-    @inject(RadiodBindings.API_KEY) private apiKey: any) { super() }
+    @inject(RadiodBindings.CONFIG) private configuration: any,
+    @inject(RadiodBindings.API_KEY) private apiKey: any) {
+    super(configuration)
+  }
 
   protected init(value?: INow, token?: string): void {
     if (token != null) {
@@ -29,6 +32,7 @@ export class NowDeezer extends NowService {
     else {
       this.now = {
         type: NowEnum.Deezer,
+        listeners: 0,
         song: '',
         artists: [],
       }
@@ -50,6 +54,7 @@ export class NowDeezer extends NowService {
       if (response.body.data != undefined) {
         this.now = {
           type: NowEnum.Deezer,
+          listeners: this.now.listeners,
           song: response.body.data[0].title,
           artists: [response.body.data[0].artist.name],
           album: response.body.data[0].album.title,
