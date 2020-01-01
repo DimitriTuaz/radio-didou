@@ -11,6 +11,7 @@ import { RadiodBindings } from './keys';
 
 import { NowNone } from './now/now.none';
 import { RepositoryMixin } from '@loopback/repository';
+import { ConfigurationService } from './services';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -31,6 +32,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     };
 
     /* APPLICATION BINDING */
+    this.service(ConfigurationService);
     this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
     this.bind(RadiodBindings.CONFIG).toDynamicValue(() => {
       return JSON.parse(
