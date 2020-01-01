@@ -1,7 +1,7 @@
 import { bind, BindingScope } from '@loopback/core';
-import { ConfigurationRepository } from '../repositories/configuration.repository';
+import { ConfigurationRepository } from '../repositories';
 import { repository } from '@loopback/repository';
-import { Configuration } from '../models/configuration.model';
+import { Configuration } from '../models';
 
 @bind({ scope: BindingScope.SINGLETON })
 export class ConfigurationService {

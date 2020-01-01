@@ -22,7 +22,7 @@ export class NowController {
   constructor(
     @inject(RadiodBindings.API_KEY) private apiKey: any,
     @inject(RadiodBindings.CONFIG) private config: any,
-    @service(ConfigurationService) private configuration: ConfigurationService,
+    @inject(RadiodBindings.CONFIG_SERVICE) private configuration: ConfigurationService,
     @repository(CredentialRepository) public credentialRepository: CredentialRepository,
     @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
     @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>
@@ -115,7 +115,7 @@ export class NowController {
   }
 
   private async obtainSpotifyToken(code: string) {
-    const authorization = new Buffer(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
+    const authorization = Buffer.from(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
       .toString('base64');
     const response = await request
       .post(NowSpotify.token_url)

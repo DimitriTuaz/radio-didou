@@ -72,7 +72,7 @@ export class NowSpotify extends NowService {
 
   private async obtain_access_token(): Promise<void> {
     try {
-      const authorization = new Buffer(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
+      const authorization = Buffer.from(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
         .toString('base64');
 
       const response = await request
