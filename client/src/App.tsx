@@ -54,7 +54,6 @@ class App extends React.Component<IProps, IState> {
 
     this.onPlaying = this.onPlaying.bind(this);
     this.getCurrentTrack = this.getCurrentTrack.bind(this);
-    this.getAuditorCount = this.getAuditorCount.bind(this);
     this.onPlay = this.onPlay.bind(this);
     this.onMute = this.onMute.bind(this);
   }
@@ -63,9 +62,7 @@ class App extends React.Component<IProps, IState> {
     this._isMounted = true;
     this.audio.onplaying = this.onPlaying;
     this.getCurrentTrack();
-    this.getAuditorCount();
-    this.currentTrackIntervalId = window.setInterval(this.getCurrentTrack, 10000);
-    this.auditorCountIntervalId = window.setInterval(this.getAuditorCount, 1000);
+    this.currentTrackIntervalId = window.setInterval(this.getCurrentTrack, 3000);
   }
 
   componentWillUnmount() {
@@ -87,6 +84,7 @@ class App extends React.Component<IProps, IState> {
             let trackTitle: string = now.song;
             let trackArtists: string = '';
             let trackUrl: string = now.url ? now.url : '';
+            let auditorCount: number = now.listeners;
 
             if (now.artists !== undefined) {
               now.artists.forEach((name: any, index: number) => {
@@ -111,33 +109,10 @@ class App extends React.Component<IProps, IState> {
                 trackAlbum: trackAlbum,
               });
             }
-          }
-        }
-      )
-  }
 
-  getAuditorCount() {
-    superagent
-      .get(ICECAST_STATUS_URL)
-      .set('Accept', 'application/json')
-      .then(
-        res => {
-          if (res.status && res.status === 200 && this._isMounted) {
-            var newAuditorCount: number = 0;
-            if (res.body.icestats !== undefined && res.body.icestats.source[0] !== undefined) {
-              newAuditorCount = res.body.icestats.source[0].listeners;
-            }
-            else if (res.body.icestats !== undefined && res.body.icestats.source !== undefined) {
-              newAuditorCount = res.body.icestats.source.listeners;
-            }
-            else {
-              this.setState({ auditorCount: undefined })
-              return;
-            }
-
-            // setState only if auditor count has changed
-            if (this.state.auditorCount !== newAuditorCount) {
-              this.setState({ auditorCount: newAuditorCount });
+            // setState for auditorCount
+            if (this.state.auditorCount !== auditorCount) {
+              this.setState({ auditorCount: auditorCount });
             }
           }
         }
