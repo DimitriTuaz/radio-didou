@@ -98,12 +98,13 @@ export class NowController {
     let token: string = '';
     switch (serviceId) {
       case NowEnum.Spotify:
-        name = 'Spotify Auth';
-        token = await this.obtainSpotifyToken(code);
+        let tokens = await this.obtainSpotifyToken(code);
+        token = tokens.refresh_token;
+        name = await this.obtainSpotifyName(tokens.access_token);
         break;
       case NowEnum.Deezer: {
-        name = 'Deezer Auth';
         token = await this.obtainDeezerToken(code);
+        name = await this.obtainDeezerName(token);
         break;
       }
     }
@@ -114,7 +115,7 @@ export class NowController {
     }));
   }
 
-  private async obtainSpotifyToken(code: string) {
+  private async obtainSpotifyToken(code: string): Promise<any> {
     const authorization = Buffer.from(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
       .toString('base64');
     const response = await request
@@ -127,7 +128,25 @@ export class NowController {
         code: code,
         redirect_uri: 'http://' + this.config.domain + ':' + this.config.rest.port + '/now/1/callback'
       });
-    return response.body.refresh_token;
+    return {
+      refresh_token: response.body.refresh_token,
+      access_token: response.body.access_token
+    }
+  }
+
+  private async obtainSpotifyName(access_token: string): Promise<string> {
+    try {
+      const response = await request
+        .get(NowSpotify.user_url)
+        .set('Accept', 'application/json')
+        .set('Content-Type', 'application/json')
+        .set('Authorization', 'Bearer ' + access_token);
+      return response.body.display_name
+    }
+    catch (e) {
+      console.log('[NowController] error: unable to obtain spotify name.')
+    }
+    return 'Undefined Account';
   }
 
   private async obtainDeezerToken(code: string) {
@@ -137,7 +156,22 @@ export class NowController {
       .query({ secret: this.apiKey.deezer.secret })
       .query({ code: code })
       .query({ output: "json" });
+    console.log(response.body)
     return response.body.access_token;
+  }
+
+  private async obtainDeezerName(access_token: string): Promise<string> {
+    try {
+      const response = await request
+        .get(NowDeezer.user_url)
+        .query({ access_token: access_token })
+        .query({ output: "json" })
+      return response.body.name;
+    }
+    catch (e) {
+      console.log('[NowController] error: unable to obtain deezer name.')
+    }
+    return 'Undefined Account';
   }
 
   @get('/now/delete/{id}', {

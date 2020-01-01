@@ -9,6 +9,7 @@ import { NowEnum, INow } from '@common/now/now.common';
 export class NowSpotify extends NowService {
 
   public static player_url = 'https://api.spotify.com/v1/me/player';
+  public static user_url = 'https://api.spotify.com/v1/me'
   public static token_url = 'https://accounts.spotify.com/api/token';
 
   public serviceName = "NowSpotify";

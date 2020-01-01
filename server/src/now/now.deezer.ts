@@ -9,7 +9,9 @@ import { NowEnum, INow } from '@common/now/now.common';
 export class NowDeezer extends NowService {
 
   public static history_url = 'https://api.deezer.com/user/me/history';
+  public static user_url = 'https://api.deezer.com/user/me';
   public static auth_url = 'https://connect.deezer.com/oauth/access_token.php';
+
   public serviceName = "NowDeezer";
 
   private access_token: string;
