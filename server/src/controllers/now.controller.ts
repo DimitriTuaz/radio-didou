@@ -13,7 +13,7 @@ import { Filter, repository } from '@loopback/repository';
 
 import { CredentialRepository } from '../repositories';
 import { ConfigurationService } from '../services';
-import { Credential, Configuration } from '../models';
+import { Credential } from '../models';
 
 import request = require('superagent');
 
@@ -174,14 +174,14 @@ export class NowController {
     return 'Undefined Account';
   }
 
-  @get('/now/delete/{id}', {
+  @get('/now/delete/{credentialId}', {
     responses: {
       '204': {
         description: 'Credential DELETE success',
       },
     },
   })
-  async deleteById(@param.path.string('id') id: string): Promise<void> {
-    await this.credentialRepository.deleteById(id);
+  async deleteById(@param.path.string('credentialId') credentialId: string): Promise<void> {
+    await this.credentialRepository.deleteById(credentialId);
   }
 }
