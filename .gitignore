@@ -5,3 +5,4 @@ api_key.json
 asset_src
 *.code-workspace
 ssl/*
+client/package-lock.json
