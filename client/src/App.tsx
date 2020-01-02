@@ -7,13 +7,12 @@ import { Dimmer, Loader } from 'semantic-ui-react'
 import superagent from 'superagent'
 
 import * as config from '../../config.json';
-import { NowEnum, INow } from '@common/now/now.common'
+import { INow } from '@common/now/now.common'
 
-var SERVER_URL: string = 'http://' + config.domain
-var ICECAST_URL: string = 'http://37.59.99.228'
-var ICECAST_PORT: string = ':8889'
-var STREAM_URL: string = ICECAST_URL + ICECAST_PORT + '/radio-didou';
-var CURRENT_TRACK_URL: string = SERVER_URL + ':' + config.rest.port + '/now/get';
+var LOOPBACK_URL: string = config.loopback
+var ICECAST_URL: string = config.icecast
+var STREAM_URL: string = ICECAST_URL + '/radio-didou';
+var CURRENT_TRACK_URL: string = LOOPBACK_URL + '/now/get';
 
 interface IProps {
 }
@@ -99,7 +98,7 @@ class App extends React.Component<IProps, IState> {
             }
 
             // setState only if track has changed
-            if (trackTitle !== this.state.trackTitle && trackArtists !== this.state.trackArtists) {
+            if (trackTitle !== this.state.trackTitle || trackArtists !== this.state.trackArtists) {
               this.trackUrl = trackUrl;
               this.setState({
                 trackCover: trackCover,

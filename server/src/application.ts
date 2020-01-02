@@ -22,7 +22,17 @@ import { Credential } from './models'
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
   constructor(rootPath: string) {
-    super(JSON.parse(fs.readFileSync(path.join(rootPath, 'config.json')).toString()));
+    /* SERVER CONFIG */
+    let config: any = JSON.parse(fs.readFileSync(path.join(rootPath, 'config.json')).toString());
+    super({
+      rest: {
+        protocol: 'https',
+        host: config.rest.host,
+        port: config.rest.port,
+        key: fs.readFileSync(path.join(rootPath, 'ssl/key.pem')),
+        cert: fs.readFileSync(path.join(rootPath, 'ssl/cert.pem')),
+      }
+    });
 
     /* LOOPBACK BINDING */
     this.projectRoot = __dirname;
@@ -43,11 +53,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     /* APPLICATION BINDING */
     this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
-    this.bind(RadiodBindings.CONFIG).toDynamicValue(() => {
-      return JSON.parse(
-        fs.readFileSync(path.join(rootPath, 'config.json')).toString()
-      )
-    });
+    this.bind(RadiodBindings.CONFIG).to(config)
     this.bind(RadiodBindings.API_KEY).toDynamicValue(() => {
       return JSON.parse(
         fs.readFileSync(path.join(rootPath, 'api_key.json')).toString()
@@ -59,10 +65,11 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
   }
 
   public async init() {
-    let configuration = await this.get(RadiodBindings.CONFIG_SERVICE);
+    /* INIT NOW SERVICE */
+    let config = await this.get(RadiodBindings.CONFIG_SERVICE);
     let repository: CredentialRepository = await this.getRepository(CredentialRepository);
     try {
-      let crendentialID: string = await configuration.get(RadiodKeys.DEFAULT_CREDENTIAL);
+      let crendentialID: string = await config.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: Credential = await repository.findById(crendentialID);
       switch (credential.type) {
         case NowEnum.Spotify:
