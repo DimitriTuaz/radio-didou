@@ -97,7 +97,7 @@ class Home extends React.Component<IProps, IState> {
               })
               this.trackUrl = res.body.item.external_urls.spotify;
               // setState only if track has changed
-              if (res.body.item.name !== this.state.trackTitle && artists !== this.state.trackArtists) {
+              if (res.body.item.name !== this.state.trackTitle || artists !== this.state.trackArtists) {
                 this.setState({
                   trackCover: res.body.item.album.images[1].url,
                   trackTitle: res.body.item.name,
