@@ -26,11 +26,8 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     let config: any = JSON.parse(fs.readFileSync(path.join(rootPath, 'config.json')).toString());
     super({
       rest: {
-        protocol: 'https',
         host: config.rest.host,
-        port: config.rest.port,
-        key: fs.readFileSync(path.join(rootPath, 'ssl/key.pem')),
-        cert: fs.readFileSync(path.join(rootPath, 'ssl/cert.pem')),
+        port: config.rest.port
       }
     });
 
