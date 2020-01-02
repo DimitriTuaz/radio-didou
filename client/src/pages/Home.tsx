@@ -12,8 +12,8 @@ import { INow } from '@common/now/now.common'
 
 var LOOPBACK_URL: string = config.loopback
 var ICECAST_URL: string = config.icecast
-var STREAM_URL: string = ICECAST_URL + '/radio-didou';
-var CURRENT_TRACK_URL: string = LOOPBACK_URL + '/now/get';
+var STREAM_URL: string = ICECAST_URL + 'radio-didou';
+var CURRENT_TRACK_URL: string = LOOPBACK_URL + 'now/get';
 
 interface IProps {
 }
