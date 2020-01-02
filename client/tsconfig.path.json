@@ -1,8 +1,5 @@
 {
-  "$schema": "http://json.schemastore.org/tsconfig",
-  "extends": "@loopback/build/config/tsconfig.common.json",
   "compilerOptions": {
-    "outDir": "dist",
     "baseUrl": "src",
     "paths": {
       "@common/*": [
@@ -15,7 +12,4 @@
       "path": "../common"
     }
   ],
-  "include": [
-    "src"
-  ]
 }
