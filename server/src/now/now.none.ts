@@ -7,7 +7,7 @@ export class NowNone extends NowService {
 
   public serviceName = "NowNone";
 
-  constructor(@inject(RadiodBindings.CONFIG) private configuration: any) {
+  constructor(@inject(RadiodBindings.GLOBAL_CONFIG) private configuration: any) {
     super(configuration)
   }
 

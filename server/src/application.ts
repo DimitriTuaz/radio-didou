@@ -50,12 +50,11 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     /* APPLICATION BINDING */
     this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
-    this.bind(RadiodBindings.CONFIG).to(config)
-    this.bind(RadiodBindings.API_KEY).toDynamicValue(() => {
-      return JSON.parse(
-        fs.readFileSync(path.join(rootPath, 'api_key.json')).toString()
-      )
-    });
+    this.bind(RadiodBindings.GLOBAL_CONFIG).to(config)
+    this.bind(RadiodBindings.MONGO_CONFIG)
+      .to(JSON.parse(fs.readFileSync(path.join(rootPath, 'mongo.config.json')).toString()));
+    this.bind(RadiodBindings.API_KEY)
+      .to(JSON.parse(fs.readFileSync(path.join(rootPath, 'api_key.json')).toString()));
     this.bind(RadiodBindings.CONFIG_SERVICE)
       .toClass(ConfigurationService)
       .inScope(BindingScope.SINGLETON);

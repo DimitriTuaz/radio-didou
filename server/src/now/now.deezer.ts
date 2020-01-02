@@ -17,7 +17,7 @@ export class NowDeezer extends NowService {
   private access_token: string;
 
   constructor(
-    @inject(RadiodBindings.CONFIG) private configuration: any,
+    @inject(RadiodBindings.GLOBAL_CONFIG) private configuration: any,
     @inject(RadiodBindings.API_KEY) private apiKey: any) {
     super(configuration)
   }

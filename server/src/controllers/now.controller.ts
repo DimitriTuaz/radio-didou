@@ -1,5 +1,5 @@
 import { get, param, getModelSchemaRef, getFilterSchemaFor } from '@loopback/rest';
-import { inject, Binding, BindingScope, Getter, bind, service } from '@loopback/core';
+import { inject, Binding, BindingScope, Getter, bind } from '@loopback/core';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 
@@ -21,7 +21,7 @@ import request = require('superagent');
 export class NowController {
   constructor(
     @inject(RadiodBindings.API_KEY) private apiKey: any,
-    @inject(RadiodBindings.CONFIG) private config: any,
+    @inject(RadiodBindings.GLOBAL_CONFIG) private config: any,
     @inject(RadiodBindings.CONFIG_SERVICE) private configuration: ConfigurationService,
     @repository(CredentialRepository) public credentialRepository: CredentialRepository,
     @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
