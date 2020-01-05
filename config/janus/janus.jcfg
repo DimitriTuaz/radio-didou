@@ -1,0 +1,50 @@
+# General configuration
+general: {
+	configs_folder = "/etc/janus"
+	plugins_folder = "/usr/lib/janus/plugins"
+	transports_folder = "/usr/lib/janus/transports"
+	events_folder = "/usr/lib/janus/events"
+	debug_level = 4
+
+	admin_secret = "cN7yFDjymbB9"
+
+        # Authentification settings
+
+	#api_secret = "janusrocks"
+	#token_auth = true
+	#token_auth_secret = "janus"
+
+	# Generic settings
+
+	#interface = "1.2.3.4"
+	#session_timeout = 60
+	#candidates_timeout = 45
+	#reclaim_session_timeout = 0
+}
+
+# HTTPS
+certificates: {
+	#cert_pem = "/path/to/certificate.pem"
+	#cert_key = "/path/to/key.pem"
+	#cert_pwd = "secretpassphrase"
+}
+
+# Media related stuff
+media: {
+}
+
+# NAT-related stuff
+nat: {
+}
+
+plugins: {
+	disable = "libjanus_audiobridge.so,libjanus_echotest.so,libjanus_textroom.so,libjanus_videocall.so,libjanus_videoroom.so,libjanus_recordplay.so,libjanus_sip.so,libjanus_nosip.so,libjanus_voicemail.so"
+}
+
+transports: {
+	disable = "libjanus_mqtt.so,libjanus_pfunix.so,libjanus_rabbitmq.so,libjanus_websockets.so"
+}
+
+events: {
+	disable = "libjanus_mqttevh.so,libjanus_rabbitmqevh.so,libjanus_sampleevh.so"
+}
