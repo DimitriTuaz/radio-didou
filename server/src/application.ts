@@ -48,6 +48,13 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.static('/', path.join(rootPath, 'client/build'));
     this.static('/jingles', path.join(rootPath, 'client/build'));
 
+    /*
+    ** TEMPORARY BINDINGS: OPUS RTP STREAM
+    */
+    this.static('/lowlatency', path.join(rootPath, 'static/lowlatency.html'));
+    this.static('/janus.min.js', path.join(rootPath, 'static/janus.min.js'));
+    this.static('/lowlatency.js', path.join(rootPath, 'static/lowlatency.js'));
+
     /* APPLICATION BINDING */
     this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
     this.bind(RadiodBindings.GLOBAL_CONFIG).to(config)
