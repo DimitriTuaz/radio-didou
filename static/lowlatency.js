@@ -8,8 +8,6 @@ var janus = null;
 var streaming = null;
 var opaqueId = "streamingtest-"+Janus.randomString(12);
 
-var bitrateTimer = null;
-
 var selectedStream = "1";
 
 $(document).ready(function() {
@@ -35,7 +33,6 @@ $(document).ready(function() {
 									$('#start').removeAttr('disabled').html("Disconnect")
 										.click(function() {
 											$(this).attr('disabled', true);
-											clearInterval(bitrateTimer);
 											janus.destroy();
 											$('#play').attr('disabled', true).unbind('click');
 											$('#start').attr('disabled', true).html("Bye").unbind('click');
@@ -101,16 +98,6 @@ $(document).ready(function() {
 										});
 									}
 									Janus.attachMediaStream($('#remotevideo').get(0), stream);
-									if(videoTracks && videoTracks.length &&
-											(Janus.webRTCAdapter.browserDetails.browser === "chrome" ||
-												Janus.webRTCAdapter.browserDetails.browser === "firefox" ||
-												Janus.webRTCAdapter.browserDetails.browser === "safari")) {
-										$('#bitrate').removeClass('hide').show();
-										bitrateTimer = setInterval(function() {
-											var bitrate = streaming.getBitrate();
-											$('#bitrate').text(bitrate);
-										}, 1000);
-									}
 								},
 								ondataopen: function(data) {
 									Janus.log("The DataChannel is available!");
@@ -120,10 +107,6 @@ $(document).ready(function() {
 								},
 								oncleanup: function() {
 									Janus.log(" ::: Got a cleanup notification :::");
-									$('#bitrate').attr('disabled', true);
-									if(bitrateTimer !== null && bitrateTimer !== undefined)
-										clearInterval(bitrateTimer);
-									bitrateTimer = null;
 								}
 							});
 					},
@@ -158,8 +141,4 @@ function stopStream() {
 	streaming.send({"message": body});
 	streaming.hangup();
 	$('#play').html("Play (Opus RTP stream)").removeAttr('disabled').unbind('click').click(startStream);
-	$('#bitrate').attr('disabled', true);
-	if(bitrateTimer !== null && bitrateTimer !== undefined)
-		clearInterval(bitrateTimer);
-	bitrateTimer = null;
 }
