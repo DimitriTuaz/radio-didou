@@ -32,7 +32,7 @@ $(document).ready(function() {
 								success: function(pluginHandle) {
 									streaming = pluginHandle;
 									Janus.log("Plugin attached! (" + streaming.getPlugin() + ", id=" + streaming.getId() + ")");
-									$('#start').removeAttr('disabled').html("Stop")
+									$('#start').removeAttr('disabled').html("Disconnect")
 										.click(function() {
 											$(this).attr('disabled', true);
 											clearInterval(bitrateTimer);
@@ -43,7 +43,6 @@ $(document).ready(function() {
 									$('#play').removeAttr('disabled')
 										.click(function() {
 											startStream();
-											$('#play').attr('disabled', true).unbind('click');
 										});
 								},
 								error: function(error) {
@@ -102,21 +101,6 @@ $(document).ready(function() {
 										});
 									}
 									Janus.attachMediaStream($('#remotevideo').get(0), stream);
-									var videoTracks = stream.getVideoTracks();
-									if(videoTracks === null || videoTracks === undefined || videoTracks.length === 0) {
-										// No remote video
-										$('#remotevideo').hide();
-										if($('#stream .no-video-container').length === 0) {
-											$('#stream').append(
-												'<div class="no-video-container">' +
-													'<i class="fa fa-video-camera fa-5 no-video-icon"></i>' +
-													'<span class="no-video-text">No remote video available</span>' +
-												'</div>');
-										}
-									} else {
-										$('#stream .no-video-container').remove();
-										$('#remotevideo').removeClass('hide').show();
-									}
 									if(videoTracks && videoTracks.length &&
 											(Janus.webRTCAdapter.browserDetails.browser === "chrome" ||
 												Janus.webRTCAdapter.browserDetails.browser === "firefox" ||
@@ -173,7 +157,7 @@ function stopStream() {
 	var body = { "request": "stop" };
 	streaming.send({"message": body});
 	streaming.hangup();
-	$('#play').html("Watch or Listen").removeAttr('disabled').unbind('click').click(startStream);
+	$('#play').html("Play (Opus RTP stream)").removeAttr('disabled').unbind('click').click(startStream);
 	$('#bitrate').attr('disabled', true);
 	if(bitrateTimer !== null && bitrateTimer !== undefined)
 		clearInterval(bitrateTimer);
