@@ -89,10 +89,14 @@ $(document).ready(function() {
 									if($('#remotevideo').length === 0) {
 										addButtons = true;
 										$('#stream').append('<video class="rounded centered hide" id="remotevideo" width=320 height=240 autoplay playsinline/>');
+										// Show the stream and hide the spinner when we get a playing event
 										$("#remotevideo").bind("playing", function () {
 											$('#waitingvideo').remove();
 											if(this.videoWidth)
 												$('#remotevideo').removeClass('hide').show();
+											if(spinner !== null && spinner !== undefined)
+												spinner.stop();
+											spinner = null;
 											var videoTracks = stream.getVideoTracks();
 											if(videoTracks === null || videoTracks === undefined || videoTracks.length === 0)
 												return;
@@ -147,10 +151,6 @@ $(document).ready(function() {
 								},
 								ondataopen: function(data) {
 									Janus.log("The DataChannel is available!");
-									$('#waitingvideo').remove();
-									$('#stream').append(
-										'<input class="form-control" type="text" id="datarecv" disabled></input>'
-									);
 								},
 								ondata: function(data) {
 									Janus.debug("We got data from the DataChannel! " + data);
@@ -179,17 +179,14 @@ $(document).ready(function() {
 });
 
 function startStream() {
-	Janus.log("Selected video id #" + selectedStream);
+	Janus.log("Selected stream id #" + selectedStream);
 	if(selectedStream === undefined || selectedStream === null) {
 		bootbox.alert("Select a stream from the list");
 		return;
 	}
-	$('#streamset').attr('disabled', true);
 	$('#play').attr('disabled', true).unbind('click');
 	var body = { "request": "watch", id: parseInt(selectedStream) };
 	streaming.send({"message": body});
-	// No remote video yet
-	$('#stream').append('<video class="rounded centered" id="waitingvideo" width=320 height=240 />');
 }
 
 function stopStream() {
@@ -197,15 +194,9 @@ function stopStream() {
 	var body = { "request": "stop" };
 	streaming.send({"message": body});
 	streaming.hangup();
-	$('#streamset').removeAttr('disabled');
 	$('#play').html("Watch or Listen").removeAttr('disabled').unbind('click').click(startStream);
-	$('#status').empty().hide();
 	$('#bitrate').attr('disabled', true);
-	$('#bitrateset').html('Bandwidth<span class="caret"></span>');
-	$('#curbitrate').hide();
 	if(bitrateTimer !== null && bitrateTimer !== undefined)
 		clearInterval(bitrateTimer);
 	bitrateTimer = null;
-	$('#curres').empty().hide();
-	$('#simulcast').remove();
 }
