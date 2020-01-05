@@ -1,0 +1,49 @@
+# General configuration
+general: {
+    configs_folder = "/etc/janus"
+    plugins_folder = "/usr/lib/x86_64-linux-gnu/janus/plugins"
+    transports_folder = "/usr/lib/x86_64-linux-gnu/janus/transports"
+    events_folder = "/usr/lib/x86_64-linux-gnu/janus/events" 
+    debug_level = 4
+
+    #interface = "1.2.3.4"
+    #session_timeout = 60
+    #candidates_timeout = 45
+    #reclaim_session_timeout = 0
+
+    admin_secret = "cN7yFDjymbB9"
+    #api_secret = "janusrocks"
+    #token_auth = true
+    #token_auth_secret = "janus"
+}
+
+# Certificate for DTLS
+certificates: {
+    #cert_pem = "/etc/ssl/certs/ssl-cert-snakeoil.pem"
+    #cert_key = "/etc/ssl/certs/ssl-cert-snakeoil.key"
+    #cert_pwd = "secretpassphrase"
+}
+
+# Media
+media: {
+
+}
+
+# NAT
+nat: {
+    nice_debug = false
+    ice_ignore_list = "vmnet"
+}
+
+plugins: {
+    disable = "libjanus_audiobridge.so,libjanus_duktape.so,libjanus_echotest.so,libjanus_lua.so,libjanus_sipre.so,libjanus_textroom.so,libjanus_videocall.so,libjanus_videoroom.so,libjanus_recordplay.so,libjanus_sip.so,libjanus_nosip.so,libjanus_voicemail.so"
+}
+
+transports: {
+    disable = "libjanus_mqtt.so,libjanus_nanomsg.so,libjanus_pfunix.so,libjanus_rabbitmq.so,libjanus_websockets.so"
+}
+
+events: {
+    disable = "libjanus_mqttevh.so,libjanus_rabbitmqevh.so,libjanus_sampleevh.so"
+}
+

@@ -1,0 +1,37 @@
+general: {
+    json = "indented"
+    #pingpong_trigger = 30
+    #pingpong_timeout = 10
+
+    ws = true
+    ws_port = 8188
+    #ws_interface = "eth0"
+    #ws_ip = "192.168.0.1"
+    wss = false
+    #wss_port = 8989
+    #wss_interface = "eth0"
+    #wss_ip = "192.168.0.1"
+    #ws_logging = "err,warn"
+    #ws_acl = "127.,192.168.0."
+}
+
+#By default the Admin API support via WebSockets is disabled.
+admin: {
+    admin_ws = false
+    admin_ws_port = 7188
+    #admin_ws_interface = "eth0"
+    #admin_ws_ip = "192.168.0.1"
+    admin_wss = false
+    #admin_wss_port = 7989
+    #admin_wss_interface = "eth0"
+    #admin_wss_ip = "192.168.0.1"
+    #admin_ws_acl = "127.,192.168.0."
+}
+
+# Certificate for WebSocket server
+certificates: {
+    #cert_pem = "/path/to/cert.pem"
+    #cert_key = "/path/to/key.pem"
+    #cert_pwd = "secretpassphrase"
+}
+

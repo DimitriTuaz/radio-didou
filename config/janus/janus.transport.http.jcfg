@@ -1,0 +1,42 @@
+general: {
+    json = "indented"
+    base_path = "/janus"
+    threads = "unlimited"
+    http = true
+    port = 8088
+    #interface = "eth0"
+    #ip = "192.168.0.1"
+    https = false
+    #secure_port = 8089
+    #secure_interface = "eth0"
+    #secure_ip = "192.168.0.1"
+    #acl = "127.,192.168.0."
+}
+
+# For security reasons, this endpoint is disabled by default.
+# Enable it by setting admin_http=true.
+admin: {
+    admin_base_path = "/admin"
+    admin_threads = "unlimited"
+    admin_http = false
+    admin_port = 7088
+    #admin_interface = "eth0"
+    #admin_ip = "192.168.0.1"
+    admin_https = false
+    #admin_secure_port = 7889
+    #admin_secure_interface = "eth0"
+    #admin_secure_ip = "192.168.0.1
+    #admin_acl = "127.,192.168.0."
+}
+
+# CORS (* by default)
+cors: {
+    #allow_origin = "http://foo.example"
+}
+
+certificates: {
+    #cert_pem = "/path/to/cert.pem"
+    #cert_key = "/path/to/key.pem"
+    #cert_pwd = "secretpassphrase"
+    #ciphers = "PFS:-VERS-TLS1.0:-VERS-TLS1.1:-3DES-CBC:-ARCFOUR-128"
+}
