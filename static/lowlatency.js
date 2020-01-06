@@ -1,8 +1,8 @@
 var server = null;
 if(window.location.protocol === 'http:')
-	server = "http://37.59.99.228:8088/janus";
+	server = "http://" + window.location.hostname + ":8088/janus"
 else
-	server = "https://37.59.99.228:8089/janus";
+	server = "https://" + window.location.hostname + ":8089/janus"
 
 var janus = null;
 var streaming = null;
