@@ -64,6 +64,14 @@ export class NowSpotify extends NowService {
           url: response.body.item.external_urls.spotify
         }
       }
+      else {
+        this.now = {
+          type: NowEnum.Spotify,
+          listeners: this.now.listeners,
+          song: '',
+          artists: [],
+        }
+      }
     }
     catch (error) {
       if (retryOnce) {
