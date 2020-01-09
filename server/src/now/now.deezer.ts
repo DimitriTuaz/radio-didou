@@ -1,32 +1,42 @@
 import { inject } from '@loopback/core';
 
-import path from 'path';
 import request from 'superagent'
-import fs from 'fs';
 
 import { RadiodBindings } from '../keys';
 import { NowService } from '../services';
-
-interface IDeezerCredential {
-  app_id: string;
-  secret: string;
-  access_token: string;
-}
+import { NowEnum, INow } from '@common/now/now.common';
 
 export class NowDeezer extends NowService {
 
-  public static deezer_api_url = 'https://api.deezer.com/user/me/history';
+  public static history_url = 'https://api.deezer.com/user/me/history';
+  public static user_url = 'https://api.deezer.com/user/me';
+  public static auth_url = 'https://connect.deezer.com/oauth/access_token.php';
+
   public serviceName = "NowDeezer";
 
-  private credential: IDeezerCredential;
+  private access_token: string;
 
   constructor(
-    @inject(RadiodBindings.ROOT_PATH)
-    private projectRoot: any) { super() }
+    @inject(RadiodBindings.GLOBAL_CONFIG) private configuration: any,
+    @inject(RadiodBindings.API_KEY) private apiKey: any) {
+    super(configuration)
+  }
 
-  protected init(): void {
-    let filePath: string = path.join(this.projectRoot, 'credential_deezer.json');
-    this.credential = JSON.parse(fs.readFileSync(filePath).toString());
+  protected init(value?: INow, token?: string): void {
+    if (token != null) {
+      this.access_token = token;
+    }
+    if (value != null) {
+      this.now = value;
+    }
+    else {
+      this.now = {
+        type: NowEnum.Deezer,
+        listeners: 0,
+        song: '',
+        artists: [],
+      }
+    }
   }
 
   protected async fetch(): Promise<void> {
@@ -36,11 +46,22 @@ export class NowDeezer extends NowService {
   private async obtain_current_playback(): Promise<void> {
     try {
       const response = await request
-        .get(NowDeezer.deezer_api_url)
-        .query({ access_token: this.credential.access_token })
+        .get(NowDeezer.history_url)
+        .query({ access_token: this.access_token })
         .query({ output: "json" })
         .query({ limit: 1 })
-      this.now = response.body;
+
+      if (response.body.data != undefined) {
+        this.now = {
+          type: NowEnum.Deezer,
+          listeners: this.now.listeners,
+          song: response.body.data[0].title,
+          artists: [response.body.data[0].artist.name],
+          album: response.body.data[0].album.title,
+          cover: response.body.data[0].album.cover_medium,
+          url: response.body.data[0].album.link
+        }
+      }
     }
     catch (error) {
       console.log("[" + this.serviceName + "] error in obtain_current_playback")

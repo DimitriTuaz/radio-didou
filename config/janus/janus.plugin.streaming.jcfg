@@ -1,0 +1,14 @@
+general: {
+}
+
+opus-rtp: {
+    type = "rtp"
+    id = 1
+    description = "Opus RTP"
+    audio = true
+    video = false
+    audioport = 5002
+    audiopt = 96
+    audiortpmap = "opus/48000/2"
+}
+

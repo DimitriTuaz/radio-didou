@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   plugins: [
     { plugin: require('@semantic-ui-react/craco-less') },
@@ -11,5 +13,10 @@ module.exports = {
         '/src/semantic-ui-less/theme.config',
       ),
     },
+    resolve: { 
+      alias: {
+        "@common": path.resolve(__dirname, "../common/"),
+      }
+    }
   },
 }

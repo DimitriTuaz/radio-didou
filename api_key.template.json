@@ -1,0 +1,10 @@
+{
+  "spotify": {
+    "client_id": "",
+    "secret": ""
+  },
+  "deezer": {
+    "app_id": "",
+    "secret": ""
+  }
+}
