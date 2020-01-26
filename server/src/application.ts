@@ -11,14 +11,14 @@ import path from 'path';
 import fs from 'fs';
 
 import { MainSequence } from './sequence';
-import { RadiodBindings, RadiodKeys } from './keys';
+import { RadiodBindings, RadiodKeys, TokenServiceBindings, TokenServiceConstants, PasswordHasherBindings } from './keys';
 
 import { NowEnum } from '@common/now/now.common';
 import { NowNone } from './now/now.none';
 import { NowSpotify } from './now/now.spotify';
 import { NowDeezer } from './now/now.deezer';
 
-import { ConfigurationService, NowService } from './services';
+import { ConfigurationService, NowService, JWTService, BcryptHasher, MyUserService } from './services';
 import { CredentialRepository } from './repositories';
 import { Credential } from './models'
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
@@ -72,6 +72,15 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.bind(RadiodBindings.CONFIG_SERVICE)
       .toClass(ConfigurationService)
       .inScope(BindingScope.SINGLETON);
+    // TOKEN Service
+    this.bind(RadiodBindings.TOKEN_SERVICE).toClass(JWTService);
+    this.bind(TokenServiceBindings.TOKEN_SECRET).to(TokenServiceConstants.TOKEN_SECRET_VALUE);
+    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(TokenServiceConstants.TOKEN_EXPIRES_IN_VALUE);
+    // HASH Service
+    this.bind(PasswordHasherBindings.ROUNDS).to(10);
+    this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
+    // USER Service
+    this.bind(RadiodBindings.USER_SERVICE).toClass(MyUserService);
   }
 
   public async init() {
