@@ -5,11 +5,12 @@
 
 import {
   DefaultCrudRepository,
-  juggler,
   HasManyRepositoryFactory,
   repository,
   HasOneRepositoryFactory,
+  HasOneRepository,
 } from '@loopback/repository';
+import { MongoDataSource } from '../datasources';
 import { User, UserCredentials } from '../models';
 import { inject, Getter } from '@loopback/core';
 import { UserCredentialsRepository } from './user-credentials.repository';
@@ -24,9 +25,8 @@ export class UserRepository extends DefaultCrudRepository<User, typeof User.prot
   public readonly userCredentials: HasOneRepositoryFactory<UserCredentials, typeof User.prototype.id>;
 
   constructor(
-    @inject('datasources.mongo') protected datasource: juggler.DataSource,
-    @repository.getter('UserCredentialsRepository')
-    protected userCredentialsRepositoryGetter: Getter<UserCredentialsRepository>) {
+    @inject('datasources.mongo') protected datasource: MongoDataSource,
+    @repository.getter('UserCredentialsRepository') protected userCredentialsRepositoryGetter: Getter<UserCredentialsRepository>) {
     super(User, datasource);
     this.userCredentials = this.createHasOneRepositoryFactoryFor(
       'userCredentials',
@@ -34,9 +34,7 @@ export class UserRepository extends DefaultCrudRepository<User, typeof User.prot
     );
   }
 
-  async findCredentials(
-    userId: typeof User.prototype.id,
-  ): Promise<UserCredentials | undefined> {
+  async findCredentials(userId: typeof User.prototype.id): Promise<UserCredentials | undefined> {
     try {
       return await this.userCredentials(userId).get();
     } catch (err) {

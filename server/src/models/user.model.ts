@@ -3,8 +3,8 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { Entity, model, property, hasMany, hasOne } from '@loopback/repository';
-import { UserCredentials } from './user-credentials.model';
+import { Entity, model, property, hasOne } from '@loopback/repository';
+import { UserCredentials, UserCredentialsWithRelations } from './user-credentials.model';
 
 @model({
   settings: {
@@ -24,6 +24,7 @@ export class User extends Entity {
   @property({
     type: 'string',
     id: true,
+    generated: true,
   })
   id: string;
 
@@ -50,3 +51,9 @@ export class User extends Entity {
     super(data);
   }
 }
+
+export interface UserRelations {
+  userCredentials?: UserCredentialsWithRelations;
+}
+
+export type UserWithRelations = User & UserRelations;

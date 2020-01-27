@@ -47,7 +47,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.bind(RestExplorerBindings.CONFIG).to({ path: '/explorer' });
     this.component(RestExplorerComponent);
     this.component(AuthenticationComponent);
-    registerAuthenticationStrategy(<any>this, JWTAuthenticationStrategy);
+    registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
     this.bootOptions = {
       controllers: {
         dirs: ['controllers'],

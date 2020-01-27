@@ -8,9 +8,9 @@ export const UserProfileSchema = {
   type: 'object',
   required: ['id'],
   properties: {
-    id: {type: 'string'},
-    email: {type: 'string'},
-    name: {type: 'string'},
+    id: { type: 'string' },
+    email: { type: 'string' },
+    name: { type: 'string' },
   },
 };
 
@@ -29,7 +29,7 @@ const CredentialsSchema = {
     },
     password: {
       type: 'string',
-      minLength: 8,
+      minLength: 6,
     },
   },
 };
@@ -38,6 +38,6 @@ export const CredentialsRequestBody = {
   description: 'The input of login function',
   required: true,
   content: {
-    'application/json': {schema: CredentialsSchema},
+    'application/json': { schema: CredentialsSchema },
   },
 };
