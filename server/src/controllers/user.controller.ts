@@ -30,7 +30,6 @@ import { Credentials } from '../repositories/user.repository';
 import { PasswordHasher } from '../services/hash.password.bcryptjs';
 
 import {
-  TokenServiceBindings,
   PasswordHasherBindings,
   RadiodBindings,
 } from '../keys';
@@ -81,30 +80,15 @@ export class UserController {
         },
       },
     })
-    newUserRequest: NewUserRequest,
-  ): Promise<User> {
-    // ensure a valid email value and password value
+    newUserRequest: NewUserRequest): Promise<User> {
     validateCredentials(_.pick(newUserRequest, ['email', 'password']));
-
-    // encrypt the password
-    const password = await this.passwordHasher.hashPassword(
-      newUserRequest.password,
-    );
-
+    const password = await this.passwordHasher.hashPassword(newUserRequest.password);
     try {
-      // create the new user
-      const savedUser = await this.userRepository.create(
-        _.omit(newUserRequest, 'password'),
-      );
-
-      // set the password
-      await this.userRepository
-        .userCredentials(savedUser.id)
-        .create({ password });
-
+      const savedUser = await this.userRepository.create(_.omit(newUserRequest, 'password'));
+      await this.userRepository.userCredentials(savedUser.id).create({ password });
       return savedUser;
+
     } catch (error) {
-      // MongoError 11000 duplicate key
       if (error.code === 11000 && error.errmsg.includes('index: uniqueEmail')) {
         throw new HttpErrors.Conflict('Email value is already taken');
       } else {
@@ -147,10 +131,7 @@ export class UserController {
   @authenticate('jwt')
   async printCurrentUser(
     @inject(SecurityBindings.USER)
-    currentUserProfile: UserProfile,
-  ): Promise<UserProfile> {
-    // (@jannyHou)FIXME: explore a way to generate OpenAPI schema
-    // for symbol property
+    currentUserProfile: UserProfile): Promise<UserProfile> {
     currentUserProfile.id = currentUserProfile[securityId];
     delete currentUserProfile[securityId];
     return currentUserProfile;
@@ -176,17 +157,10 @@ export class UserController {
     },
   })
   async login(
-    @requestBody(CredentialsRequestBody) credentials: Credentials,
-  ): Promise<{ token: string }> {
-    // ensure the user exists, and the password is correct
+    @requestBody(CredentialsRequestBody) credentials: Credentials): Promise<{ token: string }> {
     const user = await this.userService.verifyCredentials(credentials);
-
-    // convert a User object into a UserProfile object (reduced set of properties)
     const userProfile = this.userService.convertToUserProfile(user);
-
-    // create a JSON Web Token based on the user profile
     const token = await this.jwtService.generateToken(userProfile);
-
     return { token };
   }
 }

@@ -3,14 +3,19 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property, belongsTo } from '@loopback/repository';
+import { User, UserWithRelations } from '../models';
 
-@model()
+@model({
+  settings: {
+    strictObjectIDCoercion: true,
+  }
+})
 export class UserCredentials extends Entity {
   @property({
     type: 'string',
     id: true,
-    mongodb: {dataType: 'ObjectID'},
+    generated: true,
   })
   id: string;
 
@@ -20,11 +25,7 @@ export class UserCredentials extends Entity {
   })
   password: string;
 
-  @property({
-    type: 'string',
-    required: true,
-    mongodb: {dataType: 'ObjectID'},
-  })
+  @belongsTo(() => User)
   userId: string;
 
   constructor(data?: Partial<UserCredentials>) {
@@ -33,8 +34,7 @@ export class UserCredentials extends Entity {
 }
 
 export interface UserCredentialsRelations {
-  // describe navigational properties here
+  user?: UserWithRelations;
 }
 
-export type UserCredentialsWithRelations = UserCredentials &
-  UserCredentialsRelations;
+export type UserCredentialsWithRelations = UserCredentials & UserCredentialsRelations;
