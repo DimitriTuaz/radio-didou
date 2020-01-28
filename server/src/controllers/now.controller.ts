@@ -11,9 +11,9 @@ import { NowNone } from '../now/now.none';
 import { NowEnum } from '@common/now/now.common';
 import { Filter, repository } from '@loopback/repository';
 
-import { CredentialRepository } from '../repositories';
+import { NowCredentialsRepository } from '../repositories';
 import { ConfigurationService } from '../services';
-import { Credential } from '../models';
+import { NowCredentials } from '../models';
 
 import request = require('superagent');
 
@@ -23,7 +23,7 @@ export class NowController {
     @inject(RadiodBindings.API_KEY) private apiKey: any,
     @inject(RadiodBindings.GLOBAL_CONFIG) private config: any,
     @inject(RadiodBindings.CONFIG_SERVICE) private configuration: ConfigurationService,
-    @repository(CredentialRepository) public credentialRepository: CredentialRepository,
+    @repository(NowCredentialsRepository) public credentialRepository: NowCredentialsRepository,
     @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
     @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>
   ) { }
@@ -39,7 +39,7 @@ export class NowController {
     @param.path.string('credentialId') credentialId: string,
   ) {
     try {
-      let credential: Credential = await this.credentialRepository.findById(credentialId);
+      let credential: NowCredentials = await this.credentialRepository.findById(credentialId);
       await this.configuration.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
       let service = await this.serviceGetter();
       let value = service.value();
@@ -69,7 +69,7 @@ export class NowController {
           'application/json': {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(Credential, { includeRelations: true }),
+              items: getModelSchemaRef(NowCredentials, { includeRelations: true }),
             },
           },
         },
@@ -77,8 +77,8 @@ export class NowController {
     },
   })
   async find(
-    @param.query.object('filter', getFilterSchemaFor(Credential)) filter?: Filter<Credential>,
-  ): Promise<Credential[]> {
+    @param.query.object('filter', getFilterSchemaFor(NowCredentials)) filter?: Filter<NowCredentials>,
+  ): Promise<NowCredentials[]> {
     return this.credentialRepository.find(filter);
   }
 
@@ -86,14 +86,14 @@ export class NowController {
     responses: {
       '200': {
         description: 'Credential model instance',
-        content: { 'application/json': { schema: getModelSchemaRef(Credential) } },
+        content: { 'application/json': { schema: getModelSchemaRef(NowCredentials) } },
       },
     },
   })
   async create(
     @param.path.number('serviceId') serviceId: number,
     @param.query.string('code') code: string
-  ): Promise<Credential> {
+  ): Promise<NowCredentials> {
     let name: string = '';
     let token: string = '';
     switch (serviceId) {
@@ -108,7 +108,7 @@ export class NowController {
         break;
       }
     }
-    return this.credentialRepository.create(new Credential({
+    return this.credentialRepository.create(new NowCredentials({
       name: name,
       type: serviceId,
       token: token
