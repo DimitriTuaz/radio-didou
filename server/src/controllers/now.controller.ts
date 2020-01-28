@@ -12,7 +12,7 @@ import { NowEnum } from '@common/now/now.common';
 import { Filter, repository } from '@loopback/repository';
 
 import { NowCredentialsRepository } from '../repositories';
-import { ConfigurationService } from '../services';
+import { PersistentKeyService } from '../services';
 import { NowCredentials } from '../models';
 
 import request = require('superagent');
@@ -22,7 +22,7 @@ export class NowController {
   constructor(
     @inject(RadiodBindings.API_KEY) private apiKey: any,
     @inject(RadiodBindings.GLOBAL_CONFIG) private config: any,
-    @inject(RadiodBindings.CONFIG_SERVICE) private configuration: ConfigurationService,
+    @inject(RadiodBindings.CONFIG_SERVICE) private configuration: PersistentKeyService,
     @repository(NowCredentialsRepository) public credentialRepository: NowCredentialsRepository,
     @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
     @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>

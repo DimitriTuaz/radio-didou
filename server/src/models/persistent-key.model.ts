@@ -1,7 +1,7 @@
 import { Entity, model, property } from '@loopback/repository';
 
 @model()
-export class Configuration extends Entity {
+export class PersistentKey extends Entity {
   @property({
     type: 'string',
     id: true,
@@ -16,13 +16,13 @@ export class Configuration extends Entity {
   })
   value: string;
 
-  constructor(data?: Partial<Configuration>) {
+  constructor(data?: Partial<PersistentKey>) {
     super(data);
   }
 }
 
-export interface ConfigurationRelations {
+export interface PersistentKeyRelations {
   // describe navigational properties here
 }
 
-export type ConfigurationWithRelations = Configuration & ConfigurationRelations;
+export type PersistentKeyWithRelations = PersistentKey & PersistentKeyRelations;
