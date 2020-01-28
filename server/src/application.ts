@@ -80,7 +80,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.bind(RadiodBindings.API_KEY)
       .to(JSON.parse(fs.readFileSync(path.join(this.rootPath, 'api_key.json')).toString()));
 
-    this.bind(RadiodBindings.CONFIG_SERVICE)
+    this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)
       .toClass(PersistentKeyService)
       .inScope(BindingScope.SINGLETON);
 
@@ -94,7 +94,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
   }
 
   public async init() {
-    let config = await this.get(RadiodBindings.CONFIG_SERVICE);
+    let config = await this.get(RadiodBindings.PERSISTENT_KEY_SERVICE);
     let repository: NowCredentialsRepository = await this.getRepository(NowCredentialsRepository);
     try {
       let crendentialID: string = await config.get(RadiodKeys.DEFAULT_CREDENTIAL);

@@ -22,7 +22,7 @@ export class NowController {
   constructor(
     @inject(RadiodBindings.API_KEY) private apiKey: any,
     @inject(RadiodBindings.GLOBAL_CONFIG) private config: any,
-    @inject(RadiodBindings.CONFIG_SERVICE) private configuration: PersistentKeyService,
+    @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private persistentKey: PersistentKeyService,
     @repository(NowCredentialsRepository) public credentialRepository: NowCredentialsRepository,
     @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
     @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>
@@ -40,7 +40,7 @@ export class NowController {
   ) {
     try {
       let credential: NowCredentials = await this.credentialRepository.findById(credentialId);
-      await this.configuration.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
+      await this.persistentKey.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
       let service = await this.serviceGetter();
       let value = service.value();
       service.stop();
