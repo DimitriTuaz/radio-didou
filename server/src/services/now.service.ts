@@ -35,7 +35,7 @@ export class NowService implements LifeCycleObserver, Provider<INow> {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: NowCredentials = await this.credentialRepository.findById(crendentialID);
       this.setFetcher(credential);
-    } catch (e) { }
+    } catch (e) { console.log("[NowService] setDefaultFetcher failed"); }
   }
 
   public setFetcher(credentials?: NowCredentials): void {
@@ -46,19 +46,22 @@ export class NowService implements LifeCycleObserver, Provider<INow> {
       switch (credentials.type) {
         case NowEnum.Spotify:
           this.fetcher = new NowSpotify(credentials.token, this.api_key.spotify, this.fetcher.now);
+          break;
         case NowEnum.Deezer:
           this.fetcher = new NowDeezer(credentials.token, this.fetcher.now);
+          break;
         default:
           this.fetcher = new NowNone();
+          break;
       }
     }
-    console.log("[NowService] Set Fetcher to " + this.fetcher.name);
+    console.log("[NowService - " + this.fetcher.name + "] setFetcher");
   }
 
   public start(value?: INow, token?: string): void {
     try {
       if (!this.intervalID) {
-        console.log("[NowService - " + this.fetcher.name + " ] started");
+        console.log("[NowService - " + this.fetcher.name + "] started");
         this.intervalID = setIntervalAsync(
           async () => {
             await this.fetcher.fetch();
@@ -72,13 +75,13 @@ export class NowService implements LifeCycleObserver, Provider<INow> {
       }
     }
     catch (e) {
-      console.log("[NowService - " + this.fetcher.name + " ] Error! Couldn't start the service")
+      console.log("[NowService - " + this.fetcher.name + "] Error! Couldn't start the service")
     }
   }
 
   public async stop(): Promise<void> {
     if (this.intervalID) {
-      console.log("[NowService - " + this.fetcher.name + " ] stopped");
+      console.log("[NowService - " + this.fetcher.name + "] stopped");
       await clearIntervalAsync(this.intervalID);
       this.intervalID = null;
     }
