@@ -6,16 +6,12 @@
 import { Entity, model, property, belongsTo } from '@loopback/repository';
 import { User, UserWithRelations } from '../models';
 
-@model({
-  settings: {
-    strictObjectIDCoercion: true,
-  }
-})
+@model()
 export class UserCredentials extends Entity {
   @property({
     type: 'string',
     id: true,
-    generated: true,
+    mongodb: { dataType: 'ObjectID' },
   })
   id: string;
 
@@ -25,7 +21,11 @@ export class UserCredentials extends Entity {
   })
   password: string;
 
-  @belongsTo(() => User)
+  @property({
+    type: 'string',
+    required: true,
+    mongodb: { dataType: 'ObjectID' },
+  })
   userId: string;
 
   constructor(data?: Partial<UserCredentials>) {
