@@ -1,6 +1,6 @@
 import { BootMixin } from '@loopback/boot';
 import { RepositoryMixin } from '@loopback/repository';
-import { BindingScope, CoreTags } from '@loopback/core';
+import { BindingScope, CoreTags, CoreBindings } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import { AuthenticationComponent, registerAuthenticationStrategy } from '@loopback/authentication'
 import { JWTAuthenticationStrategy } from './authentication-strategies/jwt-strategy';
@@ -24,12 +24,19 @@ import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
-  constructor(rootPath: string) {
-    let config: any = JSON.parse(fs.readFileSync(path.join(rootPath, 'config.json')).toString());
-    super({
+  private rootPath: string;
+  private config: any;
+
+  constructor() {
+
+    super();
+    this.rootPath = path.join(__dirname, '../..');
+    this.config = JSON.parse(fs.readFileSync(path.join(this.rootPath, 'config.json')).toString());
+
+    this.bind(CoreBindings.APPLICATION_CONFIG).to({
       rest: {
-        host: config.rest.host,
-        port: config.rest.port
+        host: this.config.rest.host,
+        port: this.config.rest.port
       }
     });
 
@@ -41,12 +48,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
       servers: [{ url: '/' }],
     });
 
-    this.projectRoot = __dirname;
-    this.sequence(MainSequence);
-    this.bind(RestExplorerBindings.CONFIG).to({ path: '/explorer' });
-    this.component(RestExplorerComponent);
-    this.component(AuthenticationComponent);
-    registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
     this.bootOptions = {
       controllers: {
         dirs: ['controllers'],
@@ -55,26 +56,40 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
       },
     };
 
-    this.static('/', path.join(rootPath, 'client/build'));
-    this.static('/jingles', path.join(rootPath, 'client/build'));
+    this.projectRoot = __dirname;
 
-    this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
-    this.bind(RadiodBindings.GLOBAL_CONFIG).to(config)
+    this.sequence(MainSequence);
+    this.bind(RestExplorerBindings.CONFIG).to({ path: '/explorer' });
+    this.component(RestExplorerComponent);
+    this.component(AuthenticationComponent);
+    registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
+
+    this.static('/', path.join(this.rootPath, 'client/build'));
+    this.static('/jingles', path.join(this.rootPath, 'client/build'));
+
+    this.setupBindings();
+  }
+
+  private setupBindings(): void {
+
+    this.bind(RadiodBindings.ROOT_PATH).to(this.rootPath);
+    this.bind(RadiodBindings.GLOBAL_CONFIG).to(this.config)
     this.bind(RadiodBindings.MONGO_CONFIG)
-      .to(JSON.parse(fs.readFileSync(path.join(rootPath, 'mongo.config.json')).toString()));
+      .to(JSON.parse(fs.readFileSync(path.join(this.rootPath, 'mongo.config.json')).toString()));
+
     this.bind(RadiodBindings.API_KEY)
-      .to(JSON.parse(fs.readFileSync(path.join(rootPath, 'api_key.json')).toString()));
+      .to(JSON.parse(fs.readFileSync(path.join(this.rootPath, 'api_key.json')).toString()));
+
     this.bind(RadiodBindings.CONFIG_SERVICE)
       .toClass(PersistentKeyService)
       .inScope(BindingScope.SINGLETON);
-    // TOKEN Service
+
     this.bind(RadiodBindings.TOKEN_SERVICE).toClass(JWTService);
     this.bind(TokenServiceBindings.TOKEN_SECRET).to(TokenServiceConstants.TOKEN_SECRET_VALUE);
     this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(TokenServiceConstants.TOKEN_EXPIRES_IN_VALUE);
-    // HASH Service
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
-    // USER Service
+
     this.bind(RadiodBindings.USER_SERVICE).toClass(MainUserService);
   }
 
