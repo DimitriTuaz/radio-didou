@@ -19,8 +19,8 @@ import { NowSpotify } from './now/now.spotify';
 import { NowDeezer } from './now/now.deezer';
 
 import { ConfigurationService, NowService, JWTService, BcryptHasher, MyUserService } from './services';
-import { CredentialRepository } from './repositories';
-import { Credential } from './models'
+import { NowCredentialsRepository } from './repositories';
+import { NowCredentials } from './models'
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
@@ -85,10 +85,10 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
   public async init() {
     let config = await this.get(RadiodBindings.CONFIG_SERVICE);
-    let repository: CredentialRepository = await this.getRepository(CredentialRepository);
+    let repository: NowCredentialsRepository = await this.getRepository(NowCredentialsRepository);
     try {
       let crendentialID: string = await config.get(RadiodKeys.DEFAULT_CREDENTIAL);
-      let credential: Credential = await repository.findById(crendentialID);
+      let credential: NowCredentials = await repository.findById(crendentialID);
       switch (credential.type) {
         case NowEnum.Spotify:
           this.bind(RadiodBindings.NOW_SERVICE).toClass(NowSpotify)

@@ -11,7 +11,7 @@ export class UserCredentials extends Entity {
   @property({
     type: 'string',
     id: true,
-    mongodb: { dataType: 'ObjectID' },
+    generated: true
   })
   id: string;
 
@@ -21,11 +21,7 @@ export class UserCredentials extends Entity {
   })
   password: string;
 
-  @property({
-    type: 'string',
-    required: true,
-    mongodb: { dataType: 'ObjectID' },
-  })
+  @belongsTo(() => User)
   userId: string;
 
   constructor(data?: Partial<UserCredentials>) {

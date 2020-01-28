@@ -1,7 +1,7 @@
-import {Entity, model, property} from '@loopback/repository';
+import { Entity, model, property } from '@loopback/repository';
 
 @model()
-export class Credential extends Entity {
+export class NowCredentials extends Entity {
   @property({
     type: 'string',
     id: true,
@@ -34,13 +34,13 @@ export class Credential extends Entity {
   token: string;
 
 
-  constructor(data?: Partial<Credential>) {
+  constructor(data?: Partial<NowCredentials>) {
     super(data);
   }
 }
 
-export interface CredentialRelations {
+export interface NowCredentialsRelations {
   // describe navigational properties here
 }
 
-export type CredentialWithRelations = Credential & CredentialRelations;
+export type NowCredentialsWithRelations = NowCredentials & NowCredentialsRelations;
