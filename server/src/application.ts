@@ -18,7 +18,7 @@ import { NowNone } from './now/now.none';
 import { NowSpotify } from './now/now.spotify';
 import { NowDeezer } from './now/now.deezer';
 
-import { ConfigurationService, NowService, JWTService, BcryptHasher, MyUserService } from './services';
+import { PersistentKeyService, NowService, JWTService, BcryptHasher, MyUserService } from './services';
 import { NowCredentialsRepository } from './repositories';
 import { NowCredentials } from './models'
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
@@ -70,7 +70,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.bind(RadiodBindings.API_KEY)
       .to(JSON.parse(fs.readFileSync(path.join(rootPath, 'api_key.json')).toString()));
     this.bind(RadiodBindings.CONFIG_SERVICE)
-      .toClass(ConfigurationService)
+      .toClass(PersistentKeyService)
       .inScope(BindingScope.SINGLETON);
     // TOKEN Service
     this.bind(RadiodBindings.TOKEN_SERVICE).toClass(JWTService);
