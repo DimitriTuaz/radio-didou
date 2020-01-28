@@ -1,10 +1,8 @@
 import { RadiodApplication } from './application';
 
-import path from 'path';
-
 export async function main() {
 
-  const app = new RadiodApplication(path.join(__dirname, '../..'));
+  const app = new RadiodApplication();
 
   await app.boot();
   await app.init();
