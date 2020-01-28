@@ -10,16 +10,9 @@ import path from 'path';
 import fs from 'fs';
 
 import { MainSequence } from './sequence';
-import { RadiodBindings, RadiodKeys, TokenServiceBindings, TokenServiceConstants, PasswordHasherBindings } from './keys';
-
-import { NowEnum } from '@common/now/now.common';
-import { NowNone } from './now/now.none';
-import { NowSpotify } from './now/now.spotify';
-import { NowDeezer } from './now/now.deezer';
+import { RadiodBindings, TokenServiceBindings, TokenServiceConstants, PasswordHasherBindings } from './keys';
 
 import { PersistentKeyService, NowService, JWTService, BcryptHasher, MainUserService } from './services';
-import { NowCredentialsRepository } from './repositories';
-import { NowCredentials } from './models'
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
@@ -57,7 +50,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     };
 
     this.projectRoot = __dirname;
-
     this.sequence(MainSequence);
     this.bind(RestExplorerBindings.CONFIG).to({ path: '/explorer' });
     this.component(RestExplorerComponent);
@@ -66,7 +58,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.static('/', path.join(this.rootPath, 'client/build'));
     this.static('/jingles', path.join(this.rootPath, 'client/build'));
-
     this.setupBindings();
   }
 
@@ -91,32 +82,15 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 
     this.bind(RadiodBindings.USER_SERVICE).toClass(MainUserService);
+
+    this.bind(RadiodBindings.NOW_SERVICE)
+      .toClass(NowService)
+      .tag(CoreTags.LIFE_CYCLE_OBSERVER)
+      .inScope(BindingScope.SINGLETON);
   }
 
-  public async init() {
-    let config = await this.get(RadiodBindings.PERSISTENT_KEY_SERVICE);
-    let repository: NowCredentialsRepository = await this.getRepository(NowCredentialsRepository);
-    try {
-      let crendentialID: string = await config.get(RadiodKeys.DEFAULT_CREDENTIAL);
-      let credential: NowCredentials = await repository.findById(crendentialID);
-      switch (credential.type) {
-        case NowEnum.Spotify:
-          this.bind(RadiodBindings.NOW_SERVICE).toClass(NowSpotify)
-            .inScope(BindingScope.SINGLETON);
-          break;
-        case NowEnum.Deezer:
-          this.bind(RadiodBindings.NOW_SERVICE).toClass(NowDeezer)
-            .inScope(BindingScope.SINGLETON);
-          break;
-      }
-      let service: NowService = await this.get(RadiodBindings.NOW_SERVICE);
-      service.start(undefined, credential.token);
-    }
-    catch (e) {
-      this.bind(RadiodBindings.NOW_SERVICE)
-        .toClass(NowNone)
-        .tag(CoreTags.LIFE_CYCLE_OBSERVER)
-        .inScope(BindingScope.SINGLETON);
-    }
+  public async init(): Promise<void> {
+    let nowService: NowService = await this.get(RadiodBindings.NOW_SERVICE);
+    await nowService.setDefaultFetcher();
   }
 }

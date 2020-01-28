@@ -1,31 +1,21 @@
-import { inject } from '@loopback/core';
-
 import request from 'superagent'
 
-import { RadiodBindings } from '../keys';
-import { NowService } from '../services';
+import { NowFetcher } from '../now';
 import { NowEnum, INow } from '@common/now/now.common';
 
-export class NowDeezer extends NowService {
+export class NowDeezer extends NowFetcher {
 
   public static history_url = 'https://api.deezer.com/user/me/history';
   public static user_url = 'https://api.deezer.com/user/me';
   public static auth_url = 'https://connect.deezer.com/oauth/access_token.php';
 
-  public serviceName = "NowDeezer";
+  public name = "Deezer";
 
   private access_token: string;
 
-  constructor(
-    @inject(RadiodBindings.GLOBAL_CONFIG) private configuration: any,
-    @inject(RadiodBindings.API_KEY) private apiKey: any) {
-    super(configuration)
-  }
-
-  protected init(value?: INow, token?: string): void {
-    if (token != null) {
-      this.access_token = token;
-    }
+  constructor(token: string, value?: INow) {
+    super();
+    this.access_token = token;
     if (value != null) {
       this.now = value;
     }
@@ -39,7 +29,7 @@ export class NowDeezer extends NowService {
     }
   }
 
-  protected async fetch(): Promise<void> {
+  public async fetch(): Promise<void> {
     return await this.obtain_current_playback();
   }
 
@@ -64,7 +54,7 @@ export class NowDeezer extends NowService {
       }
     }
     catch (error) {
-      console.log("[" + this.serviceName + "] error in obtain_current_playback")
+      console.log("[" + this.name + "] error in obtain_current_playback")
     }
   }
 }
