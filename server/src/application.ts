@@ -6,7 +6,6 @@ import { AuthenticationComponent, registerAuthenticationStrategy } from '@loopba
 import { JWTAuthenticationStrategy } from './authentication-strategies/jwt-strategy';
 import { RestApplication } from '@loopback/rest';
 
-
 import path from 'path';
 import fs from 'fs';
 
@@ -18,7 +17,7 @@ import { NowNone } from './now/now.none';
 import { NowSpotify } from './now/now.spotify';
 import { NowDeezer } from './now/now.deezer';
 
-import { PersistentKeyService, NowService, JWTService, BcryptHasher, MyUserService } from './services';
+import { PersistentKeyService, NowService, JWTService, BcryptHasher, MainUserService } from './services';
 import { NowCredentialsRepository } from './repositories';
 import { NowCredentials } from './models'
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
@@ -59,10 +58,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.static('/', path.join(rootPath, 'client/build'));
     this.static('/jingles', path.join(rootPath, 'client/build'));
 
-    this.static('/lowlatency', path.join(rootPath, 'static/lowlatency.html'));
-    this.static('/janus.min.js', path.join(rootPath, 'static/janus.min.js'));
-    this.static('/lowlatency.js', path.join(rootPath, 'static/lowlatency.js'));
-
     this.bind(RadiodBindings.ROOT_PATH).to(rootPath);
     this.bind(RadiodBindings.GLOBAL_CONFIG).to(config)
     this.bind(RadiodBindings.MONGO_CONFIG)
@@ -80,7 +75,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
     // USER Service
-    this.bind(RadiodBindings.USER_SERVICE).toClass(MyUserService);
+    this.bind(RadiodBindings.USER_SERVICE).toClass(MainUserService);
   }
 
   public async init() {
