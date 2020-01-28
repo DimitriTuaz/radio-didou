@@ -135,7 +135,6 @@ export class NowController {
       .query({ secret: this.api_key.deezer.secret })
       .query({ code: code })
       .query({ output: "json" });
-    console.log(response.body)
     return response.body.access_token;
   }
 
