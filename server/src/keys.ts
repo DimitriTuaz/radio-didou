@@ -11,7 +11,7 @@ export namespace RadiodBindings {
   export const MONGO_CONFIG = BindingKey.create<object>('datasources.config.mongo');
   export const API_KEY = BindingKey.create<any>('radiod.api-key');
   export const NOW_SERVICE = BindingKey.create<NowService>('radiod.now-service');
-  export const CONFIG_SERVICE = BindingKey.create<PersistentKeyService>('radiod.config-service');
+  export const PERSISTENT_KEY_SERVICE = BindingKey.create<PersistentKeyService>('radiod.config-service');
   export const USER_SERVICE = BindingKey.create<UserService<User, Credentials>>('services.user.service');
   export const TOKEN_SERVICE = BindingKey.create<TokenService>('services.authentication.jwt.tokenservice');
 }
