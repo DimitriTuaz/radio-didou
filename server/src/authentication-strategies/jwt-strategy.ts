@@ -9,6 +9,8 @@ import { AuthenticationStrategy, TokenService } from '@loopback/authentication';
 import { UserProfile } from '@loopback/security';
 import { RadiodBindings } from '../keys';
 
+import { parse } from 'cookie';
+
 export class JWTAuthenticationStrategy implements AuthenticationStrategy {
   name = 'jwt';
 
@@ -24,28 +26,13 @@ export class JWTAuthenticationStrategy implements AuthenticationStrategy {
   }
 
   extractCredentials(request: Request): string {
-    if (!request.headers.authorization) {
-      throw new HttpErrors.Unauthorized(`Authorization header not found.`);
+    if (!request.headers.cookie) {
+      throw new HttpErrors.Unauthorized(`Cookie not found`);
     }
-
-
-    // for example : Bearer xxx.yyy.zzz
-    const authHeaderValue = request.headers.authorization;
-
-    if (!authHeaderValue.startsWith('Bearer')) {
-      throw new HttpErrors.Unauthorized(
-        `Authorization header is not of type 'Bearer'.`,
-      );
+    let cookies = parse(request.headers.cookie)
+    if (!('token' in cookies)) {
+      throw new HttpErrors.Unauthorized(`Token key not found in cookie.`);
     }
-
-    //split the string into 2 parts : 'Bearer ' and the `xxx.yyy.zzz`
-    const parts = authHeaderValue.split(' ');
-    if (parts.length !== 2)
-      throw new HttpErrors.Unauthorized(
-        `Authorization header value has too many parts. It must follow the pattern: 'Bearer xx.yy.zz' where xx.yy.zz is a valid JWT token.`,
-      );
-    const token = parts[1];
-
-    return token;
+    return cookies['token'];
   }
 }
