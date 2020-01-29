@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { repository, model, property } from '@loopback/repository';
+import { repository, model, property, RepositoryMixin } from '@loopback/repository';
 import { validateCredentials } from '../services/validator';
 import {
   post,
@@ -12,6 +12,8 @@ import {
   requestBody,
   HttpErrors,
   getModelSchemaRef,
+  RestBindings,
+  Response,
 } from '@loopback/rest';
 import { User } from '../models';
 import { UserRepository } from '../repositories';
@@ -130,8 +132,7 @@ export class UserController {
   })
   @authenticate('jwt')
   async printCurrentUser(
-    @inject(SecurityBindings.USER)
-    currentUserProfile: UserProfile): Promise<UserProfile> {
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<UserProfile> {
     currentUserProfile.id = currentUserProfile[securityId];
     delete currentUserProfile[securityId];
     return currentUserProfile;
@@ -157,10 +158,12 @@ export class UserController {
     },
   })
   async login(
+    @inject(RestBindings.Http.RESPONSE) response: Response,
     @requestBody(CredentialsRequestBody) credentials: Credentials): Promise<{ token: string }> {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
+    response.setHeader("Set-Cookie", ["token=" + token, "Path=/", "SameSite=Lax", "HttpOnly"]);
     return { token };
   }
 }

@@ -28,6 +28,7 @@ export class JWTAuthenticationStrategy implements AuthenticationStrategy {
       throw new HttpErrors.Unauthorized(`Authorization header not found.`);
     }
 
+
     // for example : Bearer xxx.yyy.zzz
     const authHeaderValue = request.headers.authorization;
 
