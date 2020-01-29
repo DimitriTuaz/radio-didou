@@ -86,7 +86,7 @@ export class UserController {
     validateCredentials(_.pick(newUserRequest, ['email', 'password']));
     const password = await this.passwordHasher.hashPassword(newUserRequest.password);
     try {
-      const savedUser = await this.userRepository.create(_.omit(newUserRequest, 'password'));
+      const savedUser = await this.userRepository.create(_.omit(newUserRequest, 'id', 'password'));
       await this.userRepository.userCredentials(savedUser.id).create({ password });
       return savedUser;
 
