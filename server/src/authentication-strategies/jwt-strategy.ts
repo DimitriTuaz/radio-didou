@@ -30,9 +30,9 @@ export class JWTAuthenticationStrategy implements AuthenticationStrategy {
       throw new HttpErrors.Unauthorized(`Cookie not found`);
     }
     let cookies = parse(request.headers.cookie)
-    if (!('token' in cookies)) {
-      throw new HttpErrors.Unauthorized(`Token key not found in cookie.`);
+    if (!('TOKEN' in cookies)) {
+      throw new HttpErrors.Unauthorized(`TOKEN key not found in cookie.`);
     }
-    return cookies['token'];
+    return cookies['TOKEN'];
   }
 }
