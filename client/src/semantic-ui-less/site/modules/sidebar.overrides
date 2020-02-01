@@ -1,3 +1,7 @@
 /*******************************
          Site Overrides
 *******************************/
+
+.pushable > .pusher {
+    background: @pageBackground; // Must be overidden by hand as semantic pusher background is not the pageBackgroun anymore
+}

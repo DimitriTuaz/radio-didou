@@ -1,5 +1,4 @@
 body {
-  background-image:url("images/background.png");
   background-attachment: fixed;
   font-family: OpenSansRegular, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
@@ -13,11 +12,22 @@ body {
   user-select: none;
 }
 
-.main-container {
+.main-container {  
+  height: 100vh;
   display: flex;
-  justify-content: center;
   flex-direction: column;
-  align-items: center;
+}
+
+.header-container {
+  display: flex;
+}
+
+.settings-container {
+  display: flex;
+  width : 40px;
+  height: 40px;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .title-container {
@@ -70,6 +80,14 @@ player-container-mobile {
 
 .track-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.track-clickable {
+  display: flex;
+  //align-items: flex-end;
+  //justify-content: flex-end;
   width: 50%;
   height: 250px;
   border-radius: 10px;
@@ -83,8 +101,8 @@ player-container-mobile {
     }
 }
 
-.track-container-mobile {
-  .track-container;
+.track-clickable-mobile {
+  .track-clickable;
   border-radius: 5px;
   width: 80%;
   height: 120px;
@@ -102,7 +120,7 @@ player-container-mobile {
   flex: 3;
   height: 100%;
   width: 100%;
-  padding: 30px 0px 10px 10px;
+  padding: 30px 10px 10px 10px;
 }
 
 .track-infos-container-mobile {
@@ -255,9 +273,8 @@ player-container-mobile {
 }
 
 .current-listeners-container {
-  flex-direction: column;
+  display: flex;
   justify-content: center;
-  align-items: center;
   margin-top: 15px;
 }
 
