@@ -1,23 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import '../App.less';
 import Jingle from '../components/Jingle'
 
-interface IProps {
-}
-
-interface IState {
-}
-
-class Jingles extends React.Component<IProps, IState> {
-
-    componentDidMount() {
+function Jingles() {    
+    useEffect(() => {
         document.title = 'Radio Didou - Jingles';
-    }
+    });
 
-    render() {
-        const isMobile = window.innerWidth <= 1000;
-        return (
-            <div className='main-container'>
+    const isMobile = window.innerWidth <= 1000;
+    return (
+        <div className='main-container'>
+            <div className='main-jingles-container'>
                 <div className='title-container-mobile unselectable'>
                     <p className={'sub-title' + (isMobile ? '-mobile' : '')}>Jingles</p>
                 </div>
@@ -129,8 +122,8 @@ class Jingles extends React.Component<IProps, IState> {
                     </div>
                 </div>
             </div>
-        );
-    }
+        </div>
+    ); 
 }
 
 export default Jingles;

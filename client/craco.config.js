@@ -6,6 +6,12 @@ module.exports = {
     { plugin: require('@dvhb/craco-extend-scope'), options: { path: './../' } },
     { plugin: require('@dvhb/craco-extend-scope'), options: { path: './../common' } }
   ],
+  babel: {
+    plugins: [
+      ["@babel/plugin-proposal-decorators", { legacy: true }],
+      ["@babel/plugin-proposal-class-properties", { loose: true }]
+    ]
+  },
   webpack: {
     alias: {
       '../../theme.config': require('path').join(
@@ -13,7 +19,7 @@ module.exports = {
         '/src/semantic-ui-less/theme.config',
       ),
     },
-    resolve: { 
+    resolve: {
       alias: {
         "@common": path.resolve(__dirname, "../common/"),
       }
