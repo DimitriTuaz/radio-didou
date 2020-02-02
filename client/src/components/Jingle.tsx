@@ -1,35 +1,19 @@
 import React from 'react';
 
 interface IProps {
-    display: string,
-    src: any
+    display: string;
+    src: string;
 }
 
-interface IState {
-}
+function Jingle(props: IProps) {
+    const audio: HTMLAudioElement = new Audio(props.src);
+    const isMobile = window.innerWidth <= 1000;
 
-class Jingle extends React.Component<IProps, IState> {
-
-    audio: HTMLAudioElement = new Audio(this.props.src);
-
-    constructor(props: IProps) {
-        super(props);
-
-        this.play = this.play.bind(this);    
-    } 
-
-    play() {
-        this.audio.play();
-    }
-
-    render() {
-        const isMobile = window.innerWidth <= 1000;
-        return(
-            <div>
-                <button onClick={this.play} className={'jingles-button' + (isMobile ? '-mobile' : '')}>{this.props.display}</button>
-            </div>
-        );
-    }
+    return(
+        <div>
+            <button onClick={() => audio.play()} className={'jingles-button' + (isMobile ? '-mobile' : '')}>{props.display}</button>
+        </div>
+    )
 }
 
 export default Jingle;
