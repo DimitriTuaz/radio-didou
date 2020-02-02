@@ -1,37 +1,41 @@
-import React, { useState, useEffect, createContext, useContext } from 'react';
-import { useObserver } from 'mobx-react-lite';
-import { MainStore } from '../stores/mainStore'
+import React, { useState, useEffect } from 'react'
+import { useObserver } from 'mobx-react-lite'
+import { useStores } from '../hooks/UseStores'
+import { Dimmer, Loader, Menu, Segment, Sidebar, Icon } from 'semantic-ui-react'
 import '../App.less';
 import icon_play from '../images/icon_play.png'
 import icon_sound from '../images/icon_sound.png'
 import icon_sound_low from '../images/icon_sound_low.png'
 import icon_mute from '../images/icon_mute.png'
-import { Dimmer, Loader, Menu, Segment, Sidebar, Icon } from 'semantic-ui-react'
+import { UserModal } from '../components/UserModal'
+import { UserState } from '../stores/UserStore'
 
-import * as config from '../../../config.json';
+import * as config from '../../../config.json'
 
-var ICECAST_URL: string = config.icecast
-var STREAM_URL: string = ICECAST_URL + 'radio-didou';
+const LOOPBACK_URL: string = config.loopback
+const ICECAST_URL: string = config.icecast
+const STREAM_URL: string = ICECAST_URL + 'radio-didou';
 
 interface IProps {
 }
 
-export const StoreContext = createContext<MainStore>({} as MainStore);
-export const StoreProvider = StoreContext.Provider;
-export const useStores = (): MainStore => useContext(StoreContext);
-
 export const Home = (props: IProps) => {
-  const mainStore  = useStores(); 
+  const { mainStore, userStore }  = useStores(); 
   const [mute, setMute] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
   const [volume, setVolume] = useState(1);
   const [audio] = useState(new Audio());
+  const [initOnce, setInitOnce] = useState(false)
 
   useEffect(() => {
-    mainStore.currentTrackIntervalId = window.setInterval(mainStore.getCurrentTrack, 3000);
-    mainStore.getCurrentTrack();
-    audio.onplaying = onPlaying;
+    if (!initOnce) {
+      setInitOnce(true);
+      mainStore.currentTrackIntervalId = window.setInterval(mainStore.getCurrentTrack, 3000);
+      mainStore.getCurrentTrack();
+      audio.onplaying = onPlaying;
+      userStore.cookieLogin();
+    }
 
     return() => {
       clearInterval(mainStore.currentTrackIntervalId);
@@ -81,10 +85,15 @@ export const Home = (props: IProps) => {
               <Menu.Item as='a' onClick={() => mainStore.showSidebar(false)}>
                 <Icon name='angle right' />                
               </Menu.Item>
-              <Menu.Item as='a' /*onClick={this.onClickUser}*/>
+              <Menu.Item as='a' onClick={() => {
+                if (userStore.state === UserState.signup) {
+                  userStore.state = UserState.login;
+                }
+                mainStore.showLoginModal(true);
+              }}>
                 <Icon name='user' />                
               </Menu.Item>
-              <Menu.Item as='a' /*onClick={this.onClickJingles}*/>
+              <Menu.Item as='a' onClick={() => { window.open(LOOPBACK_URL + 'jingles', '_blank') }}>
                 <Icon name='announcement' />
               </Menu.Item>
             </Sidebar>
@@ -93,12 +102,13 @@ export const Home = (props: IProps) => {
                 <Dimmer active={playing && loading}>
                   <Loader className='unselectable'>Chargement...</Loader>
                 </Dimmer>
+                <UserModal></UserModal>
                 <div className='main-container'>
                   <div className='header-container'>
                     <div className={'title-container' + (isMobile ? '-mobile' : '') + ' unselectable'}>
                       <p className={'title' + (isMobile ? '-mobile' : '')}>Radio Didou</p>
                     </div>
-                    <div className={'settings-container'} hidden={isMobile}>
+                    <div className={'settings-container'}>
                       <Icon 
                         name='settings' 
                         color='teal' // teal is the new white
@@ -152,5 +162,3 @@ export const Home = (props: IProps) => {
       </div>
   ))
 };
-
-//export default Home;
