@@ -72,7 +72,7 @@ export class UserStore {
             )
             .catch(
                 err => {
-                    if (err.status === 422) {
+                    if (err.status === 422 || err.status === 401)  {
                         this.userNotFound = true;
                     }
                 }
