@@ -163,7 +163,7 @@ export class UserController {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
-    response.setHeader("Set-Cookie", ["TOKEN=" + token, "Path=/", "SameSite=Lax", "HttpOnly"]);
+    response.setHeader("Set-Cookie", ["RADIO-DIDOU-AUTH=" + token, "Path=/", "SameSite=Lax", "HttpOnly"]);
     return { token };
   }
 }

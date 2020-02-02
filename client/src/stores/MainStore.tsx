@@ -3,11 +3,12 @@ import superagent from 'superagent'
 import { INow } from '@common/now/now.common'
 import * as config from '../../../config.json';
 
-var LOOPBACK_URL: string = config.loopback
-var CURRENT_TRACK_URL: string = LOOPBACK_URL + 'now/get';
+const LOOPBACK_URL: string = config.loopback
+const CURRENT_TRACK_URL: string = LOOPBACK_URL + 'now/get';
 
 export class MainStore {
     @observable sidebarVisible: boolean = false;
+    @observable loginModalVisible: boolean = false;
 
     @observable trackCover: string | undefined = undefined;
     @observable trackTitle: string | undefined = undefined;
@@ -21,6 +22,11 @@ export class MainStore {
     @action
     showSidebar = (show: boolean): void => {
         this.sidebarVisible = show;
+    }
+
+    @action
+    showLoginModal = (show: boolean): void => {
+        this.loginModalVisible = show;
     }
 
     @action

@@ -13,6 +13,6 @@ export const SECURITY_SCHEME_SPEC: SecuritySchemeObjects = {
   jwt: {
     type: 'apiKey',
     in: 'cookie',
-    name: 'TOKEN'
+    name: 'RADIO-DIDOU-AUTH'
   },
 };

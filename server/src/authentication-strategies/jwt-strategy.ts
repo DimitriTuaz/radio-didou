@@ -30,9 +30,9 @@ export class JWTAuthenticationStrategy implements AuthenticationStrategy {
       throw new HttpErrors.Unauthorized(`Cookie not found`);
     }
     let cookies = parse(request.headers.cookie)
-    if (!('TOKEN' in cookies)) {
-      throw new HttpErrors.Unauthorized(`TOKEN key not found in cookie.`);
+    if (!('RADIO-DIDOU-AUTH' in cookies)) {
+      throw new HttpErrors.Unauthorized(`RADIO-DIDOU-AUTH key not found in cookie.`);
     }
-    return cookies['TOKEN'];
+    return cookies['RADIO-DIDOU-AUTH'];
   }
 }
