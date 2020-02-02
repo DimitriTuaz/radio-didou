@@ -26,16 +26,12 @@ export const Home = (props: IProps) => {
   const [loading, setLoading] = useState(false);
   const [volume, setVolume] = useState(1);
   const [audio] = useState(new Audio());
-  const [initOnce, setInitOnce] = useState(false)
 
   useEffect(() => {
-    if (!initOnce) {
-      setInitOnce(true);
-      mainStore.currentTrackIntervalId = window.setInterval(mainStore.getCurrentTrack, 3000);
-      mainStore.getCurrentTrack();
-      audio.onplaying = onPlaying;
-      userStore.cookieLogin();
-    }
+    mainStore.getCurrentTrack();
+    mainStore.currentTrackIntervalId = window.setInterval(mainStore.getCurrentTrack, 3000);
+    audio.onplaying = onPlaying;
+    userStore.cookieLogin();
 
     return() => {
       clearInterval(mainStore.currentTrackIntervalId);
