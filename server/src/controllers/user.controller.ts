@@ -34,6 +34,7 @@ import { PasswordHasher } from '../services/hash.password.bcryptjs';
 import {
   PasswordHasherBindings,
   RadiodBindings,
+  TokenServiceBindings,
 } from '../keys';
 import _ from 'lodash';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
@@ -58,7 +59,7 @@ export class UserController {
     public userService: UserService<User, Credentials>,
   ) { }
 
-  @post('/users', {
+  @post('/users/register', {
     responses: {
       '200': {
         description: 'User',
@@ -159,11 +160,17 @@ export class UserController {
   })
   async login(
     @inject(RestBindings.Http.RESPONSE) response: Response,
-    @requestBody(CredentialsRequestBody) credentials: Credentials): Promise<{ token: string }> {
+    @requestBody(CredentialsRequestBody) credentials: Credentials,
+    @inject(TokenServiceBindings.TOKEN_EXPIRES_IN) maxAge: string): Promise<{ token: string }> {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
-    response.setHeader("Set-Cookie", ["RADIO-DIDOU-AUTH=" + token, "Path=/", "SameSite=Lax", "HttpOnly"]);
+    response.cookie("RADIO-DIDOU-AUTH", token, {
+      path: "/",
+      maxAge: Number.parseInt(maxAge) * 1000,
+      sameSite: "lax",
+      httpOnly: true
+    });
     return { token };
   }
 
@@ -176,7 +183,10 @@ export class UserController {
   })
   async logout(
     @inject(RestBindings.Http.RESPONSE) response: Response) {
-    response.setHeader("Set-Cookie", ["RADIO-DIDOU-AUTH=", "Path=/", "expires=Thu, 01 Jan 1970 00:00:00 GMT"]);
+    response.cookie("RADIO-DIDOU-AUTH", "", {
+      path: "/",
+      expires: new Date(0)
+    });
     return {};
   }
 }
