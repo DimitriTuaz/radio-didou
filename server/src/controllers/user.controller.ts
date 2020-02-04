@@ -163,7 +163,7 @@ export class UserController {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
-    response.setHeader("Set-Cookie", ["RADIO-DIDOU-AUTH=" + token, "Max-Age=43200", "Path=/", "SameSite=Lax", "HttpOnly"]);
+    response.cookie("RADIO-DIDOU-AUTH", token, { sameSite: "lax", maxAge: 43200 * 1000, path: "/", httpOnly: true });
     return { token };
   }
 
@@ -176,7 +176,7 @@ export class UserController {
   })
   async logout(
     @inject(RestBindings.Http.RESPONSE) response: Response) {
-    response.setHeader("Set-Cookie", ["RADIO-DIDOU-AUTH=", "Path=/", "expires=Thu, 01 Jan 1970 00:00:00 GMT"]);
+    response.cookie("RADIO-DIDOU-AUTH", "", { path: "/", expires: new Date(0) });
     return {};
   }
 }
