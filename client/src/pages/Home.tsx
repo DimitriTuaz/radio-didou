@@ -92,6 +92,9 @@ export const Home = (props: IProps) => {
               <Menu.Item as='a' onClick={() => { window.open(LOOPBACK_URL + 'jingles', '_blank') }}>
                 <Icon name='announcement' />
               </Menu.Item>
+              <Menu.Item as='a' onClick={() => { window.open('https://ign.radio-didou.com') }}>
+                <Icon name='compass' />
+              </Menu.Item>
             </Sidebar>
             <Sidebar.Pusher>
               <Segment basic>
