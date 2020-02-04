@@ -30,7 +30,7 @@ export class UserStore {
     @action
     createAccount = () => {
         superagent
-            .post(LOOPBACK_URL + 'users')
+            .post(LOOPBACK_URL + 'users/register')
             .send( {
                 firstName: this.firstName,
                 lastName: this.lastName,

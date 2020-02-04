@@ -58,7 +58,7 @@ export class UserController {
     public userService: UserService<User, Credentials>,
   ) { }
 
-  @post('/users', {
+  @post('/users/register', {
     responses: {
       '200': {
         description: 'User',
