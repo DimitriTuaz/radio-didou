@@ -109,9 +109,9 @@ export const Home = (props: IProps) => {
                     </div>
                     <div className={'settings-container'}>
                       <Icon 
-                        name='settings' 
+                        name='bars' 
                         color='teal' // teal is the new white
-                        size='large' 
+                        size='big' 
                         onClick={() => mainStore.showSidebar(true)} >
                       </Icon>
                     </div>
