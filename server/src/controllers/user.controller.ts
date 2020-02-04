@@ -166,4 +166,17 @@ export class UserController {
     response.setHeader("Set-Cookie", ["RADIO-DIDOU-AUTH=" + token, "Path=/", "SameSite=Lax", "HttpOnly"]);
     return { token };
   }
+
+  @get('/users/logout', {
+    responses: {
+      '200': {
+        description: 'Logout'
+      },
+    },
+  })
+  async logout(
+    @inject(RestBindings.Http.RESPONSE) response: Response) {
+    response.setHeader("Set-Cookie", ["RADIO-DIDOU-AUTH=", "Path=/", "expires=Thu, 01 Jan 1970 00:00:00 GMT"]);
+    return {};
+  }
 }

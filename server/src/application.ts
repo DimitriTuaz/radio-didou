@@ -10,7 +10,7 @@ import path from 'path';
 import fs from 'fs';
 
 import { MainSequence } from './sequence';
-import { RadiodBindings, TokenServiceBindings, TokenServiceConstants, PasswordHasherBindings } from './keys';
+import { RadiodBindings, TokenServiceBindings, PasswordHasherBindings } from './keys';
 
 import { PersistentKeyService, NowService, JWTService, BcryptHasher, MainUserService } from './services';
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
@@ -76,8 +76,8 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
       .inScope(BindingScope.SINGLETON);
 
     this.bind(RadiodBindings.TOKEN_SERVICE).toClass(JWTService);
-    this.bind(TokenServiceBindings.TOKEN_SECRET).to(TokenServiceConstants.TOKEN_SECRET_VALUE);
-    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(TokenServiceConstants.TOKEN_EXPIRES_IN_VALUE);
+    this.bind(TokenServiceBindings.TOKEN_SECRET).to(this.config.secret);
+    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to('43200');
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 
