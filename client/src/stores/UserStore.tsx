@@ -121,10 +121,20 @@ export class UserStore {
 
     @action
     logout = () => {
-        this.state = UserState.login;
-        this.firstName = '';
-        this.lastName = '';
-        this.email = '';
-        this.password = '';
+        superagent
+        .get(LOOPBACK_URL + 'users/logout')            
+        .set('Accept', 'application/json')
+        .then(
+            res => {
+                if (res.status && res.status === 200) {
+                    this.state = UserState.login;
+                    this.firstName = '';
+                    this.lastName = '';
+                    this.email = '';
+                    this.password = '';
+                }
+            }
+        )
+        .catch((err) => {console.log(err)})
     }
 }
