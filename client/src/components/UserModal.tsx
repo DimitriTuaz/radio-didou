@@ -8,7 +8,7 @@ interface IProps {
 }
 
 export const UserModal = (props: IProps) => {
-    const { mainStore, userStore }  = useStores();
+    const { mainStore, userStore } = useStores();
 
     const renderUserModal = () => {
         if (userStore.state === UserState.connected) {
@@ -23,7 +23,7 @@ export const UserModal = (props: IProps) => {
     }
 
     return useObserver(() => (
-        <Modal 
+        <Modal
             open={mainStore.loginModalVisible}
             closeOnDimmerClick={true}
             onClose={() => mainStore.showLoginModal(false)}
@@ -35,15 +35,15 @@ export const UserModal = (props: IProps) => {
 }
 
 const LoginModal = () => {
-    const { userStore }  = useStores(); 
+    const { userStore } = useStores();
 
     return useObserver(() => (
-            
-                <Modal.Description>
-                    <Segment placeholder>
-                        <Grid columns={2} relaxed='very' stackable>
-                        <Grid.Column>
-                            <Form>
+
+        <Modal.Description>
+            <Segment placeholder>
+                <Grid columns={2} relaxed='very' stackable>
+                    <Grid.Column>
+                        <Form>
                             <Form.Input
                                 icon='user'
                                 iconPosition='left'
@@ -58,94 +58,94 @@ const LoginModal = () => {
                                 iconPosition='left'
                                 label='Mot de passe'
                                 type='password'
-                                error={userStore.userNotFound}
                                 value={userStore.password}
                                 onChange={(e) => userStore.password = e.currentTarget.value}
                             />
 
-                            <Button content='Se connecter' primary onClick={userStore.login}/>
-                            </Form>
-                        </Grid.Column>
+                            <Button content='Se connecter' primary onClick={userStore.login} />
+                        </Form>
+                    </Grid.Column>
 
-                        <Grid.Column verticalAlign='middle'>
-                            <Button 
-                                content='S’inscrire' 
-                                icon='signup' 
-                                size='big' 
-                                primary
-                                onClick={() => userStore.state = UserState.signup}
-                            />
-                        </Grid.Column>
-                        </Grid>
+                    <Grid.Column verticalAlign='middle'>
+                        <Button
+                            content='S’inscrire'
+                            icon='signup'
+                            size='big'
+                            primary
+                            onClick={() => userStore.state = UserState.signup}
+                        />
+                    </Grid.Column>
+                </Grid>
 
-                        <Divider vertical>Ou</Divider>
-                    </Segment>            
-                </Modal.Description>
+                <Divider vertical>Ou</Divider>
+            </Segment>
+        </Modal.Description>
     ))
 }
 
 const SignupModal = () => {
-    const { userStore }  = useStores(); 
+    const { userStore } = useStores();
 
     return useObserver(() => (
         <Modal.Content image>
             <Modal.Description>
                 <Form>
                     <Form.Group>
-                        <Form.Input 
-                            label='Prénom' 
-                            placeholder='Rogis' 
-                            width={6}
-                            value={userStore.firstName}
-                            onChange={(e) => userStore.firstName = e.currentTarget.value}
-                        />
-                        <Form.Input 
-                            label='Nom' 
-                            placeholder='Elroud' 
-                            width={8}
-                            value={userStore.lastName}
-                            onChange={(e) => userStore.lastName = e.currentTarget.value}
-                        />
-                    </Form.Group>
-                    <Form.Group>
-                        <Form.Input 
-                            label='Email' 
-                            placeholder='rogis.elroud@mail.com' 
-                            type='email' 
-                            icon='mail' 
-                            iconPosition='left' 
+                        <Form.Input
+                            label='Email'
+                            placeholder='rogis.elroud@mail.com'
+                            type='email'
+                            icon='mail'
+                            iconPosition='left'
                             width={8}
                             error={userStore.emailError}
                             value={userStore.email}
                             onChange={(e) => userStore.email = e.currentTarget.value}
                         />
-                        <Form.Input 
-                            label='Mot de passe' 
-                            placeholder='••••••' 
-                            type='password' 
-                            icon='lock' 
-                            iconPosition='left' 
+                        <Form.Input
+                            label='Mot de passe'
+                            placeholder='••••••'
+                            type='password'
+                            icon='lock'
+                            iconPosition='left'
                             width={6}
+                            error={userStore.passwordError}
                             value={userStore.password}
                             onChange={(e) => userStore.password = e.currentTarget.value}
                         />
                     </Form.Group>
+                    <Form.Group>
+                        <Form.Input
+                            label='Nom'
+                            placeholder='Elroud'
+                            width={8}
+                            value={userStore.lastName}
+                            onChange={(e) => userStore.lastName = e.currentTarget.value}
+                        />
+                        <Form.Input
+                            label='Prénom'
+                            placeholder='Rogis'
+                            width={6}
+                            value={userStore.firstName}
+                            onChange={(e) => userStore.firstName = e.currentTarget.value}
+                        />
+                    </Form.Group>
                     <Form.Button primary onClick={userStore.createAccount}>S’inscrire</Form.Button>
-                </Form>             
+                </Form>
             </Modal.Description>
         </Modal.Content>
     ))
 }
 
 const ConnectedModal = () => {
-    const { userStore }  = useStores();
-    
+    const { userStore } = useStores();
+
     return useObserver(() => (
         <Modal.Content image>
             <Modal.Description>
                 <p>Connecté avec l'adresse {userStore.email}</p>
-                <Button 
-                    content='Se déconnecter' 
+                <Button
+                    content='Se déconnecter'
                     primary
                     onClick={userStore.logout}
                 />
