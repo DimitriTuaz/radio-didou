@@ -61,6 +61,7 @@ export class UserStore {
                     }
                     if (err.status === 422) {
                         this.passwordError = 'must contains at least 6 characters'
+                        this.emailError = null;
                     }
                 }
             )
