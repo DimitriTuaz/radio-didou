@@ -20,6 +20,7 @@ interface IUser {
 export class UserStore {
     @observable state: UserState = UserState.login;
     @observable userNotFound: boolean = false;
+    @observable emailError: string | null = null;
 
     @observable firstName: string = '';
     @observable lastName: string = '';
@@ -41,6 +42,7 @@ export class UserStore {
             .then(
                 res => {
                     if (res.status && res.status === 200) {
+                        this.emailError = null;
                         let user: IUser = res.body;
                         this.id = user.id;
                         this.firstName = user.firstName;
@@ -50,7 +52,13 @@ export class UserStore {
                     }
                 }
             )
-            .catch((err) => {console.log(err)})
+            .catch(
+                err => {
+                    if (err.status === 409)  {
+                        this.emailError = 'Email not avalaible';
+                    }
+                }
+            )
     }
 
     @action

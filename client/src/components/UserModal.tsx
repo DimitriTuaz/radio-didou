@@ -115,6 +115,7 @@ const SignupModal = () => {
                             icon='mail' 
                             iconPosition='left' 
                             width={8}
+                            error={userStore.emailError}
                             value={userStore.email}
                             onChange={(e) => userStore.email = e.currentTarget.value}
                         />
