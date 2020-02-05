@@ -19,7 +19,10 @@ interface IUser {
 
 export class UserStore {
     @observable state: UserState = UserState.login;
-    @observable userNotFound: boolean = false;
+
+    @observable userNotFound: string | null = null;
+    @observable emailError: string | null = null;
+    @observable passwordError: string | null = null;
 
     @observable firstName: string = '';
     @observable lastName: string = '';
@@ -50,7 +53,18 @@ export class UserStore {
                     }
                 }
             )
-            .catch((err) => {console.log(err)})
+            .catch(
+                err => {
+                    if (err.status === 409)  {
+                        this.emailError = 'Email not avalaible';
+                        this.passwordError = null;
+                    }
+                    if (err.status === 422) {
+                        this.passwordError = 'must contains at least 6 characters'
+                        this.emailError = null;
+                    }
+                }
+            )
     }
 
     @action
@@ -65,7 +79,9 @@ export class UserStore {
             .then(
                 res => {
                     if (res.status && res.status === 200) {
-                        this.userNotFound = false;
+                        this.emailError = null;
+                        this.userNotFound = null;
+                        this.passwordError = null;
                         this.state = UserState.connected;
                     }
                 }
@@ -73,7 +89,7 @@ export class UserStore {
             .catch(
                 err => {
                     if (err.status === 422 || err.status === 401)  {
-                        this.userNotFound = true;
+                        this.userNotFound = 'Invalid email or password.';
                     }
                 }
             )

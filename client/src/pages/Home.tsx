@@ -92,6 +92,9 @@ export const Home = (props: IProps) => {
               <Menu.Item as='a' onClick={() => { window.open(LOOPBACK_URL + 'jingles', '_blank') }}>
                 <Icon name='announcement' />
               </Menu.Item>
+              <Menu.Item as='a' onClick={() => { window.open('https://ign.radio-didou.com') }}>
+                <Icon name='compass' />
+              </Menu.Item>
             </Sidebar>
             <Sidebar.Pusher>
               <Segment basic>
@@ -106,9 +109,9 @@ export const Home = (props: IProps) => {
                     </div>
                     <div className={'settings-container'}>
                       <Icon 
-                        name='settings' 
+                        name='bars' 
                         color='teal' // teal is the new white
-                        size='large' 
+                        size='big' 
                         onClick={() => mainStore.showSidebar(true)} >
                       </Icon>
                     </div>
