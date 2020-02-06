@@ -28,7 +28,7 @@ export class NowController {
   }
 
   @get('/now/set/{credentialId}')
-  async setNowService(
+  async setNow(
     @param.path.string('credentialId') credentialId: string,
   ) {
     try {
@@ -55,7 +55,7 @@ export class NowController {
       },
     },
   })
-  async find(
+  async show(
     @param.query.object('filter', getFilterSchemaFor(NowCredentials)) filter?: Filter<NowCredentials>,
   ): Promise<NowCredentials[]> {
     return this.credentialRepository.find(filter);

@@ -72,7 +72,7 @@ export class UserController {
       },
     },
   })
-  async create(
+  async register(
     @requestBody({
       content: {
         'application/json': {
@@ -129,7 +129,7 @@ export class UserController {
     },
   })
   @authenticate('jwt')
-  async printCurrentUser(
+  async currentUser(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<UserProfile> {
     currentUserProfile.id = currentUserProfile[securityId];
     delete currentUserProfile[securityId];
