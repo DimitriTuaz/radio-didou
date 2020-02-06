@@ -34,14 +34,14 @@
     "!*/__tests__"
   ],
   "dependencies": {
-    "@loopback/authentication": "^3.3.1",
-    "@loopback/boot": "^1.7.2",
-    "@loopback/context": "^2.0.0",
-    "@loopback/core": "^1.12.2",
-    "@loopback/openapi-v3": "^1.12.0",
-    "@loopback/repository": "^1.18.0",
-    "@loopback/rest": "^1.26.0",
-    "@loopback/rest-explorer": "^1.4.8",
+    "@loopback/authentication": "^3.3.2",
+    "@loopback/boot": "^1.7.3",
+    "@loopback/context": "^2.1.0",
+    "@loopback/core": "^1.12.3",
+    "@loopback/openapi-v3": "^1.13.0",
+    "@loopback/repository": "^1.19.0",
+    "@loopback/rest": "^1.26.1",
+    "@loopback/rest-explorer": "^1.4.9",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie": "^0.3.3",
     "@types/set-interval-async": "^1.0.0",
@@ -55,9 +55,9 @@
     "tsconfig-paths": "^3.9.0"
   },
   "devDependencies": {
-    "@loopback/build": "^3.1.0",
-    "@loopback/testlab": "^1.10.2",
-    "@types/node": "^12.12.25",
+    "@loopback/build": "^3.1.1",
+    "@loopback/testlab": "^1.10.3",
+    "@types/node": "^12.12.26",
     "source-map-support": "^0.5.16",
     "typescript": "^3.7.5"
   }
