@@ -48,7 +48,7 @@ export class NowController {
           'application/json': {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(NowCredentials, { includeRelations: true }),
+              items: getModelSchemaRef(NowCredentials),
             },
           },
         },
