@@ -13,7 +13,6 @@ import { MainSequence } from './sequence';
 import { RadiodBindings, TokenServiceBindings, PasswordHasherBindings } from './keys';
 
 import { PersistentKeyService, NowService, JWTService, BcryptHasher, MainUserService } from './services';
-import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -37,7 +36,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
       openapi: '3.0.0',
       info: { title: "Radiod", version: "0.0.1" },
       paths: {},
-      components: { securitySchemes: SECURITY_SCHEME_SPEC },
       servers: [{ url: '/' }],
     });
 
