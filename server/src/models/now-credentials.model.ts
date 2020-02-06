@@ -40,7 +40,6 @@ export class NowCredentials extends Entity {
 }
 
 export interface NowCredentialsRelations {
-  // describe navigational properties here
 }
 
 export type NowCredentialsWithRelations = NowCredentials & NowCredentialsRelations;

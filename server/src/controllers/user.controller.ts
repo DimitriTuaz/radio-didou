@@ -39,8 +39,7 @@ import {
 import _ from 'lodash';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 
-@model()
-export class NewUserRequest extends User {
+export class NewUser extends User {
   @property({
     type: 'string',
     required: true,
@@ -77,17 +76,15 @@ export class UserController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(NewUserRequest, {
-            title: 'NewUser',
-          }),
+          schema: getModelSchemaRef(NewUser)
         },
       },
     })
-    newUserRequest: NewUserRequest): Promise<User> {
-    validateCredentials(_.pick(newUserRequest, ['email', 'password']));
-    const password = await this.passwordHasher.hashPassword(newUserRequest.password);
+    newUser: NewUser): Promise<User> {
+    validateCredentials(_.pick(newUser, ['email', 'password']));
+    const password = await this.passwordHasher.hashPassword(newUser.password);
     try {
-      const savedUser = await this.userRepository.create(_.omit(newUserRequest, 'id', 'password'));
+      const savedUser = await this.userRepository.create(_.omit(newUser, 'id', 'password'));
       await this.userRepository.userCredentials(savedUser.id).create({ password });
       return savedUser;
 
@@ -141,27 +138,23 @@ export class UserController {
 
   @post('/users/login', {
     responses: {
-      '200': {
-        description: 'Token',
-        content: {
-          'application/json': {
+      '204': {
+        description: 'Grant token in a cookie',
+        headers: {
+          'Set-Cookie': {
+            description: 'Access token valid for 12 hours',
             schema: {
-              type: 'object',
-              properties: {
-                token: {
-                  type: 'string',
-                },
-              },
-            },
-          },
-        },
+              type: 'string',
+            }
+          }
+        }
       },
     },
   })
   async login(
     @inject(RestBindings.Http.RESPONSE) response: Response,
     @requestBody(CredentialsRequestBody) credentials: Credentials,
-    @inject(TokenServiceBindings.TOKEN_EXPIRES_IN) maxAge: string): Promise<{ token: string }> {
+    @inject(TokenServiceBindings.TOKEN_EXPIRES_IN) maxAge: string): Promise<void> {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
@@ -171,22 +164,28 @@ export class UserController {
       sameSite: "lax",
       httpOnly: true
     });
-    return { token };
   }
 
-  @get('/users/logout', {
+  @post('/users/logout', {
     responses: {
-      '200': {
-        description: 'Logout'
+      '204': {
+        description: 'Revoke the token',
+        headers: {
+          'Set-Cookie': {
+            description: 'Expire the token cookie.',
+            schema: {
+              type: 'string',
+            }
+          }
+        }
       },
     },
   })
   async logout(
-    @inject(RestBindings.Http.RESPONSE) response: Response) {
+    @inject(RestBindings.Http.RESPONSE) response: Response): Promise<void> {
     response.cookie("RADIO-DIDOU-AUTH", "", {
       path: "/",
       expires: new Date(0)
     });
-    return {};
   }
 }

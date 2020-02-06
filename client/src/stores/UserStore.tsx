@@ -78,7 +78,7 @@ export class UserStore {
             .set('Accept', 'application/json')
             .then(
                 res => {
-                    if (res.status && res.status === 200) {
+                    if (res.status && res.status === 204) {
                         this.emailError = null;
                         this.userNotFound = null;
                         this.passwordError = null;
@@ -138,11 +138,10 @@ export class UserStore {
     @action
     logout = () => {
         superagent
-        .get(LOOPBACK_URL + 'users/logout')            
-        .set('Accept', 'application/json')
+        .post(LOOPBACK_URL + 'users/logout')            
         .then(
             res => {
-                if (res.status && res.status === 200) {
+                if (res.status && res.status === 204) {
                     this.state = UserState.login;
                     this.firstName = '';
                     this.lastName = '';
