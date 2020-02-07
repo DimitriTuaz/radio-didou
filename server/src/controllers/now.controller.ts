@@ -55,10 +55,8 @@ export class NowController {
       },
     },
   })
-  async show(
-    @param.query.object('filter', getFilterSchemaFor(NowCredentials)) filter?: Filter<NowCredentials>,
-  ): Promise<NowCredentials[]> {
-    return this.credentialRepository.find(filter);
+  async show(): Promise<NowCredentials[]> {
+    return this.credentialRepository.find();
   }
 
   @get('/now/{serviceId}/callback', {

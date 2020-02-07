@@ -92,67 +92,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "filter",
-            "in": "query",
-            "style": "deepObject",
-            "explode": true,
-            "schema": {
-              "type": "object",
-              "title": "NowCredentials.Filter",
-              "properties": {
-                "where": {
-                  "title": "NowCredentials.WhereFilter",
-                  "type": "object",
-                  "additionalProperties": true
-                },
-                "fields": {
-                  "title": "NowCredentials.Fields",
-                  "type": "object",
-                  "properties": {
-                    "id": {
-                      "type": "boolean"
-                    },
-                    "userId": {
-                      "type": "boolean"
-                    },
-                    "name": {
-                      "type": "boolean"
-                    },
-                    "type": {
-                      "type": "boolean"
-                    },
-                    "token": {
-                      "type": "boolean"
-                    }
-                  },
-                  "additionalProperties": false
-                },
-                "offset": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "limit": {
-                  "type": "integer",
-                  "minimum": 1,
-                  "example": 100
-                },
-                "skip": {
-                  "type": "integer",
-                  "minimum": 0
-                },
-                "order": {
-                  "type": "array",
-                  "items": {
-                    "type": "string"
-                  }
-                }
-              },
-              "additionalProperties": false
-            }
-          }
-        ],
         "operationId": "NowController.show"
       }
     },
