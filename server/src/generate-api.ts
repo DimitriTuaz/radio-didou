@@ -5,7 +5,7 @@ export async function generate(args: string[]) {
   const app = new RadiodApplication();
   await app.boot();
   try {
-    writeFileSync("dist/openapi.json", JSON.stringify(app.restServer.getApiSpec()));
+    writeFileSync("openapi.json", JSON.stringify(app.restServer.getApiSpec(), null, 2));
   } catch (e) {
     console.error(e);
   }
