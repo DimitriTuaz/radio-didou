@@ -59,6 +59,7 @@
     "@loopback/testlab": "^1.10.3",
     "@types/node": "^12.12.26",
     "source-map-support": "^0.5.16",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "openapi3-generator": "^0.13.0"
   }
 }
