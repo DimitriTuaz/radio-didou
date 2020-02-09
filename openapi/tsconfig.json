@@ -1,6 +1,11 @@
 {
     "compilerOptions": {
+        "target": "es2017",
         "declarationDir": "dist",
-        "composite": true
+        "composite": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "module": "esnext",
+        "moduleResolution": "node",
     }
 }

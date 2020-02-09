@@ -1,24 +1,24 @@
-import { superagent, SuperAgentRequest} from 'superagent';
+import request from 'superagent';
 
 export namespace NowController {
 
-    function deleteById(): SuperAgentRequest {
-        return superagent.get('/now/delete/:credentialId');
+    function deleteById(): request.SuperAgentRequest {
+        return request.get('/now/delete/:credentialId');
     }
 
-    function getNow(): SuperAgentRequest {
-        return superagent.get('/now/get');
+    function getNow(): request.SuperAgentRequest {
+        return request.get('/now/get');
     }
 
-    function setNow(): SuperAgentRequest {
-        return superagent.get('/now/set/:credentialId');
+    function setNow(): request.SuperAgentRequest {
+        return request.get('/now/set/:credentialId');
     }
 
-    function show(): SuperAgentRequest {
-        return superagent.get('/now/show');
+    function show(): request.SuperAgentRequest {
+        return request.get('/now/show');
     }
 
-    function create(): SuperAgentRequest {
-        return superagent.get('/now/:serviceId/callback');
+    function create(): request.SuperAgentRequest {
+        return request.get('/now/:serviceId/callback');
     }
 }

@@ -1,4 +1,4 @@
-import { superagent, SuperAgentRequest} from 'superagent';
+import request from 'superagent';
 
 {{#each operation as | operation |}}
 {{#each operation.path as | path |}}
@@ -7,8 +7,8 @@ import { superagent, SuperAgentRequest} from 'superagent';
 export namespace {{{path.x-controller-name}}} {
 {{/if}}
 
-    function {{{path.x-operation-name}}}(): SuperAgentRequest {
-        return superagent.{{@key}}('{{operation.path_name}}');
+    function {{{path.x-operation-name}}}(): request.SuperAgentRequest {
+        return request.{{@key}}('{{operation.path_name}}');
     }
 {{/if}}
 {{/each}}

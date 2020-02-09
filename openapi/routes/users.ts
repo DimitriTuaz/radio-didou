@@ -1,24 +1,24 @@
-import { superagent, SuperAgentRequest} from 'superagent';
+import request from 'superagent';
 
 export namespace UserController {
 
-    function login(): SuperAgentRequest {
-        return superagent.post('/users/login');
+    function login(): request.SuperAgentRequest {
+        return request.post('/users/login');
     }
 
-    function logout(): SuperAgentRequest {
-        return superagent.post('/users/logout');
+    function logout(): request.SuperAgentRequest {
+        return request.post('/users/logout');
     }
 
-    function currentUser(): SuperAgentRequest {
-        return superagent.get('/users/me');
+    function currentUser(): request.SuperAgentRequest {
+        return request.get('/users/me');
     }
 
-    function register(): SuperAgentRequest {
-        return superagent.post('/users/register');
+    function register(): request.SuperAgentRequest {
+        return request.post('/users/register');
     }
 
-    function findById(): SuperAgentRequest {
-        return superagent.get('/users/:userId');
+    function findById(): request.SuperAgentRequest {
+        return request.get('/users/:userId');
     }
 }
