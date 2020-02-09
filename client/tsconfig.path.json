@@ -2,14 +2,14 @@
   "compilerOptions": {
     "baseUrl": "src",
     "paths": {
-      "@common/*": [
-        "../../common/*"
+      "@openapi/*": [
+        "../../openapi/*"
       ]
     }
   },
   "references": [
     {
-      "path": "../common"
+      "path": "../openapi"
     }
   ],
 }

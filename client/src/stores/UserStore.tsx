@@ -1,5 +1,5 @@
 import { observable, action } from 'mobx';
-import superagent from 'superagent'
+import request from 'superagent'
 import * as config from '../../../config.json';
 
 const LOOPBACK_URL: string = config.loopback
@@ -31,125 +31,113 @@ export class UserStore {
     id: string = '';
 
     @action
-    createAccount = () => {
-        superagent
-            .post(LOOPBACK_URL + 'users/register')
-            .send( {
-                firstName: this.firstName,
-                lastName: this.lastName,
-                email: this.email,
-                password: this.password
-            })
-            .set('Accept', 'application/json')
-            .then(
-                res => {
-                    if (res.status && res.status === 200) {
-                        let user: IUser = res.body;
-                        this.id = user.id;
-                        this.firstName = user.firstName;
-                        this.lastName = user.lastName;
-                        this.email = user.email;
-                        this.login();
-                    }
-                }
-            )
-            .catch(
-                err => {
-                    if (err.status === 409)  {
-                        this.emailError = 'Email not avalaible';
-                        this.passwordError = null;
-                    }
-                    if (err.status === 422) {
-                        this.passwordError = 'must contains at least 6 characters'
-                        this.emailError = null;
-                    }
-                }
-            )
-    }
+    createAccount = async () => {
+        try {
+            const response = await request
+                .post(LOOPBACK_URL + 'users/register')
+                .send({
+                    firstName: this.firstName,
+                    lastName: this.lastName,
+                    email: this.email,
+                    password: this.password
+                })
+                .set('Accept', 'application/json');
 
-    @action
-    login = () => {
-        superagent
-            .post(LOOPBACK_URL + 'users/login')
-            .send( {
-                email: this.email,
-                password: this.password
-            })
-            .set('Accept', 'application/json')
-            .then(
-                res => {
-                    if (res.status && res.status === 204) {
-                        this.emailError = null;
-                        this.userNotFound = null;
-                        this.passwordError = null;
-                        this.state = UserState.connected;
-                    }
-                }
-            )
-            .catch(
-                err => {
-                    if (err.status === 422 || err.status === 401)  {
-                        this.userNotFound = 'Invalid email or password.';
-                    }
-                }
-            )
-    }
-
-    @action
-    cookieLogin = () => {
-        superagent
-            .get(LOOPBACK_URL + 'users/me')            
-            .set('Accept', 'application/json')
-            .then(
-                res => {
-                    if (res.status && res.status === 200) {
-                        let user: IUser = res.body;
-                        this.id = user.id;
-                        this.userInfo();
-                    }
-                }
-            )
-            .catch(
-                err => {
-                    console.log('Cookie Login Error : ' + err);
-                }
-            )
-    }
-
-    @action
-    userInfo = () => {
-        superagent
-            .get(LOOPBACK_URL + 'users/' + this.id)            
-            .set('Accept', 'application/json')
-            .then(
-                res => {
-                    if (res.status && res.status === 200) {
-                        let user: IUser = res.body;
-                        this.firstName = user.firstName;
-                        this.lastName = user.lastName;
-                        this.email = user.email;
-                        this.state = UserState.connected;
-                    }
-                }
-            )
-            .catch((err) => {console.log(err)})
-    }
-
-    @action
-    logout = () => {
-        superagent
-        .post(LOOPBACK_URL + 'users/logout')            
-        .then(
-            res => {
-                if (res.status && res.status === 204) {
-                    this.state = UserState.login;
-                    this.firstName = '';
-                    this.lastName = '';
-                    this.email = '';
-                    this.password = '';
-                }
+            if (response.status === 200) {
+                let user: IUser = response.body;
+                this.id = user.id;
+                this.firstName = user.firstName;
+                this.lastName = user.lastName;
+                this.email = user.email;
+                this.login();
             }
-        )
-        .catch((err) => {console.log(err)})
+        } catch (error) {
+            if (error.status === 409) {
+                this.emailError = 'Email not avalaible';
+                this.passwordError = null;
+            }
+            if (error.status === 422) {
+                this.passwordError = 'must contains at least 6 characters'
+                this.emailError = null;
+            }
+        }
+    }
+
+    @action
+    login = async () => {
+        try {
+            const response = await request
+                .post(LOOPBACK_URL + 'users/login')
+                .send({
+                    email: this.email,
+                    password: this.password
+                })
+                .set('Accept', 'application/json')
+
+            if (response.status === 204) {
+                this.emailError = null;
+                this.userNotFound = null;
+                this.passwordError = null;
+                this.state = UserState.connected;
+            }
+        } catch (error) {
+            if (error.status === 422 || error.status === 401) {
+                this.userNotFound = 'Invalid email or password.';
+            }
+        }
+    }
+
+    @action
+    cookieLogin = async () => {
+        try {
+            const response = await request
+                .get(LOOPBACK_URL + 'users/me')
+                .set('Accept', 'application/json')
+
+            if (response.status === 200) {
+                let user: IUser = response.body;
+                this.id = user.id;
+                this.userInfo();
+            }
+        } catch (error) {
+            console.log('Cookie Login Error : ' + error);
+        }
+    }
+
+    @action
+    userInfo = async () => {
+        try {
+            const response = await request
+                .get(LOOPBACK_URL + 'users/' + this.id)
+                .set('Accept', 'application/json')
+
+            if (response.status === 200) {
+                let user: IUser = response.body;
+                this.firstName = user.firstName;
+                this.lastName = user.lastName;
+                this.email = user.email;
+                this.state = UserState.connected;
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    @action
+    logout = async () => {
+        try {
+            const response = await request
+                .post(LOOPBACK_URL + 'users/logout');
+
+            if (response.status === 204) {
+                this.state = UserState.login;
+                this.firstName = '';
+                this.lastName = '';
+                this.email = '';
+                this.password = '';
+            }
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
