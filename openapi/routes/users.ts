@@ -1,24 +1,31 @@
+/** Loopback 4 - OpenApi Route: users **/
+
 import request from 'superagent';
 
 export namespace UserController {
 
-    function login(): request.SuperAgentRequest {
-        return request.post('/users/login');
+    export function login(): request.SuperAgentRequest {
+        return request
+            .post('/users/login');
     }
 
-    function logout(): request.SuperAgentRequest {
-        return request.post('/users/logout');
+    export function logout(): request.SuperAgentRequest {
+        return request
+            .post('/users/logout');
     }
 
-    function currentUser(): request.SuperAgentRequest {
-        return request.get('/users/me');
+    export function currentUser(): request.SuperAgentRequest {
+        return request
+            .get('/users/me');
     }
 
-    function register(): request.SuperAgentRequest {
-        return request.post('/users/register');
+    export function register(): request.SuperAgentRequest {
+        return request
+            .post('/users/register');
     }
 
-    function findById(): request.SuperAgentRequest {
-        return request.get('/users/:userId');
+    export function findById(): request.SuperAgentRequest {
+        return request
+            .get('/users/:userId');
     }
 }

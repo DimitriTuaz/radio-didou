@@ -1,5 +1,6 @@
 import { action, observable } from "mobx";
 import request from 'superagent'
+import { NowController } from '@openapi/routes'
 import { NowObject } from '@openapi/schemas'
 import * as config from '../../../config.json';
 
@@ -32,8 +33,7 @@ export class MainStore {
     @action
     getCurrentTrack = async () => {
         try {
-            const response = await request
-                .get(CURRENT_TRACK_URL)
+            const response = await NowController.getNow()
                 .set('Accept', 'application/json');
 
             if (response.status === 200) {
