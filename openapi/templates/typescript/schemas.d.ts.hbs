@@ -1,16 +1,16 @@
 /** Loopback 4 - OpenApi Schemas **/
 
 {{#unless openapi.__noSchemas}}
-{{#each openapi.components.schemas}}
+  {{#each openapi.components.schemas}}
 export interface {{this.title}} {
-{{#each this.properties}}
-{{#unless this.items}}
+    {{#each this.properties}}
+      {{#unless this.items}}
 {{@key}}{{#unless (isRequired ../this @key)}}?{{/unless}}: {{this.type}}
-{{else}}
+      {{else}}
 {{@key}}{{#unless (isRequired ../this @key)}}?{{/unless}}: {{this.items.type}}[]
-{{/unless}}
-{{/each}}
+      {{/unless}}
+    {{/each}}
 }
 
-{{/each}}
+  {{/each}}
 {{/unless}}
