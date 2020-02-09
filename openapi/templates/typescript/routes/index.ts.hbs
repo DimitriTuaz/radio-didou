@@ -1,5 +1,3 @@
 {{#each @root.openapi.endpoints}}
-{{#if this}}
 export * from './{{this}}'
-{{/if}}
 {{/each}}
