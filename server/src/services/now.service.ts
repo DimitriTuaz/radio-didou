@@ -5,12 +5,12 @@ import { LifeCycleObserver, Provider, inject } from '@loopback/core';
 import request = require('superagent');
 import { RadiodBindings, RadiodKeys } from '../keys';
 import { NowCredentials } from '../models';
-import { NowFetcher, NowNone, NowDeezer, NowSpotify, INow, NowEnum } from '../now'
+import { NowFetcher, NowNone, NowDeezer, NowSpotify, NowObject, NowEnum } from '../now'
 import { PersistentKeyService } from '../services';
 import { repository } from '@loopback/repository';
 import { NowCredentialsRepository } from '../repositories';
 
-export class NowService implements LifeCycleObserver, Provider<INow> {
+export class NowService implements LifeCycleObserver, Provider<NowObject> {
 
   private icecastURL: string;
   private fetcher: NowFetcher;
@@ -25,7 +25,7 @@ export class NowService implements LifeCycleObserver, Provider<INow> {
     this.fetcher = new NowNone();
   }
 
-  public value(): INow {
+  public value(): NowObject {
     return this.fetcher.now;
   }
 
@@ -57,7 +57,7 @@ export class NowService implements LifeCycleObserver, Provider<INow> {
     console.log("[NowService - " + this.fetcher.name + "] setFetcher");
   }
 
-  public start(value?: INow, token?: string): void {
+  public start(value?: NowObject, token?: string): void {
     try {
       if (!this.intervalID) {
         console.log("[NowService - " + this.fetcher.name + "] started");

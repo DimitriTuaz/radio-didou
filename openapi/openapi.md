@@ -17,6 +17,7 @@
   - [`POST` /users/register](#op-post-users-register) 
   - [`GET` /users/{userId}](#op-get-users-userid) 
 * [Schemas](#schemas)
+  - [NowObject](#schema-nowobject)
   - [NowCredentials](#schema-nowcredentials)
   - [User](#schema-user)
   - [NewUser](#schema-newuser)
@@ -141,11 +142,100 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Return value of NowController.getNow
+##### ▶ 200 - Informations about the current song
 
 ###### Headers
 _No headers specified_
 
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>listeners <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>song <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artists <strong>(required)</strong></td>
+        <td>
+          array(string)
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>album</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>release_date</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>cover</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+{
+  "listeners": 0,
+  "song": "string",
+  "artists": [
+    "string"
+  ],
+  "album": "string",
+  "release_date": "string",
+  "cover": "string",
+  "url": "string"
+}
+```
 
 #### Tags
 
@@ -980,6 +1070,94 @@ _No headers specified_
 
 ## Schemas
 
+<a id="schema-nowobject" />
+
+#### NowObject
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>listeners <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>song <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artists <strong>(required)</strong></td>
+        <td>
+          array(string)
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>album</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>release_date</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>cover</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+##### Example _(generated)_
+
+```json
+{
+  "listeners": 0,
+  "song": "string",
+  "artists": [
+    "string"
+  ],
+  "album": "string",
+  "release_date": "string",
+  "cover": "string",
+  "url": "string"
+}
+```
 <a id="schema-nowcredentials" />
 
 #### NowCredentials

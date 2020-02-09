@@ -1,5 +1,15 @@
 /** Loopback 4 - OpenApi Schemas **/
 
+export interface NowObject {
+  listeners: number
+  song: string
+  artists: array
+  album?: string
+  release_date?: string
+  cover?: string
+  url?: string
+}
+
 export interface NowCredentials {
   id?: string
   userId?: string
