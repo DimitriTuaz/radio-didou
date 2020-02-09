@@ -21,7 +21,7 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
     @inject(RadiodBindings.API_KEY) private api_key: any,
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
     @repository(NowCredentialsRepository) private credentialRepository: NowCredentialsRepository) {
-    this.icecastURL = configuration.icecast + 'status-json.xsl';
+    this.icecastURL = configuration.icecast + '/status-json.xsl';
     this.fetcher = new NowNone();
   }
 

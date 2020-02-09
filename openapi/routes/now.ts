@@ -1,31 +1,32 @@
 /** Loopback 4 - OpenApi Route: now **/
 
 import request from 'superagent';
+import { OpenAPI } from '..'
 
 export namespace NowController {
 
     export function deleteById(): request.SuperAgentRequest {
         return request
-            .get('/now/delete/:credentialId');
+            .get(OpenAPI.URL + '/now/delete/:credentialId');
     }
 
     export function getNow(): request.SuperAgentRequest {
         return request
-            .get('/now/get');
+            .get(OpenAPI.URL + '/now/get');
     }
 
     export function setNow(): request.SuperAgentRequest {
         return request
-            .get('/now/set/:credentialId');
+            .get(OpenAPI.URL + '/now/set/:credentialId');
     }
 
     export function show(): request.SuperAgentRequest {
         return request
-            .get('/now/show');
+            .get(OpenAPI.URL + '/now/show');
     }
 
     export function create(): request.SuperAgentRequest {
         return request
-            .get('/now/:serviceId/callback');
+            .get(OpenAPI.URL + '/now/:serviceId/callback');
     }
 }

@@ -1,6 +1,7 @@
 /** Loopback 4 - OpenApi Route: {{operation_name}} **/
 
 import request from 'superagent';
+import { OpenAPI } from '..'
 
 {{#each operation as | operation |}}
     {{#each operation.path as | path |}}
@@ -11,7 +12,7 @@ export namespace {{{path.x-controller-name}}} {
 
     export function {{{path.x-operation-name}}}(): request.SuperAgentRequest {
         return request
-            .{{@key}}('{{operation.path_name}}');
+            .{{@key}}(OpenAPI.URL + '{{operation.path_name}}');
     }
         {{/if}}
     {{/each}}

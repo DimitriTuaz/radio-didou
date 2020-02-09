@@ -1,11 +1,7 @@
 import { action, observable } from "mobx";
-import request from 'superagent'
 import { NowController } from '@openapi/routes'
 import { NowObject } from '@openapi/schemas'
-import * as config from '../../../config.json';
 
-const LOOPBACK_URL: string = config.loopback
-const CURRENT_TRACK_URL: string = LOOPBACK_URL + 'now/get';
 
 export class MainStore {
     @observable sidebarVisible: boolean = false;
@@ -62,7 +58,7 @@ export class MainStore {
                     this.trackArtists = trackArtists;
                     this.trackAlbum = trackAlbum;
                     this.trackUrl = trackUrl;
-                    if (navigator !== undefined && navigator.mediaSession != undefined) {
+                    if (navigator !== undefined && navigator.mediaSession !== undefined) {
                         navigator.mediaSession.metadata = new MediaMetadata({
                             title: trackTitle,
                             artist: trackArtists,
