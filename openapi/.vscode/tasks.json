@@ -6,7 +6,11 @@
     {
       "label": "Build",
       "type": "shell",
+      "options": {"cwd": "../server"},
       "command": "../server/build.sh",
+      "args": [
+        "openapi"
+      ],
       "isBackground": true,
       "group": {
         "kind": "build",
