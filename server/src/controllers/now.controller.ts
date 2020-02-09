@@ -4,8 +4,7 @@ import { Filter, repository } from '@loopback/repository';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 
-import { NowDeezer, NowSpotify } from '../now';
-import { NowEnum } from '@common/now/now.common';
+import { NowDeezer, NowSpotify, NowEnum } from '../now';
 import { NowCredentials } from '../models';
 import { NowCredentialsRepository } from '../repositories';
 import { PersistentKeyService, NowService } from '../services';

@@ -5,8 +5,8 @@ const generator = require('openapi3-generator/lib/generator');
 const path = require('path');
 
 const template: string[] = ['typescript', 'markdown'];
-const output: string = '../common/openapi';
-const templates: string = '../common/templates';
+const output: string = '../openapi';
+const templates: string = '../openapi/templates';
 
 export async function generate(args: string[]) {
   const app = new RadiodApplication();

@@ -1,7 +1,6 @@
 import request from 'superagent'
 
-import { NowFetcher } from '../now';
-import { NowEnum, INow } from '@common/now/now.common';
+import { NowFetcher, NowEnum, INow } from '../now';
 
 export class NowDeezer extends NowFetcher {
 
