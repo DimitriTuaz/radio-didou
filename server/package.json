@@ -17,7 +17,7 @@
     "pretest": "npm run clean && npm run build",
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
-    "start": "node -r source-map-support/register -r tsconfig-paths/register .",
+    "start": "node -r source-map-support/register .",
     "prepublishOnly": "npm run test"
   },
   "repository": {
@@ -51,8 +51,7 @@
     "jsonwebtoken": "^8.5.1",
     "loopback-connector-mongodb": "^5.2.1",
     "set-interval-async": "1.0.29",
-    "superagent": "^5.2.1",
-    "tsconfig-paths": "^3.9.0"
+    "superagent": "^5.2.1"
   },
   "devDependencies": {
     "@loopback/build": "^3.1.1",

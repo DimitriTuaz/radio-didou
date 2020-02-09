@@ -6,4 +6,4 @@ echo "## BUILD SERVER ##"
 cd ../server
 npm run build
 echo "## GENERATE OPENAPI CLIENT ##"
-node -r tsconfig-paths/register ./dist/generate-api
+node ./dist/generate-api
