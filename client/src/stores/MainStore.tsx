@@ -1,6 +1,6 @@
 import { action, observable } from "mobx";
-import superagent from 'superagent'
-import { INow } from '@common/now/now.common'
+import request from 'superagent'
+import { NowObject } from '@openapi/schemas'
 import * as config from '../../../config.json';
 
 const LOOPBACK_URL: string = config.loopback
@@ -30,57 +30,53 @@ export class MainStore {
     }
 
     @action
-    getCurrentTrack = (): void  => {
-        superagent
-            .get(CURRENT_TRACK_URL)
-            .set('Accept', 'application/json')
-            .then(
-                res => {
-                    if (res.status && res.status === 200) {
-                        let now: INow = res.body;
-                        let trackCover: string = now.cover ? now.cover : '';
-                        let trackAlbum: string = now.album ? now.album : '';
-                        let trackTitle: string = now.song;
-                        let trackArtists: string = '';
-                        let trackUrl: string = now.url ? now.url : '';
-                        let auditorCount: number = now.listeners;
+    getCurrentTrack = async () => {
+        try {
+            const response = await request
+                .get(CURRENT_TRACK_URL)
+                .set('Accept', 'application/json');
 
-                        if (now.artists !== undefined) {
-                            now.artists.forEach((name: any, index: number) => {
-                                trackArtists += name;
-                                if (index < now.artists.length - 1) {
-                                    trackArtists += ", ";
-                                }
-                            })
-                        }
-                        if (now.release_date !== undefined) {
-                            trackAlbum += " (" + now.release_date.substring(0, 4) + ")";
-                        }
-                        // update values only if track has changed
-                        if (trackTitle !== this.trackTitle || trackArtists !== this.trackArtists) {
-                            this.trackCover = trackCover;
-                            this.trackTitle = trackTitle;
-                            this.trackArtists = trackArtists;
-                            this.trackAlbum = trackAlbum;
-                            this.trackUrl = trackUrl;
+            if (response.status === 200) {
+                let now: NowObject = response.body;
+                let trackCover: string = now.cover ? now.cover : '';
+                let trackAlbum: string = now.album ? now.album : '';
+                let trackTitle: string = now.song;
+                let trackArtists: string = '';
+                let trackUrl: string = now.url ? now.url : '';
+                let auditorCount: number = now.listeners;
 
-                            if (navigator !== undefined && 'mediaSession' in navigator) {
-                                // Hack for TypeScript 'navigator may be undefined' warning
-                                const navigatorConst: any = navigator;
-                                navigatorConst.mediaSession.metadata = new MediaMetadata({
-                                    title: trackTitle,
-                                    artist: trackArtists,
-                                    album: trackAlbum,
-                                    artwork: [
-                                        { src: trackCover, sizes: '300x300', type: 'image/jpg' }
-                                    ]
-                                });
-                            }
+                if (now.artists !== undefined) {
+                    now.artists.forEach((name: any, index: number) => {
+                        trackArtists += name;
+                        if (index < now.artists.length - 1) {
+                            trackArtists += ", ";
                         }
-                        
-                        this.auditorCount = auditorCount
+                    })
+                }
+                if (now.release_date !== undefined) {
+                    trackAlbum += " (" + now.release_date.substring(0, 4) + ")";
+                }
+                if (trackTitle !== this.trackTitle || trackArtists !== this.trackArtists) {
+                    this.trackCover = trackCover;
+                    this.trackTitle = trackTitle;
+                    this.trackArtists = trackArtists;
+                    this.trackAlbum = trackAlbum;
+                    this.trackUrl = trackUrl;
+                    if (navigator !== undefined && navigator.mediaSession != undefined) {
+                        navigator.mediaSession.metadata = new MediaMetadata({
+                            title: trackTitle,
+                            artist: trackArtists,
+                            album: trackAlbum,
+                            artwork: [
+                                { src: trackCover, sizes: '300x300', type: 'image/jpg' }
+                            ]
+                        });
                     }
                 }
-            )
+                this.auditorCount = auditorCount
+            }
+        } catch (error) {
+            console.error(error);
         }
+    }
 }

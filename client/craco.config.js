@@ -4,7 +4,7 @@ module.exports = {
   plugins: [
     { plugin: require('@semantic-ui-react/craco-less') },
     { plugin: require('@dvhb/craco-extend-scope'), options: { path: './../' } },
-    { plugin: require('@dvhb/craco-extend-scope'), options: { path: './../common' } }
+    { plugin: require('@dvhb/craco-extend-scope'), options: { path: './../openapi' } }
   ],
   babel: {
     plugins: [
@@ -21,7 +21,7 @@ module.exports = {
     },
     resolve: {
       alias: {
-        "@common": path.resolve(__dirname, "../common/"),
+        "@openapi": path.resolve(__dirname, "../openapi/"),
       }
     }
   },

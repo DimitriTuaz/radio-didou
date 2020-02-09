@@ -1,5 +1,16 @@
-{{#each operation}}
-{{#each this.path}}
-{{this.x-controller-name}} {{this.title}}
+import { superagent, SuperAgentRequest} from 'superagent';
+
+{{#each operation as | operation |}}
+{{#each operation.path as | path |}}
+{{#if path.x-operation-name}}
+{{#if @../first}}
+export namespace {{{path.x-controller-name}}} {
+{{/if}}
+
+    function {{{path.x-operation-name}}}(): SuperAgentRequest {
+        return superagent.{{@key}}('{{operation.path_name}}');
+    }
+{{/if}}
 {{/each}}
 {{/each}}
+}
