@@ -4,7 +4,7 @@
     "port": "8888"
   },
   "secret": "myjwts3cr3t",
-  "loopback": "http://localhost:8888/",
-  "icecast": "http://37.59.99.228:8889/"
+  "loopback": "http://localhost:8888",
+  "icecast": "http://radio-didou.com:8889"
 }
 
