@@ -4,7 +4,11 @@
 {{#each openapi.components.schemas}}
 export interface {{this.title}} {
 {{#each this.properties}}
-  {{@key}}{{#unless (isRequired ../this @key)}}?{{/unless}}: {{this.type}}
+{{#unless this.items}}
+{{@key}}{{#unless (isRequired ../this @key)}}?{{/unless}}: {{this.type}}
+{{else}}
+{{@key}}{{#unless (isRequired ../this @key)}}?{{/unless}}: {{this.items.type}}[]
+{{/unless}}
 {{/each}}
 }
 
