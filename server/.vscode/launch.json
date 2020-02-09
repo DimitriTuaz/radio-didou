@@ -4,6 +4,10 @@
     {
       "type": "node",
       "request": "launch",
+      "runtimeArgs": [
+        "-r",
+        "source-map-support/register",
+      ],
       "name": "Launch Program",
       "program": "${workspaceFolder}/index.js"
     }
