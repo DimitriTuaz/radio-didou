@@ -4,10 +4,6 @@
     {
       "type": "node",
       "request": "launch",
-      "runtimeArgs": [
-        "-r",
-        "tsconfig-paths/register"
-      ],
       "name": "Launch Program",
       "program": "${workspaceFolder}/index.js"
     }
