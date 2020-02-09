@@ -1,5 +1,4 @@
-import { NowFetcher } from '../now';
-import { NowEnum } from '@common/now/now.common';
+import { NowFetcher, NowEnum } from '../now';
 
 export class NowNone extends NowFetcher {
 

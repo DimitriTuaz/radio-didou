@@ -1,0 +1,47 @@
+{
+  "program": {
+    "fileInfos": {
+      "../../../../usr/lib/node_modules/typescript/lib/lib.d.ts": {
+        "version": "49ff9798f592c8b7e628fd881401e68810c1b3589ecd7a41b32b3c287374cde0",
+        "signature": "49ff9798f592c8b7e628fd881401e68810c1b3589ecd7a41b32b3c287374cde0"
+      },
+      "../../../../usr/lib/node_modules/typescript/lib/lib.es5.d.ts": {
+        "version": "fc43680ad3a1a4ec8c7b8d908af1ec9ddff87845346de5f02c735c9171fa98ea",
+        "signature": "fc43680ad3a1a4ec8c7b8d908af1ec9ddff87845346de5f02c735c9171fa98ea"
+      },
+      "../../../../usr/lib/node_modules/typescript/lib/lib.dom.d.ts": {
+        "version": "d93de5e8a7275cb9d47481410e13b3b1debb997e216490954b5d106e37e086de",
+        "signature": "d93de5e8a7275cb9d47481410e13b3b1debb997e216490954b5d106e37e086de"
+      },
+      "../../../../usr/lib/node_modules/typescript/lib/lib.webworker.importscripts.d.ts": {
+        "version": "fe4e59403e34c7ff747abe4ff6abbc7718229556d7c1a5b93473fb53156c913b",
+        "signature": "fe4e59403e34c7ff747abe4ff6abbc7718229556d7c1a5b93473fb53156c913b"
+      },
+      "../../../../usr/lib/node_modules/typescript/lib/lib.scripthost.d.ts": {
+        "version": "b9faa17292f17d2ad75e34fac77dd63a6403af1dba02d39cd0cbb9ffdf3de8b9",
+        "signature": "b9faa17292f17d2ad75e34fac77dd63a6403af1dba02d39cd0cbb9ffdf3de8b9"
+      },
+      "./now/now.common.ts": {
+        "version": "01988c4f1dd12426f211dd3599fde348e8cbf420a701fc73d9766509d399b01e",
+        "signature": "19f80cdf751fc5fa28b753f8e9ae8d58ef1d78ef49a25011c839b27cb95f012d"
+      },
+      "./openapi/lol.tsx": {
+        "version": "d3d0ad90a0d39dbc9792c24b3b7caac88776abce944f0dc3451e0cd5065d5957",
+        "signature": "480e9ded42a561283d15e8bbae66666e7ef8041d23d2bc663f721efa43146c0a"
+      },
+      "./openapi/schemas.d.ts": {
+        "version": "2083364e1fb03af60e25206bf2335cbf56c00ede94063f7ac1b7bdd997efe9e1",
+        "signature": "2083364e1fb03af60e25206bf2335cbf56c00ede94063f7ac1b7bdd997efe9e1"
+      }
+    },
+    "options": {
+      "declarationDir": "./dist",
+      "composite": true,
+      "configFilePath": "./tsconfig.json"
+    },
+    "referencedMap": {},
+    "exportedModulesMap": {},
+    "semanticDiagnosticsPerFile": []
+  },
+  "version": "3.7.3"
+}
