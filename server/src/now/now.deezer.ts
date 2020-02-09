@@ -1,6 +1,6 @@
 import request from 'superagent'
 
-import { NowFetcher, NowEnum, INow } from '../now';
+import { NowFetcher, NowEnum, NowObject } from '../now';
 
 export class NowDeezer extends NowFetcher {
 
@@ -12,7 +12,7 @@ export class NowDeezer extends NowFetcher {
 
   private access_token: string;
 
-  constructor(token: string, value?: INow) {
+  constructor(token: string, value?: NowObject) {
     super();
     this.access_token = token;
     if (value != null) {

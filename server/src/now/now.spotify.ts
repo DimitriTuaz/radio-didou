@@ -1,6 +1,6 @@
 import request from 'superagent'
 
-import { NowFetcher, NowEnum, INow } from '../now';
+import { NowFetcher, NowEnum, NowObject } from '../now';
 
 export class NowSpotify extends NowFetcher {
 
@@ -14,7 +14,7 @@ export class NowSpotify extends NowFetcher {
   private refresh_token: string;
   private api_key: any;
 
-  constructor(token: string, api_key: any, value?: INow) {
+  constructor(token: string, api_key: any, value?: NowObject) {
     super();
     this.refresh_token = token;
     this.api_key = api_key;

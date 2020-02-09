@@ -1,22 +1,25 @@
+import { model, property } from "@loopback/repository";
+
 export enum NowEnum {
   None = 0,
   Spotify = 1,
   Deezer = 2,
 }
 
-export interface INow {
+@model()
+export class NowObject {
   type: NowEnum;
-  listeners: number;
-  song: string;
-  artists: string[];
-  album?: string;
-  release_date?: string;
-  cover?: string;
-  url?: string;
+  @property({ required: true }) listeners: number;
+  @property({ required: true }) song: string;
+  @property.array(String, { required: true }) artists: string[];
+  @property() album?: string;
+  @property() release_date?: string;
+  @property() cover?: string;
+  @property() url?: string;
 }
 
 export abstract class NowFetcher {
-  public now: INow;
+  public now: NowObject;
   public abstract async fetch(): Promise<void>;
   public abstract name: string;
 }

@@ -39,7 +39,14 @@
         ],
         "responses": {
           "200": {
-            "description": "Return value of NowController.getNow"
+            "description": "Informations about the current song",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NowObject"
+                }
+              }
+            }
           }
         },
         "operationId": "NowController.getNow"
@@ -320,6 +327,41 @@
       }
     },
     "schemas": {
+      "NowObject": {
+        "title": "NowObject",
+        "properties": {
+          "listeners": {
+            "type": "number"
+          },
+          "song": {
+            "type": "string"
+          },
+          "artists": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "album": {
+            "type": "string"
+          },
+          "release_date": {
+            "type": "string"
+          },
+          "cover": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "listeners",
+          "song",
+          "artists"
+        ],
+        "additionalProperties": false
+      },
       "NowCredentials": {
         "title": "NowCredentials",
         "properties": {
