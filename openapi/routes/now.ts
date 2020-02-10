@@ -4,29 +4,40 @@ import request from 'superagent';
 import { OpenAPI } from '..'
 
 export namespace NowController {
-
-    export function deleteById(): request.SuperAgentRequest {
-        return request
-            .get(OpenAPI.URL + '/now/delete/:credentialId');
+    export function getNow(): Promise<NowObject> {
+        return new Promise<NowObject>(async (resolve, reject) => {
+                        try {
+                const response = await request
+                    .get(OpenAPI.URL + '/now/get');
+                resolve(response.body);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    export function getNow(): request.SuperAgentRequest {
-        return request
-            .get(OpenAPI.URL + '/now/get');
+    export function show(): Promise<> {
+        return new Promise<>(async (resolve, reject) => {
+                        try {
+                const response = await request
+                    .get(OpenAPI.URL + '/now/show');
+                resolve(response.body);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    export function setNow(): request.SuperAgentRequest {
-        return request
-            .get(OpenAPI.URL + '/now/set/:credentialId');
+    export function create(): Promise<NowCredentials> {
+        return new Promise<NowCredentials>(async (resolve, reject) => {
+                        try {
+                const response = await request
+                    .get(OpenAPI.URL + '/now/:serviceId/callback');
+                resolve(response.body);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    export function show(): request.SuperAgentRequest {
-        return request
-            .get(OpenAPI.URL + '/now/show');
-    }
-
-    export function create(): request.SuperAgentRequest {
-        return request
-            .get(OpenAPI.URL + '/now/:serviceId/callback');
-    }
 }

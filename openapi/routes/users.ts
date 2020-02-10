@@ -4,29 +4,40 @@ import request from 'superagent';
 import { OpenAPI } from '..'
 
 export namespace UserController {
-
-    export function login(): request.SuperAgentRequest {
-        return request
-            .post(OpenAPI.URL + '/users/login');
+    export function currentUser(): Promise<> {
+        return new Promise<>(async (resolve, reject) => {
+                        try {
+                const response = await request
+                    .get(OpenAPI.URL + '/users/me');
+                resolve(response.body);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    export function logout(): request.SuperAgentRequest {
-        return request
-            .post(OpenAPI.URL + '/users/logout');
+    export function register(): Promise<User> {
+        return new Promise<User>(async (resolve, reject) => {
+                        try {
+                const response = await request
+                    .post(OpenAPI.URL + '/users/register');
+                resolve(response.body);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    export function currentUser(): request.SuperAgentRequest {
-        return request
-            .get(OpenAPI.URL + '/users/me');
+    export function findById(): Promise<User> {
+        return new Promise<User>(async (resolve, reject) => {
+                        try {
+                const response = await request
+                    .get(OpenAPI.URL + '/users/:userId');
+                resolve(response.body);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
 
-    export function register(): request.SuperAgentRequest {
-        return request
-            .post(OpenAPI.URL + '/users/register');
-    }
-
-    export function findById(): request.SuperAgentRequest {
-        return request
-            .get(OpenAPI.URL + '/users/:userId');
-    }
 }
