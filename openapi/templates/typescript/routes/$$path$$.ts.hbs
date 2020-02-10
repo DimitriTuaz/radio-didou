@@ -5,7 +5,7 @@ import { OpenAPI } from '..';
 import * as schema from '../schemas';
 
 {{#each operation as | operation |}}
-    {{#each operation.path as | path |}}
+    {{#each operation.path as | path pathName|}}
         {{#if path.x-operation-name}}
             {{#if @../first}}
 export namespace {{{path.x-controller-name}}} {
@@ -13,11 +13,21 @@ export namespace {{{path.x-controller-name}}} {
         {{#each path.responses as | response |}}
             {{#if @first}}
 
-    export function {{{path.x-operation-name}}}({{~>pathParameters path=path~}}): Promise<{{~>contentType response=response~}}> {
+    export function {{{path.x-operation-name}}}({{~>functionParameters path=path~}}): Promise<{{~>contentType response=response~}}> {
         return new Promise<{{~>contentType response=response~}}>(async (resolve, reject) => {
             try {
                 const response = await request
-                    .{{@../key}}(OpenAPI.URL + '{{operation.path_name}}');
+                    .{{@../key}}(OpenAPI.URL + {{{requestPath operation.path_name}}})
+                {{#if path.requestBody}}
+                    {{>setPost path=path}}
+                {{/if}}
+                {{#each path.parameters as | parameter |}}
+                    {{>setQuery parameter=parameter}}
+                {{/each}}
+                    {{>setAcceptHeader response=response}}
+                if (response.status !== {{@key}}) {
+                    reject(response);
+                }
                 resolve(response.body);
             } catch (error) {
                 reject(error);
