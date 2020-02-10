@@ -4,6 +4,7 @@ import request from 'superagent';
 import { OpenAPI } from '..'
 
 export namespace UserController {
+
     export function currentUser(): Promise<> {
         return new Promise<>(async (resolve, reject) => {
                         try {
@@ -39,5 +40,4 @@ export namespace UserController {
             }
         });
     }
-
 }
