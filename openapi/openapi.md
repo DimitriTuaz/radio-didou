@@ -21,6 +21,7 @@
   - [NowCredentials](#schema-nowcredentials)
   - [User](#schema-user)
   - [NewUser](#schema-newuser)
+  - [LoginCredentials](#schema-logincredentials)
 
 
 <a id="servers" />
@@ -611,7 +612,7 @@ _No headers specified_
 
 ```json
 {
-  "email": "user@example.com",
+  "email": "string",
   "password": "string"
 }
 ```
@@ -1359,6 +1360,47 @@ _No headers specified_
   "email": "string",
   "firstName": "string",
   "lastName": "string",
+  "password": "string"
+}
+```
+<a id="schema-logincredentials" />
+
+#### LoginCredentials
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>email <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>password <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+##### Example _(generated)_
+
+```json
+{
+  "email": "string",
   "password": "string"
 }
 ```

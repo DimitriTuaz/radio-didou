@@ -13,8 +13,8 @@ export namespace {{{path.x-controller-name}}} {
         {{#each path.responses as | response |}}
             {{#if @first}}
 
-    export function {{{path.x-operation-name}}}(): Promise<{{~>contentType response=response responseName=@key~}}> {
-        return new Promise<{{~>contentType response=response responseName=@key~}}>(async (resolve, reject) => {
+    export function {{{path.x-operation-name}}}({{~>pathParameters path=path~}}): Promise<{{~>contentType response=response~}}> {
+        return new Promise<{{~>contentType response=response~}}>(async (resolve, reject) => {
             try {
                 const response = await request
                     .{{@../key}}(OpenAPI.URL + '{{operation.path_name}}');

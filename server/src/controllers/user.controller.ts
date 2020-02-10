@@ -3,7 +3,7 @@
 // This file is licensed under the MIT License.
 // License text available at https://opensource.org/licenses/MIT
 
-import { repository, model, property, RepositoryMixin } from '@loopback/repository';
+import { repository, model, property, RepositoryMixin, ModelMetadataHelper } from '@loopback/repository';
 import { validateCredentials } from '../services/validator';
 import {
   post,
@@ -39,12 +39,15 @@ import {
 import _ from 'lodash';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 
-export class NewUser extends User {
-  @property({
-    type: 'string',
-    required: true,
-  })
-  password: string;
+@model()
+class NewUser extends User {
+  @property({ required: true }) password: string;
+}
+
+@model()
+class LoginCredentials {
+  @property({ required: true }) email: string;
+  @property({ required: true }) password: string;
 }
 
 export class UserController {
@@ -155,7 +158,13 @@ export class UserController {
   })
   async login(
     @inject(RestBindings.Http.RESPONSE) response: Response,
-    @requestBody(CredentialsRequestBody) credentials: Credentials,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(LoginCredentials)
+        },
+      },
+    }) credentials: Credentials,
     @inject(TokenServiceBindings.TOKEN_EXPIRES_IN) maxAge: string): Promise<void> {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
