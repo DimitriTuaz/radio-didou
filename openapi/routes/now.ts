@@ -4,6 +4,7 @@ import request from 'superagent';
 import { OpenAPI } from '..'
 
 export namespace NowController {
+
     export function getNow(): Promise<NowObject> {
         return new Promise<NowObject>(async (resolve, reject) => {
                         try {
@@ -16,8 +17,8 @@ export namespace NowController {
         });
     }
 
-    export function show(): Promise<> {
-        return new Promise<>(async (resolve, reject) => {
+    export function show(): Promise<NowCredentials[]> {
+        return new Promise<NowCredentials[]>(async (resolve, reject) => {
                         try {
                 const response = await request
                     .get(OpenAPI.URL + '/now/show');
@@ -39,5 +40,4 @@ export namespace NowController {
             }
         });
     }
-
 }
