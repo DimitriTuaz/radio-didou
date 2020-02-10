@@ -6,18 +6,28 @@
           {{~#if content.schema.type}}
 {{content.schema.type}}
           {{~else}}
+            {{~#if content.schema.title}}
 schema.{{content.schema.title}}
+            {{~else}}
+any
+            {{~/if}}
           {{~/if}}
         {{~else}}
           {{~#if content.schema.items.type}}
 {{content.schema.items.type}}[]
           {{~else}}
+            {{~#if content.schema.items.title}}
 schema.{{content.schema.items.title}}[]
+            {{~else}}
+any[]
+            {{~/if}}
           {{~/if}}
         {{~/unless}}
+      {{~else}}
+any
       {{/if}}
     {{~/if}}
   {{~/each}}
 {{~else}}
-any
+void
 {{~/if}}
