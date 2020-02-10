@@ -8,7 +8,6 @@
     "**/.svn": true,
     "**/CVS": true,
     "dist": true,
-    "**/*.js": true,
     "**/node_modules": true,
     "package-lock.json": true,
     "tsconfig.tsbuildinfo": true
