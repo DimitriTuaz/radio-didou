@@ -1,0 +1,29 @@
+{{~#if object.schema}}
+  {{~#unless object.schema.items}}
+    {{~#if object.schema.type}}
+param
+    {{~else}}
+      {{~#if object.schema.title}}
+{{camelCase object.schema.title}}
+      {{~else}}
+param
+      {{~/if}}
+    {{~/if}}
+  {{~else}}
+    {{~#if object.schema.items.type}}
+param
+    {{~else}}
+      {{~#if object.schema.items.title}}
+{{camelCase object.schema.items.title}}
+      {{~else}}
+param
+      {{~/if}}
+    {{~/if}}
+  {{~/unless}}
+{{~else}}
+  {{~#if object.type}}
+param
+  {{~else}}
+param
+  {{~/if}}
+{{~/if}}

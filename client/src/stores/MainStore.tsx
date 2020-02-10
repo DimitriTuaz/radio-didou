@@ -6,12 +6,11 @@ import { NowObject } from '@openapi/schemas'
 export class MainStore {
     @observable sidebarVisible: boolean = false;
     @observable loginModalVisible: boolean = false;
-
     @observable trackCover: string | undefined = undefined;
     @observable trackTitle: string | undefined = undefined;
     @observable trackArtists: string | undefined = undefined;
     @observable trackAlbum: string | undefined = undefined;
-    @observable trackUrl: string = "";
+    @observable trackUrl: string = '';
     @observable auditorCount: number | undefined = undefined;
 
     currentTrackIntervalId: number = 0;
@@ -30,6 +29,7 @@ export class MainStore {
     getCurrentTrack = async () => {
         try {
             let now: NowObject = await NowController.getNow();
+            
             let trackCover: string = now.cover ? now.cover : '';
             let trackAlbum: string = now.album ? now.album : '';
             let trackTitle: string = now.song;
@@ -41,12 +41,12 @@ export class MainStore {
                 now.artists.forEach((name: any, index: number) => {
                     trackArtists += name;
                     if (index < now.artists.length - 1) {
-                        trackArtists += ", ";
+                        trackArtists += ', ';
                     }
                 })
             }
             if (now.release_date !== undefined) {
-                trackAlbum += " (" + now.release_date.substring(0, 4) + ")";
+                trackAlbum += ' (' + now.release_date.substring(0, 4) + ')';
             }
             if (trackTitle !== this.trackTitle || trackArtists !== this.trackArtists) {
                 this.trackCover = trackCover;
@@ -54,6 +54,7 @@ export class MainStore {
                 this.trackArtists = trackArtists;
                 this.trackAlbum = trackAlbum;
                 this.trackUrl = trackUrl;
+
                 if (navigator !== undefined && navigator.mediaSession !== undefined) {
                     navigator.mediaSession.metadata = new MediaMetadata({
                         title: trackTitle,
@@ -65,7 +66,8 @@ export class MainStore {
                     });
                 }
             }
-            this.auditorCount = auditorCount
+            this.auditorCount = auditorCount;
+            
         } catch (error) {
             console.error(error);
         }

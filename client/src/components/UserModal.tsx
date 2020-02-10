@@ -50,8 +50,8 @@ const LoginModal = () => {
                                 label='Email'
                                 placeholder='rogis.elroud@mail.com'
                                 error={userStore.userNotFound}
-                                value={userStore.email}
-                                onChange={(e) => userStore.email = e.currentTarget.value}
+                                value={userStore.user.email}
+                                onChange={(e) => userStore.user.email = e.currentTarget.value}
                             />
                             <Form.Input
                                 icon='lock'
@@ -99,8 +99,8 @@ const SignupModal = () => {
                             iconPosition='left'
                             width={8}
                             error={userStore.emailError}
-                            value={userStore.email}
-                            onChange={(e) => userStore.email = e.currentTarget.value}
+                            value={userStore.user.email}
+                            onChange={(e) => userStore.user.email = e.currentTarget.value}
                         />
                         <Form.Input
                             label='Mot de passe'
@@ -119,15 +119,15 @@ const SignupModal = () => {
                             label='Nom'
                             placeholder='Elroud'
                             width={8}
-                            value={userStore.lastName}
-                            onChange={(e) => userStore.lastName = e.currentTarget.value}
+                            value={userStore.user.lastName}
+                            onChange={(e) => userStore.user.lastName = e.currentTarget.value}
                         />
                         <Form.Input
                             label='Prénom'
                             placeholder='Rogis'
                             width={6}
-                            value={userStore.firstName}
-                            onChange={(e) => userStore.firstName = e.currentTarget.value}
+                            value={userStore.user.firstName}
+                            onChange={(e) => userStore.user.firstName = e.currentTarget.value}
                         />
                     </Form.Group>
                     <Form.Button primary onClick={userStore.createAccount}>S’inscrire</Form.Button>
@@ -143,7 +143,7 @@ const ConnectedModal = () => {
     return useObserver(() => (
         <Modal.Content image>
             <Modal.Description>
-                <p>Connecté avec l'adresse {userStore.email}</p>
+                <p>Connecté avec l'adresse {userStore.user.email}</p>
                 <Button
                     content='Se déconnecter'
                     primary

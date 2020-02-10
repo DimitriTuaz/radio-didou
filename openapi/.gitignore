@@ -7,7 +7,6 @@ package-lock.json
 
 # Transpiled JavaScript files from Typescript
 dist
-*.js
 
 # Cache used by TypeScript's incremental build
 *.tsbuildinfo
