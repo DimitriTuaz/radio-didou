@@ -162,26 +162,10 @@
           }
         },
         "requestBody": {
-          "description": "The input of login function",
-          "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "email",
-                  "password"
-                ],
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email"
-                  },
-                  "password": {
-                    "type": "string",
-                    "minLength": 6
-                  }
-                }
+                "$ref": "#/components/schemas/LoginCredentials"
               }
             }
           },
@@ -408,6 +392,22 @@
             "type": "string"
           },
           "lastName": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "additionalProperties": false
+      },
+      "LoginCredentials": {
+        "title": "LoginCredentials",
+        "properties": {
+          "email": {
             "type": "string"
           },
           "password": {

@@ -6,7 +6,7 @@ import * as schema from '../schemas';
 
 export namespace UserController {
 
-    export function login(): Promise<void> {
+    export function login(param: schema.LoginCredentials): Promise<void> {
         return new Promise<void>(async (resolve, reject) => {
             try {
                 const response = await request
@@ -42,7 +42,7 @@ export namespace UserController {
         });
     }
 
-    export function register(): Promise<schema.User> {
+    export function register(param: schema.NewUser): Promise<schema.User> {
         return new Promise<schema.User>(async (resolve, reject) => {
             try {
                 const response = await request
