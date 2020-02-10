@@ -34,7 +34,7 @@ export class UserStore {
     createAccount = async () => {
         try {
             const response = await request
-                .post(LOOPBACK_URL + 'users/register')
+                .post(LOOPBACK_URL + '/users/register')
                 .send({
                     firstName: this.firstName,
                     lastName: this.lastName,
@@ -67,7 +67,7 @@ export class UserStore {
     login = async () => {
         try {
             const response = await request
-                .post(LOOPBACK_URL + 'users/login')
+                .post(LOOPBACK_URL + '/users/login')
                 .send({
                     email: this.email,
                     password: this.password
@@ -91,7 +91,7 @@ export class UserStore {
     cookieLogin = async () => {
         try {
             const response = await request
-                .get(LOOPBACK_URL + 'users/me')
+                .get(LOOPBACK_URL + '/users/me')
                 .set('Accept', 'application/json')
 
             if (response.status === 200) {
@@ -108,7 +108,7 @@ export class UserStore {
     userInfo = async () => {
         try {
             const response = await request
-                .get(LOOPBACK_URL + 'users/' + this.id)
+                .get(LOOPBACK_URL + '/users/' + this.id)
                 .set('Accept', 'application/json')
 
             if (response.status === 200) {
@@ -127,7 +127,7 @@ export class UserStore {
     logout = async () => {
         try {
             const response = await request
-                .post(LOOPBACK_URL + 'users/logout');
+                .post(LOOPBACK_URL + '/users/logout');
 
             if (response.status === 204) {
                 this.state = UserState.login;
