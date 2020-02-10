@@ -2,11 +2,12 @@
 
 import request from 'superagent';
 import { OpenAPI } from '..'
+import * as schema from '../schemas'
 
 export namespace UserController {
 
-    export function currentUser(): Promise<> {
-        return new Promise<>(async (resolve, reject) => {
+    export function currentUser(): Promise<schema.User> {
+        return new Promise<schema.User>(async (resolve, reject) => {
                         try {
                 const response = await request
                     .get(OpenAPI.URL + '/users/me');
@@ -17,8 +18,8 @@ export namespace UserController {
         });
     }
 
-    export function register(): Promise<User> {
-        return new Promise<User>(async (resolve, reject) => {
+    export function register(): Promise<schema.User> {
+        return new Promise<schema.User>(async (resolve, reject) => {
                         try {
                 const response = await request
                     .post(OpenAPI.URL + '/users/register');
@@ -29,8 +30,8 @@ export namespace UserController {
         });
     }
 
-    export function findById(): Promise<User> {
-        return new Promise<User>(async (resolve, reject) => {
+    export function findById(): Promise<schema.User> {
+        return new Promise<schema.User>(async (resolve, reject) => {
                         try {
                 const response = await request
                     .get(OpenAPI.URL + '/users/:userId');
