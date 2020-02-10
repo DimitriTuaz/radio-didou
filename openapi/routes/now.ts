@@ -2,11 +2,12 @@
 
 import request from 'superagent';
 import { OpenAPI } from '..'
+import * as schema from '../schemas'
 
 export namespace NowController {
 
-    export function getNow(): Promise<NowObject> {
-        return new Promise<NowObject>(async (resolve, reject) => {
+    export function getNow(): Promise<schema.NowObject> {
+        return new Promise<schema.NowObject>(async (resolve, reject) => {
                         try {
                 const response = await request
                     .get(OpenAPI.URL + '/now/get');
@@ -17,8 +18,8 @@ export namespace NowController {
         });
     }
 
-    export function show(): Promise<NowCredentials[]> {
-        return new Promise<NowCredentials[]>(async (resolve, reject) => {
+    export function show(): Promise<schema.NowCredentials[]> {
+        return new Promise<schema.NowCredentials[]>(async (resolve, reject) => {
                         try {
                 const response = await request
                     .get(OpenAPI.URL + '/now/show');
@@ -29,8 +30,8 @@ export namespace NowController {
         });
     }
 
-    export function create(): Promise<NowCredentials> {
-        return new Promise<NowCredentials>(async (resolve, reject) => {
+    export function create(): Promise<schema.NowCredentials> {
+        return new Promise<schema.NowCredentials>(async (resolve, reject) => {
                         try {
                 const response = await request
                     .get(OpenAPI.URL + '/now/:serviceId/callback');

@@ -2,6 +2,7 @@
 
 import request from 'superagent';
 import { OpenAPI } from '..'
+import * as schema from '../schemas'
 
 {{#each operation as | operation |}}
     {{#each operation.path as | path |}}
@@ -15,8 +16,8 @@ export namespace {{{path.x-controller-name}}} {
                 {{#if content.schema}}
 
                     {{#if content.schema.items}}
-    export function {{{path.x-operation-name}}}(): Promise<{{content.schema.items.title}}[]> {
-        return new Promise<{{content.schema.items.title}}[]>(async (resolve, reject) => {
+    export function {{{path.x-operation-name}}}(): Promise<schema.{{content.schema.items.title}}[]> {
+        return new Promise<schema.{{content.schema.items.title}}[]>(async (resolve, reject) => {
                         try {
                 const response = await request
                     .{{@../../key}}(OpenAPI.URL + '{{operation.path_name}}');
@@ -27,8 +28,8 @@ export namespace {{{path.x-controller-name}}} {
         });
     }
                     {{else}}
-    export function {{{path.x-operation-name}}}(): Promise<{{content.schema.title}}> {
-        return new Promise<{{content.schema.title}}>(async (resolve, reject) => {
+    export function {{{path.x-operation-name}}}(): Promise<schema.{{content.schema.title}}> {
+        return new Promise<schema.{{content.schema.title}}>(async (resolve, reject) => {
                         try {
                 const response = await request
                     .{{@../../key}}(OpenAPI.URL + '{{operation.path_name}}');

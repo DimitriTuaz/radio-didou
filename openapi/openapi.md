@@ -748,7 +748,7 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
-        <td>id <strong>(required)</strong></td>
+        <td>id</td>
         <td>
           string
         </td>
@@ -756,7 +756,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>email</td>
+        <td>email <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -764,7 +764,15 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>name</td>
+        <td>firstName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>lastName</td>
         <td>
           string
         </td>
@@ -781,7 +789,8 @@ _No headers specified_
 {
   "id": "string",
   "email": "string",
-  "name": "string"
+  "firstName": "string",
+  "lastName": "string"
 }
 ```
 
