@@ -6,8 +6,8 @@ import * as schema from '../schemas';
 
 export namespace NowController {
 
-    export function deleteById(): Promise<any> {
-        return new Promise<any>(async (resolve, reject) => {
+    export function deleteById(): Promise<void> {
+        return new Promise<void>(async (resolve, reject) => {
             try {
                 const response = await request
                     .get(OpenAPI.URL + '/now/delete/:credentialId');
@@ -30,8 +30,8 @@ export namespace NowController {
         });
     }
 
-    export function setNow(): Promise<any> {
-        return new Promise<any>(async (resolve, reject) => {
+    export function setNow(): Promise<void> {
+        return new Promise<void>(async (resolve, reject) => {
             try {
                 const response = await request
                     .get(OpenAPI.URL + '/now/set/:credentialId');

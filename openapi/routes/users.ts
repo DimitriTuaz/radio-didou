@@ -6,8 +6,8 @@ import * as schema from '../schemas';
 
 export namespace UserController {
 
-    export function login(): Promise<any> {
-        return new Promise<any>(async (resolve, reject) => {
+    export function login(): Promise<void> {
+        return new Promise<void>(async (resolve, reject) => {
             try {
                 const response = await request
                     .post(OpenAPI.URL + '/users/login');
@@ -18,8 +18,8 @@ export namespace UserController {
         });
     }
 
-    export function logout(): Promise<any> {
-        return new Promise<any>(async (resolve, reject) => {
+    export function logout(): Promise<void> {
+        return new Promise<void>(async (resolve, reject) => {
             try {
                 const response = await request
                     .post(OpenAPI.URL + '/users/logout');
@@ -30,8 +30,8 @@ export namespace UserController {
         });
     }
 
-    export function currentUser(): Promise<object> {
-        return new Promise<object>(async (resolve, reject) => {
+    export function currentUser(): Promise<schema.User> {
+        return new Promise<schema.User>(async (resolve, reject) => {
             try {
                 const response = await request
                     .get(OpenAPI.URL + '/users/me');

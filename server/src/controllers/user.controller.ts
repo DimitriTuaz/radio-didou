@@ -122,7 +122,9 @@ export class UserController {
         description: 'The current user profile',
         content: {
           'application/json': {
-            schema: UserProfileSchema,
+            schema: {
+              'x-ts-type': User,
+            },
           },
         },
       },
