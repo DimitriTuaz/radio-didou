@@ -9,11 +9,26 @@ import { OpenAPI } from '..'
             {{#if @../first}}
 export namespace {{{path.x-controller-name}}} {
             {{/if}}
-
-    export function {{{path.x-operation-name}}}(): request.SuperAgentRequest {
-        return request
-            .{{@key}}(OpenAPI.URL + '{{operation.path_name}}');
+        {{#each path.responses as | response |}}
+            {{#if @first}}
+                {{#each response.content as | content |}}
+                {{#if content.schema}}
+    export function {{{path.x-operation-name}}}(): Promise<{{content.schema.title}}> {
+        return new Promise<{{content.schema.title}}>(async (resolve, reject) => {
+                        try {
+                const response = await request
+                    .{{@../../key}}(OpenAPI.URL + '{{operation.path_name}}');
+                resolve(response.body);
+            } catch (error) {
+                reject(error);
+            }
+        });
     }
+
+                {{/if}}
+                {{/each}}
+            {{/if}}
+        {{/each}}
         {{/if}}
     {{/each}}
 {{/each}}
