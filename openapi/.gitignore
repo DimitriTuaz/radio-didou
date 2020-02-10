@@ -15,3 +15,11 @@ dist
 # Modules
 node_modules
 
+# Generated Code
+
+openapi.md
+openapi.json
+index.ts
+schemas.d.ts
+routes
+
