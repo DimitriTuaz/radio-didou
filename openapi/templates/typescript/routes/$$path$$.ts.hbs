@@ -1,8 +1,8 @@
 /** Loopback 4 - OpenApi Route: {{operation_name}} **/
 
 import request from 'superagent';
-import { OpenAPI } from '..'
-import * as schema from '../schemas'
+import { OpenAPI } from '..';
+import * as schema from '../schemas';
 
 {{#each operation as | operation |}}
     {{#each operation.path as | path |}}
@@ -12,36 +12,18 @@ export namespace {{{path.x-controller-name}}} {
             {{/if}}
         {{#each path.responses as | response |}}
             {{#if @first}}
-                {{#each response.content as | content |}}
-                {{#if content.schema}}
 
-                    {{#if content.schema.items}}
-    export function {{{path.x-operation-name}}}(): Promise<schema.{{content.schema.items.title}}[]> {
-        return new Promise<schema.{{content.schema.items.title}}[]>(async (resolve, reject) => {
-                        try {
+    export function {{{path.x-operation-name}}}(): Promise<{{~>contentType response=response responseName=@key~}}> {
+        return new Promise<{{~>contentType response=response responseName=@key~}}>(async (resolve, reject) => {
+            try {
                 const response = await request
-                    .{{@../../key}}(OpenAPI.URL + '{{operation.path_name}}');
+                    .{{@../key}}(OpenAPI.URL + '{{operation.path_name}}');
                 resolve(response.body);
             } catch (error) {
                 reject(error);
             }
         });
     }
-                    {{else}}
-    export function {{{path.x-operation-name}}}(): Promise<schema.{{content.schema.title}}> {
-        return new Promise<schema.{{content.schema.title}}>(async (resolve, reject) => {
-                        try {
-                const response = await request
-                    .{{@../../key}}(OpenAPI.URL + '{{operation.path_name}}');
-                resolve(response.body);
-            } catch (error) {
-                reject(error);
-            }
-        });
-    }
-                    {{/if}}
-                {{/if}}
-                {{/each}}
             {{/if}}
         {{/each}}
         {{/if}}
