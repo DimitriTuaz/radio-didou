@@ -58,6 +58,7 @@ const LoginModal = () => {
                                 iconPosition='left'
                                 label='Mot de passe'
                                 type='password'
+                                placeholder='••••••'
                                 value={userStore.password}
                                 onChange={(e) => userStore.password = e.currentTarget.value}
                             />
