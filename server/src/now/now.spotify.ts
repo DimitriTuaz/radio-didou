@@ -7,6 +7,7 @@ export class NowSpotify extends NowFetcher {
   public static player_url = 'https://api.spotify.com/v1/me/player';
   public static user_url = 'https://api.spotify.com/v1/me'
   public static token_url = 'https://accounts.spotify.com/api/token';
+  public static track_url = 'https://api.spotify.com/v1/tracks';
 
   public name = "Spotify";
 
