@@ -1,4 +1,4 @@
-import { get, param } from '@loopback/rest';
+import { get, param, post, getModelSchemaRef } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
@@ -15,7 +15,7 @@ import { NowSpotify } from '../now';
 import request = require('superagent');
 
 @bind({ scope: BindingScope.SINGLETON })
-export class LikeController {
+export class SongController {
 
   private access_token: string;
   public name: string = 'LikeController';
@@ -25,7 +25,7 @@ export class LikeController {
     @repository(UserRepository) public userRepository: UserRepository,
   ) { }
 
-  @get('/like', {
+  @post('/song/add', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
@@ -41,18 +41,18 @@ export class LikeController {
     },
   })
   @authenticate('jwt')
-  async create(
+  async add(
     @param.query.string('url') url: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile
   ): Promise<Song> {
     let trackURL: URL = new URL(url);
     let track: any = await this.obtain_track(trackURL, true);
+    let userId: string = currentUserProfile[securityId];
     let song: Song = new Song({
       title: track.name,
       url: track.external_urls.spotify,
       artwork: track.album.images[2].url
     });
-    let userId: string = currentUserProfile[securityId];
     try {
       await this.userRepository.songs(userId).create(song);
     } catch (error) {
@@ -63,6 +63,30 @@ export class LikeController {
       }
     }
     return song;
+  }
+
+  @get('/song/get', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Array of user\'s songs',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(Song),
+            },
+          },
+        },
+      },
+    },
+  })
+  @authenticate('jwt')
+  async get(
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
+  ): Promise<Song[]> {
+    let userId: string = currentUserProfile[securityId];
+    return this.userRepository.songs(userId).find();
   }
 
   private async obtain_track(trackURL: URL, retryOnce: boolean): Promise<any> {
