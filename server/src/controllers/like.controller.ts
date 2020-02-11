@@ -1,11 +1,15 @@
-import { get, param, HttpErrors } from '@loopback/rest';
+import { get, param } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
+
+import { authenticate } from '@loopback/authentication';
+import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
+import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
 import { RadiodBindings } from '../keys';
 
 import { Song } from '../models';
-import { SongRepository } from '../repositories';
+import { UserRepository } from '../repositories';
 import { NowSpotify } from '../now';
 
 import request = require('superagent');
@@ -18,10 +22,11 @@ export class LikeController {
 
   constructor(
     @inject(RadiodBindings.API_KEY) private api_key: any,
-    @repository(SongRepository) public songRepository: SongRepository
+    @repository(UserRepository) public userRepository: UserRepository,
   ) { }
 
   @get('/like', {
+    security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
         description: 'Informations about the current song',
@@ -35,8 +40,10 @@ export class LikeController {
       },
     },
   })
+  @authenticate('jwt')
   async create(
-    @param.query.string('url') url: string
+    @param.query.string('url') url: string,
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
   ): Promise<Song> {
     let trackURL: URL = new URL(url);
     let track: any = await this.obtain_track(trackURL, true);
@@ -45,8 +52,9 @@ export class LikeController {
       url: track.external_urls.spotify,
       artwork: track.album.images[2].url
     });
+    let userId: string = currentUserProfile[securityId];
     try {
-      await this.songRepository.create(song);
+      await this.userRepository.songs(userId).create(song);
     } catch (error) {
       if (error.code === 11000 && error.errmsg.includes('index: uniqueURL')) {
         console.log('[' + this.name + '] Song ' + url + ' is already in DB');

@@ -1,4 +1,5 @@
-import { Entity, model, property } from '@loopback/repository';
+import { Entity, model, property, belongsTo } from '@loopback/repository';
+import { User } from '../models';
 
 @model({
   settings: {
@@ -6,6 +7,7 @@ import { Entity, model, property } from '@loopback/repository';
       uniqueURL: {
         keys: {
           url: 1,
+          userId: 1,
         },
         options: {
           unique: true,
@@ -39,6 +41,9 @@ export class Song extends Entity {
     required: true,
   })
   url: string;
+
+  @belongsTo(() => User)
+  userId: string;
 
   constructor(data?: Partial<Song>) {
     super(data);

@@ -1,9 +1,4 @@
-// Copyright IBM Corp. 2018,2019. All Rights Reserved.
-// Node module: loopback4-example-shopping
-// This file is licensed under the MIT License.
-// License text available at https://opensource.org/licenses/MIT
-
-import { repository, model, property, RepositoryMixin, ModelMetadataHelper } from '@loopback/repository';
+import { repository, model, property } from '@loopback/repository';
 import { validateCredentials } from '../services/validator';
 import {
   post,
@@ -24,10 +19,6 @@ import {
   UserService,
 } from '@loopback/authentication';
 import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
-import {
-  CredentialsRequestBody,
-  UserProfileSchema,
-} from './specs/user-controller.specs';
 import { Credentials } from '../repositories/user.repository';
 import { PasswordHasher } from '../services/hash.password.bcryptjs';
 
