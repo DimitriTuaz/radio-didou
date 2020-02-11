@@ -5,6 +5,6 @@
   },
   "secret": "myjwts3cr3t",
   "loopback": "http://localhost:8888",
-  "icecast": "http://radio-didou.com:8889"
+  "icecast": "https://www.radio-didou.com:8895"
 }
 

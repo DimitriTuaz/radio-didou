@@ -14,7 +14,7 @@ import * as config from '../../../config.json'
 
 const LOOPBACK_URL: string = config.loopback
 const ICECAST_URL: string = config.icecast
-const STREAM_URL: string = ICECAST_URL + 'radio-didou';
+const STREAM_URL: string = ICECAST_URL + '/radio-didou';
 
 interface IProps {
 }
@@ -119,6 +119,13 @@ export const Home = (props: IProps) => {
                   <div className={'player-container' + (isMobile ? '-mobile' : '')}>
                     <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onPlay}>
                       <img src={icon_play} alt=''></img>
+                    </button>
+                    <button className={'icon-sound' + (isMobile ? '-mobile' : '')}>
+                      <Icon 
+                        name='heart outline' 
+                        color='teal' // teal is the new white
+                        size='huge'>
+                      </Icon>
                     </button>
                     <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onMute}>
                       <img src={mute ? icon_mute : (volume > 0.5 ? icon_sound : icon_sound_low)} alt=''></img>
