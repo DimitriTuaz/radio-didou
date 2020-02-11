@@ -4,6 +4,8 @@ import { useStores } from '../hooks/UseStores'
 import { Dimmer, Loader, Menu, Segment, Sidebar, Icon } from 'semantic-ui-react'
 import '../App.less';
 import icon_play from '../images/icon_play.png'
+import icon_heart from '../images/icon_heart.png'
+import icon_heart_outline from '../images/icon_heart_outline.png'
 import icon_sound from '../images/icon_sound.png'
 import icon_sound_low from '../images/icon_sound_low.png'
 import icon_mute from '../images/icon_mute.png'
@@ -121,11 +123,7 @@ export const Home = (props: IProps) => {
                       <img src={icon_play} alt=''></img>
                     </button>
                     <button className={'icon-sound' + (isMobile ? '-mobile' : '')}>
-                      <Icon 
-                        name='heart outline' 
-                        color='teal' // teal is the new white
-                        size='huge'>
-                      </Icon>
+                    <img src={icon_heart_outline} alt=''></img>
                     </button>
                     <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onMute}>
                       <img src={mute ? icon_mute : (volume > 0.5 ? icon_sound : icon_sound_low)} alt=''></img>
