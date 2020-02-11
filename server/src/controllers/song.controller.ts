@@ -1,4 +1,4 @@
-import { get, param, post, getModelSchemaRef } from '@loopback/rest';
+import { get, param, getModelSchemaRef, put, del } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
@@ -25,7 +25,7 @@ export class SongController {
     @repository(UserRepository) public userRepository: UserRepository,
   ) { }
 
-  @post('/song/add', {
+  @put('/song/add', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
@@ -87,6 +87,23 @@ export class SongController {
   ): Promise<Song[]> {
     let userId: string = currentUserProfile[securityId];
     return this.userRepository.songs(userId).find();
+  }
+
+  @del('/song/delete', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '204': {
+        description: 'The user\'s song is deleted with success'
+      },
+    },
+  })
+  @authenticate('jwt')
+  async remove(
+    @param.query.string('url') url: string,
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
+  ): Promise<void> {
+    let userId: string = currentUserProfile[securityId];
+    await this.userRepository.songs(userId).delete({ url: url });
   }
 
   private async obtain_track(trackURL: URL, retryOnce: boolean): Promise<any> {
