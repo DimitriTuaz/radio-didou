@@ -52,7 +52,7 @@ export class UserController {
     public userService: UserService<User, Credentials>,
   ) { }
 
-  @post('/users/register', {
+  @post('/user/register', {
     responses: {
       '200': {
         description: 'User',
@@ -91,7 +91,7 @@ export class UserController {
     }
   }
 
-  @get('/users/{userId}', {
+  @get('/user/{userId}', {
     responses: {
       '200': {
         description: 'User',
@@ -109,7 +109,7 @@ export class UserController {
     return this.userRepository.findById(userId);
   }
 
-  @get('/users/me', {
+  @get('/user/me', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
@@ -132,7 +132,7 @@ export class UserController {
     return currentUserProfile;
   }
 
-  @post('/users/login', {
+  @post('/user/login', {
     responses: {
       '204': {
         description: 'Grant token in a cookie',
@@ -168,7 +168,7 @@ export class UserController {
     });
   }
 
-  @post('/users/logout', {
+  @post('/user/logout', {
     responses: {
       '204': {
         description: 'Revoke the token',
