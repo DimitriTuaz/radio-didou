@@ -25,6 +25,7 @@ export namespace {{{path.x-controller-name}}} {
                     {{>setQuery parameter=parameter}}
                 {{/each}}
                     {{>setAcceptHeader response=response}}
+                    {{>setWithCredentials path=path}}
                 if (response.status !== {{@key}}) {
                     reject(response);
                 }
