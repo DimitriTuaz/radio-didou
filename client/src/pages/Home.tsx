@@ -60,6 +60,11 @@ export const Home = (props: IProps) => {
     setMute(!mute)
   };
 
+  const onLike = async () => {
+    await songStore.add(mainStore.trackUrl);
+    songStore.state = SongState.liked;
+  }
+
   const onChangeVolume = (event: React.FormEvent<HTMLInputElement>)  => {
     audio.volume = parseFloat(event.currentTarget.value);
     setVolume(parseFloat(event.currentTarget.value))
@@ -127,7 +132,7 @@ export const Home = (props: IProps) => {
                     userStore.state === UserState.connected &&
                     <button
                       className={'icon-sound' + (isMobile ? '-mobile' : '')}
-                      onClick={() => songStore.add(mainStore.trackUrl)}>
+                      onClick={onLike}>
                       <img src={songStore.state === SongState.liked ? icon_heart: icon_heart_outline} ></img>
                     </button>
                     }
