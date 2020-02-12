@@ -61,8 +61,14 @@ export const Home = (props: IProps) => {
   };
 
   const onLike = async () => {
-    await songStore.add(mainStore.trackUrl);
-    songStore.state = SongState.liked;
+    switch (songStore.state) {
+      case SongState.liked:
+        await songStore.remove(mainStore.trackUrl);
+        break;
+      case SongState.unliked:
+        await songStore.add(mainStore.trackUrl);
+        break;
+    }
   }
 
   const onChangeVolume = (event: React.FormEvent<HTMLInputElement>)  => {
