@@ -3,11 +3,13 @@ import { NowController } from '@openapi/routes'
 import { NowObject } from '@openapi/schemas'
 import { UserState } from "./UserStore";
 import { CommonStore } from "./CommonStore";
+import { SongStore } from "./SongStore";
 
 
 export class MainStore {
 
     private commonStore: CommonStore;
+    private songStore: SongStore;
 
     @observable sidebarVisible: boolean = false;
     @observable loginModalVisible: boolean = false;
@@ -20,8 +22,9 @@ export class MainStore {
 
     currentTrackIntervalId: number = 0;
 
-    constructor(commonStore: CommonStore) {
+    constructor(commonStore: CommonStore, songStore: SongStore) {
         this.commonStore = commonStore;
+        this.songStore = songStore;
     }
 
     @action
@@ -77,7 +80,7 @@ export class MainStore {
                 }
 
                 if (this.commonStore.userState === UserState.connected) {
-                    console.log('youpi');
+                    await this.songStore.refresh(this.trackUrl);
                 }
             }
             this.auditorCount = auditorCount;

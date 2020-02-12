@@ -5,10 +5,12 @@ import { SongStore } from '../stores/SongStore'
 import { CommonStore } from '../stores/CommonStore'
 
 const commonStore = new CommonStore();
+const songStore = new SongStore();
+const mainStore = new MainStore(commonStore, songStore);
 
 export const storesContext = React.createContext({
   commonStore: commonStore,
-  mainStore: new MainStore(commonStore),
-  userStore: new UserStore(commonStore),
-  songStore: new SongStore()
+  mainStore: mainStore,
+  songStore: songStore,
+  userStore: new UserStore(commonStore, mainStore, songStore),
 });

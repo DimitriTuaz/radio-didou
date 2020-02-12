@@ -43,8 +43,7 @@ export class SongController {
   @authenticate('jwt')
   async add(
     @param.query.string('url') url: string,
-    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
-  ): Promise<Song> {
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<Song> {
     let trackURL: URL = new URL(url);
     let track: any = await this.obtain_track(trackURL, true);
     let userId: string = currentUserProfile[securityId];
@@ -83,10 +82,37 @@ export class SongController {
   })
   @authenticate('jwt')
   async get(
-    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
-  ): Promise<Song[]> {
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<Song[]> {
     let userId: string = currentUserProfile[securityId];
     return this.userRepository.songs(userId).find();
+  }
+
+  @get('/song/is', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Return true is this is an user\'s song, false otherwise.',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'boolean'
+            }
+          },
+        },
+      },
+    },
+  })
+  @authenticate('jwt')
+  async is(
+    @param.query.string('url') url: string,
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<boolean> {
+    let userId: string = currentUserProfile[securityId];
+    let songs: Song[] = await this.userRepository.songs(userId).find({
+      where: {
+        url: url
+      }
+    });
+    return songs.length > 0;
   }
 
   @del('/song/delete', {
@@ -100,8 +126,7 @@ export class SongController {
   @authenticate('jwt')
   async remove(
     @param.query.string('url') url: string,
-    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
-  ): Promise<void> {
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<void> {
     let userId: string = currentUserProfile[securityId];
     await this.userRepository.songs(userId).delete({ url: url });
   }

@@ -29,4 +29,14 @@ export class SongStore {
             console.error(error);
         }
     }
+
+    @action
+    refresh = async (url: string) => {
+        try {
+            let isLiked: boolean = await SongController.is(url);
+            this.state = isLiked ? SongState.liked : SongState.unliked;
+        } catch (error) {
+            console.error(error);
+        }
+    }
 }
