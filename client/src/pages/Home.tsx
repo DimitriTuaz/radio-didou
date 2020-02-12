@@ -11,6 +11,7 @@ import icon_sound_low from '../images/icon_sound_low.png'
 import icon_mute from '../images/icon_mute.png'
 import { UserModal } from '../components/UserModal'
 import { UserState } from '../stores/UserStore'
+import { SongState} from '../stores/SongStore'
 
 import * as config from '../../../config.json'
 
@@ -22,7 +23,7 @@ interface IProps {
 }
 
 export const Home = (props: IProps) => {
-  const { mainStore, userStore }  = useStores(); 
+  const { mainStore, userStore, songStore }  = useStores(); 
   const [mute, setMute] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -122,9 +123,14 @@ export const Home = (props: IProps) => {
                     <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onPlay}>
                       <img src={icon_play} alt=''></img>
                     </button>
-                    <button className={'icon-sound' + (isMobile ? '-mobile' : '')}>
-                    <img src={icon_heart_outline} alt=''></img>
+                    {
+                    userStore.state === UserState.connected &&
+                    <button
+                      className={'icon-sound' + (isMobile ? '-mobile' : '')}
+                      onClick={() => songStore.add(mainStore.trackUrl)}>
+                      <img src={songStore.state === SongState.liked ? icon_heart: icon_heart_outline} ></img>
                     </button>
+                    }
                     <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onMute}>
                       <img src={mute ? icon_mute : (volume > 0.5 ? icon_sound : icon_sound_low)} alt=''></img>
                     </button>
