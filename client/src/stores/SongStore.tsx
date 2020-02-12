@@ -13,6 +13,17 @@ export class SongStore {
     add = async (url: string) => {
         try {
             await SongController.add(url);
+            this.state = SongState.liked;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    @action
+    remove = async (url: string) => {
+        try {
+            await SongController.remove(url);
+            this.state = SongState.unliked;
         } catch (error) {
             console.error(error);
         }
