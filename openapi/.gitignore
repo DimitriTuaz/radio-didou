@@ -1,5 +1,4 @@
 ## GITIGNORE ##
-
 package-lock.json
 
 # Optional npm cache directory
@@ -15,8 +14,6 @@ dist
 node_modules
 
 # Generated Code
-
-openapi.md
 openapi.json
 index.ts
 schemas.d.ts
