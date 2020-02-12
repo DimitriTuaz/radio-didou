@@ -23,7 +23,7 @@ interface IProps {
 }
 
 export const Home = (props: IProps) => {
-  const { mainStore, userStore, songStore }  = useStores(); 
+  const { mainStore, userStore, songStore }  = useStores();
   const [mute, setMute] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -87,7 +87,7 @@ export const Home = (props: IProps) => {
               color='blue'
             >
               <Menu.Item as='a' onClick={() => mainStore.showSidebar(false)}>
-                <Icon name='angle right' />                
+                <Icon name='angle right' />
               </Menu.Item>
               <Menu.Item as='a' onClick={() => {
                 if (userStore.state === UserState.signup) {
@@ -95,7 +95,7 @@ export const Home = (props: IProps) => {
                 }
                 mainStore.showLoginModal(true);
               }}>
-                <Icon name='user' />                
+                <Icon name='user' />
               </Menu.Item>
               <Menu.Item as='a' onClick={() => { window.open(LOOPBACK_URL + 'jingles', '_blank') }}>
                 <Icon name='announcement' />
@@ -116,10 +116,10 @@ export const Home = (props: IProps) => {
                       <p className={'title' + (isMobile ? '-mobile' : '')}>Radio Didou</p>
                     </div>
                     <div className={'settings-container'}>
-                      <Icon 
-                        name='bars' 
+                      <Icon
+                        name='bars'
                         color='teal' // teal is the new white
-                        size='big' 
+                        size='big'
                         onClick={() => mainStore.showSidebar(true)} >
                       </Icon>
                     </div>
@@ -133,7 +133,7 @@ export const Home = (props: IProps) => {
                     <button
                       className={'icon-sound' + (isMobile ? '-mobile' : '')}
                       onClick={onLike}>
-                      <img src={songStore.state === SongState.liked ? icon_heart: icon_heart_outline} ></img>
+                      <img src={songStore.state === SongState.liked ? icon_heart: icon_heart_outline} alt=''></img>
                     </button>
                     }
                     <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onMute}>
@@ -150,7 +150,7 @@ export const Home = (props: IProps) => {
                       />
                     </div>
                   </div>
-                  
+
                   <div className={'track-container'}>
                     <div className={'track-clickable' + (isMobile ? '-mobile' : '')} onClick={() => { window.open(mainStore.trackUrl, '_blank') }}>
                       <div className='track-cover-container' >
