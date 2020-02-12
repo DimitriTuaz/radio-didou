@@ -7,6 +7,7 @@ export enum SongState {
 }
 
 export class SongStore {
+    
     @observable state: SongState = SongState.unliked;
 
     @action

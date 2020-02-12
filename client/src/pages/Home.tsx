@@ -23,7 +23,7 @@ interface IProps {
 }
 
 export const Home = (props: IProps) => {
-  const { mainStore, userStore, songStore }  = useStores();
+  const { commonStore, mainStore, userStore, songStore }  = useStores();
   const [mute, setMute] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -96,8 +96,8 @@ export const Home = (props: IProps) => {
                 <Icon name='angle right' />
               </Menu.Item>
               <Menu.Item as='a' onClick={() => {
-                if (userStore.state === UserState.signup) {
-                  userStore.state = UserState.login;
+                if (commonStore.userState === UserState.signup) {
+                  commonStore.userState = UserState.login;
                 }
                 mainStore.showLoginModal(true);
               }}>
@@ -135,7 +135,7 @@ export const Home = (props: IProps) => {
                       <img src={icon_play} alt=''></img>
                     </button>
                     {
-                    userStore.state === UserState.connected &&
+                    commonStore.userState === UserState.connected &&
                     <button
                       className={'icon-sound' + (isMobile ? '-mobile' : '')}
                       onClick={onLike}>

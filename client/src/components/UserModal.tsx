@@ -8,13 +8,13 @@ interface IProps {
 }
 
 export const UserModal = (props: IProps) => {
-    const { mainStore, userStore } = useStores();
+    const { commonStore, mainStore } = useStores();
 
     const renderUserModal = () => {
-        if (userStore.state === UserState.connected) {
+        if (commonStore.userState === UserState.connected) {
             return ConnectedModal()
         }
-        else if (userStore.state === UserState.signup) {
+        else if (commonStore.userState === UserState.signup) {
             return SignupModal()
         }
         else {
@@ -35,7 +35,7 @@ export const UserModal = (props: IProps) => {
 }
 
 const LoginModal = () => {
-    const { userStore } = useStores();
+    const { commonStore, userStore } = useStores();
 
     return useObserver(() => (
 
@@ -73,7 +73,7 @@ const LoginModal = () => {
                             icon='signup'
                             size='big'
                             primary
-                            onClick={() => userStore.state = UserState.signup}
+                            onClick={() => commonStore.userState = UserState.signup}
                         />
                     </Grid.Column>
                 </Grid>

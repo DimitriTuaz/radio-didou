@@ -1,6 +1,7 @@
 import { observable, action } from 'mobx';
 import { UserController } from '@openapi/routes'
 import { User } from '@openapi/schemas'
+import { CommonStore } from './CommonStore';
 
 export enum UserState {
     login,
@@ -9,18 +10,22 @@ export enum UserState {
 }
 
 export class UserStore {
-    @observable state: UserState = UserState.login;
+
+    private commonStore: CommonStore;
 
     @observable userNotFound: string | null = null;
     @observable emailError: string | null = null;
     @observable passwordError: string | null = null;
-
     @observable user: User = {
         email: '',
         firstName: '',
         lastName: ''
     };
     @observable password: string = '';
+
+    constructor(commonStore: CommonStore) {
+        this.commonStore = commonStore;
+    }
 
     @action
     createAccount = async () => {
@@ -56,7 +61,7 @@ export class UserStore {
             this.emailError = null;
             this.userNotFound = null;
             this.passwordError = null;
-            this.state = UserState.connected;
+            this.commonStore.userState = UserState.connected;
 
         } catch (error) {
             if (error.status === 422 || error.status === 401) {
@@ -82,7 +87,7 @@ export class UserStore {
         try {
             if (this.user.id !== undefined) {
                 this.user = await UserController.findById(this.user.id);
-                this.state = UserState.connected;
+                this.commonStore.userState = UserState.connected;
             }
         } catch (error) {
             console.error(error);
@@ -99,7 +104,7 @@ export class UserStore {
                 lastName: ''
             };
             this.password = '';
-            this.state = UserState.login;
+            this.commonStore.userState = UserState.login;
         } catch (error) {
             console.error(error);
         }
