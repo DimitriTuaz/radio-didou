@@ -2,6 +2,8 @@ import { observable, action } from 'mobx';
 import { UserController } from '@openapi/routes'
 import { User } from '@openapi/schemas'
 import { CommonStore } from './CommonStore';
+import { MainStore } from './MainStore';
+import { SongStore, SongState } from './SongStore';
 
 export enum UserState {
     login,
@@ -12,6 +14,8 @@ export enum UserState {
 export class UserStore {
 
     private commonStore: CommonStore;
+    private mainStore: MainStore;
+    private songStore: SongStore;
 
     @observable userNotFound: string | null = null;
     @observable emailError: string | null = null;
@@ -23,8 +27,10 @@ export class UserStore {
     };
     @observable password: string = '';
 
-    constructor(commonStore: CommonStore) {
+    constructor(commonStore: CommonStore, mainStore: MainStore, songStore: SongStore) {
         this.commonStore = commonStore;
+        this.mainStore = mainStore;
+        this.songStore = songStore;
     }
 
     @action
@@ -61,7 +67,10 @@ export class UserStore {
             this.emailError = null;
             this.userNotFound = null;
             this.passwordError = null;
-            this.commonStore.userState = UserState.connected;
+            if (!(this.commonStore.userState === UserState.connected)) {
+                this.commonStore.userState = UserState.connected;
+                await this.songStore.refresh(this.mainStore.trackUrl);
+            }
 
         } catch (error) {
             if (error.status === 422 || error.status === 401) {
@@ -87,7 +96,10 @@ export class UserStore {
         try {
             if (this.user.id !== undefined) {
                 this.user = await UserController.findById(this.user.id);
-                this.commonStore.userState = UserState.connected;
+                if (!(this.commonStore.userState === UserState.connected)) {
+                    this.commonStore.userState = UserState.connected;
+                    await this.songStore.refresh(this.mainStore.trackUrl);
+                }
             }
         } catch (error) {
             console.error(error);
@@ -105,6 +117,7 @@ export class UserStore {
             };
             this.password = '';
             this.commonStore.userState = UserState.login;
+            this.songStore.state = SongState.unliked;
         } catch (error) {
             console.error(error);
         }
