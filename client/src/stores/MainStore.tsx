@@ -1,9 +1,14 @@
 import { action, observable } from "mobx";
 import { NowController } from '@openapi/routes'
 import { NowObject } from '@openapi/schemas'
+import { UserState } from "./UserStore";
+import { CommonStore } from "./CommonStore";
 
 
 export class MainStore {
+
+    private commonStore: CommonStore;
+
     @observable sidebarVisible: boolean = false;
     @observable loginModalVisible: boolean = false;
     @observable trackCover: string | undefined = undefined;
@@ -14,6 +19,10 @@ export class MainStore {
     @observable auditorCount: number | undefined = undefined;
 
     currentTrackIntervalId: number = 0;
+
+    constructor(commonStore: CommonStore) {
+        this.commonStore = commonStore;
+    }
 
     @action
     showSidebar = (show: boolean): void => {
@@ -49,6 +58,7 @@ export class MainStore {
                 trackAlbum += ' (' + now.release_date.substring(0, 4) + ')';
             }
             if (trackTitle !== this.trackTitle || trackArtists !== this.trackArtists) {
+
                 this.trackCover = trackCover;
                 this.trackTitle = trackTitle;
                 this.trackArtists = trackArtists;
@@ -64,6 +74,10 @@ export class MainStore {
                             { src: trackCover, sizes: '300x300', type: 'image/jpg' }
                         ]
                     });
+                }
+
+                if (this.commonStore.userState === UserState.connected) {
+                    console.log('youpi');
                 }
             }
             this.auditorCount = auditorCount;
