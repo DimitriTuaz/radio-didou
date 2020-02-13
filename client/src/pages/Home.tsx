@@ -71,6 +71,11 @@ export const Home = (props: IProps) => {
     }
   }
 
+  const onLikeListShow = () => {
+    mainStore.showSidebar(false);
+    mainStore.showLikeList(true);
+  }
+
   const onChangeVolume = (event: React.FormEvent<HTMLInputElement>)  => {
     audio.volume = parseFloat(event.currentTarget.value);
     setVolume(parseFloat(event.currentTarget.value))
@@ -103,14 +108,32 @@ export const Home = (props: IProps) => {
               }}>
                 <Icon name='user' />
               </Menu.Item>
-              <Menu.Item as='a' onClick={() => {}}>
+              {
+                commonStore.userState === UserState.connected &&
+                <Menu.Item as='a' onClick={ () => onLikeListShow() }>
                 <Icon name='heart' />
-              </Menu.Item>
+                </Menu.Item>
+              }
               <Menu.Item as='a' onClick={() => { window.open(LOOPBACK_URL + '/jingles', '_blank') }}>
                 <Icon name='announcement' />
               </Menu.Item>
               <Menu.Item as='a' onClick={() => { window.open('https://ign.radio-didou.com') }}>
                 <Icon name='compass' />
+              </Menu.Item>
+            </Sidebar>
+            <Sidebar
+              as={Menu}
+              animation='overlay'
+              icon='labeled'
+              direction='right'
+              inverted
+              vertical
+              visible={mainStore.likeListVisible}
+              width='wide'
+              color='blue'
+            >
+              <Menu.Item as='a' onClick={() => mainStore.showLikeList(false)}>
+                <Icon name='angle right' />
               </Menu.Item>
             </Sidebar>
             <Sidebar.Pusher>
