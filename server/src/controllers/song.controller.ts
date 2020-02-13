@@ -49,6 +49,8 @@ export class SongController {
     let userId: string = currentUserProfile[securityId];
     let song: Song = new Song({
       title: track.name,
+      album: track.album.name,
+      artist: track.artists[0].name,
       url: track.external_urls.spotify,
       artwork: track.album.images[2].url
     });

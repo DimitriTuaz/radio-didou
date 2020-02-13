@@ -649,6 +649,22 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>album <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artist <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>artwork <strong>(required)</strong></td>
         <td>
           string
@@ -682,6 +698,8 @@ _No headers specified_
 {
   "id": "string",
   "title": "string",
+  "album": "string",
+  "artist": "string",
   "artwork": "string",
   "url": "string",
   "userId": "string"
@@ -810,6 +828,22 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>Response.album <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.artist <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>Response.artwork <strong>(required)</strong></td>
         <td>
           string
@@ -844,6 +878,8 @@ _No headers specified_
   {
     "id": "string",
     "title": "string",
+    "album": "string",
+    "artist": "string",
     "artwork": "string",
     "url": "string",
     "userId": "string"
@@ -1649,6 +1685,22 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>album <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artist <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>artwork <strong>(required)</strong></td>
         <td>
           string
@@ -1681,6 +1733,8 @@ _No headers specified_
 {
   "id": "string",
   "title": "string",
+  "album": "string",
+  "artist": "string",
   "artwork": "string",
   "url": "string",
   "userId": "string"
