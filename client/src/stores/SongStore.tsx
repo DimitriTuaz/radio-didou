@@ -24,13 +24,15 @@ export class SongStore {
     }
 
     @action
-    remove = async (url: string) => {
+    remove = async (current_url: string, url: string) => {
         try {
             await SongController.remove(url);
             this.songs = this.songs.filter((value: Song) => {
                 return value.url !== url;
             });
-            this.state = SongState.unliked;
+            if (current_url === url) {
+                this.state = SongState.unliked;   
+            }
         } catch (error) {
             console.error(error);
         }
