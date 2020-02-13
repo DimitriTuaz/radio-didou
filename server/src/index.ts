@@ -1,4 +1,6 @@
 import { RadiodApplication } from './application';
+import { RestBindings } from '@loopback/rest';
+import { RadiodBindings } from './keys';
 
 export async function main() {
 
@@ -9,9 +11,11 @@ export async function main() {
   await app.init();
   await app.start();
 
+  const port = await app.restServer.get(RestBindings.PORT);
+  const host = await app.restServer.get(RestBindings.HOST);
+  const config = await app.get(RadiodBindings.GLOBAL_CONFIG);
 
-  const url = app.restServer.url;
-  console.log(`Server is running at ${url}`);
+  console.log(`Server is listening ${host} on port ${port} : ${config.loopback}`);
 
   return app;
 }

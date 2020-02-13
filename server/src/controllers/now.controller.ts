@@ -17,7 +17,7 @@ export class NowController {
     @inject(RadiodBindings.API_KEY) private api_key: any,
     @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
-    @repository(NowCredentialsRepository) public credentialRepository: NowCredentialsRepository,
+    @repository(NowCredentialsRepository) private credentialRepository: NowCredentialsRepository,
     @inject(RadiodBindings.NOW_SERVICE) private nowService: NowService,
   ) { }
 
