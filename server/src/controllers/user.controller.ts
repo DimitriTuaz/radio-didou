@@ -43,13 +43,10 @@ class LoginCredentials {
 
 export class UserController {
   constructor(
-    @repository(UserRepository) public userRepository: UserRepository,
-    @inject(PasswordHasherBindings.PASSWORD_HASHER)
-    public passwordHasher: PasswordHasher,
-    @inject(RadiodBindings.TOKEN_SERVICE)
-    public jwtService: TokenService,
-    @inject(RadiodBindings.USER_SERVICE)
-    public userService: UserService<User, Credentials>,
+    @repository(UserRepository) private userRepository: UserRepository,
+    @inject(PasswordHasherBindings.PASSWORD_HASHER) private passwordHasher: PasswordHasher,
+    @inject(RadiodBindings.TOKEN_SERVICE) private jwtService: TokenService,
+    @inject(RadiodBindings.USER_SERVICE) private userService: UserService<User, Credentials>,
   ) { }
 
   @post('/user/register', {
@@ -148,7 +145,6 @@ export class UserController {
     },
   })
   async login(
-    @inject(RestBindings.Http.RESPONSE) response: Response,
     @requestBody({
       content: {
         'application/json': {
@@ -156,6 +152,7 @@ export class UserController {
         },
       },
     }) credentials: Credentials,
+    @inject(RestBindings.Http.RESPONSE) response: Response,
     @inject(TokenServiceBindings.TOKEN_EXPIRES_IN) maxAge: string): Promise<void> {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);

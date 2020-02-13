@@ -22,7 +22,7 @@ export class SongController {
 
   constructor(
     @inject(RadiodBindings.API_KEY) private api_key: any,
-    @repository(UserRepository) public userRepository: UserRepository,
+    @repository(UserRepository) private userRepository: UserRepository,
   ) { }
 
   @put('/song/add', {

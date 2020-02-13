@@ -2,19 +2,32 @@ import { BootMixin } from '@loopback/boot';
 import { RepositoryMixin } from '@loopback/repository';
 import { BindingScope, CoreTags, CoreBindings } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
-import { AuthenticationComponent, registerAuthenticationStrategy } from '@loopback/authentication'
+import {
+  AuthenticationComponent,
+  registerAuthenticationStrategy
+} from '@loopback/authentication'
 import { JWTAuthenticationStrategy } from './authentication-strategies/jwt-strategy';
+import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 import { RestApplication } from '@loopback/rest';
 
 import path from 'path';
 import fs from 'fs';
 
 import { MainSequence } from './sequence';
-import { RadiodBindings, TokenServiceBindings, PasswordHasherBindings } from './keys';
 
-import { PersistentKeyService, NowService, JWTService, BcryptHasher, MainUserService } from './services';
+import {
+  RadiodBindings,
+  TokenServiceBindings,
+  PasswordHasherBindings
+} from './keys';
 
-import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
+import {
+  PersistentKeyService,
+  NowService,
+  JWTService,
+  BcryptHasher,
+  MainUserService
+} from './services';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -27,12 +40,31 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.rootPath = path.join(__dirname, '../..');
     this.config = JSON.parse(fs.readFileSync(path.join(this.rootPath, 'config.json')).toString());
 
-    this.bind(CoreBindings.APPLICATION_CONFIG).to({
-      rest: {
-        host: this.config.rest.host,
-        port: this.config.rest.port
-      }
-    });
+    if (['127.0.0.1', 'localhost'].includes(this.config.rest.host)) {
+      this.bind(CoreBindings.APPLICATION_CONFIG).to({
+        rest: {
+          host: this.config.rest.host,
+          port: this.config.rest.port,
+          cors: {
+            origin: [
+              'http://localhost:3000',
+              'http://localhost:8888',
+              'http://127.0.0.1:3000',
+              'http://127.0.0.1:8888'
+            ],
+            credentials: true
+          }
+        }
+      });
+    }
+    else {
+      this.bind(CoreBindings.APPLICATION_CONFIG).to({
+        rest: {
+          host: this.config.rest.host,
+          port: this.config.rest.port
+        }
+      });
+    }
 
     this.api({
       openapi: '3.0.0',
