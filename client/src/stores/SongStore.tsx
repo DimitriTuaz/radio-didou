@@ -1,5 +1,6 @@
 import { observable, action } from 'mobx';
 import { SongController } from '@openapi/routes'
+import { Song } from '@openapi/schemas'
 
 export enum SongState {
     liked,
@@ -9,6 +10,7 @@ export enum SongState {
 export class SongStore {
     
     @observable state: SongState = SongState.unliked;
+    @observable songs: Song[] = [];
 
     @action
     add = async (url: string) => {
@@ -35,6 +37,15 @@ export class SongStore {
         try {
             let isLiked: boolean = await SongController.is(url);
             this.state = isLiked ? SongState.liked : SongState.unliked;
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    @action
+    get = async () => {
+        try {
+            this.songs = await SongController.get();
         } catch (error) {
             console.error(error);
         }
