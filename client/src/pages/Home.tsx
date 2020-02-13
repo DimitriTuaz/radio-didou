@@ -103,7 +103,10 @@ export const Home = (props: IProps) => {
               }}>
                 <Icon name='user' />
               </Menu.Item>
-              <Menu.Item as='a' onClick={() => { window.open(LOOPBACK_URL + 'jingles', '_blank') }}>
+              <Menu.Item as='a' onClick={() => {}}>
+                <Icon name='heart' />
+              </Menu.Item>
+              <Menu.Item as='a' onClick={() => { window.open(LOOPBACK_URL + '/jingles', '_blank') }}>
                 <Icon name='announcement' />
               </Menu.Item>
               <Menu.Item as='a' onClick={() => { window.open('https://ign.radio-didou.com') }}>
