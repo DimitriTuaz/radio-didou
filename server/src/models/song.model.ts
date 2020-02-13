@@ -34,6 +34,18 @@ export class Song extends Entity {
     type: 'string',
     required: true,
   })
+  album: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
+  artist: string;
+
+  @property({
+    type: 'string',
+    required: true,
+  })
   artwork: string;
 
   @property({
