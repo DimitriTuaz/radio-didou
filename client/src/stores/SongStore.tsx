@@ -15,7 +15,8 @@ export class SongStore {
     @action
     add = async (url: string) => {
         try {
-            await SongController.add(url);
+            let song: Song = await SongController.add(url);
+            this.songs.push(song);
             this.state = SongState.liked;
         } catch (error) {
             console.error(error);
@@ -26,6 +27,9 @@ export class SongStore {
     remove = async (url: string) => {
         try {
             await SongController.remove(url);
+            this.songs = this.songs.filter((value: Song) => {
+                return value.url !== url;
+            });
             this.state = SongState.unliked;
         } catch (error) {
             console.error(error);
