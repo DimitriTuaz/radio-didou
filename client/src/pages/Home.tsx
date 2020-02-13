@@ -64,7 +64,7 @@ export const Home = (props: IProps) => {
   const onLike = async () => {
     switch (songStore.state) {
       case SongState.liked:
-        await songStore.remove(mainStore.trackUrl);
+        await songStore.remove(mainStore.trackUrl, mainStore.trackUrl);
         break;
       case SongState.unliked:
         await songStore.add(mainStore.trackUrl);
@@ -143,7 +143,7 @@ export const Home = (props: IProps) => {
                 return (
                   <List.Item>
                   <List.Content floated='right'>
-                    <div onClick={() => songStore.remove(song.url)}>
+                    <div onClick={() => songStore.remove(mainStore.trackUrl, song.url)}>
                       <Icon name='trash alternate' size='large'></Icon>
                     </div>
                   </List.Content>
