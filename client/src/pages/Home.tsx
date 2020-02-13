@@ -137,17 +137,17 @@ export const Home = (props: IProps) => {
             <Menu.Item as='a' onClick={() => mainStore.showLikeList(false)}>
               <Icon name='angle right' />
             </Menu.Item>
-            <List divided verticalAlign='middle'>
+            <List divided verticalAlign='middle' className='song-list'>
               {
               songStore.songs.map((song: Song) => {
                 return (
-                  <List.Item>
+                  <List.Item >
                   <List.Content floated='right'>
-                    <div onClick={() => songStore.remove(mainStore.trackUrl, song.url)}>
+                    <div onClick={() => songStore.remove(mainStore.trackUrl, song.url)} className='song-item'>
                       <Icon name='trash alternate' size='large'></Icon>
                     </div>
                   </List.Content>
-                  <div onClick={() => window.open(song.url)}>
+                  <div onClick={() => window.open(song.url)} className='song-item'>
                   <Image floated='left' avatar src={song.artwork} />
                   <List.Content floated='left'>{song.title}</List.Content>
                   </div>
