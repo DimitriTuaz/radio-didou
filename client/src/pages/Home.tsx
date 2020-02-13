@@ -143,10 +143,14 @@ export const Home = (props: IProps) => {
                 return (
                   <List.Item>
                   <List.Content floated='right'>
-                    <Icon name='trash alternate' size='large'></Icon>
+                    <div onClick={() => songStore.remove(song.url)}>
+                      <Icon name='trash alternate' size='large'></Icon>
+                    </div>
                   </List.Content>
+                  <div onClick={() => window.open(song.url)}>
                   <Image floated='left' avatar src={song.artwork} />
                   <List.Content floated='left'>{song.title}</List.Content>
+                  </div>
                 </List.Item>
                 )
               })
