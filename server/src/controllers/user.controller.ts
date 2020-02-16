@@ -159,7 +159,7 @@ export class UserController {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
-    var options: CookieOptions = {
+    let options: CookieOptions = {
       path: "/",
       maxAge: Number.parseInt(maxAge) * 1000,
       sameSite: "lax",
@@ -188,9 +188,13 @@ export class UserController {
   })
   async logout(
     @inject(RestBindings.Http.RESPONSE) response: Response): Promise<void> {
-    response.cookie("RADIO-DIDOU-AUTH", "", {
+    let options: CookieOptions = {
       path: "/",
       expires: new Date(0)
-    });
+    };
+    if ('domain' in this.global_config) {
+      options.domain = this.global_config.domain;
+    }
+    response.cookie("RADIO-DIDOU-AUTH", "", options);
   }
 }
