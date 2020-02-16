@@ -4,6 +4,11 @@
   "compilerOptions": {
     "outDir": "dist"
   },
+  "references": [
+    {
+      "path": "../common"
+    }
+  ],
   "include": [
     "src"
   ]

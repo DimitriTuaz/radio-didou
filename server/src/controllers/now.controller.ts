@@ -75,6 +75,7 @@ export class NowController {
     responses: {
       '200': {
         description: 'Credential model instance',
+
         content: { 'application/json': { schema: getModelSchemaRef(NowCredentials) } },
       },
     },

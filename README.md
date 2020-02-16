@@ -42,7 +42,13 @@ Installez nodejs, npm.
 
 A radio-didou.com -> xxx.xxx.xxx.xxx
 
-CNAME wwww -> @
+CNAME www -> @
+
+### Certificat SSL
+
+https://certbot.eff.org/lets-encrypt/debianbuster-other
+Lancer un server python sur le port 888 dans le dossier '/tmp/https' : python -m SimpleHTTPServer 8888
+webroot : '/tmp/https'
 
 ### Redirection de port
 

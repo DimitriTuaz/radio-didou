@@ -17,7 +17,7 @@
     "pretest": "npm run clean && npm run build",
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
-    "start": "node -r source-map-support/register .",
+    "start": "node -r source-map-support/register -r tsconfig-paths/register .",
     "prepublishOnly": "npm run test"
   },
   "repository": {
