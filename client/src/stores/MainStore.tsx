@@ -12,8 +12,9 @@ export class MainStore {
     private songStore: SongStore;
 
     @observable sidebarVisible: boolean = false;
-    @observable likeListVisible: boolean = false;
     @observable loginModalVisible: boolean = false;
+    @observable songModalVisible: boolean = false;
+
     @observable trackCover: string | undefined = undefined;
     @observable trackTitle: string | undefined = undefined;
     @observable trackArtists: string | undefined = undefined;
@@ -34,13 +35,15 @@ export class MainStore {
     }
 
     @action
-    showLikeList = (show: boolean): void => {
-        this.likeListVisible = show;
+    showLoginModal = (show: boolean): void => {
+        this.loginModalVisible = show;
+        this.songModalVisible = false;
     }
 
     @action
-    showLoginModal = (show: boolean): void => {
-        this.loginModalVisible = show;
+    showSongModal = (show: boolean): void => {
+        this.songModalVisible = show;
+        this.loginModalVisible = false;
     }
 
     @action

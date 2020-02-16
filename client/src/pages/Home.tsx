@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { useStores } from '../hooks/UseStores'
-import { Dimmer, Loader, Menu, Segment, Sidebar, Icon, Image, List } from 'semantic-ui-react'
+import { Dimmer, Loader, Menu, Segment, Sidebar, Icon } from 'semantic-ui-react'
 import '../App.less';
 import icon_play from '../images/icon_play.png'
 import icon_heart from '../images/icon_heart.png'
@@ -10,11 +10,11 @@ import icon_sound from '../images/icon_sound.png'
 import icon_sound_low from '../images/icon_sound_low.png'
 import icon_mute from '../images/icon_mute.png'
 import { UserModal } from '../components/UserModal'
+import { SongModal } from '../components/SongModal'
 import { UserState } from '../stores/UserStore'
 import { SongState } from '../stores/SongStore'
 
 import * as config from '../../../config.json'
-import { Song } from '@openapi/schemas';
 
 const LOOPBACK_URL: string = config.loopback
 const ICECAST_URL: string = config.icecast
@@ -73,9 +73,8 @@ export const Home = (props: IProps) => {
   }
 
   const onLikeListShow = async () => {
-    mainStore.showSidebar(false)
     await songStore.get();
-    mainStore.showLikeList(true);
+    mainStore.showSongModal(true);
   }
 
   const onChangeVolume = (event: React.FormEvent<HTMLInputElement>) => {
@@ -123,46 +122,13 @@ export const Home = (props: IProps) => {
               <Icon name='compass' />
             </Menu.Item>
           </Sidebar>
-          <Sidebar
-            as={Menu}
-            animation='overlay'
-            icon='labeled'
-            direction='right'
-            inverted
-            vertical
-            visible={mainStore.likeListVisible}
-            width='wide'
-            color='blue'
-          >
-            <Menu.Item as='a' onClick={() => mainStore.showLikeList(false)}>
-              <Icon name='angle right' />
-            </Menu.Item>
-            <List divided verticalAlign='middle' className='song-list'>
-              {
-              songStore.songs.map((song: Song) => {
-                return (
-                  <List.Item >
-                  <List.Content floated='right'>
-                    <div onClick={() => songStore.remove(mainStore.trackUrl, song.url)} className='song-item'>
-                      <Icon name='trash alternate' size='large'></Icon>
-                    </div>
-                  </List.Content>
-                  <div onClick={() => window.open(song.url)} className='song-item'>
-                  <Image floated='left' avatar src={song.artwork} />
-                  <List.Content floated='left'>{song.title}</List.Content>
-                  </div>
-                </List.Item>
-                )
-              })
-              }
-            </List>
-          </Sidebar>
           <Sidebar.Pusher>
             <Segment basic>
               <Dimmer active={playing && loading}>
                 <Loader className='unselectable'>Chargement...</Loader>
               </Dimmer>
               <UserModal></UserModal>
+              <SongModal></SongModal>
               <div className='main-container'>
                 <div className='header-container'>
                   <div className={'title-container' + (isMobile ? '-mobile' : '') + ' unselectable'}>
@@ -181,14 +147,6 @@ export const Home = (props: IProps) => {
                   <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onPlay}>
                     <img src={icon_play} alt=''></img>
                   </button>
-                  {
-                    commonStore.userState === UserState.connected &&
-                    <button
-                      className={'icon-sound' + (isMobile ? '-mobile' : '')}
-                      onClick={onLike}>
-                      <img src={songStore.state === SongState.liked ? icon_heart : icon_heart_outline} alt=''></img>
-                    </button>
-                  }
                   <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onMute}>
                     <img src={mute ? icon_mute : (volume > 0.5 ? icon_sound : icon_sound_low)} alt=''></img>
                   </button>
@@ -215,6 +173,14 @@ export const Home = (props: IProps) => {
                       <p className={'track-album' + (isMobile ? '-mobile' : '')}>{mainStore.trackAlbum}</p>
                     </div>
                   </div>
+                  {
+                      commonStore.userState === UserState.connected &&
+                      <button
+                        className={'icon-sound' + (isMobile ? '-mobile' : '')}
+                        onClick={onLike}>
+                        <img src={songStore.state === SongState.liked ? icon_heart : icon_heart_outline} alt=''></img>
+                      </button>
+                    }
                 </div>
 
                 <div className='current-listeners-container unselectable'>
