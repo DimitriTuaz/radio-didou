@@ -8,3 +8,4 @@ ssl/*
 client/package-lock.json
 /mongo.config.json
 /config.json
+tx.sh

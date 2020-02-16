@@ -1,0 +1,9 @@
+{{~#if response.content}}
+  {{~#each response.content as | content |}}
+    {{~#if @first}}
+{{~>type object=content~}}
+    {{~/if}}
+  {{~/each}}
+{{~else}}
+void
+{{~/if}}

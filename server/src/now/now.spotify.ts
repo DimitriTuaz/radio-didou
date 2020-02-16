@@ -1,32 +1,24 @@
-import { inject } from '@loopback/core';
-
 import request from 'superagent'
 
-import { RadiodBindings } from '../keys';
-import { NowService } from '../services';
-import { NowEnum, INow } from '@common/now/now.common';
+import { NowFetcher, NowEnum, NowObject } from '../now';
 
-export class NowSpotify extends NowService {
+export class NowSpotify extends NowFetcher {
 
   public static player_url = 'https://api.spotify.com/v1/me/player';
   public static user_url = 'https://api.spotify.com/v1/me'
   public static token_url = 'https://accounts.spotify.com/api/token';
+  public static track_url = 'https://api.spotify.com/v1/tracks';
 
-  public serviceName = "NowSpotify";
+  public name = "Spotify";
 
   private access_token: string;
   private refresh_token: string;
+  private api_key: any;
 
-  constructor(
-    @inject(RadiodBindings.GLOBAL_CONFIG) private configuration: any,
-    @inject(RadiodBindings.API_KEY) private apiKey: any) {
-    super(configuration)
-  }
-
-  protected init(value?: INow, token?: string): void {
-    if (token != null) {
-      this.refresh_token = token;
-    }
+  constructor(token: string, api_key: any, value?: NowObject) {
+    super();
+    this.refresh_token = token;
+    this.api_key = api_key;
     if (value != null) {
       this.now = value;
     }
@@ -40,7 +32,7 @@ export class NowSpotify extends NowService {
     }
   }
 
-  protected async fetch(): Promise<void> {
+  public async fetch(): Promise<void> {
     return await this.obtain_current_playback(true);
   }
 
@@ -79,8 +71,32 @@ export class NowSpotify extends NowService {
         await this.obtain_current_playback(false);
       }
       else {
-        console.log("[" + this.serviceName + "] error in obtain_current_playback")
+        console.log("[" + this.name + "] error in obtain_current_playback")
       }
+    }
+  }
+
+  private async obtain_access_token(): Promise<void> {
+    try {
+      const authorization = Buffer.from(this.api_key.client_id + ':' + this.api_key.secret)
+        .toString('base64');
+
+      const response = await request
+        .post(NowSpotify.token_url)
+        .set('Content-Type', 'application/x-www-form-urlencoded')
+        .set('Authorization', 'Basic ' + authorization)
+        .send({
+          grant_type: 'refresh_token',
+          refresh_token: this.refresh_token
+        });
+      const data = response.body;
+      if ('access_token' in data) {
+        this.access_token = data.access_token;
+        console.log("[" + this.name + "] obtain_access_token succeeded")
+      }
+    }
+    catch (error) {
+      console.log("[" + this.name + "] error in obtain_access_token")
     }
   }
 

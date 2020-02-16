@@ -1,3 +1,9 @@
 /*******************************
      User Global Variables
 *******************************/
+
+@primaryColor: #7a9ab4;
+@pageBackground: @primaryColor url(../../../images/background.png);
+
+@blue: @primaryColor;
+@teal: #ffffff; // teal is the new white

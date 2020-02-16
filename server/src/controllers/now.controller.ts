@@ -1,61 +1,52 @@
-import { get, param, getModelSchemaRef, getFilterSchemaFor } from '@loopback/rest';
-import { inject, Binding, BindingScope, Getter, bind } from '@loopback/core';
+import { get, param, getModelSchemaRef } from '@loopback/rest';
+import { inject, BindingScope, bind } from '@loopback/core';
+import { repository } from '@loopback/repository';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 
-import { NowService } from '../services/now.service';
-import { NowDeezer } from '../now/now.deezer';
-import { NowSpotify } from '../now/now.spotify';
-import { NowNone } from '../now/now.none';
-
-import { NowEnum } from '@common/now/now.common';
-import { Filter, repository } from '@loopback/repository';
-
-import { CredentialRepository } from '../repositories';
-import { ConfigurationService } from '../services';
-import { Credential } from '../models';
+import { NowDeezer, NowSpotify, NowEnum, NowObject } from '../now';
+import { NowCredentials } from '../models';
+import { NowCredentialsRepository } from '../repositories';
+import { PersistentKeyService, NowService } from '../services';
 
 import request = require('superagent');
 
 @bind({ scope: BindingScope.SINGLETON })
 export class NowController {
   constructor(
-    @inject(RadiodBindings.API_KEY) private apiKey: any,
-    @inject(RadiodBindings.GLOBAL_CONFIG) private config: any,
-    @inject(RadiodBindings.CONFIG_SERVICE) private configuration: ConfigurationService,
-    @repository(CredentialRepository) public credentialRepository: CredentialRepository,
-    @inject.getter(RadiodBindings.NOW_SERVICE) private serviceGetter: Getter<NowService>,
-    @inject.binding(RadiodBindings.NOW_SERVICE) private serviceBinding: Binding<NowService>
+    @inject(RadiodBindings.API_KEY) private api_key: any,
+    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
+    @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
+    @repository(NowCredentialsRepository) private credentialRepository: NowCredentialsRepository,
+    @inject(RadiodBindings.NOW_SERVICE) private nowService: NowService,
   ) { }
 
-  @get('/now/get')
+  @get('/now/get', {
+    responses: {
+      '200': {
+        description: 'Informations about the current song',
+        content: {
+          'application/json': {
+            schema: {
+              'x-ts-type': NowObject,
+            },
+          },
+        },
+      },
+    },
+  })
   async getNow() {
-    const service = await this.serviceGetter();
-    return service.value();
+    return this.nowService.value();
   }
 
   @get('/now/set/{credentialId}')
-  async setNowService(
+  async setNow(
     @param.path.string('credentialId') credentialId: string,
   ) {
     try {
-      let credential: Credential = await this.credentialRepository.findById(credentialId);
-      await this.configuration.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
-      let service = await this.serviceGetter();
-      let value = service.value();
-      service.stop();
-      switch (credential.type) {
-        case NowEnum.Spotify:
-          this.serviceBinding.toClass(NowSpotify).inScope(BindingScope.SINGLETON);
-          break;
-        case NowEnum.Deezer:
-          this.serviceBinding.toClass(NowDeezer).inScope(BindingScope.SINGLETON);
-          break;
-        default:
-          this.serviceBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
-      }
-      service = await this.serviceGetter();
-      service.start(value, credential.token);
+      let credential: NowCredentials = await this.credentialRepository.findById(credentialId);
+      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
+      this.nowService.setFetcher(credential);
     } catch (e) {
       console.log(e);
     }
@@ -69,31 +60,30 @@ export class NowController {
           'application/json': {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(Credential, { includeRelations: true }),
+              items: getModelSchemaRef(NowCredentials),
             },
           },
         },
       },
     },
   })
-  async find(
-    @param.query.object('filter', getFilterSchemaFor(Credential)) filter?: Filter<Credential>,
-  ): Promise<Credential[]> {
-    return this.credentialRepository.find(filter);
+  async show(): Promise<NowCredentials[]> {
+    return this.credentialRepository.find();
   }
 
   @get('/now/{serviceId}/callback', {
     responses: {
       '200': {
         description: 'Credential model instance',
-        content: { 'application/json': { schema: getModelSchemaRef(Credential) } },
+
+        content: { 'application/json': { schema: getModelSchemaRef(NowCredentials) } },
       },
     },
   })
   async create(
     @param.path.number('serviceId') serviceId: number,
     @param.query.string('code') code: string
-  ): Promise<Credential> {
+  ): Promise<NowCredentials> {
     let name: string = '';
     let token: string = '';
     switch (serviceId) {
@@ -108,7 +98,7 @@ export class NowController {
         break;
       }
     }
-    return this.credentialRepository.create(new Credential({
+    return this.credentialRepository.create(new NowCredentials({
       name: name,
       type: serviceId,
       token: token
@@ -116,7 +106,7 @@ export class NowController {
   }
 
   private async obtainSpotifyToken(code: string): Promise<any> {
-    const authorization = Buffer.from(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
+    const authorization = Buffer.from(this.api_key.spotify.client_id + ':' + this.api_key.spotify.secret)
       .toString('base64');
     const response = await request
       .post(NowSpotify.token_url)
@@ -126,7 +116,7 @@ export class NowController {
       .send({
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: this.config.loopback + 'now/1/callback'
+        redirect_uri: this.global_config.loopback + 'now/1/callback'
       });
     return {
       refresh_token: response.body.refresh_token,
@@ -152,11 +142,10 @@ export class NowController {
   private async obtainDeezerToken(code: string) {
     const response = await request
       .get(NowDeezer.auth_url)
-      .query({ app_id: this.apiKey.deezer.app_id })
-      .query({ secret: this.apiKey.deezer.secret })
+      .query({ app_id: this.api_key.deezer.app_id })
+      .query({ secret: this.api_key.deezer.secret })
       .query({ code: code })
       .query({ output: "json" });
-    console.log(response.body)
     return response.body.access_token;
   }
 

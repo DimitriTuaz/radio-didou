@@ -6,7 +6,7 @@
       "request": "launch",
       "runtimeArgs": [
         "-r",
-        "tsconfig-paths/register"
+        "source-map-support/register",
       ],
       "name": "Launch Program",
       "program": "${workspaceFolder}/index.js"

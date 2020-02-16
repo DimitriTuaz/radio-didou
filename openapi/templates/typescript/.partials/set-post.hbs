@@ -1,0 +1,7 @@
+{{~#if path.requestBody}}
+  {{~#each path.requestBody.content as | content |}}
+    {{~#if @first}}
+.send({{>parameterName object=content}})
+    {{/if}}
+  {{/each}}
+{{/if}}

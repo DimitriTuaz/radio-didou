@@ -5,6 +5,10 @@ import 'semantic-ui-less/semantic.less'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+import * as config from '../../config.json';
+import { OpenAPI } from '@openapi/.'
+
+OpenAPI.URL = config.loopback;
 ReactDOM.render(<App />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
