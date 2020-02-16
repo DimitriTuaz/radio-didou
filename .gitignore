@@ -1,11 +1,17 @@
 .DS_Store
+
+# CONFIG FILES
+./mongo.config.json
+./config.json
+./api_key.json
+
+# STATIC
 static/sounds
-deploy.sh
-api_key.json
-asset_src
+
+# MISC
 *.code-workspace
-ssl/*
-client/package-lock.json
-/mongo.config.json
-/config.json
+package-lock.json
+deploy.sh
+asset_src
 tx.sh
+
