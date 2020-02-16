@@ -10,6 +10,7 @@ import {
   RestBindings,
   Response,
 } from '@loopback/rest';
+import { CookieOptions } from 'express'
 import { User } from '../models';
 import { UserRepository } from '../repositories';
 import { inject } from '@loopback/core';
@@ -47,6 +48,7 @@ export class UserController {
     @inject(PasswordHasherBindings.PASSWORD_HASHER) private passwordHasher: PasswordHasher,
     @inject(RadiodBindings.TOKEN_SERVICE) private jwtService: TokenService,
     @inject(RadiodBindings.USER_SERVICE) private userService: UserService<User, Credentials>,
+    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any
   ) { }
 
   @post('/user/register', {
@@ -157,12 +159,16 @@ export class UserController {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
-    response.cookie("RADIO-DIDOU-AUTH", token, {
+    var options: CookieOptions = {
       path: "/",
       maxAge: Number.parseInt(maxAge) * 1000,
       sameSite: "lax",
       httpOnly: true
-    });
+    };
+    if ('domain' in this.global_config) {
+      options.domain = this.global_config.domain;
+    }
+    response.cookie("RADIO-DIDOU-AUTH", token, options);
   }
 
   @post('/user/logout', {

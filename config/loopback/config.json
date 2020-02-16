@@ -3,6 +3,7 @@
     "host": "0.0.0.0",
     "port": "8888"
   },
+  "domain": "radio-didou.com",
   "secret": "myjwts3cr3t",
   "loopback": "http://localhost:8888",
   "icecast": "https://www.radio-didou.com:8895"
