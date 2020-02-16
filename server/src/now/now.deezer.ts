@@ -1,6 +1,7 @@
 import request from 'superagent'
 
 import { NowFetcher, NowEnum, NowObject } from '../now';
+
 export class NowDeezer extends NowFetcher {
 
   public static history_url = 'https://api.deezer.com/user/me/history';
