@@ -1,9 +1,9 @@
 .DS_Store
 
 # CONFIG FILES
-./mongo.config.json
-./config.json
-./api_key.json
+/mongo.config.json
+/config.json
+/api_key.json
 
 # STATIC
 static/sounds
