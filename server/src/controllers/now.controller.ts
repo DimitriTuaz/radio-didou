@@ -75,7 +75,6 @@ export class NowController {
     responses: {
       '200': {
         description: 'Credential model instance',
-
         content: { 'application/json': { schema: getModelSchemaRef(NowCredentials) } },
       },
     },
@@ -116,7 +115,7 @@ export class NowController {
       .send({
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: this.global_config.loopback + 'now/1/callback'
+        redirect_uri: this.global_config.loopback + '/now/1/callback'
       });
     return {
       refresh_token: response.body.refresh_token,

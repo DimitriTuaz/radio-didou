@@ -99,28 +99,4 @@ export class NowSpotify extends NowFetcher {
       console.log("[" + this.name + "] error in obtain_access_token")
     }
   }
-
-  private async obtain_access_token(): Promise<void> {
-    try {
-      const authorization = Buffer.from(this.apiKey.spotify.client_id + ':' + this.apiKey.spotify.secret)
-        .toString('base64');
-
-      const response = await request
-        .post(NowSpotify.token_url)
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-        .set('Authorization', 'Basic ' + authorization)
-        .send({
-          grant_type: 'refresh_token',
-          refresh_token: this.refresh_token
-        });
-      const data = response.body;
-      if ('access_token' in data) {
-        this.access_token = data.access_token;
-        console.log("[" + this.serviceName + "] obtain_access_token succeeded")
-      }
-    }
-    catch (error) {
-      console.log("[" + this.serviceName + "] error in obtain_access_token")
-    }
-  }
 }
