@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { useStores } from '../hooks/UseStores'
-import { Dimmer, Loader, Menu, Segment, Sidebar, Icon, Image, List, Button } from 'semantic-ui-react'
+import { Dimmer, Loader, Menu, Segment, Sidebar, Icon, Image, List } from 'semantic-ui-react'
 import '../App.less';
 import icon_play from '../images/icon_play.png'
 import icon_heart from '../images/icon_heart.png'
@@ -192,7 +192,7 @@ export const Home = (props: IProps) => {
                   <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onMute}>
                     <img src={mute ? icon_mute : (volume > 0.5 ? icon_sound : icon_sound_low)} alt=''></img>
                   </button>
-                  <div className={'volume-slider-wrapper' + (isMobile ? '-mobile' : '')}>
+                  <div style={{display: isMobile ? 'none' : ''}} className={'volume-slider-wrapper' + (isMobile ? '-mobile' : '')}>
                     <input
                       min={0}
                       max={1}

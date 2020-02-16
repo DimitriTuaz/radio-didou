@@ -17,9 +17,13 @@ export class UserStore {
     private mainStore: MainStore;
     private songStore: SongStore;
 
-    @observable userNotFound: string | null = null;
-    @observable emailError: string | null = null;
-    @observable passwordError: string | null = null;
+    @observable loginLoading: boolean = false;
+    @observable signupLoading: boolean = false;
+    @observable userNotFound: boolean = false;
+    @observable emailError: string | null = null;
+    @observable passwordError: boolean = false;
+    @observable lastNameError: boolean = false;
+    @observable firstNameError: boolean = false;
     @observable user: User = {
         email: '',
         firstName: '',
@@ -36,22 +40,30 @@ export class UserStore {
     @action
     createAccount = async () => {
         try {
+            this.emailError = (this.user.email === '' ? 'L’email ne peut pas être vide' : null);
+            this.passwordError = (this.password.length < 6); 
+            this.firstNameError = (this.user.firstName === '');
+            this.lastNameError = (this.user.lastName === '');
+            if (this.emailError || this.firstNameError || this.lastNameError || this.passwordError) {
+                return;
+            }
+            this.signupLoading = true;
             this.user = await UserController.register({
                 firstName: this.user.firstName,
                 lastName: this.user.lastName,
                 email: this.user.email,
                 password: this.password
             });
+            this.signupLoading = false;
             await this.login();
 
         } catch (error) {
+            this.signupLoading = false;
             if (error.status === 409) {
-                this.emailError = 'Email not avalaible';
-                this.passwordError = null;
+                this.emailError = 'Cette addresse email est déjà utilisée';
             }
             if (error.status === 422) {
-                this.passwordError = 'must contains at least 6 characters'
-                this.emailError = null;
+                this.passwordError = true;
             }
         }
     }
@@ -59,22 +71,22 @@ export class UserStore {
     @action
     login = async () => {
         try {
+            this.loginLoading = true;
             await UserController.login({
                 email: this.user.email,
                 password: this.password
             });
-
-            this.emailError = null;
-            this.userNotFound = null;
-            this.passwordError = null;
+            this.loginLoading = false;
+            this.userNotFound = false;
             if (!(this.commonStore.userState === UserState.connected)) {
                 this.commonStore.userState = UserState.connected;
                 await this.songStore.refresh(this.mainStore.trackUrl);
             }
 
         } catch (error) {
+            this.loginLoading = false;
             if (error.status === 422 || error.status === 401) {
-                this.userNotFound = 'Invalid email or password.';
+                this.userNotFound = true;
             }
             console.error(error);
         }
