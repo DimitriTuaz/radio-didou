@@ -32,9 +32,7 @@ function SongList() {
         <List divided relaxed>
             {songStore.songs.map((song: Song) => {
                 return(
-                    
-                        <SongItem song={song} />
-                    
+                    <SongItem song={song} key={song.url}/>
                 )
             })}
         </List>
