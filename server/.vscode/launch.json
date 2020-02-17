@@ -8,6 +8,9 @@
         "-r",
         "source-map-support/register",
       ],
+      "outFiles": [
+        "${workspaceFolder}/dist/*/.js"
+      ],
       "name": "Launch Program",
       "program": "${workspaceFolder}/index.js"
     }

@@ -1,4 +1,4 @@
-import { get, param, getModelSchemaRef } from '@loopback/rest';
+import { get, param, getModelSchemaRef, RestBindings, Request } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
@@ -81,13 +81,21 @@ export class NowController {
   })
   async create(
     @param.path.number('serviceId') serviceId: number,
-    @param.query.string('code') code: string
+    @param.query.string('code') code: string,
+    @inject(RestBindings.Http.REQUEST) request: Request,
   ): Promise<NowCredentials> {
     let name: string = '';
     let token: string = '';
     switch (serviceId) {
       case NowEnum.Spotify:
-        let tokens = await this.obtainSpotifyToken(code);
+        let redirect_uri: string;
+
+        if (this.global_config.loopback !== undefined)
+          redirect_uri = this.global_config.loopback + '/now/1/callback';
+        else
+          redirect_uri = request.protocol + '://' + request.headers.host + '/now/1/callback';
+
+        let tokens = await this.obtainSpotifyToken(code, redirect_uri);
         token = tokens.refresh_token;
         name = await this.obtainSpotifyName(tokens.access_token);
         break;
@@ -104,7 +112,7 @@ export class NowController {
     }));
   }
 
-  private async obtainSpotifyToken(code: string): Promise<any> {
+  private async obtainSpotifyToken(code: string, redirect_uri: string): Promise<any> {
     const authorization = Buffer.from(this.api_key.spotify.client_id + ':' + this.api_key.spotify.secret)
       .toString('base64');
     const response = await request
@@ -115,7 +123,7 @@ export class NowController {
       .send({
         grant_type: 'authorization_code',
         code: code,
-        redirect_uri: this.global_config.loopback + '/now/1/callback'
+        redirect_uri: redirect_uri
       });
     return {
       refresh_token: response.body.refresh_token,
