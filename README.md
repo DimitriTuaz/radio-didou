@@ -56,7 +56,7 @@
 
 # Contribution
 
-If you want to contribute to this fun, full-stack typescript, project, we welcome you on discord : https://discord.gg/CJrZDrt
+If you want to contribute to this fun, full-stack typescript project, we welcome you on discord : https://discord.gg/CJrZDrt. We could also help you if you plan to set-up your own server.
 
 
 
