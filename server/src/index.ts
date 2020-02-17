@@ -16,7 +16,9 @@ export async function main() {
   const config = await app.get(RadiodBindings.GLOBAL_CONFIG);
 
   console.log(`[Radiod] Server is listening ${host} on port ${port}`);
-  console.log(`[Radiod] Visit ${config.loopback}`);
+
+  if (config.loopback !== undefined)
+    console.log(`[Radiod] Visit ${config.loopback}`);
 
   return app;
 }

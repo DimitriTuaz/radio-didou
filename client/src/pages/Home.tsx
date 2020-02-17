@@ -16,9 +16,7 @@ import { SongState } from '../stores/SongStore'
 
 import * as config from '../../../config.json'
 
-const LOOPBACK_URL: string = config.loopback
-const ICECAST_URL: string = config.icecast
-const STREAM_URL: string = ICECAST_URL + '/radio-didou';
+const STREAM_URL: string = config.icecast + '/radio-didou';
 
 interface IProps {
 }
@@ -115,7 +113,7 @@ export const Home = (props: IProps) => {
                 <Icon name='heart' />
               </Menu.Item>
             }
-            <Menu.Item as='a' onClick={() => { window.open(LOOPBACK_URL + '/jingles', '_blank') }}>
+            <Menu.Item as='a' onClick={() => { window.open(window.location.origin + '/jingles', '_blank') }}>
               <Icon name='announcement' />
             </Menu.Item>
             <Menu.Item as='a' onClick={() => { window.open('https://ign.radio-didou.com') }}>
