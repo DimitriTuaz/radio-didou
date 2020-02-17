@@ -5,58 +5,60 @@
 - Icecast
 - LiquidSoap
 - Loopback 4
+- MongoDB
 - React
 - SpotifyDeamon
 
-## Install
+## How-to install?
 
 ### Icecast
 
-Configuration is in /usr/local/etc/icecast.xml
+- Install Icecast2.
 
 ### Spotifyd
 
-- Installez spotifyd
-- Permettre à un service user de runner même sans session user active : sudo loginctl enable-linger dimitri
-- Ajoutez une carte son virtuelle : sudo modprobe snd-aloop
-- Reboot persistent : Ajouter la ligne 'snd-aloop' à /etc/modules
-- Copiez /config/.asoundrc dans la home du user
-- Ajoutez son user au group audio : sudo adduser "your_username" audio
+- Install Spotifyd https://github.com/Spotifyd/spotifyd
+- Enable systemd for user even when not connected: 'loginctl enable-linger your_user'
+- Add an aslsa virtual sound card : 'modprobe snd-aloop'
+- Add line 'snd-aloop' to /etc/modules
+- Copy /config/audio/.asoundrc in your user's home.
+- Add your user to audio group : 'sudo adduser "your_user" audio'
 
 ### Liquidsoap
 
-- Install opam : sudo apt-get install opam
-- Install ocaml via opam : https://ocaml.org/docs/install.fr.html
-- if having troubles with opam swithc :  (https://github.com/ocaml/opam/issues/3827)
-- Install via OPAM and add alsa as opam package : https://www.liquidsoap.info/doc-dev/install.html#debianubuntu
-- sudo ln -s /home/liquidsoap/.opam/system/bin/liquidsoap /usr/bin/liquidsoap
-- sudo systemctl enable liquidsoap
+- Install OPAM : 'apt-get install opam'
+- Install OCaml via OPAM : https://ocaml.org/docs/install.fr.html
+- If having troubles with opam swithc :  https://github.com/ocaml/opam/issues/3827
+- Install LiquidSoap via OPAM and add ALSA : https://www.liquidsoap.info/doc-dev/install.html#debianubuntu
+- Add a symlink 'ln -s /home/liquidsoap/.opam/system/bin/liquidsoap /usr/bin/liquidsoap'
+- The config file is in 'config/audio/radio-didou.liq'
+
+### MongoDB
+
+- Install MongoDB
+- If you want to add authentication : https://docs.mongodb.com/manual/core/authentication/
 
 ### Loopback 4 (Backend)
 
-Installez nodejs, npm.
-- Dans le dossier server faite npm install
-- Pour lancer le serveur faite ./run.sh
+- Install NodeJS, NPM and Yarn.
+- In server folder do 'npm install'
+- In OpenAPI folder do 'npm install'
+- In server folder do './build.sh'
+- In the client folder do 'yarn install'
+- In the client folder do 'yarn build'
+- In your root folder, run the server with './run.sh'
 
-### Enregistrement DNS
+## How to configure ?
+- Copy the files of '/config/loopback/' in the root folder.
+- 'api_key.json' should contains at least your spotify developper credentials.
+- 'mongo.config.json' should contains your credentials if you enabled authentication.
+- 'config.json' is the main config file.
 
-A radio-didou.com -> xxx.xxx.xxx.xxx
+# Contribution
 
-CNAME wwww -> @
+If you want to contribute to this fun, full-stack typescript, project, we welcome you on discord : https://discord.gg/CJrZDrt
 
-### Redirection de port
 
-Redirigez le port 80 vers le port de l'application (8888) : https://o7planning.org/fr/11363/redirection-du-port-80-443-sur-ubuntu-server-en-utilisant-iptables
-
-### Systemd
-
-Enable : sudo systemctl enable radio-didou
-
-### Client setup
-
-Installer node, npm et yarn sur une machine debian : https://github.com/nodesource/distributions/blob/master/README.md
-Add semantic : https://react.semantic-ui.com/usage
-Dans le dossier client : 'yarn install && yarn build'
 
 
 
