@@ -4,6 +4,7 @@
   "url": "",
   "host": "localhost",
   "port": 27017,
+  "authSource": "admin",
   "user": "",
   "password": "",
   "database": "radiod",
