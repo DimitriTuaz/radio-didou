@@ -90,10 +90,15 @@ export class NowController {
       case NowEnum.Spotify:
         let redirect_uri: string;
 
-        if (this.global_config.loopback !== undefined)
+        if (this.global_config.loopback !== undefined) {
           redirect_uri = this.global_config.loopback + '/now/1/callback';
-        else
-          redirect_uri = request.protocol + '://' + request.headers.host + '/now/1/callback';
+        }
+        else {
+          let protocol: string = request.protocol;
+          if (request.headers['x_forwarded_proto'])
+            protocol = request.headers['x_forwarded_proto'] as string;
+          redirect_uri = protocol + '://' + request.headers.host + '/now/1/callback';
+        }
 
         let tokens = await this.obtainSpotifyToken(code, redirect_uri);
         token = tokens.refresh_token;
