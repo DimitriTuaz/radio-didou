@@ -9,55 +9,22 @@ import icon_heart_outline from '../images/icon_heart_outline.png'
 import icon_sound from '../images/icon_sound.png'
 import icon_sound_low from '../images/icon_sound_low.png'
 import icon_mute from '../images/icon_mute.png'
-import { UserModal } from '../components/UserModal'
-import { SongModal } from '../components/SongModal'
-import { UserState } from '../stores/UserStore'
-import { SongState } from '../stores/SongStore'
+import { Player, SongModal, UserModal, Now } from '../components'
+import { SongState, UserState } from '../stores'
 
-import * as config from '../../../config.json'
+export const Home = () => {
 
-const STREAM_URL: string = config.icecast + '/radio-didou';
-
-interface IProps {
-}
-
-export const Home = (props: IProps) => {
   const { commonStore, mainStore, userStore, songStore } = useStores();
-  const [mute, setMute] = useState(false);
-  const [playing, setPlaying] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [volume, setVolume] = useState(1);
-  const [audio] = useState(new Audio());
 
   useEffect(() => {
     mainStore.getCurrentTrack();
     mainStore.currentTrackIntervalId = window.setInterval(mainStore.getCurrentTrack, 3000);
-    audio.onplaying = onPlaying;
     userStore.cookieLogin();
 
     return () => {
       clearInterval(mainStore.currentTrackIntervalId);
     };
   });
-
-  const onPlaying = () => {
-    setPlaying(true);
-    setLoading(false);
-  }
-
-  const onPlay = () => {
-    setPlaying(true);
-    setLoading(true);
-    audio.src = '';
-    audio.src = STREAM_URL;
-    audio.load();
-    audio.play();
-  };
-
-  const onMute = () => {
-    audio.muted = !mute;
-    setMute(!mute)
-  };
 
   const onLike = async () => {
     switch (songStore.state) {
@@ -75,10 +42,6 @@ export const Home = (props: IProps) => {
     mainStore.showSongModal(true);
   }
 
-  const onChangeVolume = (event: React.FormEvent<HTMLInputElement>) => {
-    audio.volume = parseFloat(event.currentTarget.value);
-    setVolume(parseFloat(event.currentTarget.value))
-  };
 
   const isMobile = window.innerWidth <= 1000;
   return useObserver(() => (
@@ -122,9 +85,6 @@ export const Home = (props: IProps) => {
           </Sidebar>
           <Sidebar.Pusher>
             <Segment basic>
-              <Dimmer active={playing && loading}>
-                <Loader className='unselectable'>Chargement...</Loader>
-              </Dimmer>
               <UserModal></UserModal>
               <SongModal></SongModal>
               <div className='main-container'>
@@ -141,46 +101,8 @@ export const Home = (props: IProps) => {
                     </Icon>
                   </div>
                 </div>
-                <div className={'player-container' + (isMobile ? '-mobile' : '')}>
-                  <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onPlay}>
-                    <img src={icon_play} alt=''></img>
-                  </button>
-                  <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onMute}>
-                    <img src={mute ? icon_mute : (volume > 0.5 ? icon_sound : icon_sound_low)} alt=''></img>
-                  </button>
-                  <div style={{display: isMobile ? 'none' : ''}} className={'volume-slider-wrapper' + (isMobile ? '-mobile' : '')}>
-                    <input
-                      min={0}
-                      max={1}
-                      onChange={onChangeVolume}
-                      step='any'
-                      type='range'
-                      value={volume}
-                    />
-                  </div>
-                </div>
-
-                <div className={'track-container'}>
-                  <div className={'track-clickable' + (isMobile ? '-mobile' : '')} onClick={() => { window.open(mainStore.trackUrl, '_blank') }}>
-                    <div className='track-cover-container' >
-                      <img className={'track-cover' + (isMobile ? '-mobile' : '')} src={mainStore.trackCover} alt=''></img>
-                    </div>
-                    <div className={'track-infos-container' + (isMobile ? '-mobile' : '')}>
-                      <p className={'track-title' + (isMobile ? '-mobile' : '')}>{mainStore.trackTitle}</p>
-                      <p className={'track-artists' + (isMobile ? '-mobile' : '')}>{mainStore.trackArtists}</p>
-                      <p className={'track-album' + (isMobile ? '-mobile' : '')}>{mainStore.trackAlbum}</p>
-                    </div>
-                  </div>
-                  {
-                      commonStore.userState === UserState.connected &&
-                      <button
-                        className={'icon-sound' + (isMobile ? '-mobile' : '')}
-                        onClick={onLike}>
-                        <img src={songStore.state === SongState.liked ? icon_heart : icon_heart_outline} alt=''></img>
-                      </button>
-                    }
-                </div>
-
+                <Player />
+                <Now />
                 <div className='current-listeners-container unselectable'>
                   <p className={'current-listeners' + (isMobile ? '-mobile' : '')}>
                     {mainStore.auditorCount === undefined ? '' : mainStore.auditorCount + ' auditeur' + (mainStore.auditorCount > 1 ? 's' : '') + ' actuellement'}

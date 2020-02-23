@@ -5,7 +5,7 @@ import { CommonStore } from './CommonStore';
 import { MainStore } from './MainStore';
 import { SongStore, SongState } from './SongStore';
 
-export enum UserState {
+enum UserState {
     login,
     signup,
     connected

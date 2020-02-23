@@ -1,13 +1,10 @@
 import React from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { useStores } from '../hooks/UseStores'
-import { UserState } from '../stores/UserStore'
+import { UserState } from '../stores'
 import { Modal, Form, Segment, Grid, Button, Divider } from 'semantic-ui-react'
 
-interface IProps {
-}
-
-export const UserModal = (props: IProps) => {
+export const UserModal = () => {
     const { commonStore, mainStore } = useStores();
 
     const renderUserModal = () => {

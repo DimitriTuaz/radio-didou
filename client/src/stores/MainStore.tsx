@@ -1,7 +1,7 @@
 import { action, observable } from "mobx";
 import { NowController } from '@openapi/routes'
 import { NowObject } from '@openapi/schemas'
-import { UserState } from "./UserStore";
+import { UserState } from "../stores";
 import { CommonStore } from "./CommonStore";
 import { SongStore } from "./SongStore";
 
