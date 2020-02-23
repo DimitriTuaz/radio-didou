@@ -58,5 +58,5 @@ export const Home = () => {
         </Sidebar.Pushable>
       </div>
     </div>
-  ))
+  ));
 };

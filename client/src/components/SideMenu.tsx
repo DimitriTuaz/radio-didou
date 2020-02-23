@@ -2,6 +2,7 @@ import React from 'react';
 import { useStores } from '../hooks/UseStores';
 import { Menu, Sidebar, Icon } from 'semantic-ui-react';
 import { UserState, SongState } from '../stores';
+import { useObserver } from 'mobx-react-lite';
 
 export const SideMenu = () => {
 
@@ -12,7 +13,7 @@ export const SideMenu = () => {
     mainStore.showSongModal(true);
   }
 
-  return (
+  return useObserver(() => (
     <Sidebar
       as={Menu}
       animation='overlay'
@@ -48,5 +49,5 @@ export const SideMenu = () => {
         <Icon name='compass' />
       </Menu.Item>
     </Sidebar>
-  );
+  ));
 }
