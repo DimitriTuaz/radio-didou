@@ -1,14 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { useStores } from '../hooks/UseStores'
-import { Dimmer, Loader, Menu, Segment, Sidebar, Icon } from 'semantic-ui-react'
+import { Menu, Segment, Sidebar, Icon } from 'semantic-ui-react'
 import '../App.less';
-import icon_play from '../images/icon_play.png'
-import icon_heart from '../images/icon_heart.png'
-import icon_heart_outline from '../images/icon_heart_outline.png'
-import icon_sound from '../images/icon_sound.png'
-import icon_sound_low from '../images/icon_sound_low.png'
-import icon_mute from '../images/icon_mute.png'
 import { Player, SongModal, UserModal, Now } from '../components'
 import { SongState, UserState } from '../stores'
 
