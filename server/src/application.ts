@@ -6,7 +6,7 @@ import {
   AuthenticationComponent,
   registerAuthenticationStrategy
 } from '@loopback/authentication'
-import { JWTAuthenticationStrategy } from './authentication-strategies/jwt-strategy';
+import { JWTAuthenticationStrategy } from './authentication/jwt-strategy';
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 import { RestApplication } from '@loopback/rest';
 
