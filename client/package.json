@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@dvhb/craco-extend-scope": "^1.0.1",
+    "@reach/slider": "^0.8.5",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^7.1.2",

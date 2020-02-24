@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Icon } from 'semantic-ui-react';
+import { Slider } from '@reach/slider'
+import "@reach/slider/styles.css";
 
 import * as config from '../../../config.json';
 const STREAM_URL: string = config.icecast + '/radio-didou';
@@ -7,9 +9,9 @@ const STREAM_URL: string = config.icecast + '/radio-didou';
 export const Player = () => {
 
     const [mute, setMute] = useState(false);
-    const [playing, setPlaying] = useState(false);
     const [loading, setLoading] = useState(false);
     const [volume, setVolume] = useState(1);
+    const [slider, setSlider] = useState(1);
     const [audio] = useState(new Audio());
 
     useEffect(() => {
@@ -17,12 +19,10 @@ export const Player = () => {
     });
 
     const onPlaying = () => {
-        setPlaying(true);
         setLoading(false);
     }
 
     const onPlay = () => {
-        setPlaying(true);
         setLoading(true);
         audio.src = '';
         audio.src = STREAM_URL;
@@ -32,53 +32,41 @@ export const Player = () => {
 
     const onMute = () => {
         audio.muted = !mute;
-        setMute(!mute)
+        setMute(!mute);
+        setSlider(!mute ? 0 : volume);
     };
 
-    const onChangeVolume = (event: React.FormEvent<HTMLInputElement>) => {
-        audio.volume = parseFloat(event.currentTarget.value);
-        setVolume(parseFloat(event.currentTarget.value))
+    const onChangeSlider = (slider: number) => {
+        audio.volume = slider;
+        setSlider(slider);
+        setVolume(slider);
     };
 
     return (
         <Button.Group icon>
-            <Button>
-                <Icon name='play' />
+            <Button onClick={onPlay}>
+                <Icon
+                    link
+                    name={loading ? 'spinner' : 'play'}
+                    loading={loading}
+                    color='teal' />
             </Button>
-            <Button>
-                <Icon name='pause' />
+            <Button onClick={onMute}>
+                <Icon
+                    link
+                    name={
+                        slider >= 0.5 ? 'volume up' :
+                            slider > 0 ? 'volume down' :
+                                'volume off'
+                    }
+                    color='teal' />
             </Button>
-            <Button>
-                <Icon name='shuffle' />
-            </Button>
+            <Slider id='volume-slider'
+                value={slider}
+                onChange={(slider: number) => onChangeSlider(slider)}
+                min={0}
+                max={1}
+                step={0.05} />;
         </Button.Group>
     );
 }
-
-/*
-
-        <div className="player-container">
-            <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onPlay}>
-                <img src={icon_play} alt=''></img>
-            </button>
-            <button className={'icon-sound' + (isMobile ? '-mobile' : '')} onClick={onMute}>
-                <img src={mute ? icon_mute : (volume > 0.5 ? icon_sound : icon_sound_low)} alt=''></img>
-            </button>
-            <div style={{ display: isMobile ? 'none' : '' }} className={'volume-slider-wrapper' + (isMobile ? '-mobile' : '')}>
-                <input
-                    min={0}
-                    max={1}
-                    onChange={onChangeVolume}
-                    step='any'
-                    type='range'
-                    value={volume}
-                />
-            </div>
-        </div>
-        */
-
-        /*
-                      <Dimmer active={playing && loading}>
-                <Loader className='unselectable'>Chargement...</Loader>
-              </Dimmer>
-              */

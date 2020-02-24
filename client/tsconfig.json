@@ -18,7 +18,8 @@
     "experimentalDecorators": true,
     "noEmit": true,
     "jsx": "react",
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": false
   },
   "include": [
     "src"
