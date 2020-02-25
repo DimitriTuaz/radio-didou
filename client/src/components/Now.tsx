@@ -1,9 +1,9 @@
 import React from 'react';
-import { useStores } from '../hooks/UseStores';
+import { useStore } from '../hooks';
 
 export const Now = () => {
 
-    const { mainStore } = useStores();
+    const { mainStore } = useStore();
 
     return (
         <div className="track-container">

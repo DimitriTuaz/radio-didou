@@ -1,8 +1,5 @@
 import React from 'react'
-import { MainStore} from '../stores/MainStore'
-import { UserStore } from '../stores/UserStore'
-import { SongStore } from '../stores/SongStore'
-import { CommonStore } from '../stores/CommonStore'
+import { MainStore, UserStore, SongStore, CommonStore } from '../stores';
 
 const commonStore = new CommonStore();
 const songStore = new SongStore();

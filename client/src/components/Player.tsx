@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Icon } from 'semantic-ui-react';
+
 import { Slider } from '@reach/slider'
 import "@reach/slider/styles.css";
 
@@ -24,7 +25,6 @@ export const Player = () => {
 
     const onPlay = () => {
         setLoading(true);
-        audio.src = '';
         audio.src = STREAM_URL;
         audio.load();
         audio.play();
@@ -61,7 +61,7 @@ export const Player = () => {
                     }
                     color='teal' />
             </Button>
-            <Slider id='volume-slider'
+            <Slider style={{ marginTop: 6, width: 120 }}
                 value={slider}
                 onChange={(slider: number) => onChangeSlider(slider)}
                 min={0}

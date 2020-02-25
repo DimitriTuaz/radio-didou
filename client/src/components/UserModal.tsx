@@ -1,38 +1,35 @@
 import React from 'react'
 import { useObserver } from 'mobx-react-lite'
-import { useStores } from '../hooks/UseStores'
-import { UserState } from '../stores'
 import { Modal, Form, Segment, Grid, Button, Divider } from 'semantic-ui-react'
 
-export const UserModal = () => {
-    const { commonStore, mainStore } = useStores();
+import { UserState } from '../stores'
+import { useStore } from '../hooks'
 
-    const renderUserModal = () => {
-        if (commonStore.userState === UserState.connected) {
-            return ConnectedModal()
-        }
-        else if (commonStore.userState === UserState.signup) {
-            return SignupModal()
-        }
-        else {
-            return LoginModal();
-        }
-    }
+export const UserModal = () => {
+    const { commonStore, mainStore } = useStore();
 
     return useObserver(() => (
         <Modal
             open={mainStore.loginModalVisible}
             closeOnDimmerClick={true}
             onClose={() => mainStore.showLoginModal(false)}
-            closeIcon
-        >
-            {renderUserModal()}
+            closeIcon>
+            {(() => {
+                switch (commonStore.userState) {
+                    case UserState.connected:
+                        return ConnectedModal();
+                    case UserState.signup:
+                        return SignupModal();
+                    default:
+                        return LoginModal();
+                }
+            })()}
         </Modal>
     ))
 }
 
 const LoginModal = () => {
-    const { commonStore, userStore } = useStores();
+    const { commonStore, userStore } = useStore();
 
     return useObserver(() => (
 
@@ -48,7 +45,10 @@ const LoginModal = () => {
                                 placeholder='rogis.elrood@mail.com'
                                 error={userStore.userNotFound}
                                 value={userStore.user.email}
-                                onChange={(e) => {userStore.user.email = e.currentTarget.value; userStore.userNotFound = false}}
+                                onChange={(e) => {
+                                    userStore.user.email = e.currentTarget.value;
+                                    userStore.userNotFound = false
+                                }}
                             />
                             <Form.Input
                                 icon='lock'
@@ -58,10 +58,15 @@ const LoginModal = () => {
                                 placeholder='••••••'
                                 error={userStore.userNotFound}
                                 value={userStore.password}
-                                onChange={(e) => {userStore.password = e.currentTarget.value; userStore.userNotFound = false}}
-                            />
+                                onChange={(e) => {
+                                    userStore.password = e.currentTarget.value;
+                                    userStore.userNotFound = false
+                                }} />
                             <div className={'user-modal-login-error-container'}>
-                                <p className={'error-msg'}>{userStore.userNotFound ? 'L’email ou le mot de passe est incorrect' : ''}</p>
+                                <p className={'error-msg'}>
+                                    {userStore.userNotFound ?
+                                        'L’email ou le mot de passe est incorrect' : ''}
+                                </p>
                             </div>
                             <Button content='Se connecter' primary onClick={userStore.login} />
                         </Form>
@@ -85,12 +90,12 @@ const LoginModal = () => {
 }
 
 const SignupModal = () => {
-    const { userStore } = useStores();
+    const { userStore } = useStore();
 
     return useObserver(() => (
         <Modal.Content image>
             <Modal.Description>
-                <Form loading={userStore.signupLoading}>                
+                <Form loading={userStore.signupLoading}>
                     <Form.Group widths='equal'>
                         <Form.Input
                             label='Email'
@@ -101,9 +106,12 @@ const SignupModal = () => {
                             fluid
                             error={userStore.emailError}
                             value={userStore.user.email}
-                            onChange={(e) => {userStore.user.email = e.currentTarget.value; userStore.emailError = null}}
+                            onChange={(e) => {
+                                userStore.user.email = e.currentTarget.value;
+                                userStore.emailError = null
+                            }}
                         />
-                        
+
                         <Form.Input
                             label='Mot de passe'
                             placeholder='••••••'
@@ -111,9 +119,13 @@ const SignupModal = () => {
                             icon='lock'
                             iconPosition='left'
                             fluid
-                            error={userStore.passwordError ? 'Le mot de passe doit contenir au moins 6 caractères' : null}
+                            error={userStore.passwordError ?
+                                'Le mot de passe doit contenir au moins 6 caractères' : null}
                             value={userStore.password}
-                            onChange={(e) => {userStore.password = e.currentTarget.value; userStore.passwordError = false}}
+                            onChange={(e) => {
+                                userStore.password = e.currentTarget.value;
+                                userStore.passwordError = false
+                            }}
                         />
                     </Form.Group>
                     <Form.Group widths='equal'>
@@ -123,7 +135,10 @@ const SignupModal = () => {
                             fluid
                             error={userStore.lastNameError ? 'Le nom ne peut pas être vide' : null}
                             value={userStore.user.lastName}
-                            onChange={(e) => {userStore.user.lastName = e.currentTarget.value; userStore.lastNameError = false}}
+                            onChange={(e) => {
+                                userStore.user.lastName = e.currentTarget.value;
+                                userStore.lastNameError = false
+                            }}
                         />
                         <Form.Input
                             label='Prénom'
@@ -131,7 +146,10 @@ const SignupModal = () => {
                             fluid
                             error={userStore.firstNameError ? 'Le prénom ne peut pas être vide' : null}
                             value={userStore.user.firstName}
-                            onChange={(e) => {userStore.user.firstName = e.currentTarget.value; userStore.firstNameError = false}}
+                            onChange={(e) => {
+                                userStore.user.firstName = e.currentTarget.value;
+                                userStore.firstNameError = false
+                            }}
                         />
                     </Form.Group>
                     <Segment basic textAlign={"center"}>
@@ -144,13 +162,13 @@ const SignupModal = () => {
 }
 
 const ConnectedModal = () => {
-    const { userStore } = useStores();
+    const { userStore } = useStore();
 
     return useObserver(() => (
         <Modal.Content image>
             <Modal.Description>
-            <Segment basic textAlign={"center"}>
-                    <p>Connecté avec l'adresse {userStore.user.email} ({userStore.user.firstName} {userStore.user.lastName})</p> 
+                <Segment basic textAlign={"center"}>
+                    <p>Connecté avec l'adresse {userStore.user.email} ({userStore.user.firstName} {userStore.user.lastName})</p>
                     <Button
                         content='Se déconnecter'
                         primary
