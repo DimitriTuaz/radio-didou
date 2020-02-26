@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react'
 import { useStore } from '../hooks'
 import '../App.less';
-import { TopMenu, SideMenu, UserModal, SongModal } from '../components'
+
+import { AuditorCount, TopMenu, SideMenu, UserModal, SongModal, CurrentTrack } from '../components'
+import { Grid } from 'semantic-ui-react';
 
 export const Home = () => {
 
@@ -19,12 +21,20 @@ export const Home = () => {
 
   return (
     <div>
-      <UserModal></UserModal>
-      <SongModal></SongModal>
       <SideMenu />
+      <UserModal />
+      <SongModal />
       <div style={{ textAlign: "center" }}>
         <TopMenu />
       </div>
+      <Grid columns={1} centered padded>
+        <Grid.Row>
+          <CurrentTrack />
+        </Grid.Row>
+        <Grid.Row>
+          <AuditorCount />
+        </Grid.Row>
+      </Grid>
     </div >
   );
 };

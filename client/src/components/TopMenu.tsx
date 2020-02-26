@@ -27,7 +27,11 @@ export const TopMenu = () => {
       <Menu.Item fitted >
         <Player />
       </Menu.Item>
-      <Like />
+      {(() => {
+        if (commonStore.userState === UserState.connected) {
+          return <Like />
+        }
+      })()}
       <Menu.Item as='a' onClick={onShowSidebar}>
         <Icon
           fitted
