@@ -20,7 +20,7 @@ export class UserStore {
     @observable loginLoading: boolean = false;
     @observable signupLoading: boolean = false;
     @observable userNotFound: boolean = false;
-    @observable emailError: string | null = null;
+    @observable emailError: string | null = null;
     @observable passwordError: boolean = false;
     @observable lastNameError: boolean = false;
     @observable firstNameError: boolean = false;
@@ -41,7 +41,7 @@ export class UserStore {
     createAccount = async () => {
         try {
             this.emailError = (this.user.email === '' ? 'L’email ne peut pas être vide' : null);
-            this.passwordError = (this.password.length < 6); 
+            this.passwordError = (this.password.length < 6);
             this.firstNameError = (this.user.firstName === '');
             this.lastNameError = (this.user.lastName === '');
             if (this.emailError || this.firstNameError || this.lastNameError || this.passwordError) {
@@ -80,6 +80,7 @@ export class UserStore {
             this.userNotFound = false;
             if (!(this.commonStore.userState === UserState.connected)) {
                 this.commonStore.userState = UserState.connected;
+                await this.cookieLogin();
                 await this.songStore.refresh(this.mainStore.trackUrl);
             }
 
