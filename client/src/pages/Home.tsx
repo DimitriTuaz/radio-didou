@@ -2,7 +2,16 @@ import React, { useEffect } from 'react'
 import { useStore } from '../hooks'
 import '../App.less';
 
-import { AuditorCount, TopMenu, SideMenu, UserModal, SongModal, CurrentTrack } from '../components'
+import {
+  AuditorCount,
+  TopMenu,
+  SideMenu,
+  UserModal,
+  SongModal,
+  CurrentTrack,
+  SettingsModal
+} from '../components';
+
 import { Grid } from 'semantic-ui-react';
 
 export const Home = () => {
@@ -24,6 +33,7 @@ export const Home = () => {
       <SideMenu />
       <UserModal />
       <SongModal />
+      <SettingsModal />
       <div id='main-container'>
         <div style={{ textAlign: "center" }}>
           <TopMenu />

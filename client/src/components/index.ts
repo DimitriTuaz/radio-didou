@@ -4,6 +4,7 @@ export * from './Jingle';
 export * from './Like';
 export * from './Player';
 export * from './SideMenu';
+export * from './SettingsModal';
 export * from './SongModal';
 export * from './TopMenu';
 export * from './UserModal';

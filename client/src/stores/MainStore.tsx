@@ -14,6 +14,7 @@ export class MainStore {
     @observable sidebarVisible: boolean = false;
     @observable loginModalVisible: boolean = false;
     @observable songModalVisible: boolean = false;
+    @observable settingsModalVisible: boolean = false;
 
     @observable trackCover: string | undefined = undefined;
     @observable trackTitle: string | undefined = undefined;
@@ -37,20 +38,29 @@ export class MainStore {
     @action
     showLoginModal = (show: boolean): void => {
         this.loginModalVisible = show;
+        this.settingsModalVisible = false;
         this.songModalVisible = false;
     }
 
     @action
     showSongModal = (show: boolean): void => {
         this.songModalVisible = show;
+        this.settingsModalVisible = false;
         this.loginModalVisible = false;
+    }
+
+    @action
+    showSettingsModal = (show: boolean): void => {
+        this.settingsModalVisible = show;
+        this.loginModalVisible = false;
+        this.songModalVisible = false;
     }
 
     @action
     getCurrentTrack = async () => {
         try {
             let now: NowObject = await NowController.getNow();
-            
+
             let trackCover: string = now.cover ? now.cover : '';
             let trackAlbum: string = now.album ? now.album : '';
             let trackTitle: string = now.song;
@@ -93,7 +103,7 @@ export class MainStore {
                 }
             }
             this.auditorCount = auditorCount;
-            
+
         } catch (error) {
             console.error(error);
         }

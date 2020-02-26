@@ -21,6 +21,10 @@ export const SideMenu = () => {
     mainStore.showLoginModal(true);
   }
 
+  const onClickSettings = () => {
+    mainStore.showSettingsModal(true);
+  }
+
   return useObserver(() => (
     <Sidebar
       as={Menu}
@@ -46,6 +50,15 @@ export const SideMenu = () => {
           return (
             <Menu.Item as='a' onClick={onClickLike}>
               <Icon name='heart' />
+            </Menu.Item>
+          );
+      })()}
+
+      {(() => {
+        if (commonStore.userState === UserState.connected)
+          return (
+            <Menu.Item as='a' onClick={onClickSettings}>
+              <Icon name='cog' />
             </Menu.Item>
           );
       })()}
