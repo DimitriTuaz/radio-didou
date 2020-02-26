@@ -2,7 +2,3 @@
     User Variable Overrides
 *******************************/
 
-@backgroundColor: transparent;
-@hoverBackgroundColor: transparent;
-@downBackgroundColor: transparent;
-@activeBackgroundColor: transparent;

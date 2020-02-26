@@ -44,14 +44,18 @@ export const Player = () => {
 
     return (
         <Button.Group icon>
-            <Button onClick={onPlay}>
+            <Button
+                id='player-button'
+                onClick={onPlay}>
                 <Icon
                     link
                     name={loading ? 'spinner' : 'play'}
                     loading={loading}
                     color='teal' />
             </Button>
-            <Button onClick={onMute}>
+            <Button
+                id='player-button'
+                onClick={onMute}>
                 <Icon
                     link
                     name={
