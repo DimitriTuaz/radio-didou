@@ -1,19 +1,53 @@
-.track-container {
-  cursor: pointer;
+/*
+* Main Layout
+*/
 
-  border-radius: 10px;
-  padding: 20px;
+#main-container {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
 
-  background-color: rgba(255, 255, 255, 0.1);
-    &:hover {
-      background-color: rgba(255, 255, 255, 0.15);
+.full-height {
+  height: 100%;
+}
+
+/*
+* Components
+*/
+
+.current-track-wrapper {
+  display: flex;
+  align-items: center;
+
+  font-size: 18px;
+
+  .current-track-container {
+    cursor: pointer;
+
+    border-radius: 10px;
+    padding: 20px;
+
+    background-color: rgba(255, 255, 255, 0.1);
+      &:hover {
+        background-color: rgba(255, 255, 255, 0.15);
+      }
+      &:active {
+        background-color: rgba(255, 255, 255, 0.05);
+      }
+  }
+}
+
+@media only screen and (max-width: 767px) {
+  .current-track-wrapper {
+    font-size: 14px;
+    .current-track-container {
+      padding: 0px 20px;
     }
-    &:active {
-      background-color: rgba(255, 255, 255, 0.05);
-    }
+  }
 }
 
 .current-listeners {
   color: white;
-  font-size: 16px;
+  font-size: 18px;
 }

@@ -10,7 +10,7 @@ import Jingles from './pages/Jingles'
 export default function App() {
   return (
     <Router>
-      <div>
+      <div className='full-height'>
         <Switch>
           <Route path="/jingles">
             <Jingles />

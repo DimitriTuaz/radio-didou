@@ -20,21 +20,23 @@ export const Home = () => {
   });
 
   return (
-    <div>
+    <div className='full-height'>
       <SideMenu />
       <UserModal />
       <SongModal />
-      <div style={{ textAlign: "center" }}>
-        <TopMenu />
+      <div id='main-container'>
+        <div style={{ textAlign: "center" }}>
+          <TopMenu />
+        </div>
+        <Grid columns={1} padded centered style={{ flexGrow: 1 }}>
+          <Grid.Row >
+            <CurrentTrack />
+          </Grid.Row>
+          <Grid.Row>
+            <AuditorCount />
+          </Grid.Row>
+        </Grid>
       </div>
-      <Grid columns={1} centered padded>
-        <Grid.Row>
-          <CurrentTrack />
-        </Grid.Row>
-        <Grid.Row>
-          <AuditorCount />
-        </Grid.Row>
-      </Grid>
     </div >
   );
 };
