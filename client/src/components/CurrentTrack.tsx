@@ -16,9 +16,19 @@ export const CurrentTrack = () => {
                         <Item>
                             <Item.Image
                                 size='medium'
-                                src={mainStore.trackCover} />
+                                src={
+                                    (mainStore.trackCover !== undefined
+                                        && mainStore.trackCover.length > 0) ?
+                                        mainStore.trackCover :
+                                        'cover.png'
+                                } />
                             <Item.Content verticalAlign='middle'>
-                                <Item.Header>{mainStore.trackTitle}</Item.Header>
+                                <Item.Header>{
+                                    (mainStore.trackTitle !== undefined
+                                        && mainStore.trackTitle.length > 0) ?
+                                        mainStore.trackTitle :
+                                        'Aucun titre'
+                                }</Item.Header>
                                 <Item.Description>{mainStore.trackArtists}</Item.Description>
                                 <Item.Extra>{mainStore.trackAlbum}</Item.Extra>
                             </Item.Content>
