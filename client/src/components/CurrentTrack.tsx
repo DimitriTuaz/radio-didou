@@ -9,7 +9,10 @@ export const CurrentTrack = () => {
     const { mainStore } = useStore();
 
     return useObserver(() => (
-        <a className='track-container' onClick={() => { window.open(mainStore.trackUrl, '_blank') }}>
+        <a
+            className='track-container'
+            onClick={() => { window.open(mainStore.trackUrl, '_blank') }}>
+
             <Item.Group relaxed>
                 <Item>
                     <Item.Image size='tiny' src={mainStore.trackCover} />
