@@ -487,80 +487,11 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Credential model instance
+##### ▶ 204 - Add your credential to Radiod and redirect to /close
 
 ###### Headers
 _No headers specified_
 
-###### application/json
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>id</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>userId</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>name <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>type <strong>(required)</strong></td>
-        <td>
-          number
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>token <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-##### Example _(generated)_
-
-```json
-{
-  "id": "string",
-  "userId": "string",
-  "name": "string",
-  "type": 0,
-  "token": "string"
-}
-```
 
 #### Tags
 

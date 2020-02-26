@@ -1,4 +1,4 @@
-import { get, param, getModelSchemaRef, RestBindings, Request } from '@loopback/rest';
+import { get, param, getModelSchemaRef, RestBindings, Request, Response } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
@@ -71,11 +71,11 @@ export class NowController {
     return this.credentialRepository.find();
   }
 
+
   @get('/now/{serviceId}/callback', {
     responses: {
-      '200': {
-        description: 'Credential model instance',
-        content: { 'application/json': { schema: getModelSchemaRef(NowCredentials) } },
+      '204': {
+        description: 'Add your credential to Radiod and redirect to /close',
       },
     },
   })
@@ -83,7 +83,8 @@ export class NowController {
     @param.path.number('serviceId') serviceId: number,
     @param.query.string('code') code: string,
     @inject(RestBindings.Http.REQUEST) request: Request,
-  ): Promise<NowCredentials> {
+    @inject(RestBindings.Http.RESPONSE) response: Response
+  ): Promise<void> {
     let name: string = '';
     let token: string = '';
     switch (serviceId) {
@@ -110,11 +111,12 @@ export class NowController {
         break;
       }
     }
-    return this.credentialRepository.create(new NowCredentials({
+    await this.credentialRepository.create(new NowCredentials({
       name: name,
       type: serviceId,
       token: token
     }));
+    response.redirect('/close');
   }
 
   private async obtainSpotifyToken(code: string, redirect_uri: string): Promise<any> {
