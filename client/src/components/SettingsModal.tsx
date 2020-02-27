@@ -5,13 +5,15 @@ import { Modal, Header, Button } from 'semantic-ui-react'
 import { OpenAPI } from '@openapi/.';
 import { useStore } from '../hooks'
 
-const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&show_dialog=true';
-const client_id = '776060114a8f49acbdd04a5d6c719c4e';
+import { spotify } from '../../../api_key_public.json'
 
+const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&show_dialog=true';
 const scope_playback = 'user-read-playback-state';
 const scope_playlist = 'playlist-modify-public';
+const client_id = spotify.client_id;
 
 export const SettingsModal = () => {
+
     const { mainStore, userStore } = useStore();
 
     const onClick = () => {
@@ -27,7 +29,6 @@ export const SettingsModal = () => {
     }
 
     const onClose = () => {
-        console.log('lol!');
     }
 
     return useObserver(() => (
