@@ -1,6 +1,10 @@
-import { get, param, getModelSchemaRef, RestBindings, Request, Response } from '@loopback/rest';
+import { get, param, getModelSchemaRef, RestBindings, Request, Response, del, HttpErrors, post } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
+
+import { authenticate } from '@loopback/authentication';
+import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
+import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 
@@ -39,11 +43,20 @@ export class NowController {
     return this.nowService.value();
   }
 
-  @get('/now/set/{credentialId}')
+  @post('/now/set/{credentialId}', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '204': {
+        description: 'Set the default credential succeeed',
+      },
+    },
+  })
+  @authenticate('jwt')
   async setNow(
     @param.path.string('credentialId') credentialId: string,
-  ) {
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<void> {
     try {
+      let userId: string = currentUserProfile[securityId];
       let credential: NowCredentials = await this.credentialRepository.findById(credentialId);
       await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
       this.nowService.setFetcher(credential);
@@ -52,7 +65,8 @@ export class NowController {
     }
   }
 
-  @get('/now/show', {
+  @get('/now/find', {
+    security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
         description: 'Array of Credential model instances',
@@ -67,10 +81,39 @@ export class NowController {
       },
     },
   })
-  async show(): Promise<NowCredentials[]> {
-    return this.credentialRepository.find();
+  @authenticate('jwt')
+  async find(
+    @param.query.string('scope') scope: string,
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
+  ): Promise<NowCredentials[]> {
+    let userId: string = currentUserProfile[securityId];
+    return this.credentialRepository.find({
+      where: {
+        userId: userId,
+        scope: scope
+      }
+    });
   }
 
+
+  @del('/now/delete/{credentialId}', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '204': {
+        description: 'Credential DELETE success',
+      },
+    },
+  })
+  @authenticate('jwt')
+  async deleteById(
+    @param.path.string('credentialId') credentialId: string,
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<void> {
+    let userId: string = currentUserProfile[securityId];
+    let credential: NowCredentials = await this.credentialRepository.findById(credentialId);
+    if (credential.userId != userId)
+      throw new HttpErrors.Unauthorized(`UserID and Credential's UserID doesn't match`);
+    await this.credentialRepository.deleteById(credentialId);
+  }
 
   @get('/now/{serviceId}/callback', {
     responses: {
@@ -179,16 +222,5 @@ export class NowController {
       console.log('[NowController] error: unable to obtain deezer name.')
     }
     return 'Undefined Account';
-  }
-
-  @get('/now/delete/{credentialId}', {
-    responses: {
-      '204': {
-        description: 'Credential DELETE success',
-      },
-    },
-  })
-  async deleteById(@param.path.string('credentialId') credentialId: string): Promise<void> {
-    await this.credentialRepository.deleteById(credentialId);
   }
 }

@@ -6,10 +6,10 @@
 
 * [Servers](#servers)
 * [Paths](#paths)
-  - [`GET` /now/delete/{credentialId}](#op-get-now-delete-credentialid) 
+  - [`DELETE` /now/delete/{credentialId}](#op-delete-now-delete-credentialid) 
+  - [`GET` /now/find](#op-get-now-find) 
   - [`GET` /now/get](#op-get-now-get) 
-  - [`GET` /now/set/{credentialId}](#op-get-now-set-credentialid) 
-  - [`GET` /now/show](#op-get-now-show) 
+  - [`POST` /now/set/{credentialId}](#op-post-now-set-credentialid) 
   - [`GET` /now/{serviceId}/callback](#op-get-now-serviceid-callback) 
   - [`PUT` /song/add](#op-put-song-add) 
   - [`DELETE` /song/delete](#op-delete-song-delete) 
@@ -77,8 +77,8 @@
 ## Paths
 
 
-### `GET` /now/delete/{credentialId}
-<a id="op-get-now-delete-credentialid" />
+### `DELETE` /now/delete/{credentialId}
+<a id="op-delete-now-delete-credentialid" />
 
 
 
@@ -126,6 +126,151 @@
 ###### Headers
 _No headers specified_
 
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `GET` /now/find
+<a id="op-get-now-find" />
+
+
+
+
+
+#### Query parameters
+
+##### &#9655; scope
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>scope </td>
+        <td>
+          string
+        </td>
+        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 200 - Array of Credential model instances
+
+###### Headers
+_No headers specified_
+
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>Response</td>
+        <td>
+          array
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.id</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.userId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.name <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.token <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.scope</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+[
+  {
+    "id": "string",
+    "userId": "string",
+    "name": "string",
+    "type": 0,
+    "token": "string",
+    "scope": "string"
+  }
+]
+```
 
 #### Tags
 
@@ -250,8 +395,8 @@ _No headers specified_
 </div>
 </div>
 
-### `GET` /now/set/{credentialId}
-<a id="op-get-now-set-credentialid" />
+### `POST` /now/set/{credentialId}
+<a id="op-post-now-set-credentialid" />
 
 
 
@@ -294,126 +439,11 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Return value of NowController.setNow
+##### ▶ 204 - Set the default credential succeeed
 
 ###### Headers
 _No headers specified_
 
-
-#### Tags
-
-<div class="tags">
-  <div class="tags__tag"></div>
-</div>
-</div>
-
-### `GET` /now/show
-<a id="op-get-now-show" />
-
-
-
-
-
-
-
-
-
-#### Responses
-
-
-##### ▶ 200 - Array of Credential model instances
-
-###### Headers
-_No headers specified_
-
-###### application/json
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>Response</td>
-        <td>
-          array
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.id</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.userId</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.name <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.type <strong>(required)</strong></td>
-        <td>
-          number
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.token <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.scope</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-##### Example _(generated)_
-
-```json
-[
-  {
-    "id": "string",
-    "userId": "string",
-    "name": "string",
-    "type": 0,
-    "token": "string",
-    "scope": "string"
-  }
-]
-```
 
 #### Tags
 

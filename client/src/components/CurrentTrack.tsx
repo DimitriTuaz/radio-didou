@@ -11,21 +11,23 @@ export const CurrentTrack = () => {
     return useObserver(() => (
         <div className='current-track-wrapper'>
             <div className='current-track-container'>
-                <a onClick={() => { window.open(mainStore.trackUrl, '_blank') }}>
+                <a
+                    href={mainStore.trackUrl}
+                    onClick={() => { window.open(mainStore.trackUrl, '_blank') }}>
                     <Item.Group>
                         <Item>
                             <Item.Image
                                 size='medium'
                                 src={
                                     (mainStore.trackCover !== undefined
-                                        && mainStore.trackCover.length == 0) ?
+                                        && mainStore.trackCover.length === 0) ?
                                         'cover.png' :
                                         mainStore.trackCover
                                 } />
                             <Item.Content verticalAlign='middle'>
                                 <Item.Header>{
                                     (mainStore.trackTitle !== undefined
-                                        && mainStore.trackTitle.length == 0) ?
+                                        && mainStore.trackTitle.length === 0) ?
                                         'Aucun titre' :
                                         mainStore.trackTitle
                                 }</Item.Header>
