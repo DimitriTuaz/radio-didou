@@ -41,8 +41,7 @@ export class MediaController {
   @authenticate('jwt')
   async find(
     @param.query.string('scope') scope: string,
-    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
-  ): Promise<MediaCredentials[]> {
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<MediaCredentials[]> {
     let userId: string = currentUserProfile[securityId];
     return await this.userRepository.mediaCredentials(userId).find({
       where: {
@@ -71,49 +70,55 @@ export class MediaController {
   }
 
   @get('/media/{serviceId}/callback', {
+    security: OPERATION_SECURITY_SPEC,
     responses: {
       '204': {
         description: 'Add your credential to Radiod and redirect to /close',
       },
     },
   })
+  @authenticate('jwt')
   async create(
     @param.path.number('serviceId') serviceId: number,
     @param.query.string('code') code: string,
-    @param.query.string('state') state: string,
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
     @inject(RestBindings.Http.REQUEST) request: Request,
-    @inject(RestBindings.Http.RESPONSE) response: Response
-  ): Promise<void> {
-    let name: string = '';
+    @inject(RestBindings.Http.RESPONSE) response: Response): Promise<void> {
+
+    let userId: string = currentUserProfile[securityId];
     let token: string = '';
-    let userId: string | undefined = undefined;
+
+    let name: string | undefined = undefined;
     let scope: string | undefined = undefined;
+
     switch (serviceId) {
-      case NowEnum.Spotify: {
-        let redirect_uri: string;
-        if (this.global_config.loopback !== undefined) {
-          redirect_uri = this.global_config.loopback + '/media/1/callback';
+      case NowEnum.Spotify:
+        {
+          let redirect_uri: string;
+          if (this.global_config.loopback !== undefined) {
+            redirect_uri = this.global_config.loopback + '/media/1/callback';
+          }
+          else {
+            let protocol: string = request.protocol;
+            if (request.headers['x_forwarded_proto'])
+              protocol = request.headers['x_forwarded_proto'] as string;
+            redirect_uri = protocol + '://' + request.headers.host + '/media/1/callback';
+          }
+
+          let data = await this.obtainSpotifyToken(code, redirect_uri);
+          token = data.refresh_token;
+          name = await this.obtainSpotifyName(data.access_token);
+          scope = data.scope;
+          break;
         }
-        else {
-          let protocol: string = request.protocol;
-          if (request.headers['x_forwarded_proto'])
-            protocol = request.headers['x_forwarded_proto'] as string;
-          redirect_uri = protocol + '://' + request.headers.host + '/media/1/callback';
+      case NowEnum.Deezer:
+        {
+          token = await this.obtainDeezerToken(code);
+          name = await this.obtainDeezerName(token);
+          break;
         }
-        let data = await this.obtainSpotifyToken(code, redirect_uri);
-        token = data.refresh_token;
-        scope = data.scope;
-        name = await this.obtainSpotifyName(data.access_token);
-        if (state !== undefined)
-          userId = state;
-        break;
-      }
-      case NowEnum.Deezer: {
-        token = await this.obtainDeezerToken(code);
-        name = await this.obtainDeezerName(token);
-        break;
-      }
     }
+
     await this.userRepository.mediaCredentials(userId).create(new MediaCredentials({
       name: name,
       type: serviceId,
