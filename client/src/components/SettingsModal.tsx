@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { Modal, Header, Button } from 'semantic-ui-react'
 
@@ -14,7 +14,12 @@ const client_id = spotify.client_id;
 
 export const SettingsModal = () => {
 
-    const { mainStore, userStore } = useStore();
+    const { mainStore, userStore, settingStore } = useStore();
+
+    useEffect(() => {
+        settingStore.obtainPlaybackCredential();
+        settingStore.obtainPlaylistCredential();
+    }, [userStore.user.id]);
 
     const onClick = () => {
         (window as any).closeCallback = onClose;
@@ -29,6 +34,7 @@ export const SettingsModal = () => {
     }
 
     const onClose = () => {
+
     }
 
     return useObserver(() => (
@@ -43,9 +49,14 @@ export const SettingsModal = () => {
                     <Header>
                         Mon compte Spotify
                     </Header>
-                    <Button onClick={onClick}>
-                        Ajouter un compte
-                    </Button>
+                    {settingStore.playlistCredential !== undefined &&
+                        settingStore.playbackCredential?.name
+                    }
+                    {settingStore.playlistCredential === undefined &&
+                        <Button onClick={onClick}>
+                            Ajouter un compte
+                        </Button>
+                    }
                 </Modal.Description>
             </Modal.Content>
         </Modal>

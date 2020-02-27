@@ -1,5 +1,5 @@
 import React from 'react'
-import { MainStore, UserStore, SongStore, CommonStore } from '../stores';
+import { MainStore, UserStore, SongStore, CommonStore, SettingStore } from '../stores';
 
 const commonStore = new CommonStore();
 const songStore = new SongStore();
@@ -10,4 +10,5 @@ export const storesContext = React.createContext({
   mainStore: mainStore,
   songStore: songStore,
   userStore: new UserStore(commonStore, mainStore, songStore),
+  settingStore: new SettingStore()
 });
