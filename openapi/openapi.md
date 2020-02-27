@@ -388,6 +388,14 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
+      <tr>
+        <td>Response.scope</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
   </tbody>
 </table>
 
@@ -401,7 +409,8 @@ _No headers specified_
     "userId": "string",
     "name": "string",
     "type": 0,
-    "token": "string"
+    "token": "string",
+    "scope": "string"
   }
 ]
 ```
@@ -469,6 +478,34 @@ _No headers specified_
   <tbody>
       <tr>
         <td>code </td>
+        <td>
+          string
+        </td>
+        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### &#9655; state
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>state </td>
         <td>
           string
         </td>
@@ -1571,6 +1608,14 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
+      <tr>
+        <td>scope</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
   </tbody>
 </table>
 
@@ -1582,7 +1627,8 @@ _No headers specified_
   "userId": "string",
   "name": "string",
   "type": 0,
-  "token": "string"
+  "token": "string",
+  "scope": "string"
 }
 ```
 <a id="schema-song" />

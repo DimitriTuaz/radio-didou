@@ -7,18 +7,21 @@ import { useStore } from '../hooks'
 
 const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&show_dialog=true';
 const client_id = '776060114a8f49acbdd04a5d6c719c4e';
-const scope = 'user-read-playback-state';
+
+const scope_playback = 'user-read-playback-state';
+const scope_playlist = 'playlist-modify-public';
 
 export const SettingsModal = () => {
-    const { mainStore } = useStore();
+    const { mainStore, userStore } = useStore();
 
     const onClick = () => {
         (window as any).closeCallback = onClose;
         let left = (window.screen.width - 500) / 2;
         let top = (window.screen.height - 500) / 4;
         window.open(
-            spotify_url + '&client_id=' + client_id + '&scope=' + scope
-            + '&redirect_uri=' + OpenAPI.URL + '/now/1/callback',
+            spotify_url + '&client_id=' + client_id + '&scope=' + scope_playlist
+            + '&redirect_uri=' + OpenAPI.URL + '/now/1/callback'
+            + '&state=' + userStore.user.id,
             'SpotifyLogin',
             `width=500,height=500,top=${top},left=${left}`);
     }

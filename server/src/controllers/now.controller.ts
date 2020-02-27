@@ -82,15 +82,17 @@ export class NowController {
   async create(
     @param.path.number('serviceId') serviceId: number,
     @param.query.string('code') code: string,
+    @param.query.string('state') state: string,
     @inject(RestBindings.Http.REQUEST) request: Request,
     @inject(RestBindings.Http.RESPONSE) response: Response
   ): Promise<void> {
     let name: string = '';
     let token: string = '';
+    let userId: string | undefined = undefined;
+    let scope: string | undefined = undefined;
     switch (serviceId) {
-      case NowEnum.Spotify:
+      case NowEnum.Spotify: {
         let redirect_uri: string;
-
         if (this.global_config.loopback !== undefined) {
           redirect_uri = this.global_config.loopback + '/now/1/callback';
         }
@@ -100,11 +102,14 @@ export class NowController {
             protocol = request.headers['x_forwarded_proto'] as string;
           redirect_uri = protocol + '://' + request.headers.host + '/now/1/callback';
         }
-
-        let tokens = await this.obtainSpotifyToken(code, redirect_uri);
-        token = tokens.refresh_token;
-        name = await this.obtainSpotifyName(tokens.access_token);
+        let data = await this.obtainSpotifyToken(code, redirect_uri);
+        token = data.refresh_token;
+        scope = data.scope;
+        name = await this.obtainSpotifyName(data.access_token);
+        if (state !== undefined)
+          userId = state;
         break;
+      }
       case NowEnum.Deezer: {
         token = await this.obtainDeezerToken(code);
         name = await this.obtainDeezerName(token);
@@ -114,7 +119,9 @@ export class NowController {
     await this.credentialRepository.create(new NowCredentials({
       name: name,
       type: serviceId,
-      token: token
+      token: token,
+      scope: scope,
+      userId: userId
     }));
     response.redirect('/close');
   }
@@ -132,10 +139,7 @@ export class NowController {
         code: code,
         redirect_uri: redirect_uri
       });
-    return {
-      refresh_token: response.body.refresh_token,
-      access_token: response.body.access_token
-    }
+    return response.body;
   }
 
   private async obtainSpotifyName(access_token: string): Promise<string> {
