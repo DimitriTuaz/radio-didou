@@ -7,30 +7,22 @@ export enum SpotifyScope {
     playlist = 'playlist-modify-public'
 }
 
+type ScopedCredentials = { [key in SpotifyScope]: MediaCredentials | undefined };
+
 export class SettingStore {
 
-    @observable playbackCredential: MediaCredentials | undefined = undefined;
-    @observable playlistCredential: MediaCredentials | undefined = undefined;
-
-    @action
-    obtainPlaybackCredential = async () => {
-        try {
-            this.playbackCredential = undefined;
-            let data: MediaCredentials[] = await MediaController.find(SpotifyScope.playback);
-            if (data.length > 0)
-                this.playbackCredential = data[0];
-        } catch (error) {
-            console.error(error);
-        }
+    @observable credentials: ScopedCredentials = {
+        [SpotifyScope.playback]: undefined,
+        [SpotifyScope.playlist]: undefined
     }
 
     @action
-    obtainPlaylistCredential = async () => {
+    obtainCredential = async (scope: SpotifyScope) => {
         try {
-            this.playlistCredential = undefined;
-            let data: MediaCredentials[] = await MediaController.find(SpotifyScope.playlist);
+            this.credentials[scope] = undefined;
+            let data: MediaCredentials[] = await MediaController.find(scope);
             if (data.length > 0)
-                this.playlistCredential = data[0];
+                this.credentials[scope] = data[0];
         } catch (error) {
             console.error(error);
         }
@@ -38,34 +30,12 @@ export class SettingStore {
 
     @action
     deleteCredential = async (scope: SpotifyScope) => {
-        switch (scope) {
-            case SpotifyScope.playback:
-                await this.deletePlaybackCredential();
-                break;
-            case SpotifyScope.playlist:
-                await this.deletePlaylistCredential();
-                break;
-        }
-    }
-
-    private deletePlaybackCredential = async () => {
         try {
-            if (this.playbackCredential !== undefined) {
-                if (this.playbackCredential.id !== undefined)
-                    await MediaController.deleteById(this.playbackCredential.id)
-                this.playbackCredential = undefined;
-            }
-        } catch (error) {
-            console.error(error);
-        }
-    }
-
-    private deletePlaylistCredential = async () => {
-        try {
-            if (this.playlistCredential !== undefined) {
-                if (this.playlistCredential.id !== undefined)
-                    await MediaController.deleteById(this.playlistCredential.id)
-                this.playlistCredential = undefined;
+            if (this.credentials[scope] !== undefined) {
+                let credentialId = this.credentials[scope]?.id;
+                if (credentialId !== undefined)
+                    await MediaController.deleteById(credentialId);
+                this.credentials[scope] = undefined;
             }
         } catch (error) {
             console.error(error);

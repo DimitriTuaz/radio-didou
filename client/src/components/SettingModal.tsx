@@ -57,28 +57,19 @@ const CredentialItem = (props: CredentialItemProps) => {
     }
 
     const onClose = () => {
-        switch (props.scope) {
-            case SpotifyScope.playback:
-                settingStore.obtainPlaybackCredential();
-                break;
-            case SpotifyScope.playlist:
-                settingStore.obtainPlaylistCredential();
-                break;
-        }
+        settingStore.obtainCredential(props.scope);
     }
 
     return useObserver(() => (
         <div>
             {(() => {
-                let credentials: MediaCredentials | undefined = undefined;
+                let credentials: MediaCredentials | undefined = settingStore.credentials[props.scope];
                 let message: string;
                 switch (props.scope) {
                     case SpotifyScope.playback:
-                        credentials = settingStore.playbackCredential;
                         message = 'The type of device you’re listening on ';
                         break;
                     case SpotifyScope.playlist:
-                        credentials = settingStore.playlistCredential;
                         message = 'Create, edit, and follow playlists.';
                         break;
                 }

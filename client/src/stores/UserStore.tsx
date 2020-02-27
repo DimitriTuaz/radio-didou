@@ -4,6 +4,7 @@ import { User } from '@openapi/schemas'
 
 import { CommonStore, MainStore, SettingStore, SongStore } from '../stores';
 import { SongState } from './SongStore';
+import { SpotifyScope } from './SettingStore';
 
 enum UserState {
     login,
@@ -112,8 +113,8 @@ export class UserStore {
                 if (!(this.commonStore.userState === UserState.connected)) {
                     this.commonStore.userState = UserState.connected;
                     this.songStore.refresh(this.mainStore.trackUrl);
-                    this.settingStore.obtainPlaybackCredential();
-                    this.settingStore.obtainPlaylistCredential();
+                    this.settingStore.obtainCredential(SpotifyScope.playback);
+                    this.settingStore.obtainCredential(SpotifyScope.playlist);
                 }
             }
         } catch (error) {
