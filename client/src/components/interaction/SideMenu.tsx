@@ -2,8 +2,8 @@ import React from 'react';
 import { Menu, Sidebar, Icon } from 'semantic-ui-react';
 import { useObserver } from 'mobx-react-lite';
 
-import { UserState } from '../stores';
-import { useStore } from '../hooks';
+import { UserState } from '../../stores';
+import { useStore } from '../../hooks';
 
 export const SideMenu = () => {
 

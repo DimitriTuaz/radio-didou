@@ -2,8 +2,8 @@ import React from 'react';
 import { Menu, Icon } from 'semantic-ui-react';
 import { useObserver } from 'mobx-react-lite';
 
-import { SongState } from '../stores';
-import { useStore } from '../hooks';
+import { SongState } from '../../stores';
+import { useStore } from '../../hooks';
 
 export const Like = () => {
 

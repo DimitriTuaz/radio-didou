@@ -1,6 +1,6 @@
 import React from 'react';
 import { useObserver } from 'mobx-react-lite';
-import { useStore } from '../hooks';
+import { useStore } from '../../hooks';
 
 export const AuditorCount = () => {
 

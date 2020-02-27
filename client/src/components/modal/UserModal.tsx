@@ -2,8 +2,8 @@ import React from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { Modal, Form, Segment, Grid, Button, Divider } from 'semantic-ui-react'
 
-import { UserState } from '../stores'
-import { useStore } from '../hooks'
+import { UserState } from '../../stores'
+import { useStore } from '../../hooks'
 
 export const UserModal = () => {
     const { commonStore, mainStore } = useStore();

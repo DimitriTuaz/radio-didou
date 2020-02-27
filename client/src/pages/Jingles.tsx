@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import '../App.less';
 import '../Jingles.less'
-import Jingle from '../components/Jingle'
+import Jingle from '../components/jingle/Jingle'
 
 function Jingles() {
     useEffect(() => {

@@ -3,7 +3,7 @@ import { useObserver } from 'mobx-react-lite'
 import { Modal, List, Image } from 'semantic-ui-react'
 
 import { Song } from '@openapi/schemas';
-import { useStore } from '../hooks'
+import { useStore } from '../../hooks'
 
 interface SongProps {
     song: Song;

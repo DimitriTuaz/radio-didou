@@ -3,10 +3,10 @@ import { useObserver } from 'mobx-react-lite'
 import { Modal, Header, Button, Card, Image, Icon } from 'semantic-ui-react'
 
 import { OpenAPI } from '@openapi/.';
-import { useStore } from '../hooks'
-import { SpotifyScope } from '../stores';
+import { useStore } from '../../hooks'
+import { SpotifyScope } from '../../stores';
 
-import { spotify } from '../../../api_key_public.json'
+import { spotify } from '../../../../api_key_public.json'
 import { MediaCredentials } from '@openapi/schemas';
 
 const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&show_dialog=true';

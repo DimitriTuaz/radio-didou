@@ -2,9 +2,9 @@ import React from 'react';
 import { Image, Menu, Icon } from 'semantic-ui-react';
 import { useObserver } from 'mobx-react-lite';
 
-import { Player, Like } from '../components'
-import { UserState } from '../stores';
-import { useStore } from '../hooks';
+import { Player, Like } from '..'
+import { UserState } from '../../stores';
+import { useStore } from '../../hooks';
 
 export const TopMenu = () => {
 

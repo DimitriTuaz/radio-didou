@@ -4,7 +4,7 @@ import { Button, Icon } from 'semantic-ui-react';
 import { Slider } from '@reach/slider'
 import "@reach/slider/styles.css";
 
-import * as config from '../../../config.json';
+import * as config from '../../../../config.json';
 const STREAM_URL: string = config.icecast + '/radio-didou';
 
 export const Player = () => {

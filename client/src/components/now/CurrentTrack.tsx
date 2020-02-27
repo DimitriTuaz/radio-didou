@@ -2,7 +2,7 @@ import React from 'react';
 import { useObserver } from 'mobx-react-lite';
 import { Item } from 'semantic-ui-react';
 
-import { useStore } from '../hooks';
+import { useStore } from '../../hooks';
 
 export const CurrentTrack = () => {
 
