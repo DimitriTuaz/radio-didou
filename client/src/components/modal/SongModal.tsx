@@ -9,7 +9,20 @@ interface SongProps {
     song: Song;
 }
 
-function SongItem(props: SongProps) {
+export const SongModal = () => {
+    return (
+        <React.Fragment>
+            <Modal.Header>Les chansons que j’aime</Modal.Header>
+            <Modal.Content scrolling>
+                <Modal.Description>
+                    <SongList></SongList>
+                </Modal.Description>
+            </Modal.Content>
+        </React.Fragment>
+    );
+}
+
+const SongItem = (props: SongProps) => {
     const { mainStore, songStore } = useStore();
 
     return (
@@ -35,7 +48,7 @@ function SongItem(props: SongProps) {
     )
 }
 
-function SongList() {
+const SongList = () => {
     const { songStore } = useStore();
 
     return useObserver(() => (
@@ -46,24 +59,5 @@ function SongList() {
                 )
             })}
         </List>
-    ))
-}
-
-export const SongModal = () => {
-    const { mainStore } = useStore();
-
-    return useObserver(() => (
-        <Modal
-            open={mainStore.songModalVisible}
-            closeOnDimmerClick={true}
-            onClose={() => mainStore.showSongModal(false)}
-            closeIcon >
-            <Modal.Header>Les chansons que j’aime</Modal.Header>
-            <Modal.Content scrolling>
-                <Modal.Description>
-                    <SongList></SongList>
-                </Modal.Description>
-            </Modal.Content>
-        </Modal>
     ))
 }

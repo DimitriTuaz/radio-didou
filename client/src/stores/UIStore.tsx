@@ -1,20 +1,16 @@
 import { action, observable } from "mobx";
-import { NowController } from '@openapi/routes'
-import { NowObject } from '@openapi/schemas'
-import { UserState } from "../stores";
-import { CommonStore } from "./CommonStore";
-import { SongStore } from "./SongStore";
+import { NowController } from '@openapi/routes';
+import { NowObject } from '@openapi/schemas';
 
+import { UserState, CommonStore, SongStore } from "../stores";
 
-export class MainStore {
+export class UIStore {
 
     private commonStore: CommonStore;
     private songStore: SongStore;
 
-    @observable sidebarVisible: boolean = false;
-    @observable loginModalVisible: boolean = false;
-    @observable songModalVisible: boolean = false;
-    @observable settingsModalVisible: boolean = false;
+    @observable activeSidebar: boolean = false;
+    @observable activeModal: string | undefined = undefined;
 
     @observable trackCover: string | undefined = undefined;
     @observable trackTitle: string | undefined = undefined;
@@ -32,28 +28,15 @@ export class MainStore {
 
     @action
     showSidebar = (show: boolean): void => {
-        this.sidebarVisible = show;
+        this.activeSidebar = show;
     }
 
     @action
-    showLoginModal = (show: boolean): void => {
-        this.loginModalVisible = show;
-        this.settingsModalVisible = false;
-        this.songModalVisible = false;
-    }
-
-    @action
-    showSongModal = (show: boolean): void => {
-        this.songModalVisible = show;
-        this.settingsModalVisible = false;
-        this.loginModalVisible = false;
-    }
-
-    @action
-    showSettingsModal = (show: boolean): void => {
-        this.settingsModalVisible = show;
-        this.loginModalVisible = false;
-        this.songModalVisible = false;
+    showModal = (key: string, show: boolean): void => {
+        if (show)
+            this.activeModal = key;
+        else if (key === this.activeModal)
+            this.activeModal = undefined;
     }
 
     @action

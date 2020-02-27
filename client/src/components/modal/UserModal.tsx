@@ -6,14 +6,10 @@ import { UserState } from '../../stores'
 import { useStore } from '../../hooks'
 
 export const UserModal = () => {
-    const { commonStore, mainStore } = useStore();
+    const { commonStore } = useStore();
 
-    return useObserver(() => (
-        <Modal
-            open={mainStore.loginModalVisible}
-            closeOnDimmerClick={true}
-            onClose={() => mainStore.showLoginModal(false)}
-            closeIcon>
+    return (
+        <React.Fragment>
             {(() => {
                 switch (commonStore.userState) {
                     case UserState.connected:
@@ -24,8 +20,8 @@ export const UserModal = () => {
                         return LoginModal();
                 }
             })()}
-        </Modal>
-    ))
+        </React.Fragment>
+    );
 }
 
 const LoginModal = () => {

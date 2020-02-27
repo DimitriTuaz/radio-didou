@@ -4,6 +4,7 @@ import { useObserver } from 'mobx-react-lite';
 
 import { UserState } from '../../stores';
 import { useStore } from '../../hooks';
+import { ModalKey } from '../../components';
 
 export const SideMenu = () => {
 
@@ -11,18 +12,18 @@ export const SideMenu = () => {
 
   const onClickLike = async () => {
     await songStore.get();
-    mainStore.showSongModal(true);
+    mainStore.showModal(ModalKey.SONG, true)
   }
 
   const onClickUser = () => {
     if (commonStore.userState === UserState.signup) {
       commonStore.userState = UserState.login;
     }
-    mainStore.showLoginModal(true);
+    mainStore.showModal(ModalKey.USER, true)
   }
 
   const onClickSettings = () => {
-    mainStore.showSettingsModal(true);
+    mainStore.showModal(ModalKey.SETTING, true)
   }
 
   return useObserver(() => (
@@ -33,7 +34,7 @@ export const SideMenu = () => {
       direction='right'
       inverted
       vertical
-      visible={mainStore.sidebarVisible}
+      visible={mainStore.activeSidebar}
       width='thin'
       color='blue'>
 

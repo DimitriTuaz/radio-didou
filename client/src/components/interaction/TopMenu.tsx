@@ -11,7 +11,7 @@ export const TopMenu = () => {
   const { mainStore, commonStore } = useStore();
 
   const onShowSidebar = () => {
-    mainStore.showSidebar(!mainStore.sidebarVisible);
+    mainStore.showSidebar(!mainStore.activeSidebar);
   }
 
   return useObserver(() => (
@@ -35,7 +35,7 @@ export const TopMenu = () => {
       <Menu.Item as='a' onClick={onShowSidebar}>
         <Icon
           fitted
-          rotated={mainStore.sidebarVisible ? 'clockwise' : undefined}
+          rotated={mainStore.activeSidebar ? 'clockwise' : undefined}
           name='bars'
           color='teal'
           size='large'>

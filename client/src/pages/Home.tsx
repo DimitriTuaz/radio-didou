@@ -9,7 +9,9 @@ import {
   UserModal,
   SongModal,
   CurrentTrack,
-  SettingModal
+  SettingModal,
+  ModalController,
+  ModalKey
 } from '../components';
 
 import { Grid } from 'semantic-ui-react';
@@ -31,9 +33,13 @@ export const Home = () => {
   return (
     <div className='full-height'>
       <SideMenu />
-      <UserModal />
-      <SongModal />
-      <SettingModal />
+      <ModalController>
+        {{
+          [ModalKey.USER]: <UserModal />,
+          [ModalKey.SONG]: <SongModal />,
+          [ModalKey.SETTING]: <SettingModal />
+        }}
+      </ModalController>
       <div id='main-container'>
         <div style={{ textAlign: "center" }}>
           <TopMenu />

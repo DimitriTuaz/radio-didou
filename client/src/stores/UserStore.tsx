@@ -2,7 +2,7 @@ import { observable, action } from 'mobx';
 import { UserController } from '@openapi/routes'
 import { User } from '@openapi/schemas'
 
-import { CommonStore, MainStore, SettingStore, SongStore } from '../stores';
+import { CommonStore, UIStore, SettingStore, SongStore } from '../stores';
 import { SongState } from './SongStore';
 import { SpotifyScope } from './SettingStore';
 
@@ -15,7 +15,7 @@ enum UserState {
 export class UserStore {
 
     private commonStore: CommonStore;
-    private mainStore: MainStore;
+    private mainStore: UIStore;
     private songStore: SongStore;
     private settingStore: SettingStore;
 
@@ -33,7 +33,7 @@ export class UserStore {
     };
     @observable password: string = '';
 
-    constructor(commonStore: CommonStore, mainStore: MainStore, songStore: SongStore, settingStore: SettingStore) {
+    constructor(commonStore: CommonStore, mainStore: UIStore, songStore: SongStore, settingStore: SettingStore) {
         this.commonStore = commonStore;
         this.mainStore = mainStore;
         this.songStore = songStore;

@@ -13,14 +13,9 @@ const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&s
 const client_id = spotify.client_id;
 
 export const SettingModal = () => {
-    const { mainStore } = useStore();
 
-    return useObserver(() => (
-        <Modal
-            open={mainStore.settingsModalVisible}
-            closeOnDimmerClick={true}
-            onClose={() => mainStore.showSettingsModal(false)}
-            closeIcon >
+    return (
+        <React.Fragment>
             <Modal.Header>Mes paramètres</Modal.Header>
             <Modal.Content scrolling>
                 <Modal.Description>
@@ -34,8 +29,8 @@ export const SettingModal = () => {
                     <CredentialItem scope={SpotifyScope.playlist} />
                 </Modal.Description>
             </Modal.Content>
-        </Modal>
-    ))
+        </React.Fragment>
+    );
 }
 
 interface CredentialItemProps {
