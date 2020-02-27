@@ -1,6 +1,7 @@
 import { Entity, model, property, hasOne, hasMany } from '@loopback/repository';
 import { UserCredentials, UserCredentialsWithRelations } from './user-credentials.model';
 import { Song } from '../models';
+import { MediaCredentials, MediaCredentialsWithRelations } from './media-credentials.model';
 
 @model({
   settings: {
@@ -24,6 +25,7 @@ export class User extends Entity {
   @property({ type: 'string' }) lastName?: string;
   @hasOne(() => UserCredentials) userCredentials: UserCredentials;
   @hasMany(() => Song) songs: Song[];
+  @hasMany(() => MediaCredentials) mediaCredentials: MediaCredentials[];
 
   constructor(data?: Partial<User>) {
     super(data);
@@ -32,6 +34,7 @@ export class User extends Entity {
 
 export interface UserRelations {
   userCredentials?: UserCredentialsWithRelations;
+  mediaCredentials?: MediaCredentialsWithRelations;
 }
 
 export type UserWithRelations = User & UserRelations;

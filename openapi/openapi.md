@@ -6,11 +6,11 @@
 
 * [Servers](#servers)
 * [Paths](#paths)
-  - [`DELETE` /now/delete/{credentialId}](#op-delete-now-delete-credentialid) 
-  - [`GET` /now/find](#op-get-now-find) 
+  - [`DELETE` /media/delete/{credentialId}](#op-delete-media-delete-credentialid) 
+  - [`GET` /media/find](#op-get-media-find) 
+  - [`GET` /media/{serviceId}/callback](#op-get-media-serviceid-callback) 
   - [`GET` /now/get](#op-get-now-get) 
   - [`POST` /now/set/{credentialId}](#op-post-now-set-credentialid) 
-  - [`GET` /now/{serviceId}/callback](#op-get-now-serviceid-callback) 
   - [`PUT` /song/add](#op-put-song-add) 
   - [`DELETE` /song/delete](#op-delete-song-delete) 
   - [`GET` /song/get](#op-get-song-get) 
@@ -21,8 +21,8 @@
   - [`POST` /user/register](#op-post-user-register) 
   - [`GET` /user/{userId}](#op-get-user-userid) 
 * [Schemas](#schemas)
+  - [MediaCredentials](#schema-mediacredentials)
   - [NowObject](#schema-nowobject)
-  - [NowCredentials](#schema-nowcredentials)
   - [Song](#schema-song)
   - [User](#schema-user)
   - [NewUser](#schema-newuser)
@@ -77,8 +77,8 @@
 ## Paths
 
 
-### `DELETE` /now/delete/{credentialId}
-<a id="op-delete-now-delete-credentialid" />
+### `DELETE` /media/delete/{credentialId}
+<a id="op-delete-media-delete-credentialid" />
 
 
 
@@ -134,8 +134,8 @@ _No headers specified_
 </div>
 </div>
 
-### `GET` /now/find
-<a id="op-get-now-find" />
+### `GET` /media/find
+<a id="op-get-media-find" />
 
 
 
@@ -222,14 +222,6 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.name <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
         <td>Response.type <strong>(required)</strong></td>
         <td>
           number
@@ -239,6 +231,14 @@ _No headers specified_
       </tr>
       <tr>
         <td>Response.token <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.name</td>
         <td>
           string
         </td>
@@ -264,13 +264,128 @@ _No headers specified_
   {
     "id": "string",
     "userId": "string",
-    "name": "string",
     "type": 0,
     "token": "string",
+    "name": "string",
     "scope": "string"
   }
 ]
 ```
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `GET` /media/{serviceId}/callback
+<a id="op-get-media-serviceid-callback" />
+
+
+
+#### Path parameters
+
+##### &#9655; serviceId
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>serviceId  <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td>path</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+
+#### Query parameters
+
+##### &#9655; code
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>code </td>
+        <td>
+          string
+        </td>
+        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### &#9655; state
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>state </td>
+        <td>
+          string
+        </td>
+        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 204 - Add your credential to Radiod and redirect to /close
+
+###### Headers
+_No headers specified_
+
 
 #### Tags
 
@@ -440,121 +555,6 @@ _No headers specified_
 
 
 ##### ▶ 204 - Set the default credential succeeed
-
-###### Headers
-_No headers specified_
-
-
-#### Tags
-
-<div class="tags">
-  <div class="tags__tag"></div>
-</div>
-</div>
-
-### `GET` /now/{serviceId}/callback
-<a id="op-get-now-serviceid-callback" />
-
-
-
-#### Path parameters
-
-##### &#9655; serviceId
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>In</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>serviceId  <strong>(required)</strong></td>
-        <td>
-          number
-        </td>
-        <td>path</td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-
-
-#### Query parameters
-
-##### &#9655; code
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>In</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>code </td>
-        <td>
-          string
-        </td>
-        <td>query</td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-##### &#9655; state
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>In</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>state </td>
-        <td>
-          string
-        </td>
-        <td>query</td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-
-
-
-
-#### Responses
-
-
-##### ▶ 204 - Add your credential to Radiod and redirect to /close
 
 ###### Headers
 _No headers specified_
@@ -1496,6 +1496,83 @@ _No headers specified_
 
 ## Schemas
 
+<a id="schema-mediacredentials" />
+
+#### MediaCredentials
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>id</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>userId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>token <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>scope</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+##### Example _(generated)_
+
+```json
+{
+  "id": "string",
+  "userId": "string",
+  "type": 0,
+  "token": "string",
+  "name": "string",
+  "scope": "string"
+}
+```
 <a id="schema-nowobject" />
 
 #### NowObject
@@ -1582,83 +1659,6 @@ _No headers specified_
   "release_date": "string",
   "cover": "string",
   "url": "string"
-}
-```
-<a id="schema-nowcredentials" />
-
-#### NowCredentials
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>id</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>userId</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>name <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>type <strong>(required)</strong></td>
-        <td>
-          number
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>token <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>scope</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-##### Example _(generated)_
-
-```json
-{
-  "id": "string",
-  "userId": "string",
-  "name": "string",
-  "type": 0,
-  "token": "string",
-  "scope": "string"
 }
 ```
 <a id="schema-song" />

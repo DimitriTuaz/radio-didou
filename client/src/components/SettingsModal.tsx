@@ -52,7 +52,7 @@ const CredentialItem = () => {
         let top = (window.screen.height - 500) / 4;
         window.open(
             spotify_url + '&client_id=' + client_id + '&scope=' + SettingStore.scope_playlist
-            + '&redirect_uri=' + OpenAPI.URL + '/now/1/callback'
+            + '&redirect_uri=' + OpenAPI.URL + '/media/1/callback'
             + '&state=' + userStore.user.id,
             'SpotifyLogin',
             `width=500,height=500,top=${top},left=${left}`);

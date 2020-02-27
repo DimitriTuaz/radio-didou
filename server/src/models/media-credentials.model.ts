@@ -1,4 +1,5 @@
-import { Entity, model, property } from '@loopback/repository';
+import { Entity, model, property, belongsTo } from '@loopback/repository';
+import { User } from '../models';
 
 @model({
   settings: {
@@ -16,21 +17,21 @@ import { Entity, model, property } from '@loopback/repository';
     },
   },
 })
-export class NowCredentials extends Entity {
+export class MediaCredentials extends Entity {
 
   @property({ type: 'string', id: true, generated: true }) id?: string;
-  @property({ type: 'string', required: false }) userId?: string;
-  @property({ type: 'string', required: true }) name: string;
+  @belongsTo(() => User) userId: string;
   @property({ type: 'number', required: true, default: 0 }) type: number;
   @property({ type: 'string', required: true }) token: string;
+  @property({ type: 'string', required: false }) name?: string;
   @property({ type: 'string', required: false }) scope?: string;
 
-  constructor(data?: Partial<NowCredentials>) {
+  constructor(data?: Partial<MediaCredentials>) {
     super(data);
   }
 }
 
-export interface NowCredentialsRelations {
+export interface MediaCredentialsRelations {
 }
 
-export type NowCredentialsWithRelations = NowCredentials & NowCredentialsRelations;
+export type MediaCredentialsWithRelations = MediaCredentials & MediaCredentialsRelations;
