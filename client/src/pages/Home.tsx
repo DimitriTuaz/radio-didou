@@ -9,7 +9,7 @@ import {
   UserModal,
   SongModal,
   CurrentTrack,
-  SettingsModal
+  SettingModal
 } from '../components';
 
 import { Grid } from 'semantic-ui-react';
@@ -33,7 +33,7 @@ export const Home = () => {
       <SideMenu />
       <UserModal />
       <SongModal />
-      <SettingsModal />
+      <SettingModal />
       <div id='main-container'>
         <div style={{ textAlign: "center" }}>
           <TopMenu />

@@ -1,9 +1,9 @@
 import { observable, action } from 'mobx';
 import { UserController } from '@openapi/routes'
 import { User } from '@openapi/schemas'
-import { CommonStore } from './CommonStore';
-import { MainStore } from './MainStore';
-import { SongStore, SongState } from './SongStore';
+
+import { CommonStore, MainStore, SettingStore, SongStore } from '../stores';
+import { SongState } from './SongStore';
 
 enum UserState {
     login,
@@ -16,6 +16,7 @@ export class UserStore {
     private commonStore: CommonStore;
     private mainStore: MainStore;
     private songStore: SongStore;
+    private settingStore: SettingStore;
 
     @observable loginLoading: boolean = false;
     @observable signupLoading: boolean = false;
@@ -31,10 +32,11 @@ export class UserStore {
     };
     @observable password: string = '';
 
-    constructor(commonStore: CommonStore, mainStore: MainStore, songStore: SongStore) {
+    constructor(commonStore: CommonStore, mainStore: MainStore, songStore: SongStore, settingStore: SettingStore) {
         this.commonStore = commonStore;
         this.mainStore = mainStore;
         this.songStore = songStore;
+        this.settingStore = settingStore;
     }
 
     @action
@@ -79,9 +81,7 @@ export class UserStore {
             this.loginLoading = false;
             this.userNotFound = false;
             if (!(this.commonStore.userState === UserState.connected)) {
-                this.commonStore.userState = UserState.connected;
                 await this.cookieLogin();
-                await this.songStore.refresh(this.mainStore.trackUrl);
             }
 
         } catch (error) {
@@ -111,7 +111,9 @@ export class UserStore {
                 this.user = await UserController.findById(this.user.id);
                 if (!(this.commonStore.userState === UserState.connected)) {
                     this.commonStore.userState = UserState.connected;
-                    await this.songStore.refresh(this.mainStore.trackUrl);
+                    this.songStore.refresh(this.mainStore.trackUrl);
+                    this.settingStore.obtainPlaybackCredential();
+                    this.settingStore.obtainPlaylistCredential();
                 }
             }
         } catch (error) {
