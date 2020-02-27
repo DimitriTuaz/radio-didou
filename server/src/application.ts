@@ -111,7 +111,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(RadiodBindings.TOKEN_SERVICE).toClass(JWTService);
     this.bind(TokenServiceBindings.TOKEN_SECRET).to(this.config.secret);
-    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to('43200');
+    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to((48 * 60 * 60).toString());
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 
