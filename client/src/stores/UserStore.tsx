@@ -28,7 +28,8 @@ export class UserStore {
     @observable user: User = {
         email: '',
         firstName: '',
-        lastName: ''
+        lastName: '',
+        power: 0
     };
 
     @observable password: string = '';
@@ -126,7 +127,8 @@ export class UserStore {
             this.user = {
                 email: '',
                 firstName: '',
-                lastName: ''
+                lastName: '',
+                power: 0
             };
             this.password = '';
             this.userState = UserState.login;

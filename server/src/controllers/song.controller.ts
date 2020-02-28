@@ -1,4 +1,4 @@
-import { get, param, getModelSchemaRef, put, del } from '@loopback/rest';
+import { get, param, getModelSchemaRef, put, del, RestHttpErrors, HttpErrors } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
@@ -44,7 +44,13 @@ export class SongController {
   async add(
     @param.query.string('url') url: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<Song> {
-    let trackURL: URL = new URL(url);
+    let trackURL: URL;
+    try {
+      trackURL = new URL(url);
+    } catch (error) {
+      console.log('[' + this.name + '] Invalid URL to add..');
+      throw new HttpErrors.BadRequest('Invalid URL')
+    }
     let track: any = await this.obtain_track(trackURL, true);
     let userId: string = currentUserProfile[securityId];
     let song: Song = new Song({

@@ -14,15 +14,24 @@ const client_id = spotify.client_id;
 
 export const SettingModal = () => {
 
+    const { userStore } = useStore();
+
     return (
         <React.Fragment>
             <Modal.Header>Mes paramètres</Modal.Header>
             <Modal.Content scrolling>
                 <Modal.Description>
-                    <Header>
-                        Actuellement...
-                    </Header>
-                    <CredentialItem scope={SpotifyScope.playback} />
+                    {(() => {
+                        if (userStore.user.power >= 10) {
+                            console.log(userStore.user.power);
+                            return (
+                                <React.Fragment>
+                                    <Header>Actuellement...</Header>
+                                    <CredentialItem scope={SpotifyScope.playback} />
+                                </React.Fragment>
+                            );
+                        }
+                    })()}
                     <Header>
                         Mon compte Spotify
                     </Header>

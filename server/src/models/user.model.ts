@@ -3,6 +3,12 @@ import { UserCredentials, UserCredentialsWithRelations } from './user-credential
 import { Song } from '../models';
 import { MediaCredentials, MediaCredentialsWithRelations } from './media-credentials.model';
 
+export enum UserPower {
+  NONE = 0,
+  DJ = 5,
+  ADMIN = 10
+}
+
 @model({
   settings: {
     indexes: {
@@ -21,6 +27,7 @@ export class User extends Entity {
 
   @property({ type: 'string', id: true, generated: true }) id: string;
   @property({ type: 'string', required: true }) email: string;
+  @property({ type: 'number', required: true, default: 0 }) power: number;
   @property({ type: 'string' }) firstName?: string;
   @property({ type: 'string' }) lastName?: string;
   @hasOne(() => UserCredentials) userCredentials: UserCredentials;

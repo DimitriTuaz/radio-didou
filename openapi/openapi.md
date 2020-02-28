@@ -1153,6 +1153,14 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>power <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>firstName</td>
         <td>
           string
@@ -1178,6 +1186,7 @@ _No headers specified_
 {
   "id": "string",
   "email": "string",
+  "power": 0,
   "firstName": "string",
   "lastName": "string"
 }
@@ -1215,7 +1224,7 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
-        <td>id</td>
+        <td>email <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -1223,7 +1232,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>email <strong>(required)</strong></td>
+        <td>password <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -1246,14 +1255,6 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
-      <tr>
-        <td>password <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
   </tbody>
 </table>
 
@@ -1262,11 +1263,10 @@ _No headers specified_
 
 ```json
 {
-  "id": "string",
   "email": "string",
+  "password": "string",
   "firstName": "string",
-  "lastName": "string",
-  "password": "string"
+  "lastName": "string"
 }
 ```
 
@@ -1312,6 +1312,14 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>power <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>firstName</td>
         <td>
           string
@@ -1337,6 +1345,7 @@ _No headers specified_
 {
   "id": "string",
   "email": "string",
+  "power": 0,
   "firstName": "string",
   "lastName": "string"
 }
@@ -1429,6 +1438,14 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>power <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>firstName</td>
         <td>
           string
@@ -1454,6 +1471,7 @@ _No headers specified_
 {
   "id": "string",
   "email": "string",
+  "power": 0,
   "firstName": "string",
   "lastName": "string"
 }
@@ -1750,6 +1768,14 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>power <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>firstName</td>
         <td>
           string
@@ -1774,6 +1800,7 @@ _No headers specified_
 {
   "id": "string",
   "email": "string",
+  "power": 0,
   "firstName": "string",
   "lastName": "string"
 }
@@ -1793,7 +1820,7 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
-        <td>id</td>
+        <td>email <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -1801,7 +1828,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>email <strong>(required)</strong></td>
+        <td>password <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -1824,14 +1851,6 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
-      <tr>
-        <td>password <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
   </tbody>
 </table>
 
@@ -1839,11 +1858,10 @@ _No headers specified_
 
 ```json
 {
-  "id": "string",
   "email": "string",
+  "password": "string",
   "firstName": "string",
-  "lastName": "string",
-  "password": "string"
+  "lastName": "string"
 }
 ```
 <a id="schema-logincredentials" />

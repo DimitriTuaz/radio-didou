@@ -32,8 +32,11 @@ import _ from 'lodash';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 
 @model()
-class NewUser extends User {
+class NewUser {
+  @property({ required: true }) email: string;
   @property({ required: true }) password: string;
+  @property({ required: false }) firstName?: string;
+  @property({ required: false }) lastName?: string;
 }
 
 @model()
@@ -77,7 +80,7 @@ export class UserController {
     validateCredentials(_.pick(newUser, ['email', 'password']));
     const password = await this.passwordHasher.hashPassword(newUser.password);
     try {
-      const savedUser = await this.userRepository.create(_.omit(newUser, 'id', 'password'));
+      const savedUser = await this.userRepository.create(_.omit(newUser, 'password'));
       await this.userRepository.userCredentials(savedUser.id).create({ password });
       return savedUser;
 

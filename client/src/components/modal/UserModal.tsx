@@ -8,7 +8,7 @@ import { useStore } from '../../hooks'
 export const UserModal = () => {
     const { userStore } = useStore();
 
-    return (
+    return useObserver(() => (
         <React.Fragment>
             {(() => {
                 switch (userStore.userState) {
@@ -21,7 +21,7 @@ export const UserModal = () => {
                 }
             })()}
         </React.Fragment>
-    );
+    ));
 }
 
 const LoginModal = () => {

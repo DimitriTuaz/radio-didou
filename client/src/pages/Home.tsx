@@ -31,7 +31,7 @@ export const Home = () => {
   });
 
   return (
-    <div className='full-height'>
+    <React.Fragment>
       <SideMenu />
       <ModalController>
         {{
@@ -53,6 +53,6 @@ export const Home = () => {
           </Grid.Row>
         </Grid>
       </div>
-    </div >
+    </React.Fragment>
   );
 };
