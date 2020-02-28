@@ -53,27 +53,23 @@ export class NowController {
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
     @param.query.string('userId') userId: string,
   ): Promise<void> {
-    try {
-      let credential: MediaCredentials | undefined = undefined;
-      if (userId.length > 0) {
-        let credentials: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
-          where: {
-            scope: 'user-read-playback-state'
-          }
-        });
-        if (credentials.length == 0)
-          throw new HttpErrors.NotFound('Spotify credential not found for this user.');
-        credential = credentials[0];
-        await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
+    let credential: MediaCredentials | undefined;
+    let credentials: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
+      where: {
+        scope: 'user-read-playback-state'
       }
-      else {
-        await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, 'none');
-      }
-      this.nowService.setFetcher(credential);
-    } catch (e) {
-      console.log(e);
+    });
+    if (credentials.length > 0) {
+      credential = credentials[0];
+      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
     }
+    else {
+      credential = undefined;
+      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, 'none');
+    }
+    this.nowService.setFetcher(credential);
   }
+
 
   @get('/now/find', {
     security: OPERATION_SECURITY_SPEC,

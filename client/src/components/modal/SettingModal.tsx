@@ -58,7 +58,7 @@ const CredentialDropdown = () => {
     const defaultOption = {
         key: 'default',
         text: 'Personne',
-        value: ''
+        value: 'none'
     };
 
     const [options, setOptions] = useState([defaultOption]);
@@ -71,14 +71,18 @@ const CredentialDropdown = () => {
                 value: user.id !== undefined ? user.id : 'undefined'
             }
         }));
-        opts = [defaultOption].concat(opts);
-        setOptions(opts);
+        setOptions([defaultOption].concat(opts));
     }, [settingStore.nowUsers]);
 
     const onChange = async (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
         if (data.value !== undefined) {
             let userId: string = data.value.toString();
-            await NowController.setMedia(userId);
+            try {
+                await NowController.setMedia(userId);
+            }
+            catch (error) {
+                console.error(error);
+            }
         }
     }
 
@@ -112,6 +116,8 @@ const CredentialItem = (props: CredentialItemProps) => {
 
     const onClose = () => {
         settingStore.obtainCredential(props.scope);
+        if (props.scope == SpotifyScope.playback)
+            settingStore.obtainNowUsers();
     }
 
     return useObserver(() => (

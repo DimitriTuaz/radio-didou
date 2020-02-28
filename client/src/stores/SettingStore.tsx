@@ -30,9 +30,7 @@ export class SettingStore {
     refresh = async () => {
         this.obtainCredential(SpotifyScope.playback);
         this.obtainCredential(SpotifyScope.playlist);
-        if (this.rootStore.userStore.user.power !== undefined
-            && this.rootStore.userStore.user.power >= 10)
-            this.obtainNowUsers();
+        this.obtainNowUsers();
     }
 
     @action
@@ -63,10 +61,13 @@ export class SettingStore {
 
     @action
     obtainNowUsers = async () => {
-        try {
-            this.nowUsers = await NowController.findMedia();
-        } catch (error) {
-            console.error(error);
+        if (this.rootStore.userStore.user.power !== undefined
+            && this.rootStore.userStore.user.power >= 10) {
+            try {
+                this.nowUsers = await NowController.findMedia();
+            } catch (error) {
+                console.error(error);
+            }
         }
     }
 }
