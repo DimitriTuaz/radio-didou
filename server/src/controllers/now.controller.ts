@@ -52,15 +52,15 @@ export class NowController {
   async setMedia(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
     @param.query.string('userId') userId: string,
-  ): Promise<void> {
+  ) {
     let credential: MediaCredentials | undefined;
-    let credentials: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
+    let data: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
       where: {
         scope: 'user-read-playback-state'
       }
     });
-    if (credentials.length > 0) {
-      credential = credentials[0];
+    if (data.length > 0) {
+      credential = data[0];
       await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
     }
     else {

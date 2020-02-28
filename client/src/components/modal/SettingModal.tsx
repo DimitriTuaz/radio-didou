@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useObserver } from 'mobx-react-lite'
-import { Modal, Header, Button, Card, Image, Icon, Dropdown, DropdownProps } from 'semantic-ui-react'
+import { Modal, Header, Button, Card, Image, Icon, Dropdown, DropdownProps, DropdownItemProps, Segment } from 'semantic-ui-react'
 
 import { OpenAPI } from '@openapi/.';
 import { useStore } from '../../hooks'
@@ -22,77 +22,86 @@ export const SettingModal = () => {
             <Modal.Header>Mes paramètres</Modal.Header>
             <Modal.Content scrolling>
                 <Modal.Description>
-                    {(() => {
-                        if (userStore.user.power !== undefined
-                            && userStore.user.power >= 10) {
-                            return (
-                                <CredentialDropdown />
-                            );
-                        }
-                    })()}
-                    {(() => {
-                        if (userStore.user.power !== undefined
-                            && userStore.user.power >= 5) {
-                            return (
-                                <React.Fragment>
-                                    <Header>Actuellement...</Header>
-                                    <CredentialItem scope={SpotifyScope.playback} />
-                                </React.Fragment>
-                            );
-                        }
-                    })()}
+                    {(userStore.user.power !== undefined && userStore.user.power >= 10) &&
+                        <CredentialDropdown />
+                    }
+                    {(userStore.user.power !== undefined && userStore.user.power >= 5) &&
+                        <React.Fragment >
+                            <Header>Actuellement...</Header>
+                            <CredentialItem scope={SpotifyScope.playback} />
+                        </React.Fragment>
+                    }
                     <Header>
                         Mon compte Spotify
                     </Header>
                     <CredentialItem scope={SpotifyScope.playlist} />
                 </Modal.Description>
             </Modal.Content>
-        </React.Fragment>
+        </React.Fragment >
     );
 }
 
 const CredentialDropdown = () => {
 
-    const { settingStore } = useStore();
-
-    const defaultOption = {
-        key: 'default',
+    const defaultOption: DropdownItemProps = {
+        key: 'none',
         text: 'Personne',
         value: 'none'
     };
 
+    const { settingStore } = useStore();
     const [options, setOptions] = useState([defaultOption]);
+    const [value, setValue] = useState();
+    const [disabled, setDisabled] = useState(true);
 
     useEffect(() => {
         let opts = settingStore.nowUsers.map((user => {
             return {
-                key: user.id !== undefined ? user.id : 'undefined',
+                key: user.id,
                 text: user.email,
-                value: user.id !== undefined ? user.id : 'undefined'
+                value: user.id
             }
         }));
+        setValue('');
         setOptions([defaultOption].concat(opts));
     }, [settingStore.nowUsers]);
 
-    const onChange = async (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
-        if (data.value !== undefined) {
-            let userId: string = data.value.toString();
-            try {
-                await NowController.setMedia(userId);
-            }
-            catch (error) {
-                console.error(error);
-            }
+    const handleChange = (e: any, data: DropdownProps) => {
+        setDisabled(false);
+        setValue(data.value);
+    }
+
+    const onClick = async () => {
+        try {
+            await NowController.setMedia(value);
+            setValue('');
+            setDisabled(true);
+        }
+        catch (error) {
+            console.error(error);
         }
     }
 
     return useObserver(() => (
-        < Dropdown
-            selection
-            placeholder='Qui on écoute?'
-            options={options}
-            onChange={onChange}
-        />
+        <React.Fragment>
+            {settingStore.nowUsers.length > 0 &&
+                <React.Fragment>
+                    <Dropdown
+                        onChange={handleChange}
+                        options={options}
+                        placeholder='Qui on écoute?'
+                        selection
+                        value={value}
+                    />
+                    <Button
+                        style={{ marginLeft: 10 }}
+                        onClick={onClick}
+                        disabled={disabled}>
+                        <Icon attached name='paper plane' />
+                    </Button>
+                </React.Fragment>
+            }
+        </React.Fragment >
     ));
 }
 
@@ -107,11 +116,15 @@ const CredentialItem = (props: CredentialItemProps) => {
         (window as any).closeCallback = onClose;
         let left = (window.screen.width - 500) / 2;
         let top = (window.screen.height - 500) / 4;
+
         window.open(
-            spotify_url + '&client_id=' + client_id + '&scope=' + props.scope
+            spotify_url
+            + '&client_id=' + client_id
+            + '&scope=' + props.scope
             + '&redirect_uri=' + OpenAPI.URL + '/media/1/callback',
             'SpotifyLogin',
-            `width=500,height=500,top=${top},left=${left}`);
+            `width=500,height=500,top=${top},left=${left}`
+        );
     }
 
     const onClose = () => {
@@ -149,7 +162,9 @@ const CredentialItem = (props: CredentialItemProps) => {
                                         {message}
                                     </Card.Description>
                                 </Card.Content>
-                                <Button attached onClick={() => settingStore.deleteCredential(props.scope)}>
+                                <Button attached onClick={
+                                    () => settingStore.deleteCredential(props.scope)
+                                }>
                                     <Icon name='trash' />
                                 </Button>
                             </Card>

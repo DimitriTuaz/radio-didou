@@ -50,8 +50,12 @@ export class SettingStore {
         try {
             if (this.credentials[scope] !== undefined) {
                 let credentialId = this.credentials[scope]?.id;
-                if (credentialId !== undefined)
+                if (credentialId !== undefined) {
                     await MediaController.deleteById(credentialId);
+                    if (scope == SpotifyScope.playback) {
+                        this.obtainNowUsers();
+                    }
+                }
                 this.credentials[scope] = undefined;
             }
         } catch (error) {
