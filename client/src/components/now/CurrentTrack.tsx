@@ -11,8 +11,7 @@ export const CurrentTrack = () => {
     return useObserver(() => (
         <div className='current-track-wrapper'>
             <div className='current-track-container'>
-                <a
-                    href={nowStore.trackUrl}
+                <div
                     onClick={() => { window.open(nowStore.trackUrl, '_blank') }}>
                     <Item.Group>
                         <Item>
@@ -36,7 +35,7 @@ export const CurrentTrack = () => {
                             </Item.Content>
                         </Item>
                     </Item.Group >
-                </a>
+                </div>
             </div>
         </div>
     ));
