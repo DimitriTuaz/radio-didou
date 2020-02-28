@@ -41,7 +41,7 @@ const SongItem = (props: SongProps) => {
             </List.Content>
             <List.Content
                 floated='right'
-                onClick={() => songStore.remove(nowStore.trackUrl, props.song.url)}>
+                onClick={() => songStore.remove(props.song.url)}>
                 <List.Icon name='trash alternate' size='large' verticalAlign='middle' />
             </List.Content>
         </List.Item>

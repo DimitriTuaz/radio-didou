@@ -1,5 +1,5 @@
 import { Entity, model, property, belongsTo } from '@loopback/repository';
-import { User } from '../models';
+import { User, UserWithRelations } from '../models';
 
 @model({
   settings: {
@@ -32,6 +32,7 @@ export class MediaCredentials extends Entity {
 }
 
 export interface MediaCredentialsRelations {
+  user?: UserWithRelations;
 }
 
 export type MediaCredentialsWithRelations = MediaCredentials & MediaCredentialsRelations;

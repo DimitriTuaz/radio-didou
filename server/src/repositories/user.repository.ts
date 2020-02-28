@@ -40,6 +40,8 @@ export class UserRepository extends DefaultCrudRepository<User, typeof User.prot
       'mediaCredentials',
       mediaCredentialsRepositoryGetter
     );
+
+    this.registerInclusionResolver('mediaCredentials', this.mediaCredentials.inclusionResolver);
   }
 
   async findCredentials(userId: typeof User.prototype.id): Promise<UserCredentials | undefined> {

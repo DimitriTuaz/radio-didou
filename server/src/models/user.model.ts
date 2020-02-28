@@ -27,7 +27,7 @@ export class User extends Entity {
 
   @property({ type: 'string', id: true, generated: true }) id: string;
   @property({ type: 'string', required: true }) email: string;
-  @property({ type: 'number', required: true, default: 0 }) power: number;
+  @property({ type: 'number', required: false }) power?: number;
   @property({ type: 'string' }) firstName?: string;
   @property({ type: 'string' }) lastName?: string;
   @hasOne(() => UserCredentials) userCredentials: UserCredentials;

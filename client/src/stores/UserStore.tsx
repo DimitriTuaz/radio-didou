@@ -2,7 +2,7 @@ import { observable, action } from 'mobx';
 import { UserController } from '@openapi/routes'
 import { User } from '@openapi/schemas'
 
-import { SongState, SpotifyScope } from '../stores';
+import { SongState } from '../stores';
 import { RootStore } from '../contexts';
 
 export enum UserState {
@@ -110,9 +110,8 @@ export class UserStore {
                 this.user = await UserController.findById(this.user.id);
                 if (!(this.userState === UserState.connected)) {
                     this.userState = UserState.connected;
-                    this.rootStore.songStore.refresh(this.rootStore.nowStore.trackUrl);
-                    this.rootStore.settingStore.obtainCredential(SpotifyScope.playback);
-                    this.rootStore.settingStore.obtainCredential(SpotifyScope.playlist);
+                    this.rootStore.songStore.refresh();
+                    this.rootStore.settingStore.refresh();
                 }
             }
         } catch (error) {

@@ -10,10 +10,10 @@ export class RootStore {
 
   constructor() {
     this.nowStore = new NowStore(this);
-    this.interfaceStore = new UIStore();
+    this.interfaceStore = new UIStore(this);
     this.userStore = new UserStore(this);
-    this.songStore = new SongStore();
-    this.settingStore = new SettingStore();
+    this.songStore = new SongStore(this);
+    this.settingStore = new SettingStore(this);
   }
 }
 

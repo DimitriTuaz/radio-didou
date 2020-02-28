@@ -1,13 +1,25 @@
-import { DefaultCrudRepository } from '@loopback/repository';
-import { MediaCredentials, MediaCredentialsRelations } from '../models';
+import { DefaultCrudRepository, BelongsToAccessor, repository } from '@loopback/repository';
+import { inject, Getter } from '@loopback/core';
+
+import { MediaCredentials, MediaCredentialsRelations, User } from '../models';
 import { MongoDataSource } from '../datasources';
-import { inject } from '@loopback/core';
+import { UserRepository } from '../repositories';
 
 export class MediaCredentialsRepository extends DefaultCrudRepository<
   MediaCredentials,
   typeof MediaCredentials.prototype.id,
   MediaCredentialsRelations> {
-  constructor(@inject('datasources.mongo') dataSource: MongoDataSource) {
+
+  public readonly user: BelongsToAccessor<User, typeof User.prototype.id>;
+
+  constructor(
+    @inject('datasources.mongo') dataSource: MongoDataSource,
+    @repository.getter('UserRepository') protected userRepositoryGetter: Getter<UserRepository>) {
     super(MediaCredentials, dataSource);
+    this.user = this.createBelongsToAccessorFor(
+      'user',
+      userRepositoryGetter,
+    );
+    this.registerInclusionResolver('user', this.user.inclusionResolver);
   }
 }

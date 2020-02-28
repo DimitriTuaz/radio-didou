@@ -12,7 +12,7 @@ export const Like = () => {
   const onClick = async () => {
     switch (songStore.state) {
       case SongState.liked:
-        await songStore.remove(nowStore.trackUrl, nowStore.trackUrl);
+        await songStore.remove(nowStore.trackUrl);
         break;
       case SongState.unliked:
         await songStore.add(nowStore.trackUrl);

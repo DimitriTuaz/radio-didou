@@ -34,11 +34,13 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: MediaCredentials = await this.credentialRepository.findById(crendentialID);
       this.setFetcher(credential);
-    } catch (e) { console.log("[NowService] setDefaultFetcher failed"); }
+    } catch (e) {
+      this.setFetcher(undefined);
+    }
   }
 
   public setFetcher(credentials?: MediaCredentials): void {
-    if (credentials == null) {
+    if (credentials == undefined) {
       this.fetcher = new NowNone();
     }
     else {

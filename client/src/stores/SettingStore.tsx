@@ -1,6 +1,8 @@
 import { observable, action } from 'mobx';
-import { MediaController } from '@openapi/routes'
-import { MediaCredentials } from '@openapi/schemas'
+import { MediaController, NowController } from '@openapi/routes'
+import { MediaCredentials, User } from '@openapi/schemas'
+
+import { RootStore } from '../contexts';
 
 export enum SpotifyScope {
     playback = 'user-read-playback-state',
@@ -11,9 +13,26 @@ type ScopedCredentials = { [key in SpotifyScope]: MediaCredentials | undefined }
 
 export class SettingStore {
 
+    private rootStore: RootStore;
+
     @observable credentials: ScopedCredentials = {
         [SpotifyScope.playback]: undefined,
         [SpotifyScope.playlist]: undefined
+    };
+
+    @observable nowUsers: User[] = [];
+
+    constructor(rootStore: RootStore) {
+        this.rootStore = rootStore;
+    }
+
+    @action
+    refresh = async () => {
+        this.obtainCredential(SpotifyScope.playback);
+        this.obtainCredential(SpotifyScope.playlist);
+        if (this.rootStore.userStore.user.power !== undefined
+            && this.rootStore.userStore.user.power >= 10)
+            this.obtainNowUsers();
     }
 
     @action
@@ -37,6 +56,15 @@ export class SettingStore {
                     await MediaController.deleteById(credentialId);
                 this.credentials[scope] = undefined;
             }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
+    @action
+    obtainNowUsers = async () => {
+        try {
+            this.nowUsers = await NowController.findMedia();
         } catch (error) {
             console.error(error);
         }

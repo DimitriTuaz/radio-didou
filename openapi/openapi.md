@@ -9,8 +9,9 @@
   - [`DELETE` /media/delete/{credentialId}](#op-delete-media-delete-credentialid) 
   - [`GET` /media/find](#op-get-media-find) 
   - [`GET` /media/{serviceId}/callback](#op-get-media-serviceid-callback) 
+  - [`GET` /now/find](#op-get-now-find) 
   - [`GET` /now/get](#op-get-now-get) 
-  - [`POST` /now/set/{credentialId}](#op-post-now-set-credentialid) 
+  - [`POST` /now/set](#op-post-now-set) 
   - [`PUT` /song/add](#op-put-song-add) 
   - [`DELETE` /song/delete](#op-delete-song-delete) 
   - [`GET` /song/get](#op-get-song-get) 
@@ -23,8 +24,8 @@
 * [Schemas](#schemas)
   - [MediaCredentials](#schema-mediacredentials)
   - [NowObject](#schema-nowobject)
-  - [Song](#schema-song)
   - [User](#schema-user)
+  - [Song](#schema-song)
   - [NewUser](#schema-newuser)
   - [LoginCredentials](#schema-logincredentials)
 
@@ -366,6 +367,112 @@ _No headers specified_
 </div>
 </div>
 
+### `GET` /now/find
+<a id="op-get-now-find" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 200 - Array of User model instances
+
+###### Headers
+_No headers specified_
+
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>Response</td>
+        <td>
+          array
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.id</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.email <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.power</td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.firstName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.lastName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+[
+  {
+    "id": "string",
+    "email": "string",
+    "power": 0,
+    "firstName": "string",
+    "lastName": "string"
+  }
+]
+```
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
 ### `GET` /now/get
 <a id="op-get-now-get" />
 
@@ -482,14 +589,16 @@ _No headers specified_
 </div>
 </div>
 
-### `POST` /now/set/{credentialId}
-<a id="op-post-now-set-credentialid" />
+### `POST` /now/set
+<a id="op-post-now-set" />
 
 
 
-#### Path parameters
 
-##### &#9655; credentialId
+
+#### Query parameters
+
+##### &#9655; userId
 
 
 
@@ -505,18 +614,16 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
-        <td>credentialId  <strong>(required)</strong></td>
+        <td>userId </td>
         <td>
           string
         </td>
-        <td>path</td>
+        <td>query</td>
         <td></td>
         <td><em>Any</em></td>
       </tr>
   </tbody>
 </table>
-
-
 
 
 
@@ -1153,7 +1260,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>power <strong>(required)</strong></td>
+        <td>power</td>
         <td>
           number
         </td>
@@ -1312,7 +1419,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>power <strong>(required)</strong></td>
+        <td>power</td>
         <td>
           number
         </td>
@@ -1438,7 +1545,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>power <strong>(required)</strong></td>
+        <td>power</td>
         <td>
           number
         </td>
@@ -1651,6 +1758,74 @@ _No headers specified_
   "url": "string"
 }
 ```
+<a id="schema-user" />
+
+#### User
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>id</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>email <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>power</td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>firstName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>lastName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+##### Example _(generated)_
+
+```json
+{
+  "id": "string",
+  "email": "string",
+  "power": 0,
+  "firstName": "string",
+  "lastName": "string"
+}
+```
 <a id="schema-song" />
 
 #### Song
@@ -1735,74 +1910,6 @@ _No headers specified_
   "artwork": "string",
   "url": "string",
   "userId": "string"
-}
-```
-<a id="schema-user" />
-
-#### User
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>id</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>email <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>power <strong>(required)</strong></td>
-        <td>
-          number
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>firstName</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>lastName</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-##### Example _(generated)_
-
-```json
-{
-  "id": "string",
-  "email": "string",
-  "power": 0,
-  "firstName": "string",
-  "lastName": "string"
 }
 ```
 <a id="schema-newuser" />

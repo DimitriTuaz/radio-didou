@@ -65,7 +65,7 @@ export class NowStore {
                 }
 
                 if (this.rootStore.userStore.userState === UserState.connected) {
-                    await this.rootStore.songStore.refresh(this.trackUrl);
+                    await this.rootStore.songStore.refresh();
                 }
             }
             this.auditorCount = auditorCount;

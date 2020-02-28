@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useObserver } from 'mobx-react-lite'
-import { Modal, Header, Button, Card, Image, Icon } from 'semantic-ui-react'
+import { Modal, Header, Button, Card, Image, Icon, Dropdown, DropdownProps } from 'semantic-ui-react'
 
 import { OpenAPI } from '@openapi/.';
 import { useStore } from '../../hooks'
@@ -8,6 +8,7 @@ import { SpotifyScope } from '../../stores';
 
 import { spotify } from '../../../../api_key_public.json'
 import { MediaCredentials } from '@openapi/schemas';
+import { NowController } from '@openapi/routes'
 
 const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&show_dialog=true';
 const client_id = spotify.client_id;
@@ -22,8 +23,16 @@ export const SettingModal = () => {
             <Modal.Content scrolling>
                 <Modal.Description>
                     {(() => {
-                        if (userStore.user.power >= 10) {
-                            console.log(userStore.user.power);
+                        if (userStore.user.power !== undefined
+                            && userStore.user.power >= 10) {
+                            return (
+                                <CredentialDropdown />
+                            );
+                        }
+                    })()}
+                    {(() => {
+                        if (userStore.user.power !== undefined
+                            && userStore.user.power >= 5) {
                             return (
                                 <React.Fragment>
                                     <Header>Actuellement...</Header>
@@ -40,6 +49,47 @@ export const SettingModal = () => {
             </Modal.Content>
         </React.Fragment>
     );
+}
+
+const CredentialDropdown = () => {
+
+    const { settingStore } = useStore();
+
+    const defaultOption = {
+        key: 'default',
+        text: 'Personne',
+        value: ''
+    };
+
+    const [options, setOptions] = useState([defaultOption]);
+
+    useEffect(() => {
+        let opts = settingStore.nowUsers.map((user => {
+            return {
+                key: user.id !== undefined ? user.id : 'undefined',
+                text: user.email,
+                value: user.id !== undefined ? user.id : 'undefined'
+            }
+        }));
+        opts = [defaultOption].concat(opts);
+        setOptions(opts);
+    }, [settingStore.nowUsers]);
+
+    const onChange = async (event: React.SyntheticEvent<HTMLElement, Event>, data: DropdownProps) => {
+        if (data.value !== undefined) {
+            let userId: string = data.value.toString();
+            await NowController.setMedia(userId);
+        }
+    }
+
+    return useObserver(() => (
+        < Dropdown
+            selection
+            placeholder='Qui on écoute?'
+            options={options}
+            onChange={onChange}
+        />
+    ));
 }
 
 interface CredentialItemProps {
