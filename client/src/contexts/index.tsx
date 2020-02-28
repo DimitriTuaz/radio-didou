@@ -1,17 +1,18 @@
 import React from 'react'
-import { UIStore, UserStore, SongStore, CommonStore, SettingStore } from '../stores';
+import { NowStore, UIStore, UserStore, SongStore, SettingStore } from '../stores';
 
-const commonStore = new CommonStore();
-const settingStore = new SettingStore();
+const userStore = new UserStore();
+
+const interfaceStore = new UIStore();
 const songStore = new SongStore();
+const settingStore = new SettingStore();
 
-const mainStore = new UIStore(commonStore, songStore);
-const userStore = new UserStore(commonStore, mainStore, songStore, settingStore);
+const nowStore = new NowStore(userStore, songStore);
 
 export const storesContext = React.createContext({
-  commonStore: commonStore,
-  mainStore: mainStore,
-  songStore: songStore,
+  nowStore: nowStore,
+  interfaceStore: interfaceStore,
   userStore: userStore,
+  songStore: songStore,
   settingStore: settingStore
 });

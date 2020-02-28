@@ -8,7 +8,7 @@ export enum SongState {
 }
 
 export class SongStore {
-    
+
     @observable state: SongState = SongState.unliked;
     @observable songs: Song[] = [];
 
@@ -31,7 +31,7 @@ export class SongStore {
                 return value.url !== url;
             });
             if (current_url === url) {
-                this.state = SongState.unliked;   
+                this.state = SongState.unliked;
             }
         } catch (error) {
             console.error(error);

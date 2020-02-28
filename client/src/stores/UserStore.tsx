@@ -2,11 +2,11 @@ import { observable, action } from 'mobx';
 import { UserController } from '@openapi/routes'
 import { User } from '@openapi/schemas'
 
-import { CommonStore, UIStore, SettingStore, SongStore } from '../stores';
+import { SettingStore, SongStore, NowStore } from '../stores';
 import { SongState } from './SongStore';
 import { SpotifyScope } from './SettingStore';
 
-enum UserState {
+export enum UserState {
     login,
     signup,
     connected
@@ -14,8 +14,7 @@ enum UserState {
 
 export class UserStore {
 
-    private commonStore: CommonStore;
-    private mainStore: UIStore;
+    private nowStore: NowStore;
     private songStore: SongStore;
     private settingStore: SettingStore;
 
@@ -26,16 +25,19 @@ export class UserStore {
     @observable passwordError: boolean = false;
     @observable lastNameError: boolean = false;
     @observable firstNameError: boolean = false;
+
+    @observable userState: UserState = UserState.login;
+
     @observable user: User = {
         email: '',
         firstName: '',
         lastName: ''
     };
+
     @observable password: string = '';
 
-    constructor(commonStore: CommonStore, mainStore: UIStore, songStore: SongStore, settingStore: SettingStore) {
-        this.commonStore = commonStore;
-        this.mainStore = mainStore;
+    constructor(nowStore: NowStore, songStore: SongStore, settingStore: SettingStore) {
+        this.nowStore = nowStore;
         this.songStore = songStore;
         this.settingStore = settingStore;
     }
@@ -81,7 +83,7 @@ export class UserStore {
             });
             this.loginLoading = false;
             this.userNotFound = false;
-            if (!(this.commonStore.userState === UserState.connected)) {
+            if (!(this.userState === UserState.connected)) {
                 await this.cookieLogin();
             }
 
@@ -110,9 +112,9 @@ export class UserStore {
         try {
             if (this.user.id !== undefined) {
                 this.user = await UserController.findById(this.user.id);
-                if (!(this.commonStore.userState === UserState.connected)) {
-                    this.commonStore.userState = UserState.connected;
-                    this.songStore.refresh(this.mainStore.trackUrl);
+                if (!(this.userState === UserState.connected)) {
+                    this.userState = UserState.connected;
+                    this.songStore.refresh(this.nowStore.trackUrl);
                     this.settingStore.obtainCredential(SpotifyScope.playback);
                     this.settingStore.obtainCredential(SpotifyScope.playlist);
                 }
@@ -132,7 +134,7 @@ export class UserStore {
                 lastName: ''
             };
             this.password = '';
-            this.commonStore.userState = UserState.login;
+            this.userState = UserState.login;
             this.songStore.state = SongState.unliked;
         } catch (error) {
             console.error(error);
