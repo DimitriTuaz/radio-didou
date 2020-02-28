@@ -23,7 +23,7 @@ export const SongModal = () => {
 }
 
 const SongItem = (props: SongProps) => {
-    const { mainStore, songStore } = useStore();
+    const { nowStore, songStore } = useStore();
 
     return (
         <List.Item>
@@ -41,7 +41,7 @@ const SongItem = (props: SongProps) => {
             </List.Content>
             <List.Content
                 floated='right'
-                onClick={() => songStore.remove(mainStore.trackUrl, props.song.url)}>
+                onClick={() => songStore.remove(nowStore.trackUrl, props.song.url)}>
                 <List.Icon name='trash alternate' size='large' verticalAlign='middle' />
             </List.Content>
         </List.Item>

@@ -7,15 +7,15 @@ import { useStore } from '../../hooks';
 
 export const Like = () => {
 
-  const { mainStore, songStore } = useStore();
+  const { nowStore, songStore } = useStore();
 
   const onClick = async () => {
     switch (songStore.state) {
       case SongState.liked:
-        await songStore.remove(mainStore.trackUrl, mainStore.trackUrl);
+        await songStore.remove(nowStore.trackUrl, nowStore.trackUrl);
         break;
       case SongState.unliked:
-        await songStore.add(mainStore.trackUrl);
+        await songStore.add(nowStore.trackUrl);
         break;
     }
   }

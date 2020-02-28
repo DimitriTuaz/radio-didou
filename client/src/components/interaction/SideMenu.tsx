@@ -8,22 +8,22 @@ import { ModalKey } from '../../components';
 
 export const SideMenu = () => {
 
-  const { commonStore, mainStore, songStore } = useStore();
+  const { userStore, interfaceStore, songStore } = useStore();
 
   const onClickLike = async () => {
     await songStore.get();
-    mainStore.showModal(ModalKey.SONG, true)
+    interfaceStore.showModal(ModalKey.SONG, true)
   }
 
   const onClickUser = () => {
-    if (commonStore.userState === UserState.signup) {
-      commonStore.userState = UserState.login;
+    if (userStore.userState === UserState.signup) {
+      userStore.userState = UserState.login;
     }
-    mainStore.showModal(ModalKey.USER, true)
+    interfaceStore.showModal(ModalKey.USER, true)
   }
 
   const onClickSettings = () => {
-    mainStore.showModal(ModalKey.SETTING, true)
+    interfaceStore.showModal(ModalKey.SETTING, true)
   }
 
   return useObserver(() => (
@@ -34,11 +34,11 @@ export const SideMenu = () => {
       direction='right'
       inverted
       vertical
-      visible={mainStore.activeSidebar}
+      visible={interfaceStore.activeSidebar}
       width='thin'
       color='blue'>
 
-      <Menu.Item as='a' onClick={() => mainStore.showSidebar(false)}>
+      <Menu.Item as='a' onClick={() => interfaceStore.showSidebar(false)}>
         <Icon name='angle right' />
       </Menu.Item>
 
@@ -47,7 +47,7 @@ export const SideMenu = () => {
       </Menu.Item>
 
       {(() => {
-        if (commonStore.userState === UserState.connected)
+        if (userStore.userState === UserState.connected)
           return (
             <Menu.Item as='a' onClick={onClickLike}>
               <Icon name='heart' />
@@ -56,7 +56,7 @@ export const SideMenu = () => {
       })()}
 
       {(() => {
-        if (commonStore.userState === UserState.connected)
+        if (userStore.userState === UserState.connected)
           return (
             <Menu.Item as='a' onClick={onClickSettings}>
               <Icon name='cog' />

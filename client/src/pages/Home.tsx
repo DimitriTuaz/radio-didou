@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
-import { useStore } from '../hooks'
+import { Grid } from 'semantic-ui-react';
 import '../App.less';
+
+import { useStore } from '../hooks'
 
 import {
   AuditorCount,
@@ -14,19 +16,17 @@ import {
   ModalKey
 } from '../components';
 
-import { Grid } from 'semantic-ui-react';
-
 export const Home = () => {
 
-  const { mainStore, userStore } = useStore();
+  const { nowStore, userStore } = useStore();
 
   useEffect(() => {
-    mainStore.getCurrentTrack();
-    mainStore.currentTrackIntervalId = window.setInterval(mainStore.getCurrentTrack, 3000);
+    nowStore.getCurrentTrack();
+    nowStore.currentTrackIntervalId = window.setInterval(nowStore.getCurrentTrack, 3000);
     userStore.cookieLogin();
 
     return () => {
-      clearInterval(mainStore.currentTrackIntervalId);
+      clearInterval(nowStore.currentTrackIntervalId);
     };
   });
 

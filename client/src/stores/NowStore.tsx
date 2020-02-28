@@ -2,12 +2,12 @@ import { action, observable } from "mobx";
 import { NowController } from '@openapi/routes';
 import { NowObject } from '@openapi/schemas';
 
-import { UserState, UserStore, SongStore } from "../stores";
+import { RootStore } from "../contexts";
+import { UserState } from "../stores";
 
 export class NowStore {
 
-    private userStore: UserStore;
-    private songStore: SongStore;
+    private rootStore: RootStore;
 
     @observable trackCover: string | undefined = undefined;
     @observable trackTitle: string | undefined = undefined;
@@ -18,9 +18,8 @@ export class NowStore {
 
     currentTrackIntervalId: number = 0;
 
-    constructor(userStore: UserStore, songStore: SongStore) {
-        this.userStore = userStore;
-        this.songStore = songStore;
+    constructor(rootStore: RootStore) {
+        this.rootStore = rootStore;
     }
 
     @action
@@ -65,8 +64,8 @@ export class NowStore {
                     });
                 }
 
-                if (this.userStore.userState === UserState.connected) {
-                    await this.songStore.refresh(this.trackUrl);
+                if (this.rootStore.userStore.userState === UserState.connected) {
+                    await this.rootStore.songStore.refresh(this.trackUrl);
                 }
             }
             this.auditorCount = auditorCount;

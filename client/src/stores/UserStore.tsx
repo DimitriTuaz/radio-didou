@@ -2,9 +2,8 @@ import { observable, action } from 'mobx';
 import { UserController } from '@openapi/routes'
 import { User } from '@openapi/schemas'
 
-import { SettingStore, SongStore, NowStore } from '../stores';
-import { SongState } from './SongStore';
-import { SpotifyScope } from './SettingStore';
+import { SongState, SpotifyScope } from '../stores';
+import { RootStore } from '../contexts';
 
 export enum UserState {
     login,
@@ -14,9 +13,7 @@ export enum UserState {
 
 export class UserStore {
 
-    private nowStore: NowStore;
-    private songStore: SongStore;
-    private settingStore: SettingStore;
+    private rootStore: RootStore;
 
     @observable loginLoading: boolean = false;
     @observable signupLoading: boolean = false;
@@ -36,10 +33,8 @@ export class UserStore {
 
     @observable password: string = '';
 
-    constructor(nowStore: NowStore, songStore: SongStore, settingStore: SettingStore) {
-        this.nowStore = nowStore;
-        this.songStore = songStore;
-        this.settingStore = settingStore;
+    constructor(rootStore: RootStore) {
+        this.rootStore = rootStore;
     }
 
     @action
@@ -114,9 +109,9 @@ export class UserStore {
                 this.user = await UserController.findById(this.user.id);
                 if (!(this.userState === UserState.connected)) {
                     this.userState = UserState.connected;
-                    this.songStore.refresh(this.nowStore.trackUrl);
-                    this.settingStore.obtainCredential(SpotifyScope.playback);
-                    this.settingStore.obtainCredential(SpotifyScope.playlist);
+                    this.rootStore.songStore.refresh(this.rootStore.nowStore.trackUrl);
+                    this.rootStore.settingStore.obtainCredential(SpotifyScope.playback);
+                    this.rootStore.settingStore.obtainCredential(SpotifyScope.playlist);
                 }
             }
         } catch (error) {
@@ -135,7 +130,7 @@ export class UserStore {
             };
             this.password = '';
             this.userState = UserState.login;
-            this.songStore.state = SongState.unliked;
+            this.rootStore.songStore.state = SongState.unliked;
         } catch (error) {
             console.error(error);
         }

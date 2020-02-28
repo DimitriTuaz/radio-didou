@@ -4,16 +4,16 @@ import { useStore } from '../../hooks';
 
 export const AuditorCount = () => {
 
-    const { mainStore } = useStore();
+    const { nowStore } = useStore();
 
     return useObserver(() => (
         <div className='current-listeners-container unselectable'>
             <p className='current-listeners'>
                 {
-                    mainStore.auditorCount === undefined ? '' :
-                        mainStore.auditorCount
+                    nowStore.auditorCount === undefined ? '' :
+                        nowStore.auditorCount
                         + ' auditeur'
-                        + (mainStore.auditorCount > 1 ? 's' : '')
+                        + (nowStore.auditorCount > 1 ? 's' : '')
                         + ' actuellement'
                 }
             </p>

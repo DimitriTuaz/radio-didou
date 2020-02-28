@@ -1,18 +1,28 @@
 import React from 'react'
 import { NowStore, UIStore, UserStore, SongStore, SettingStore } from '../stores';
 
-const userStore = new UserStore();
+export class RootStore {
+  public readonly nowStore: NowStore;
+  public readonly interfaceStore: UIStore;
+  public readonly userStore: UserStore;
+  public readonly songStore: SongStore;
+  public readonly settingStore: SettingStore;
 
-const interfaceStore = new UIStore();
-const songStore = new SongStore();
-const settingStore = new SettingStore();
+  constructor() {
+    this.nowStore = new NowStore(this);
+    this.interfaceStore = new UIStore();
+    this.userStore = new UserStore(this);
+    this.songStore = new SongStore();
+    this.settingStore = new SettingStore();
+  }
+}
 
-const nowStore = new NowStore(userStore, songStore);
+const rootStore = new RootStore();
 
 export const storesContext = React.createContext({
-  nowStore: nowStore,
-  interfaceStore: interfaceStore,
-  userStore: userStore,
-  songStore: songStore,
-  settingStore: settingStore
+  nowStore: rootStore.nowStore,
+  interfaceStore: rootStore.interfaceStore,
+  userStore: rootStore.userStore,
+  songStore: rootStore.songStore,
+  settingStore: rootStore.settingStore
 });

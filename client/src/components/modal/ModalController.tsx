@@ -16,7 +16,7 @@ interface ModalControllerProps {
 
 export const ModalController = (props: ModalControllerProps) => {
 
-  const { mainStore } = useStore();
+  const { interfaceStore } = useStore();
 
   return useObserver(() => (
     <React.Fragment>
@@ -24,9 +24,9 @@ export const ModalController = (props: ModalControllerProps) => {
         Object.entries(props.children).map(([key, element]) => {
           return (
             <Modal
-              open={mainStore.activeModal === key}
+              open={interfaceStore.activeModal === key}
               closeOnDimmerClick={true}
-              onClose={() => { mainStore.showModal(key, false) }}
+              onClose={() => { interfaceStore.showModal(key, false) }}
               closeIcon>
               {element}
             </Modal>

@@ -8,10 +8,10 @@ import { useStore } from '../../hooks';
 
 export const TopMenu = () => {
 
-  const { mainStore, commonStore } = useStore();
+  const { interfaceStore, userStore } = useStore();
 
   const onShowSidebar = () => {
-    mainStore.showSidebar(!mainStore.activeSidebar);
+    interfaceStore.showSidebar(!interfaceStore.activeSidebar);
   }
 
   return useObserver(() => (
@@ -20,7 +20,7 @@ export const TopMenu = () => {
         <Image
           size="mini"
           src={
-            commonStore.userState === UserState.connected ? 'avatar128.png' :
+            userStore.userState === UserState.connected ? 'avatar128.png' :
               'logo192.png'
           } />
       </Menu.Item>
@@ -28,14 +28,14 @@ export const TopMenu = () => {
         <Player />
       </Menu.Item>
       {(() => {
-        if (commonStore.userState === UserState.connected) {
+        if (userStore.userState === UserState.connected) {
           return <Like />
         }
       })()}
       <Menu.Item as='a' onClick={onShowSidebar}>
         <Icon
           fitted
-          rotated={mainStore.activeSidebar ? 'clockwise' : undefined}
+          rotated={interfaceStore.activeSidebar ? 'clockwise' : undefined}
           name='bars'
           color='teal'
           size='large'>

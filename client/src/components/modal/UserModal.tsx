@@ -6,12 +6,12 @@ import { UserState } from '../../stores'
 import { useStore } from '../../hooks'
 
 export const UserModal = () => {
-    const { commonStore } = useStore();
+    const { userStore } = useStore();
 
     return (
         <React.Fragment>
             {(() => {
-                switch (commonStore.userState) {
+                switch (userStore.userState) {
                     case UserState.connected:
                         return ConnectedModal();
                     case UserState.signup:
@@ -25,7 +25,7 @@ export const UserModal = () => {
 }
 
 const LoginModal = () => {
-    const { commonStore, userStore } = useStore();
+    const { userStore } = useStore();
 
     return useObserver(() => (
 
@@ -74,7 +74,7 @@ const LoginModal = () => {
                             icon='signup'
                             size='big'
                             primary
-                            onClick={() => commonStore.userState = UserState.signup}
+                            onClick={() => userStore.userState = UserState.signup}
                         />
                     </Grid.Column>
                 </Grid>
