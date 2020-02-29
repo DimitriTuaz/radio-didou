@@ -8,7 +8,7 @@ import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
 import { RadiodBindings } from '../keys';
 
-import { Song } from '../models';
+import { Song, UserPower } from '../models';
 import { UserRepository } from '../repositories';
 import { NowSpotify } from '../now';
 
@@ -40,7 +40,7 @@ export class SongController {
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async add(
     @param.query.string('url') url: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<Song> {
@@ -88,7 +88,7 @@ export class SongController {
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async get(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<Song[]> {
     let userId: string = currentUserProfile[securityId];
@@ -110,7 +110,7 @@ export class SongController {
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async is(
     @param.query.string('url') url: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<boolean> {
@@ -131,7 +131,7 @@ export class SongController {
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async remove(
     @param.query.string('url') url: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<void> {

@@ -9,7 +9,7 @@ import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 import { RadiodBindings } from '../keys';
 
 import { NowDeezer, NowSpotify, NowEnum } from '../now';
-import { MediaCredentials } from '../models';
+import { MediaCredentials, UserPower } from '../models';
 import { UserRepository } from '../repositories';
 
 import request = require('superagent');
@@ -38,7 +38,7 @@ export class MediaController {
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async find(
     @param.query.string('scope') scope: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<MediaCredentials[]> {
@@ -59,7 +59,7 @@ export class MediaController {
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async deleteById(
     @param.path.string('credentialId') credentialId: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<void> {
@@ -77,7 +77,7 @@ export class MediaController {
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async create(
     @param.path.number('serviceId') serviceId: number,
     @param.query.string('code') code: string,

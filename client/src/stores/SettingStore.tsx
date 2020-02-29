@@ -4,6 +4,12 @@ import { MediaCredentials, User } from '@openapi/schemas'
 
 import { RootStore } from '../contexts';
 
+export enum UserPower {
+    NONE = 0,
+    DJ = 5,
+    ADMIN = 10
+}
+
 export enum SpotifyScope {
     playback = 'user-read-playback-state',
     playlist = 'playlist-modify-public'
@@ -72,7 +78,7 @@ export class SettingStore {
     @action
     obtainNowUsers = async () => {
         if (this.rootStore.userStore.user.power !== undefined
-            && this.rootStore.userStore.user.power >= 10) {
+            && this.rootStore.userStore.user.power >= UserPower.ADMIN) {
             try {
                 this.nowUsers = await NowController.findMedia();
             } catch (error) {
@@ -84,7 +90,7 @@ export class SettingStore {
     @action
     obtainCurrentNowUser = async () => {
         if (this.rootStore.userStore.user.power !== undefined
-            && this.rootStore.userStore.user.power >= 10) {
+            && this.rootStore.userStore.user.power >= UserPower.ADMIN) {
             try {
                 let users: User[] = await NowController.getMedia();
                 this.currentNowUser = users[0];

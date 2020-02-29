@@ -4,7 +4,7 @@ import { Modal, Header, Button, Card, Image, Icon, Dropdown, DropdownProps, Drop
 
 import { OpenAPI } from '@openapi/.';
 import { useStore } from '../../hooks'
-import { SpotifyScope } from '../../stores';
+import { SpotifyScope, UserPower } from '../../stores';
 
 import { spotify } from '../../../../api_key_public.json'
 import { MediaCredentials, User } from '@openapi/schemas';
@@ -22,10 +22,10 @@ export const SettingModal = () => {
             <Modal.Header>Mes paramètres</Modal.Header>
             <Modal.Content scrolling>
                 <Modal.Description>
-                    {(userStore.user.power !== undefined && userStore.user.power >= 10) &&
+                    {(userStore.user.power !== undefined && userStore.user.power >= UserPower.ADMIN) &&
                         <CredentialDropdown />
                     }
-                    {(userStore.user.power !== undefined && userStore.user.power >= 5) &&
+                    {(userStore.user.power !== undefined && userStore.user.power >= UserPower.DJ) &&
                         <React.Fragment >
                             <Header>Actuellement...</Header>
                             <CredentialItem scope={SpotifyScope.playback} />

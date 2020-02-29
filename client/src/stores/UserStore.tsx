@@ -4,6 +4,7 @@ import { User } from '@openapi/schemas'
 
 import { SongState } from '../stores';
 import { RootStore } from '../contexts';
+import { UserPower } from './SettingStore';
 
 export enum UserState {
     login,
@@ -29,7 +30,7 @@ export class UserStore {
         email: '',
         firstName: '',
         lastName: '',
-        power: 0
+        power: UserPower.NONE
     };
 
     @observable password: string = '';
@@ -127,7 +128,7 @@ export class UserStore {
                 email: '',
                 firstName: '',
                 lastName: '',
-                power: 0
+                power: UserPower.NONE
             };
             this.password = '';
             this.userState = UserState.login;

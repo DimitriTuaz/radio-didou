@@ -9,7 +9,7 @@ import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 import { RadiodBindings, RadiodKeys } from '../keys';
 
 import { NowObject } from '../now';
-import { MediaCredentials, User } from '../models';
+import { MediaCredentials, User, UserPower } from '../models';
 import { MediaCredentialsRepository, UserRepository } from '../repositories';
 import { PersistentKeyService, NowService } from '../services';
 
@@ -48,9 +48,8 @@ export class NowController {
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async setMedia(
-    @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
     @param.query.string('userId') userId: string,
   ) {
     let credential: MediaCredentials | undefined;
@@ -87,11 +86,8 @@ export class NowController {
       },
     },
   })
-  @authenticate('jwt')
-  async findMedia(
-    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
-  ) {
-    let userId: string = currentUserProfile[securityId];
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
+  async findMedia() {
     let credentials = await this.credentialRepository.find({
       include: [
         {
@@ -121,11 +117,8 @@ export class NowController {
       },
     },
   })
-  @authenticate('jwt')
-  async getMedia(
-    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
-  ) {
-    let userId: string = currentUserProfile[securityId];
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
+  async getMedia() {
     let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
     let credentials = await this.credentialRepository.find({
       include: [
