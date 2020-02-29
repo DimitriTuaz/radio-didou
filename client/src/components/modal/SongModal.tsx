@@ -1,6 +1,6 @@
 import React from 'react'
 import { useObserver } from 'mobx-react-lite'
-import { Modal, List, Image } from 'semantic-ui-react'
+import { Modal, List, Image, Button, Icon } from 'semantic-ui-react'
 
 import { Song } from '@openapi/schemas';
 import { useStore } from '../../hooks'
@@ -12,13 +12,25 @@ interface SongProps {
 export const SongModal = () => {
     return (
         <React.Fragment>
-            <Modal.Header>Les chansons que j’aime</Modal.Header>
+            <Modal.Header style={{ display: 'flex' }}>
+                <div style={{ flexGrow: 1, padding: 5 }}>
+                    Les chansons que j’aime
+                </div>
+                <Button
+                    style={{ marginRight: 10 }}
+                    basic
+                    color='blue'
+                    disabled>
+                    <Icon name='spotify' />
+                    Spotify
+                </Button>
+            </Modal.Header>
             <Modal.Content scrolling>
                 <Modal.Description>
                     <SongList></SongList>
                 </Modal.Description>
             </Modal.Content>
-        </React.Fragment>
+        </React.Fragment >
     );
 }
 
