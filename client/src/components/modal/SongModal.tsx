@@ -1,6 +1,6 @@
 import React from 'react'
 import { useObserver } from 'mobx-react-lite'
-import { Modal, List, Image, Button, Icon } from 'semantic-ui-react'
+import { Modal, List, Image, Button, Icon, Popup } from 'semantic-ui-react'
 
 import { Song } from '@openapi/schemas';
 import { useStore } from '../../hooks'
@@ -16,14 +16,7 @@ export const SongModal = () => {
                 <div style={{ flexGrow: 1, padding: 5 }}>
                     Les chansons que j’aime
                 </div>
-                <Button
-                    style={{ marginRight: 10 }}
-                    basic
-                    color='blue'
-                    disabled>
-                    <Icon name='spotify' />
-                    Spotify
-                </Button>
+                <SpotifyButtonDisabled />
             </Modal.Header>
             <Modal.Content scrolling>
                 <Modal.Description>
@@ -31,6 +24,24 @@ export const SongModal = () => {
                 </Modal.Description>
             </Modal.Content>
         </React.Fragment >
+    );
+}
+
+const SpotifyButtonDisabled = () => {
+    return (
+        <Popup
+            trigger={
+                <div>
+                    <Button basic disabled color='blue'>
+                        <Icon name='spotify' />
+                        Spotify
+                    </Button>
+                </div>
+            }
+            header='Synchronisation'
+            content="Ajoutez votre compte Spotify dans les paramètres."
+            on={['hover']}
+        />
     );
 }
 
