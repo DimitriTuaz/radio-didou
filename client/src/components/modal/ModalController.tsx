@@ -24,6 +24,7 @@ export const ModalController = (props: ModalControllerProps) => {
         Object.entries(props.children).map(([key, element]) => {
           return (
             <Modal
+              key={key}
               open={interfaceStore.activeModal === key}
               closeOnDimmerClick={true}
               onClose={() => { interfaceStore.showModal(key, false) }}

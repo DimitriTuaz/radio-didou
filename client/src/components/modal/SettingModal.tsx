@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useObserver } from 'mobx-react-lite'
-import { Modal, Header, Button, Card, Image, Icon, Dropdown, DropdownProps, DropdownItemProps, Segment } from 'semantic-ui-react'
+import { Modal, Header, Button, Card, Image, Icon, Dropdown } from 'semantic-ui-react'
 
 import { OpenAPI } from '@openapi/.';
 import { useStore } from '../../hooks'
@@ -50,7 +50,7 @@ const CredentialDropdown = () => {
 
     useEffect(() => {
         setOptions(defaultOptions.concat(settingStore.nowUsers));
-    }, [settingStore.nowUsers]);
+    }, [defaultOptions, settingStore.nowUsers]);
 
     const onClick = async (user: (User | undefined)) => {
         try {
@@ -114,7 +114,7 @@ const CredentialItem = (props: CredentialItemProps) => {
 
     const onClose = () => {
         settingStore.obtainCredential(props.scope);
-        if (props.scope == SpotifyScope.playback)
+        if (props.scope === SpotifyScope.playback)
             settingStore.obtainNowUsers();
     }
 

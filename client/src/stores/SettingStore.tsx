@@ -60,7 +60,7 @@ export class SettingStore {
                 let credentialId = this.credentials[scope]?.id;
                 if (credentialId !== undefined) {
                     await MediaController.deleteById(credentialId);
-                    if (scope == SpotifyScope.playback) {
+                    if (scope === SpotifyScope.playback) {
                         if (this.currentNowUser?.id === this.rootStore.userStore.user.id) {
                             await NowController.setMedia('undefined');
                             this.currentNowUser = undefined;

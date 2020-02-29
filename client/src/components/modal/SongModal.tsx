@@ -23,7 +23,7 @@ export const SongModal = () => {
 }
 
 const SongItem = (props: SongProps) => {
-    const { nowStore, songStore } = useStore();
+    const { songStore } = useStore();
 
     return (
         <List.Item>
