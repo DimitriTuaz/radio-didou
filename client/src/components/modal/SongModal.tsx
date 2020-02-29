@@ -10,13 +10,27 @@ interface SongProps {
 }
 
 export const SongModal = () => {
-    return (
+
+    const { settingStore } = useStore();
+
+    return useObserver(() => (
         <React.Fragment>
             <Modal.Header style={{ display: 'flex' }}>
                 <div style={{ flexGrow: 1, padding: 5 }}>
                     Les chansons que j’aime
                 </div>
-                <SpotifyButtonDisabled />
+                {(() => {
+                    if (settingStore.credentials["playlist-modify-public"] !== undefined) {
+                        return (
+                            <SpotifyButton />
+                        );
+                    }
+                    else {
+                        return (
+                            <SpotifyButtonDisabled />
+                        );
+                    }
+                })()}
             </Modal.Header>
             <Modal.Content scrolling>
                 <Modal.Description>
@@ -24,14 +38,34 @@ export const SongModal = () => {
                 </Modal.Description>
             </Modal.Content>
         </React.Fragment >
+    ));
+}
+
+const SpotifyButton = () => {
+    return (
+        <Popup
+            basic
+            trigger={
+                <div style={{ marginRight: 5 }}>
+                    <Button basic color='blue'>
+                        <Icon name='spotify' />
+                        Spotify
+                    </Button>
+                </div>
+            }
+            header='Synchronisation'
+            content="Ajoutez votre compte Spotify dans les paramètres."
+            on={['click']}
+        />
     );
 }
 
 const SpotifyButtonDisabled = () => {
     return (
         <Popup
+            basic
             trigger={
-                <div>
+                <div style={{ marginRight: 5 }}>
                     <Button basic disabled color='blue'>
                         <Icon name='spotify' />
                         Spotify
