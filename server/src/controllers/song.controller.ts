@@ -152,7 +152,8 @@ export class SongController {
   })
   @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async synchronize(
-    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
+    @param.query.string('name', { required: false }) name?: string,
   ) {
     let userId: string = currentUserProfile[securityId];
     let user = await this.userRepository.findOne({
