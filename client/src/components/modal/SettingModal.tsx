@@ -7,7 +7,7 @@ import { useStore } from '../../hooks'
 import { SpotifyScope } from '../../stores';
 
 import { spotify } from '../../../../api_key_public.json'
-import { MediaCredentials } from '@openapi/schemas';
+import { MediaCredentials, User } from '@openapi/schemas';
 import { NowController } from '@openapi/routes'
 
 const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&show_dialog=true';
@@ -43,39 +43,22 @@ export const SettingModal = () => {
 
 const CredentialDropdown = () => {
 
-    const defaultOption: DropdownItemProps = {
-        key: 'none',
-        text: 'Personne',
-        value: 'none'
-    };
+    const defaultOptions: (User | undefined)[] = [undefined];
 
     const { settingStore } = useStore();
-    const [options, setOptions] = useState([defaultOption]);
-    const [value, setValue] = useState();
-    const [disabled, setDisabled] = useState(true);
+    const [options, setOptions] = useState(defaultOptions);
 
     useEffect(() => {
-        let opts = settingStore.nowUsers.map((user => {
-            return {
-                key: user.id,
-                text: user.email,
-                value: user.id
-            }
-        }));
-        setValue('');
-        setOptions([defaultOption].concat(opts));
+        setOptions(defaultOptions.concat(settingStore.nowUsers));
     }, [settingStore.nowUsers]);
 
-    const handleChange = (e: any, data: DropdownProps) => {
-        setDisabled(false);
-        setValue(data.value);
-    }
-
-    const onClick = async () => {
+    const onClick = async (user: (User | undefined)) => {
         try {
-            await NowController.setMedia(value);
-            setValue('');
-            setDisabled(true);
+            if (user === undefined)
+                await NowController.setMedia('undefined');
+            else if (user.id !== undefined)
+                await NowController.setMedia(user.id);
+            settingStore.currentNowUser = user;
         }
         catch (error) {
             console.error(error);
@@ -87,18 +70,20 @@ const CredentialDropdown = () => {
             {settingStore.nowUsers.length > 0 &&
                 <React.Fragment>
                     <Dropdown
-                        onChange={handleChange}
-                        options={options}
-                        placeholder='Qui on écoute?'
+                        text='Qui on écoute?'
                         selection
-                        value={value}
-                    />
-                    <Button
-                        style={{ marginLeft: 10 }}
-                        onClick={onClick}
-                        disabled={disabled}>
-                        <Icon attached name='paper plane' />
-                    </Button>
+                        item>
+                        <Dropdown.Menu>
+                            <Dropdown.Header content='Compte Radio-didou' />
+                            {options.map((user) => (
+                                <Dropdown.Item
+                                    key={user !== undefined ? user.id : undefined}
+                                    text={user !== undefined ? user.email : 'Aucun'}
+                                    onClick={() => onClick(user)}
+                                    active={user?.id === settingStore.currentNowUser?.id} />
+                            ))}
+                        </Dropdown.Menu>
+                    </Dropdown>
                 </React.Fragment>
             }
         </React.Fragment >

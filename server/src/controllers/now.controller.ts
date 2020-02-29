@@ -1,4 +1,4 @@
-import { get, param, post, getModelSchemaRef, HttpErrors } from '@loopback/rest';
+import { get, param, post, getModelSchemaRef } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
@@ -25,7 +25,7 @@ export class NowController {
   @get('/now/get', {
     responses: {
       '200': {
-        description: 'Informations about the current song',
+        description: 'Return informations about the current song',
         content: {
           'application/json': {
             schema: {
@@ -75,7 +75,7 @@ export class NowController {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
-        description: 'Array of User model instances',
+        description: 'Return an array of users with a Spotify account.',
         content: {
           'application/json': {
             schema: {
@@ -100,9 +100,41 @@ export class NowController {
       ],
       where: {
         scope: 'user-read-playback-state'
-      },
-      fields: {
+      }
+    });
+    return credentials.map(value => value.user);
+  }
 
+  @get('/now/who', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Return the selected user for displaying the current track',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(User),
+            },
+          },
+        },
+      },
+    },
+  })
+  @authenticate('jwt')
+  async getMedia(
+    @inject(SecurityBindings.USER) currentUserProfile: UserProfile
+  ) {
+    let userId: string = currentUserProfile[securityId];
+    let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
+    let credentials = await this.credentialRepository.find({
+      include: [
+        {
+          relation: 'user',
+        },
+      ],
+      where: {
+        id: crendentialID
       }
     });
     return credentials.map(value => value.user);

@@ -12,6 +12,7 @@
   - [`GET` /now/find](#op-get-now-find) 
   - [`GET` /now/get](#op-get-now-get) 
   - [`POST` /now/set](#op-post-now-set) 
+  - [`GET` /now/who](#op-get-now-who) 
   - [`PUT` /song/add](#op-put-song-add) 
   - [`DELETE` /song/delete](#op-delete-song-delete) 
   - [`GET` /song/get](#op-get-song-get) 
@@ -381,7 +382,7 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Array of User model instances
+##### ▶ 200 - Return an array of users with a Spotify account.
 
 ###### Headers
 _No headers specified_
@@ -487,7 +488,7 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Informations about the current song
+##### ▶ 200 - Return informations about the current song
 
 ###### Headers
 _No headers specified_
@@ -638,6 +639,112 @@ _No headers specified_
 ###### Headers
 _No headers specified_
 
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `GET` /now/who
+<a id="op-get-now-who" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 200 - Return the selected user for displaying the current track
+
+###### Headers
+_No headers specified_
+
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>Response</td>
+        <td>
+          array
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.id</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.email <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.power</td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.firstName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.lastName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+[
+  {
+    "id": "string",
+    "email": "string",
+    "power": 0,
+    "firstName": "string",
+    "lastName": "string"
+  }
+]
+```
 
 #### Tags
 

@@ -21,6 +21,7 @@ export class SettingStore {
     };
 
     @observable nowUsers: User[] = [];
+    @observable currentNowUser: User | undefined;
 
     constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
@@ -30,6 +31,7 @@ export class SettingStore {
     refresh = async () => {
         this.obtainCredential(SpotifyScope.playback);
         this.obtainCredential(SpotifyScope.playlist);
+        this.obtainCurrentNowUser();
         this.obtainNowUsers();
     }
 
@@ -53,6 +55,10 @@ export class SettingStore {
                 if (credentialId !== undefined) {
                     await MediaController.deleteById(credentialId);
                     if (scope == SpotifyScope.playback) {
+                        if (this.currentNowUser?.id === this.rootStore.userStore.user.id) {
+                            await NowController.setMedia('undefined');
+                            this.currentNowUser = undefined;
+                        }
                         this.obtainNowUsers();
                     }
                 }
@@ -69,6 +75,19 @@ export class SettingStore {
             && this.rootStore.userStore.user.power >= 10) {
             try {
                 this.nowUsers = await NowController.findMedia();
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    }
+
+    @action
+    obtainCurrentNowUser = async () => {
+        if (this.rootStore.userStore.user.power !== undefined
+            && this.rootStore.userStore.user.power >= 10) {
+            try {
+                let users: User[] = await NowController.getMedia();
+                this.currentNowUser = users[0];
             } catch (error) {
                 console.error(error);
             }
