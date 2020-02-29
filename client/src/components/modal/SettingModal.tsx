@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { Modal, Header, Button, Card, Image, Icon, Dropdown } from 'semantic-ui-react'
 
@@ -43,14 +43,10 @@ export const SettingModal = () => {
 
 const CredentialDropdown = () => {
 
-    const defaultOptions: (User | undefined)[] = [undefined];
-
     const { settingStore } = useStore();
-    const [options, setOptions] = useState(defaultOptions);
 
-    useEffect(() => {
-        setOptions(defaultOptions.concat(settingStore.nowUsers));
-    }, [defaultOptions, settingStore.nowUsers]);
+    const defaultOptions: (User | undefined)[] = [undefined];
+    const options = defaultOptions.concat(settingStore.nowUsers);
 
     const onClick = async (user: (User | undefined)) => {
         try {
