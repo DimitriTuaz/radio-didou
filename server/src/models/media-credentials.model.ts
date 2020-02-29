@@ -23,6 +23,7 @@ export class MediaCredentials extends Entity {
   @belongsTo(() => User) userId: string;
   @property({ type: 'number', required: true, default: 0 }) type: number;
   @property({ type: 'string', required: true }) token: string;
+  @property({ type: 'string', required: true }) identifier: string;
   @property({ type: 'string', required: false }) name?: string;
   @property({ type: 'string', required: false }) scope?: string;
 

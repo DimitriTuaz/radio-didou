@@ -2,16 +2,23 @@ import request from 'superagent'
 
 import { NowFetcher, NowEnum, NowObject } from '../now';
 
+export enum SpotifyScope {
+  playback = 'user-read-playback-state',
+  playlist = 'playlist-modify-public'
+}
+
 export class NowSpotify extends NowFetcher {
 
   public static player_url = 'https://api.spotify.com/v1/me/player';
-  public static user_url = 'https://api.spotify.com/v1/me'
+  public static me_url = 'https://api.spotify.com/v1/me'
   public static token_url = 'https://accounts.spotify.com/api/token';
-  public static track_url = 'https://api.spotify.com/v1/tracks';
+  public static tracks_url = 'https://api.spotify.com/v1/tracks';
+  public static users_url = 'https://api.spotify.com/v1/users';
+  public static playlists_url = 'https://api.spotify.com/v1/playlists';
 
   public name = "Spotify";
 
-  private access_token: string;
+  private access_token: string | undefined;
   private refresh_token: string;
   private api_key: any;
 
@@ -67,7 +74,11 @@ export class NowSpotify extends NowFetcher {
     }
     catch (error) {
       if (retryOnce) {
-        await this.obtain_access_token();
+        this.access_token = await NowSpotify.obtain_user_access_token(
+          this.refresh_token,
+          this.api_key.client_id,
+          this.api_key.secret
+        );
         await this.obtain_current_playback(false);
       }
       else {
@@ -76,9 +87,12 @@ export class NowSpotify extends NowFetcher {
     }
   }
 
-  private async obtain_access_token(): Promise<void> {
+  public static async obtain_user_access_token(refresh_token: string | undefined, client_id: string, secret: string
+  ): Promise<string | undefined> {
+    if (refresh_token == undefined)
+      throw new Error('Please provide a refresh token');
     try {
-      const authorization = Buffer.from(this.api_key.client_id + ':' + this.api_key.secret)
+      const authorization = Buffer.from(client_id + ':' + secret)
         .toString('base64');
 
       const response = await request
@@ -87,16 +101,16 @@ export class NowSpotify extends NowFetcher {
         .set('Authorization', 'Basic ' + authorization)
         .send({
           grant_type: 'refresh_token',
-          refresh_token: this.refresh_token
+          refresh_token: refresh_token
         });
       const data = response.body;
       if ('access_token' in data) {
-        this.access_token = data.access_token;
-        console.log("[" + this.name + "] obtain_access_token succeeded")
+        console.log("[Spotify] obtain_user_access_token succeeded")
+        return data.access_token;
       }
     }
     catch (error) {
-      console.log("[" + this.name + "] error in obtain_access_token")
+      console.log("[Spotify] error in obtain_user_access_token")
     }
   }
 }

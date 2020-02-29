@@ -33,6 +33,7 @@ export class User extends Entity {
   @hasOne(() => UserCredentials) userCredentials: UserCredentials;
   @hasMany(() => Song) songs: Song[];
   @hasMany(() => MediaCredentials) mediaCredentials: MediaCredentials[];
+  @property({ type: 'string', required: false }) playlistId?: string;
 
   constructor(data?: Partial<User>) {
     super(data);

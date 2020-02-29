@@ -17,7 +17,6 @@ import { JWTService } from '../services';
 import { inject } from '@loopback/core';
 import {
   authenticate,
-  TokenService,
   UserService,
 } from '@loopback/authentication';
 import { UserProfile, securityId, SecurityBindings } from '@loopback/security';

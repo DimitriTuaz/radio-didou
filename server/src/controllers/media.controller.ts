@@ -87,7 +87,7 @@ export class MediaController {
 
     let userId: string = currentUserProfile[securityId];
     let token: string = '';
-
+    let identifier: string = '';
     let name: string | undefined = undefined;
     let scope: string | undefined = undefined;
 
@@ -107,14 +107,14 @@ export class MediaController {
 
           let data = await this.obtainSpotifyToken(code, redirect_uri);
           token = data.refresh_token;
-          name = await this.obtainSpotifyName(data.access_token);
+          [identifier, name] = await this.obtainSpotifyUser(data.access_token);
           scope = data.scope;
           break;
         }
       case NowEnum.Deezer:
         {
           token = await this.obtainDeezerToken(code);
-          name = await this.obtainDeezerName(token);
+          [identifier, name] = await this.obtainDeezerUser(token);
           break;
         }
     }
@@ -123,6 +123,7 @@ export class MediaController {
       name: name,
       type: serviceId,
       token: token,
+      identifier: identifier,
       scope: scope
     }));
     response.redirect('/close');
@@ -144,14 +145,14 @@ export class MediaController {
     return response.body;
   }
 
-  private async obtainSpotifyName(access_token: string): Promise<string> {
+  private async obtainSpotifyUser(access_token: string) {
     try {
       const response = await request
-        .get(NowSpotify.user_url)
+        .get(NowSpotify.me_url)
         .set('Accept', 'application/json')
         .set('Content-Type', 'application/json')
         .set('Authorization', 'Bearer ' + access_token);
-      return response.body.display_name
+      return [response.body.id, response.body.display_name];
     }
     catch (e) {
       console.log('[MediaController] error: unable to obtain spotify name.')
@@ -169,13 +170,13 @@ export class MediaController {
     return response.body.access_token;
   }
 
-  private async obtainDeezerName(access_token: string): Promise<string> {
+  private async obtainDeezerUser(access_token: string) {
     try {
       const response = await request
         .get(NowDeezer.user_url)
         .query({ access_token: access_token })
         .query({ output: "json" })
-      return response.body.name;
+      return [response.body.id, response.body.name];
     }
     catch (e) {
       console.log('[MediaController] error: unable to obtain deezer name.')

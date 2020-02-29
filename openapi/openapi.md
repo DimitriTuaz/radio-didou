@@ -17,6 +17,7 @@
   - [`DELETE` /song/delete](#op-delete-song-delete) 
   - [`GET` /song/get](#op-get-song-get) 
   - [`GET` /song/is](#op-get-song-is) 
+  - [`POST` /song/synchronize](#op-post-song-synchronize) 
   - [`POST` /user/login](#op-post-user-login) 
   - [`POST` /user/logout](#op-post-user-logout) 
   - [`GET` /user/me](#op-get-user-me) 
@@ -240,6 +241,14 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>Response.identifier <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>Response.name</td>
         <td>
           string
@@ -268,6 +277,7 @@ _No headers specified_
     "userId": "string",
     "type": 0,
     "token": "string",
+    "identifier": "string",
     "name": "string",
     "scope": "string"
   }
@@ -449,6 +459,14 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
+      <tr>
+        <td>Response.playlistId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
   </tbody>
 </table>
 
@@ -462,7 +480,8 @@ _No headers specified_
     "email": "string",
     "power": 0,
     "firstName": "string",
-    "lastName": "string"
+    "lastName": "string",
+    "playlistId": "string"
   }
 ]
 ```
@@ -728,6 +747,14 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
+      <tr>
+        <td>Response.playlistId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
   </tbody>
 </table>
 
@@ -741,7 +768,8 @@ _No headers specified_
     "email": "string",
     "power": 0,
     "firstName": "string",
-    "lastName": "string"
+    "lastName": "string",
+    "playlistId": "string"
   }
 ]
 ```
@@ -1166,6 +1194,33 @@ true
 </div>
 </div>
 
+### `POST` /song/synchronize
+<a id="op-post-song-synchronize" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 204 - The synchronization with Spotify is a success.
+
+###### Headers
+_No headers specified_
+
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
 ### `POST` /user/login
 <a id="op-post-user-login" />
 
@@ -1390,6 +1445,14 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
+      <tr>
+        <td>playlistId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
   </tbody>
 </table>
 
@@ -1402,7 +1465,8 @@ _No headers specified_
   "email": "string",
   "power": 0,
   "firstName": "string",
-  "lastName": "string"
+  "lastName": "string",
+  "playlistId": "string"
 }
 ```
 
@@ -1549,6 +1613,14 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
+      <tr>
+        <td>playlistId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
   </tbody>
 </table>
 
@@ -1561,7 +1633,8 @@ _No headers specified_
   "email": "string",
   "power": 0,
   "firstName": "string",
-  "lastName": "string"
+  "lastName": "string",
+  "playlistId": "string"
 }
 ```
 
@@ -1675,6 +1748,14 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
+      <tr>
+        <td>playlistId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
   </tbody>
 </table>
 
@@ -1687,7 +1768,8 @@ _No headers specified_
   "email": "string",
   "power": 0,
   "firstName": "string",
-  "lastName": "string"
+  "lastName": "string",
+  "playlistId": "string"
 }
 ```
 
@@ -1747,6 +1829,14 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>identifier <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>name</td>
         <td>
           string
@@ -1773,6 +1863,7 @@ _No headers specified_
   "userId": "string",
   "type": 0,
   "token": "string",
+  "identifier": "string",
   "name": "string",
   "scope": "string"
 }
@@ -1919,6 +2010,14 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
+      <tr>
+        <td>playlistId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
   </tbody>
 </table>
 
@@ -1930,7 +2029,8 @@ _No headers specified_
   "email": "string",
   "power": 0,
   "firstName": "string",
-  "lastName": "string"
+  "lastName": "string",
+  "playlistId": "string"
 }
 ```
 <a id="schema-song" />

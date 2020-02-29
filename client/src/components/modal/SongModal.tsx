@@ -4,6 +4,7 @@ import { Modal, List, Image, Button, Icon, Popup } from 'semantic-ui-react'
 
 import { Song } from '@openapi/schemas';
 import { useStore } from '../../hooks'
+import { SongController } from '@openapi/routes';
 
 interface SongProps {
     song: Song;
@@ -42,21 +43,22 @@ export const SongModal = () => {
 }
 
 const SpotifyButton = () => {
+
+    const onClick = async () => {
+        try {
+            await SongController.synchronize();
+        } catch (error) {
+            console.error(error);
+        }
+    }
+
     return (
-        <Popup
-            basic
-            trigger={
-                <div style={{ marginRight: 5 }}>
-                    <Button basic color='blue'>
-                        <Icon name='spotify' />
-                        Spotify
-                    </Button>
-                </div>
-            }
-            header='Synchronisation'
-            content="Ajoutez votre compte Spotify dans les paramètres."
-            on={['click']}
-        />
+        <div style={{ marginRight: 5 }}>
+            <Button onClick={onClick} basic color='blue'>
+                <Icon name='spotify' />
+                Spotify
+        </Button>
+        </div>
     );
 }
 

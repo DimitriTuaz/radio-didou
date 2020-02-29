@@ -8,7 +8,7 @@ import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 
-import { NowObject } from '../now';
+import { NowObject, SpotifyScope } from '../now';
 import { MediaCredentials, User, UserPower } from '../models';
 import { MediaCredentialsRepository, UserRepository } from '../repositories';
 import { PersistentKeyService, NowService } from '../services';
@@ -55,7 +55,7 @@ export class NowController {
     let credential: MediaCredentials | undefined;
     let data: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
       where: {
-        scope: 'user-read-playback-state'
+        scope: SpotifyScope.playback
       }
     });
     if (data.length > 0) {
@@ -95,7 +95,7 @@ export class NowController {
         },
       ],
       where: {
-        scope: 'user-read-playback-state'
+        scope: SpotifyScope.playback
       }
     });
     return credentials.map(value => value.user);
