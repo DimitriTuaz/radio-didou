@@ -188,7 +188,7 @@ export class SongController {
       user.playlistId = await this.create_playlist(
         user.mediaCredentials[0].identifier,
         access_token,
-        'Ma super playlist');
+        name !== undefined ? name : 'Radio-Didou');
       delete user.mediaCredentials;
       await this.userRepository.update(user);
     }

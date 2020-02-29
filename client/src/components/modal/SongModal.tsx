@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { Modal, List, Image, Button, Icon, Popup } from 'semantic-ui-react'
 
@@ -44,21 +44,37 @@ export const SongModal = () => {
 
 const SpotifyButton = () => {
 
+    const [loading, setLoading] = useState(false);
+
     const onClick = async () => {
         try {
+            setLoading(true);
             await SongController.synchronize();
+            setLoading(false);
         } catch (error) {
             console.error(error);
         }
     }
 
     return (
-        <div style={{ marginRight: 5 }}>
-            <Button onClick={onClick} basic color='blue'>
-                <Icon name='spotify' />
-                Spotify
-        </Button>
-        </div>
+        <Popup
+            basic
+            trigger={
+                <div style={{ marginRight: 5 }}>
+                    <Button
+                        onClick={onClick}
+                        loading={loading}
+                        basic
+                        color='blue'>
+                        <Icon name='spotify' />
+                        Spotify
+                </Button>
+                </div>
+            }
+            header='Synchronisation'
+            content="Synchroniser les chansons avec votre compte."
+            on={['hover']}
+        />
     );
 }
 
