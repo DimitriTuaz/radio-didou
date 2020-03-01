@@ -105,7 +105,6 @@ export class NowSpotify extends NowFetcher {
         });
       const data = response.body;
       if ('access_token' in data) {
-        console.log("[Spotify] obtain_user_access_token succeeded")
         return data.access_token;
       }
     }

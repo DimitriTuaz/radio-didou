@@ -2,13 +2,14 @@ import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dyna
 import { clearIntervalAsync } from 'set-interval-async';
 import { LifeCycleObserver, Provider, inject } from '@loopback/core';
 
-import request = require('superagent');
 import { RadiodBindings, RadiodKeys } from '../keys';
 import { MediaCredentials } from '../models';
 import { NowFetcher, NowNone, NowDeezer, NowSpotify, NowObject, NowEnum } from '../now'
 import { PersistentKeyService } from '../services';
 import { repository } from '@loopback/repository';
 import { MediaCredentialsRepository } from '../repositories';
+
+import request from 'superagent'
 
 export class NowService implements LifeCycleObserver, Provider<NowObject> {
 

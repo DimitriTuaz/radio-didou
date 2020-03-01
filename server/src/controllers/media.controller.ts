@@ -8,18 +8,19 @@ import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
 import { RadiodBindings } from '../keys';
 
-import { NowDeezer, NowSpotify, NowEnum } from '../now';
-import { MediaCredentials, UserPower } from '../models';
-import { UserRepository } from '../repositories';
+import { NowDeezer, NowSpotify, NowEnum, SpotifyScope } from '../now';
+import { MediaCredentials, UserPower, User } from '../models';
+import { UserRepository, MediaCredentialsRepository } from '../repositories';
 
-import request = require('superagent');
+import request from 'superagent'
 
 @bind({ scope: BindingScope.SINGLETON })
 export class MediaController {
   constructor(
     @inject(RadiodBindings.API_KEY) private api_key: any,
     @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
-    @repository(UserRepository) private userRepository: UserRepository,
+    @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
+    @repository(UserRepository) private userRepository: UserRepository
   ) { }
 
   @get('/media/find', {
@@ -64,9 +65,15 @@ export class MediaController {
     @param.path.string('credentialId') credentialId: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<void> {
     let userId: string = currentUserProfile[securityId];
+    let user: User = await this.userRepository.findById(userId);
+    let credential: MediaCredentials = await this.credentialRepository.findById(credentialId);
     await this.userRepository.mediaCredentials(userId).delete({
       id: credentialId
     });
+    if (credential.scope == SpotifyScope.playlist) {
+      user.playlistId = undefined;
+      await this.userRepository.update(user);
+    }
   }
 
   @get('/media/{serviceId}/callback', {
