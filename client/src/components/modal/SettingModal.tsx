@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { Modal, Header, Button, Card, Image, Icon, Dropdown } from 'semantic-ui-react'
 
@@ -44,6 +44,7 @@ export const SettingModal = () => {
 const CredentialDropdown = () => {
 
     const { settingStore } = useStore();
+    const [error, setError] = useState(false);
 
     const defaultOptions: (User | undefined)[] = [undefined];
     const options = defaultOptions.concat(settingStore.nowUsers);
@@ -55,8 +56,10 @@ const CredentialDropdown = () => {
             else if (user.id !== undefined)
                 await NowController.setMedia(user.id);
             settingStore.currentNowUser = user;
+            setError(false);
         }
         catch (error) {
+            setError(true);
             console.error(error);
         }
     }
@@ -68,6 +71,7 @@ const CredentialDropdown = () => {
                     <Dropdown
                         text='Qui on écoute?'
                         selection
+                        error={error}
                         item>
                         <Dropdown.Menu>
                             <Dropdown.Header content='Compte Radio-didou' />
