@@ -1,30 +1,31 @@
-import { get, param, getModelSchemaRef, RestBindings, Request } from '@loopback/rest';
+import { get, param, post, getModelSchemaRef } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
+import { authenticate } from '@loopback/authentication';
+import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
+import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
+
 import { RadiodBindings, RadiodKeys } from '../keys';
 
-import { NowDeezer, NowSpotify, NowEnum, NowObject } from '../now';
-import { NowCredentials } from '../models';
-import { NowCredentialsRepository } from '../repositories';
+import { NowObject, SpotifyScope } from '../now';
+import { MediaCredentials, User, UserPower } from '../models';
+import { MediaCredentialsRepository, UserRepository } from '../repositories';
 import { PersistentKeyService, NowService } from '../services';
-
-import request = require('superagent');
 
 @bind({ scope: BindingScope.SINGLETON })
 export class NowController {
   constructor(
-    @inject(RadiodBindings.API_KEY) private api_key: any,
-    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
-    @repository(NowCredentialsRepository) private credentialRepository: NowCredentialsRepository,
+    @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
+    @repository(UserRepository) private userRepository: UserRepository,
     @inject(RadiodBindings.NOW_SERVICE) private nowService: NowService,
   ) { }
 
   @get('/now/get', {
     responses: {
       '200': {
-        description: 'Informations about the current song',
+        description: 'Return informations about the current song',
         content: {
           'application/json': {
             schema: {
@@ -39,150 +40,96 @@ export class NowController {
     return this.nowService.value();
   }
 
-  @get('/now/set/{credentialId}')
-  async setNow(
-    @param.path.string('credentialId') credentialId: string,
+  @post('/now/set', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '204': {
+        description: 'Set the default credential succeeed',
+      },
+    },
+  })
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
+  async setMedia(
+    @param.query.string('userId') userId: string,
   ) {
-    try {
-      let credential: NowCredentials = await this.credentialRepository.findById(credentialId);
+    let credential: MediaCredentials | undefined;
+    let data: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
+      where: {
+        scope: SpotifyScope.playback
+      }
+    });
+    if (data.length > 0) {
+      credential = data[0];
       await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
-      this.nowService.setFetcher(credential);
-    } catch (e) {
-      console.log(e);
     }
+    else {
+      credential = undefined;
+      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, 'none');
+    }
+    this.nowService.setFetcher(credential);
   }
 
-  @get('/now/show', {
+
+  @get('/now/find', {
+    security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
-        description: 'Array of Credential model instances',
+        description: 'Return an array of users with a Spotify account.',
         content: {
           'application/json': {
             schema: {
               type: 'array',
-              items: getModelSchemaRef(NowCredentials),
+              items: getModelSchemaRef(User),
             },
           },
         },
       },
     },
   })
-  async show(): Promise<NowCredentials[]> {
-    return this.credentialRepository.find();
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
+  async findMedia() {
+    let credentials = await this.credentialRepository.find({
+      include: [
+        {
+          relation: 'user',
+        },
+      ],
+      where: {
+        scope: SpotifyScope.playback
+      }
+    });
+    return credentials.map(value => value.user);
   }
 
-  @get('/now/{serviceId}/callback', {
+  @get('/now/who', {
+    security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
-        description: 'Credential model instance',
-        content: { 'application/json': { schema: getModelSchemaRef(NowCredentials) } },
+        description: 'Return the selected user for displaying the current track',
+        content: {
+          'application/json': {
+            schema: {
+              type: 'array',
+              items: getModelSchemaRef(User),
+            },
+          },
+        },
       },
     },
   })
-  async create(
-    @param.path.number('serviceId') serviceId: number,
-    @param.query.string('code') code: string,
-    @inject(RestBindings.Http.REQUEST) request: Request,
-  ): Promise<NowCredentials> {
-    let name: string = '';
-    let token: string = '';
-    switch (serviceId) {
-      case NowEnum.Spotify:
-        let redirect_uri: string;
-
-        if (this.global_config.loopback !== undefined) {
-          redirect_uri = this.global_config.loopback + '/now/1/callback';
-        }
-        else {
-          let protocol: string = request.protocol;
-          if (request.headers['x_forwarded_proto'])
-            protocol = request.headers['x_forwarded_proto'] as string;
-          redirect_uri = protocol + '://' + request.headers.host + '/now/1/callback';
-        }
-
-        let tokens = await this.obtainSpotifyToken(code, redirect_uri);
-        token = tokens.refresh_token;
-        name = await this.obtainSpotifyName(tokens.access_token);
-        break;
-      case NowEnum.Deezer: {
-        token = await this.obtainDeezerToken(code);
-        name = await this.obtainDeezerName(token);
-        break;
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
+  async getMedia() {
+    let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
+    let credentials = await this.credentialRepository.find({
+      include: [
+        {
+          relation: 'user',
+        },
+      ],
+      where: {
+        id: crendentialID
       }
-    }
-    return this.credentialRepository.create(new NowCredentials({
-      name: name,
-      type: serviceId,
-      token: token
-    }));
-  }
-
-  private async obtainSpotifyToken(code: string, redirect_uri: string): Promise<any> {
-    const authorization = Buffer.from(this.api_key.spotify.client_id + ':' + this.api_key.spotify.secret)
-      .toString('base64');
-    const response = await request
-      .post(NowSpotify.token_url)
-      .set('Accept', 'application/json')
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .set('Authorization', 'Basic ' + authorization)
-      .send({
-        grant_type: 'authorization_code',
-        code: code,
-        redirect_uri: redirect_uri
-      });
-    return {
-      refresh_token: response.body.refresh_token,
-      access_token: response.body.access_token
-    }
-  }
-
-  private async obtainSpotifyName(access_token: string): Promise<string> {
-    try {
-      const response = await request
-        .get(NowSpotify.user_url)
-        .set('Accept', 'application/json')
-        .set('Content-Type', 'application/json')
-        .set('Authorization', 'Bearer ' + access_token);
-      return response.body.display_name
-    }
-    catch (e) {
-      console.log('[NowController] error: unable to obtain spotify name.')
-    }
-    return 'Undefined Account';
-  }
-
-  private async obtainDeezerToken(code: string) {
-    const response = await request
-      .get(NowDeezer.auth_url)
-      .query({ app_id: this.api_key.deezer.app_id })
-      .query({ secret: this.api_key.deezer.secret })
-      .query({ code: code })
-      .query({ output: "json" });
-    return response.body.access_token;
-  }
-
-  private async obtainDeezerName(access_token: string): Promise<string> {
-    try {
-      const response = await request
-        .get(NowDeezer.user_url)
-        .query({ access_token: access_token })
-        .query({ output: "json" })
-      return response.body.name;
-    }
-    catch (e) {
-      console.log('[NowController] error: unable to obtain deezer name.')
-    }
-    return 'Undefined Account';
-  }
-
-  @get('/now/delete/{credentialId}', {
-    responses: {
-      '204': {
-        description: 'Credential DELETE success',
-      },
-    },
-  })
-  async deleteById(@param.path.string('credentialId') credentialId: string): Promise<void> {
-    await this.credentialRepository.deleteById(credentialId);
+    });
+    return credentials.map(value => value.user);
   }
 }

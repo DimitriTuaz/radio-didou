@@ -3,21 +3,10 @@ import { User, UserWithRelations } from '../models';
 
 @model()
 export class UserCredentials extends Entity {
-  @property({
-    type: 'string',
-    id: true,
-    generated: true
-  })
-  id: string;
 
-  @property({
-    type: 'string',
-    required: true,
-  })
-  password: string;
-
-  @belongsTo(() => User)
-  userId: string;
+  @property({ type: 'string', id: true, generated: true }) id: string;
+  @property({ type: 'string', required: true }) password: string;
+  @belongsTo(() => User) userId: string;
 
   constructor(data?: Partial<UserCredentials>) {
     super(data);

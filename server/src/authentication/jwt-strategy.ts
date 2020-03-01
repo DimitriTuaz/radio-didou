@@ -5,9 +5,11 @@
 
 import { inject } from '@loopback/context';
 import { HttpErrors, Request } from '@loopback/rest';
-import { AuthenticationStrategy, TokenService } from '@loopback/authentication';
+import { AuthenticationStrategy, AuthenticationBindings, AuthenticationMetadata } from '@loopback/authentication';
 import { UserProfile } from '@loopback/security';
 import { RadiodBindings } from '../keys';
+import { JWTService } from '../services';
+import { UserPower } from '../models';
 
 import { parse } from 'cookie';
 
@@ -15,13 +17,16 @@ export class JWTAuthenticationStrategy implements AuthenticationStrategy {
   name = 'jwt';
 
   constructor(
-    @inject(RadiodBindings.TOKEN_SERVICE)
-    public tokenService: TokenService,
+    @inject(RadiodBindings.TOKEN_SERVICE) public tokenService: JWTService,
+    @inject(AuthenticationBindings.METADATA) private metadata: AuthenticationMetadata,
   ) { }
 
   async authenticate(request: Request): Promise<UserProfile | undefined> {
+    let userPower: UserPower | undefined = undefined;
     const token: string = this.extractCredentials(request);
-    const userProfile: UserProfile = await this.tokenService.verifyToken(token);
+    if (this.metadata.options !== undefined)
+      userPower = this.metadata.options.power;
+    const userProfile: UserProfile = await this.tokenService.verifyToken(token, userPower);
     return userProfile;
   }
 

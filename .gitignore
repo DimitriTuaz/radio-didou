@@ -4,6 +4,7 @@
 /mongo.config.json
 /config.json
 /api_key.json
+/api_key_public.json
 
 # STATIC
 static/sounds

@@ -1,3 +1,7 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+@headerColor: white;
+@descriptionColor: white;
+@extraColor: white;

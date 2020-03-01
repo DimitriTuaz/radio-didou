@@ -13,19 +13,19 @@ export namespace {{{path.x-controller-name}}} {
         {{#each path.responses as | response |}}
             {{#if @first}}
 
-    export function {{{path.x-operation-name}}}({{~>functionParameters path=path~}}): Promise<{{~>contentType response=response~}}> {
+    export function {{{path.x-operation-name}}}({{~>params path=path~}}): Promise<{{~>contentType response=response~}}> {
         return new Promise<{{~>contentType response=response~}}>(async (resolve, reject) => {
             try {
                 const response = await request
                     .{{@../key}}(OpenAPI.URL + {{{requestPath operation.path_name}}})
                 {{#if path.requestBody}}
-                    {{>setPost path=path}}
+                    {{>post path=path}}
                 {{/if}}
                 {{#each path.parameters as | parameter |}}
-                    {{>setQuery parameter=parameter}}
+                    {{>query parameter=parameter}}
                 {{/each}}
-                    {{>setAcceptHeader response=response}}
-                    {{>setWithCredentials path=path}}
+                    {{>acceptHeader response=response}}
+                    {{>withCredentials path=path}}
                 if (response.status !== {{@key}}) {
                     reject(response);
                 }

@@ -1,19 +1,13 @@
 import { action, observable } from "mobx";
-import { NowController } from '@openapi/routes'
-import { NowObject } from '@openapi/schemas'
-import { UserState } from "./UserStore";
-import { CommonStore } from "./CommonStore";
-import { SongStore } from "./SongStore";
+import { NowController } from '@openapi/routes';
+import { NowObject } from '@openapi/schemas';
 
+import { RootStore } from "../contexts";
+import { UserState } from "../stores";
 
-export class MainStore {
+export class NowStore {
 
-    private commonStore: CommonStore;
-    private songStore: SongStore;
-
-    @observable sidebarVisible: boolean = false;
-    @observable loginModalVisible: boolean = false;
-    @observable songModalVisible: boolean = false;
+    private rootStore: RootStore;
 
     @observable trackCover: string | undefined = undefined;
     @observable trackTitle: string | undefined = undefined;
@@ -24,33 +18,15 @@ export class MainStore {
 
     currentTrackIntervalId: number = 0;
 
-    constructor(commonStore: CommonStore, songStore: SongStore) {
-        this.commonStore = commonStore;
-        this.songStore = songStore;
-    }
-
-    @action
-    showSidebar = (show: boolean): void => {
-        this.sidebarVisible = show;
-    }
-
-    @action
-    showLoginModal = (show: boolean): void => {
-        this.loginModalVisible = show;
-        this.songModalVisible = false;
-    }
-
-    @action
-    showSongModal = (show: boolean): void => {
-        this.songModalVisible = show;
-        this.loginModalVisible = false;
+    constructor(rootStore: RootStore) {
+        this.rootStore = rootStore;
     }
 
     @action
     getCurrentTrack = async () => {
         try {
             let now: NowObject = await NowController.getNow();
-            
+
             let trackCover: string = now.cover ? now.cover : '';
             let trackAlbum: string = now.album ? now.album : '';
             let trackTitle: string = now.song;
@@ -88,12 +64,12 @@ export class MainStore {
                     });
                 }
 
-                if (this.commonStore.userState === UserState.connected) {
-                    await this.songStore.refresh(this.trackUrl);
+                if (this.rootStore.userStore.userState === UserState.connected) {
+                    await this.rootStore.songStore.refresh();
                 }
             }
             this.auditorCount = auditorCount;
-            
+
         } catch (error) {
             console.error(error);
         }

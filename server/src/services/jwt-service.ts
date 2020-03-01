@@ -8,13 +8,15 @@ import { HttpErrors } from '@loopback/rest';
 import { promisify } from 'util';
 import { TokenService } from '@loopback/authentication';
 import { UserProfile, securityId } from '@loopback/security';
+
 import { TokenServiceBindings } from '../keys';
+import { UserPower } from '../models';
 
 const jwt = require('jsonwebtoken');
 const signAsync = promisify(jwt.sign);
 const verifyAsync = promisify(jwt.verify);
 
-export class JWTService implements TokenService {
+export class JWTService {
   constructor(
     @inject(TokenServiceBindings.TOKEN_SECRET)
     private jwtSecret: string,
@@ -22,7 +24,7 @@ export class JWTService implements TokenService {
     private jwtExpiresIn: string,
   ) { }
 
-  async verifyToken(token: string): Promise<UserProfile> {
+  async verifyToken(token: string, userPower: UserPower | undefined): Promise<UserProfile> {
     if (!token) {
       throw new HttpErrors.Unauthorized(
         `Error verifying token : 'token' is null`,
@@ -41,8 +43,14 @@ export class JWTService implements TokenService {
           [securityId]: decodedToken.id,
           name: decodedToken.name,
           id: decodedToken.id,
+          power: decodedToken.power
         },
       );
+      if (userPower !== undefined) {
+        if (decodedToken.power < userPower) {
+          throw new Error('user has insuffisant power.')
+        }
+      }
     } catch (error) {
       throw new HttpErrors.Unauthorized(
         `Error verifying token : ${error.message}`,
@@ -51,7 +59,7 @@ export class JWTService implements TokenService {
     return userProfile;
   }
 
-  async generateToken(userProfile: UserProfile): Promise<string> {
+  async generateToken(userProfile: UserProfile, userPower: UserPower | undefined): Promise<string> {
     if (!userProfile) {
       throw new HttpErrors.Unauthorized(
         'Error generating token : userProfile is null',
@@ -61,8 +69,8 @@ export class JWTService implements TokenService {
       id: userProfile[securityId],
       name: userProfile.name,
       email: userProfile.email,
+      power: userPower !== undefined ? userPower : 0
     };
-    // Generate a JSON Web Token
     let token: string;
     try {
       token = await signAsync(userInfoForToken, this.jwtSecret, {
