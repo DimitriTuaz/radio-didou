@@ -54,7 +54,7 @@ const SpotifyButton = () => {
                         onClick={onClick}
                         loading={loading}
                         disabled={
-                            settingStore.credentials[SpotifyScope.playlist] == undefined
+                            settingStore.credentials[SpotifyScope.playlist] === undefined
                         }
                         basic
                         color={error ? 'red' : 'blue'} >
@@ -67,7 +67,7 @@ const SpotifyButton = () => {
             content={(() => {
                 if (error)
                     return 'Une erreur est survenue.'
-                else if (settingStore.credentials[SpotifyScope.playlist] == undefined)
+                else if (settingStore.credentials[SpotifyScope.playlist] === undefined)
                     return 'Ajoutez votre compte Spotify dans les paramètres.'
                 else
                     return 'Synchroniser les chansons avec votre compte.'
