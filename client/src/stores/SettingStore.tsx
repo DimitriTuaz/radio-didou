@@ -3,12 +3,7 @@ import { MediaController, NowController } from '@openapi/routes'
 import { MediaCredentials, User } from '@openapi/schemas'
 
 import { RootStore } from '../contexts';
-
-export enum UserPower {
-    NONE = 0,
-    DJ = 5,
-    ADMIN = 10
-}
+import { UserPower } from '../stores';
 
 export enum SpotifyScope {
     playback = 'user-read-playback-state',

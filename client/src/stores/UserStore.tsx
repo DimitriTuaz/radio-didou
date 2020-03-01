@@ -4,7 +4,12 @@ import { User } from '@openapi/schemas'
 
 import { SongState } from '../stores';
 import { RootStore } from '../contexts';
-import { UserPower } from './SettingStore';
+
+export enum UserPower {
+    NONE = 0,
+    DJ = 5,
+    ADMIN = 10
+}
 
 export enum UserState {
     login,
