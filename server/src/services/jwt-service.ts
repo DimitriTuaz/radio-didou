@@ -63,7 +63,7 @@ export class JWTService {
     return userProfile;
   }
 
-  async generateToken(userProfile: UserProfile, userPower: UserPower | undefined): Promise<string> {
+  async generateToken(userProfile: UserProfile, userPower: UserPower): Promise<string> {
     if (!userProfile) {
       throw new HttpErrors.Unauthorized(
         'Error generating token : userProfile is null',
@@ -73,7 +73,7 @@ export class JWTService {
       id: userProfile[securityId],
       name: userProfile.name,
       email: userProfile.email,
-      power: userPower !== undefined ? userPower : 0
+      power: userPower
     };
     let token: string;
     try {

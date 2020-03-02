@@ -22,10 +22,10 @@ export const SettingModal = () => {
             <Modal.Header>Mes paramètres</Modal.Header>
             <Modal.Content scrolling>
                 <Modal.Description>
-                    {(userStore.user.power !== undefined && userStore.user.power >= UserPower.ADMIN) &&
+                    {userStore.user.power >= UserPower.ADMIN &&
                         <CredentialDropdown />
                     }
-                    {(userStore.user.power !== undefined && userStore.user.power >= UserPower.DJ) &&
+                    {userStore.user.power >= UserPower.DJ &&
                         <React.Fragment >
                             <Header>Actuellement...</Header>
                             <CredentialItem scope={SpotifyScope.playback} />

@@ -436,7 +436,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.power</td>
+        <td>Response.power <strong>(required)</strong></td>
         <td>
           number
         </td>
@@ -724,7 +724,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.power</td>
+        <td>Response.power <strong>(required)</strong></td>
         <td>
           number
         </td>
@@ -1452,7 +1452,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>power</td>
+        <td>power <strong>(required)</strong></td>
         <td>
           number
         </td>
@@ -1620,7 +1620,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>power</td>
+        <td>power <strong>(required)</strong></td>
         <td>
           number
         </td>
@@ -1755,7 +1755,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>power</td>
+        <td>power <strong>(required)</strong></td>
         <td>
           number
         </td>
@@ -2017,7 +2017,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>power</td>
+        <td>power <strong>(required)</strong></td>
         <td>
           number
         </td>
