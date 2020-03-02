@@ -8,12 +8,12 @@ export async function migrate(args: string[]) {
   const app = new RadiodApplication();
   await app.boot();
 
-  console.log('## USING CONNECTOR MIGRATION ##');
+  console.log('~ USING CONNECTOR MIGRATION ~');
 
   await app.migrateSchema({ existingSchema });
   console.log('-> done!\n');
 
-  console.log('## ADDING DEFAULT VALUES IF NECESSARY ##');
+  console.log('~ ADDING DEFAULT VALUES IF NECESSARY ~');
 
   let datasource: DataSource = await app.get('datasources.mongo');
   let connector: any = datasource.connector;
