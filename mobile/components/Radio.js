@@ -1,7 +1,21 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import TrackPlayer from 'react-native-track-player'
 
 class Radio extends React.Component {
+
+  componentDidMount() {    
+    TrackPlayer.setupPlayer().then(async () => {
+        await TrackPlayer.add({
+            id: 'trackId',
+            url: 'https://www.radio-didou.com:8895/radio-didou',
+            title: 'Track Title',
+            artist: 'Track Artist',
+        });
+        TrackPlayer.play();
+    });
+  }
+
   render() {
       return (
         <ImageBackground style={styles.background} source={require('../images/background.png')}>

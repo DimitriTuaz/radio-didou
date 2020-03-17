@@ -43,4 +43,6 @@ target 'RadioDidou' do
 
   # Automatically detect installed unimodules
   use_unimodules!
+  pod 'react-native-track-player', :path => '../node_modules/react-native-track-player'
+
 end
