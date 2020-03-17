@@ -72,7 +72,8 @@ export class SettingStore {
 
     @action
     obtainNowUsers = async () => {
-        if (this.rootStore.userStore.user.power >= UserPower.ADMIN) {
+        let userPower: UserPower | undefined = this.rootStore.userStore.user.power;
+        if (userPower && userPower >= UserPower.ADMIN) {
             try {
                 this.nowUsers = await NowController.findMedia();
             } catch (error) {
@@ -83,7 +84,8 @@ export class SettingStore {
 
     @action
     obtainCurrentNowUser = async () => {
-        if (this.rootStore.userStore.user.power >= UserPower.ADMIN) {
+        let userPower: UserPower | undefined = this.rootStore.userStore.user.power;
+        if (userPower && userPower >= UserPower.ADMIN) {
             try {
                 let users: User[] = await NowController.getMedia();
                 this.currentNowUser = users[0];
