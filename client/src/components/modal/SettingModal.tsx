@@ -16,17 +16,16 @@ const client_id = spotify.client_id;
 export const SettingModal = () => {
 
     const { userStore } = useStore();
-    let userPower: UserPower | undefined = userStore.user.power;
 
     return (
         <React.Fragment>
             <Modal.Header>Mes paramètres</Modal.Header>
             <Modal.Content scrolling>
                 <Modal.Description>
-                    {(userPower && userPower >= UserPower.ADMIN) &&
+                    {userStore.user.power >= UserPower.ADMIN &&
                         <CredentialDropdown />
                     }
-                    {(userPower && userPower >= UserPower.DJ) &&
+                    {userStore.user.power >= UserPower.DJ &&
                         <React.Fragment >
                             <Header>Actuellement...</Header>
                             <CredentialItem scope={SpotifyScope.playback} />
