@@ -1,6 +1,0 @@
-{
-    "compilerOptions": {
-        "declarationDir": "dist",
-        "composite": true
-    }
-}

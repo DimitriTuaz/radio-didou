@@ -1,18 +1,24 @@
 import { RadiodApplication } from './application';
-
-import path from 'path';
+import { RestBindings } from '@loopback/rest';
+import { RadiodBindings } from './keys';
 
 export async function main() {
 
-  const app = new RadiodApplication(path.join(__dirname, '../..'));
+  const app = new RadiodApplication();
 
   await app.boot();
+  await app.migrateSchema();
   await app.init();
   await app.start();
 
+  const port = await app.restServer.get(RestBindings.PORT);
+  const host = await app.restServer.get(RestBindings.HOST);
+  const config = await app.get(RadiodBindings.GLOBAL_CONFIG);
 
-  const url = app.restServer.url;
-  console.log(`Server is running at ${url}`);
+  console.log(`[Radiod] Server is listening ${host} on port ${port}`);
+
+  if (config.loopback !== undefined)
+    console.log(`[Radiod] Visit ${config.loopback}`);
 
   return app;
 }

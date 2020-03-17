@@ -1,7 +1,10 @@
 body {
-  background-image:url("images/background.png");
   background-attachment: fixed;
   font-family: OpenSansRegular, 'Helvetica Neue', Arial, Helvetica, sans-serif;
+}
+
+.song-item {
+  cursor: pointer;
 }
 
 .unselectable {
@@ -13,11 +16,30 @@ body {
   user-select: none;
 }
 
-.main-container {
+.main-container {  
+  height: 100vh;
   display: flex;
-  justify-content: center;
   flex-direction: column;
+}
+
+.header-container {
+  display: flex;
+}
+
+.settings-container {
+  display: flex;
+  width : 40px;
+  height: 40px;
+  justify-content: center;
   align-items: center;
+  border-radius: 3px;
+  cursor: pointer;
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+    &:active {
+     background-color: rgba(255, 255, 255, 0.05);
+    }
 }
 
 .title-container {
@@ -62,14 +84,21 @@ body {
   height: 170px;
 }
 
-player-container-mobile {
+.player-container-mobile {
   .player-container;
-  height: 170px;
   height: 100px;
 }
 
 .track-container {
   display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.track-clickable {
+  display: flex;
+  //align-items: flex-end;
+  //justify-content: flex-end;
   width: 50%;
   height: 250px;
   border-radius: 10px;
@@ -83,8 +112,8 @@ player-container-mobile {
     }
 }
 
-.track-container-mobile {
-  .track-container;
+.track-clickable-mobile {
+  .track-clickable;
   border-radius: 5px;
   width: 80%;
   height: 120px;
@@ -100,9 +129,10 @@ player-container-mobile {
 
 .track-infos-container {
   flex: 3;
+  overflow: auto;
   height: 100%;
   width: 100%;
-  padding: 30px 0px 10px 10px;
+  padding: 30px 10px 10px 10px;
 }
 
 .track-infos-container-mobile {
@@ -175,6 +205,7 @@ player-container-mobile {
 }
 
 .icon-sound img {
+  margin: auto;
   display: block;
   height: 85%;
   width: 85%;
@@ -190,6 +221,7 @@ player-container-mobile {
 }
 
 .icon-sound-mobile img {
+  margin: auto;
   display: block;
   height: 70px;
   width: 70px;
@@ -254,10 +286,14 @@ player-container-mobile {
   color: white;
 }
 
+.error-msg {
+  color: #9F3A38;
+  font-weight: bold;
+}
+
 .current-listeners-container {
-  flex-direction: column;
+  display: flex;
   justify-content: center;
-  align-items: center;
   margin-top: 15px;
 }
 
@@ -269,6 +305,14 @@ player-container-mobile {
 .current-listeners-mobile {
   .current-listeners;
   font-size:12px;
+}
+
+.user-modal-login-error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25px;
+  margin-bottom: 10px;
 }
 
 .jingles-section {
@@ -283,6 +327,13 @@ player-container-mobile {
   font-size: 12px;
   margin-top: 10px;
   margin-bottom: 0px;
+}
+
+.main-jingles-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .jingles-container {

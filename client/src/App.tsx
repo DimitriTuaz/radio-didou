@@ -4,7 +4,7 @@ import {
   Switch,
   Route
 } from 'react-router-dom';
-import Home from './pages/Home'
+import { Home } from './pages/Home'
 import Jingles from './pages/Jingles'
 
 export default function App() {

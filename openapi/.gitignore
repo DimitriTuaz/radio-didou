@@ -1,0 +1,21 @@
+## GITIGNORE ##
+package-lock.json
+
+# Optional npm cache directory
+.npm
+
+# Transpiled JavaScript files from Typescript
+dist
+
+# Cache used by TypeScript's incremental build
+*.tsbuildinfo
+
+# Modules
+node_modules
+
+# Generated Code
+openapi.json
+index.ts
+schemas.d.ts
+routes
+

@@ -1,0 +1,17 @@
+{
+  "editor.tabCompletion": "on",
+  "editor.tabSize": 2,
+  "files.exclude": {
+    "**/.DS_Store": true,
+    "**/.git": true,
+    "**/.hg": true,
+    "**/.svn": true,
+    "**/CVS": true,
+    "dist": true,
+    "**/node_modules": true,
+    "package-lock.json": true,
+    "tsconfig.tsbuildinfo": true
+  },
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true
+}
