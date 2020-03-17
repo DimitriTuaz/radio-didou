@@ -231,7 +231,7 @@ export class SongController {
         let playlistId = await this.create_playlist(
           spotifyId,
           access_token,
-          name !== undefined ? name : 'Radio-Didou');
+          name !== undefined ? name : 'Mes <3 Radio Didou');
         return await this.synchronize_playlist(
           spotifyId,
           playlistId,

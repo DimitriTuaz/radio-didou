@@ -23,11 +23,12 @@ export const Like = () => {
   return useObserver(() => (
     <Menu.Item as='a' onClick={onClick}>
       <Icon
+        link
         fitted
         name={songStore.state === SongState.liked ? 'heart' : 'heart outline'}
         color='teal'
-        size='large'>
-      </Icon>
+        size={window.innerWidth <= 1000 ? 'big' : 'massive'}
+      />
     </Menu.Item>
   ));
 };

@@ -2,13 +2,16 @@
 * Main Layout
 */
 
+@portrait:    ~"only screen and (orientation: portrait)";
+
 body {
   background-attachment: fixed;
+  font-family: OpenSansRegular, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 }
 
 #main-container {
   display: flex;
-  flex-flow: column;
+  flex-direction: column;
   height: 100%;
 }
 
@@ -28,20 +31,95 @@ body {
   }
 }
 
+#title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 25%;
+  @media @portrait {
+    height: 30%;
+  }
+
+  .title {
+    font-weight: bold;
+    color: white;
+    font-size: 7vw;
+    @media @portrait {
+      font-size: 12vw;
+    }
+  }
+}
+
+
+#player-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 20%;
+  @media @portrait {
+    height: 10%;
+  }
+}
+
+#heart-container {
+  display: flex;
+  align-items: center; 
+  padding-left: 5%;
+}
+
+#volume-slider-wrapper {
+  display: inline-block;
+  height: 8em;
+  width: 8em;
+  padding: 0;
+
+  input {
+    transform-origin: 5em 2.3em;
+    transform: rotate(-90deg);
+  }
+}
+
+.icon-sound {
+  //display: inline-block;
+  height: 10vw;
+  width: 10vw;
+  @media @portrait {
+    height: 12vh;
+    width: 12vh;
+  }
+  background-color: Transparent;
+  border: none;
+  border-radius: 20px;
+  padding: 0;
+  margin: 0;
+  vertical-align: top;
+  outline:0;
+}
+
+.icon-sound img {
+  margin: auto;
+  display: block;
+  height: 85%;
+  width: 85%;
+  cursor: pointer;
+    &:hover {
+      height: 88%;
+      width: 88%;
+    }
+    &:active {
+      height: 83%;
+      width: 83%;
+    }
+}
+
+
 /*
 * Components
 */
 
-#player-button {
-  background-color: transparent;
-  border-radius: 10px;
-  &:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-  }
-  &:active {
-    background-color: rgba(255, 255, 255, 0.2);
-  }
-}
+
 
 .current-track-wrapper {
   display: flex;
@@ -93,5 +171,109 @@ body {
     .current-track-container {
       padding: 0px 15px;
     }
+  }
+}
+
+/*
+ *  Slider
+ */
+
+@track-color: white;
+@thumb-color: white;
+
+@thumb-radius: 8px;
+@thumb-height: 15px;
+@thumb-width: 15px;
+@thumb-border-width: 0px;
+@thumb-border-color: white;
+
+@track-width: 100%;
+@track-height: 2px;
+@track-border-width: 0px;
+@track-border-color: white;
+
+@track-radius: 5px;
+@contrast: 5%;
+
+
+.track() {
+  width: @track-width;
+  height: @track-height;
+  cursor: pointer;
+  animate: 0.2s;
+}
+
+.thumb() {
+  border: @thumb-border-width solid @thumb-border-color;
+  height: @thumb-height;
+  width: @thumb-width;
+  border-radius: @thumb-radius;
+  background: @thumb-color;
+  cursor: pointer;
+}
+
+input[type=range] {
+  background: transparent;
+  -webkit-appearance: none;
+  margin: @thumb-height/2 0;
+  width: @track-width;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    .track();
+    background: @track-color;
+    border-radius: @track-radius;
+    border: @track-border-width solid @track-border-color;
+  }
+
+  &::-webkit-slider-thumb {
+    .thumb();
+    -webkit-appearance: none;
+    margin-top: ((-@track-border-width * 2 + @track-height) / 2) - (@thumb-height / 2);
+  }
+
+  &:focus::-webkit-slider-runnable-track {
+    background: lighten(@track-color, @contrast);
+  }
+
+  &::-moz-range-track {
+    .track();
+    background: @track-color;
+    border-radius: @track-radius;
+    border: @track-border-width solid @track-border-color;
+  }
+  &::-moz-range-thumb {
+     .thumb();
+  }
+
+  &::-ms-track {
+    .track();
+    background: transparent;
+    border-color: transparent;
+    border-width: @thumb-width 0;
+    color: transparent;
+  }
+
+  &::-ms-fill-lower {
+    background: darken(@track-color, @contrast);
+    border: @track-border-width solid @track-border-color;
+    border-radius: @track-radius*2;
+  }
+  &::-ms-fill-upper {
+    background: @track-color;
+    border: @track-border-width solid @track-border-color;
+    border-radius: @track-radius*2;
+  }
+  &::-ms-thumb {
+    .thumb();
+  }
+  &:focus::-ms-fill-lower {
+    background: @track-color;
+  }
+  &:focus::-ms-fill-upper {
+    background: lighten(@track-color, @contrast);
   }
 }

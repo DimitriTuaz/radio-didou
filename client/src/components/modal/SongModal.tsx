@@ -70,7 +70,7 @@ const SpotifyButton = () => {
                 else if (settingStore.credentials[SpotifyScope.playlist] === undefined)
                     return 'Ajoutez votre compte Spotify dans les paramètres.'
                 else
-                    return 'Synchroniser les chansons avec votre compte.'
+                    return 'Synchroniser les chansons avec votre compte Spotify.'
             })()}
             on={['hover']}
         />
@@ -95,7 +95,7 @@ const SongItem = (props: SongProps) => {
                 <List.Header as='a'>{props.song.title}</List.Header>
                 <List.Description as='a'>
                     {props.song.artist}
-                    <i>({props.song.album})</i>
+                    <i> ({props.song.album})</i>
                 </List.Description>
             </List.Content>
             <List.Content

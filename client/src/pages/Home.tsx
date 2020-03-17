@@ -2,11 +2,13 @@ import React, { useEffect } from 'react'
 import { Grid } from 'semantic-ui-react';
 import '../App.less';
 
+import { UserState } from '../stores';
 import { useStore } from '../hooks'
 
 import {
+  Player,
+  Like,
   AuditorCount,
-  TopMenu,
   SideMenu,
   OpenSideMenu,
   UserModal,
@@ -45,12 +47,21 @@ export const Home = () => {
         <div id='open-side-menu-container'>
           <OpenSideMenu />
         </div>
-        <div style={{ textAlign: "center" }}>
-          <TopMenu />
+        <div id={'title-container'} className={'unselectable'}>
+          <p className={'title'}>Radio Didou</p>
+        </div>
+        <div id={'player-container'}>
+          <Player />
         </div>
         <Grid columns={1} padded centered style={{ flexGrow: 1 }}>
           <Grid.Row >
-            <CurrentTrack />
+              <CurrentTrack />
+              {
+                userStore.userState === UserState.connected &&
+                <div id={'heart-container'}>
+                  <Like />
+                </div>
+              }
           </Grid.Row>
           <Grid.Row>
             <AuditorCount />

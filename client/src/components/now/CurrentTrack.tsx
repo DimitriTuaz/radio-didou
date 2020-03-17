@@ -27,7 +27,7 @@ export const CurrentTrack = () => {
                                 <Item.Header>{
                                     (nowStore.trackTitle !== undefined
                                         && nowStore.trackTitle.length === 0) ?
-                                        'Aucun titre' :
+                                        'Radio Didou revient bientôt...' :
                                         nowStore.trackTitle
                                 }</Item.Header>
                                 <Item.Description>{nowStore.trackArtists}</Item.Description>
