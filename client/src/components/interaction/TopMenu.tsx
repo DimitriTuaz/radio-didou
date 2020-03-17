@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Menu, Icon } from 'semantic-ui-react';
+import { Image, Menu } from 'semantic-ui-react';
 import { useObserver } from 'mobx-react-lite';
 
 import { Player, Like } from '..'
@@ -8,11 +8,7 @@ import { useStore } from '../../hooks';
 
 export const TopMenu = () => {
 
-  const { interfaceStore, userStore } = useStore();
-
-  const onShowSidebar = () => {
-    interfaceStore.showSidebar(!interfaceStore.activeSidebar);
-  }
+  const { userStore } = useStore();
 
   return useObserver(() => (
     < Menu color="blue" inverted compact >
@@ -32,15 +28,6 @@ export const TopMenu = () => {
           return <Like />
         }
       })()}
-      <Menu.Item as='a' onClick={onShowSidebar}>
-        <Icon
-          fitted
-          rotated={interfaceStore.activeSidebar ? 'clockwise' : undefined}
-          name='bars'
-          color='teal'
-          size='large'>
-        </Icon>
-      </Menu.Item>
     </Menu>
   ));
 };

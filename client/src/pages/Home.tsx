@@ -8,6 +8,7 @@ import {
   AuditorCount,
   TopMenu,
   SideMenu,
+  OpenSideMenu,
   UserModal,
   SongModal,
   CurrentTrack,
@@ -31,7 +32,7 @@ export const Home = () => {
   });
 
   return (
-    <React.Fragment>
+    <>
       <SideMenu />
       <ModalController>
         {{
@@ -41,6 +42,9 @@ export const Home = () => {
         }}
       </ModalController>
       <div id='main-container'>
+        <div id='open-side-menu-container'>
+          <OpenSideMenu />
+        </div>
         <div style={{ textAlign: "center" }}>
           <TopMenu />
         </div>
@@ -53,6 +57,6 @@ export const Home = () => {
           </Grid.Row>
         </Grid>
       </div>
-    </React.Fragment>
+    </>
   );
 };
