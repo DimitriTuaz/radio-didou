@@ -13,10 +13,10 @@ export const CurrentTrack = () => {
             <div className='current-track-container'>
                 <div
                     onClick={() => { window.open(nowStore.trackUrl, '_blank') }}>
-                    <Item.Group>
+                    <Item.Group unstackable>
                         <Item>
                             <Item.Image
-                                size={window.innerWidth <= 1000 ? 'small' : 'medium'}
+                                size={window.innerWidth <= window.innerHeight ? 'small' : 'medium'}
                                 src={
                                     (nowStore.trackCover !== undefined
                                         && nowStore.trackCover.length === 0) ?

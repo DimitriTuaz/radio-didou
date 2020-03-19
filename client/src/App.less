@@ -125,7 +125,10 @@ body {
   display: flex;
   align-items: center;
 
-  font-size: 18px;
+  font-size: 1.2em;
+  @media @portrait {
+    font-size: 1em;
+  }
 
   .current-track-container {
     cursor: pointer;
@@ -163,15 +166,6 @@ body {
 
 #spotify-button {
   pointer-events: auto !important;
-}
-
-@media only screen and (max-width: 767px) {
-  .current-track-wrapper {
-    font-size: 14px;
-    .current-track-container {
-      padding: 0px 15px;
-    }
-  }
 }
 
 /*
