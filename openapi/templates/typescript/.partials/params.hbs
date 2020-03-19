@@ -1,10 +1,10 @@
 {{~#if path.requestBody}}
   {{~#each path.requestBody.content as | content |}}
     {{~#if @first}}
-{{>parameterName object=content~}}: {{>type object=content~}},
+{{>paramName object=content~}}: {{>type object=content~}},
     {{~/if}}
   {{~/each}}
 {{~/if}}
 {{~#each path.parameters as | parameter |}}
-{{parameter.name}}: {{>type object=parameter~}},
+{{parameter.name}}{{{paramRequired parameter}}}: {{>type object=parameter~}},
 {{~/each}}

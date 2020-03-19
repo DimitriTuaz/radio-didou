@@ -6,25 +6,28 @@
 
 * [Servers](#servers)
 * [Paths](#paths)
-  - [`GET` /now/delete/{credentialId}](#op-get-now-delete-credentialid) 
+  - [`DELETE` /media/delete/{credentialId}](#op-delete-media-delete-credentialid) 
+  - [`GET` /media/find](#op-get-media-find) 
+  - [`GET` /media/{serviceId}/callback](#op-get-media-serviceid-callback) 
+  - [`GET` /now/find](#op-get-now-find) 
   - [`GET` /now/get](#op-get-now-get) 
-  - [`GET` /now/set/{credentialId}](#op-get-now-set-credentialid) 
-  - [`GET` /now/show](#op-get-now-show) 
-  - [`GET` /now/{serviceId}/callback](#op-get-now-serviceid-callback) 
+  - [`POST` /now/set](#op-post-now-set) 
+  - [`GET` /now/who](#op-get-now-who) 
   - [`PUT` /song/add](#op-put-song-add) 
   - [`DELETE` /song/delete](#op-delete-song-delete) 
   - [`GET` /song/get](#op-get-song-get) 
   - [`GET` /song/is](#op-get-song-is) 
+  - [`POST` /song/synchronize](#op-post-song-synchronize) 
   - [`POST` /user/login](#op-post-user-login) 
   - [`POST` /user/logout](#op-post-user-logout) 
   - [`GET` /user/me](#op-get-user-me) 
   - [`POST` /user/register](#op-post-user-register) 
   - [`GET` /user/{userId}](#op-get-user-userid) 
 * [Schemas](#schemas)
+  - [MediaCredentials](#schema-mediacredentials)
   - [NowObject](#schema-nowobject)
-  - [NowCredentials](#schema-nowcredentials)
-  - [Song](#schema-song)
   - [User](#schema-user)
+  - [Song](#schema-song)
   - [NewUser](#schema-newuser)
   - [LoginCredentials](#schema-logincredentials)
 
@@ -77,8 +80,8 @@
 ## Paths
 
 
-### `GET` /now/delete/{credentialId}
-<a id="op-get-now-delete-credentialid" />
+### `DELETE` /media/delete/{credentialId}
+<a id="op-delete-media-delete-credentialid" />
 
 
 
@@ -134,6 +137,362 @@ _No headers specified_
 </div>
 </div>
 
+### `GET` /media/find
+<a id="op-get-media-find" />
+
+
+
+
+
+#### Query parameters
+
+##### &#9655; scope
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>scope </td>
+        <td>
+          string
+        </td>
+        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 200 - Array of Credential model instances
+
+###### Headers
+_No headers specified_
+
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>Response</td>
+        <td>
+          array
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.id</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.userId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.token <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.identifier <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.name</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.scope</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+[
+  {
+    "id": "string",
+    "userId": "string",
+    "type": 0,
+    "token": "string",
+    "identifier": "string",
+    "name": "string",
+    "scope": "string"
+  }
+]
+```
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `GET` /media/{serviceId}/callback
+<a id="op-get-media-serviceid-callback" />
+
+
+
+#### Path parameters
+
+##### &#9655; serviceId
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>serviceId  <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td>path</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+
+#### Query parameters
+
+##### &#9655; code
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>code </td>
+        <td>
+          string
+        </td>
+        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 204 - Add your credential to Radiod and redirect to /close
+
+###### Headers
+_No headers specified_
+
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `GET` /now/find
+<a id="op-get-now-find" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 200 - Return an array of users with a Spotify account.
+
+###### Headers
+_No headers specified_
+
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>Response</td>
+        <td>
+          array
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.id</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.email <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.power <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.firstName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.lastName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.playlistId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+[
+  {
+    "id": "string",
+    "email": "string",
+    "power": 0,
+    "firstName": "string",
+    "lastName": "string",
+    "playlistId": "string"
+  }
+]
+```
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
 ### `GET` /now/get
 <a id="op-get-now-get" />
 
@@ -148,7 +507,7 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Informations about the current song
+##### ▶ 200 - Return informations about the current song
 
 ###### Headers
 _No headers specified_
@@ -250,14 +609,16 @@ _No headers specified_
 </div>
 </div>
 
-### `GET` /now/set/{credentialId}
-<a id="op-get-now-set-credentialid" />
+### `POST` /now/set
+<a id="op-post-now-set" />
 
 
 
-#### Path parameters
 
-##### &#9655; credentialId
+
+#### Query parameters
+
+##### &#9655; userId
 
 
 
@@ -273,11 +634,11 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
-        <td>credentialId  <strong>(required)</strong></td>
+        <td>userId </td>
         <td>
           string
         </td>
-        <td>path</td>
+        <td>query</td>
         <td></td>
         <td><em>Any</em></td>
       </tr>
@@ -289,12 +650,10 @@ _No headers specified_
 
 
 
-
-
 #### Responses
 
 
-##### ▶ 200 - Return value of NowController.setNow
+##### ▶ 204 - Set the default credential succeeed
 
 ###### Headers
 _No headers specified_
@@ -307,8 +666,8 @@ _No headers specified_
 </div>
 </div>
 
-### `GET` /now/show
-<a id="op-get-now-show" />
+### `GET` /now/who
+<a id="op-get-now-who" />
 
 
 
@@ -321,7 +680,7 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Array of Credential model instances
+##### ▶ 200 - Return the selected user for displaying the current track
 
 ###### Headers
 _No headers specified_
@@ -357,7 +716,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.userId</td>
+        <td>Response.email <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -365,15 +724,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.name <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.type <strong>(required)</strong></td>
+        <td>Response.power <strong>(required)</strong></td>
         <td>
           number
         </td>
@@ -381,7 +732,23 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.token <strong>(required)</strong></td>
+        <td>Response.firstName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.lastName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>Response.playlistId</td>
         <td>
           string
         </td>
@@ -398,168 +765,13 @@ _No headers specified_
 [
   {
     "id": "string",
-    "userId": "string",
-    "name": "string",
-    "type": 0,
-    "token": "string"
+    "email": "string",
+    "power": 0,
+    "firstName": "string",
+    "lastName": "string",
+    "playlistId": "string"
   }
 ]
-```
-
-#### Tags
-
-<div class="tags">
-  <div class="tags__tag"></div>
-</div>
-</div>
-
-### `GET` /now/{serviceId}/callback
-<a id="op-get-now-serviceid-callback" />
-
-
-
-#### Path parameters
-
-##### &#9655; serviceId
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>In</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>serviceId  <strong>(required)</strong></td>
-        <td>
-          number
-        </td>
-        <td>path</td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-
-
-#### Query parameters
-
-##### &#9655; code
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>In</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>code </td>
-        <td>
-          string
-        </td>
-        <td>query</td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-
-
-
-
-#### Responses
-
-
-##### ▶ 200 - Credential model instance
-
-###### Headers
-_No headers specified_
-
-###### application/json
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>id</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>userId</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>name <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>type <strong>(required)</strong></td>
-        <td>
-          number
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>token <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-##### Example _(generated)_
-
-```json
-{
-  "id": "string",
-  "userId": "string",
-  "name": "string",
-  "type": 0,
-  "token": "string"
-}
 ```
 
 #### Tags
@@ -982,6 +1194,91 @@ true
 </div>
 </div>
 
+### `POST` /song/synchronize
+<a id="op-post-song-synchronize" />
+
+
+
+
+
+#### Query parameters
+
+##### &#9655; name
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>name </td>
+        <td>
+          string
+        </td>
+        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### &#9655; description
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>description </td>
+        <td>
+          string
+        </td>
+        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 204 - The synchronization with Spotify is a success.
+
+###### Headers
+_No headers specified_
+
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
 ### `POST` /user/login
 <a id="op-post-user-login" />
 
@@ -1183,6 +1480,14 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>power <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>firstName</td>
         <td>
           string
@@ -1192,6 +1497,14 @@ _No headers specified_
       </tr>
       <tr>
         <td>lastName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>playlistId</td>
         <td>
           string
         </td>
@@ -1208,8 +1521,10 @@ _No headers specified_
 {
   "id": "string",
   "email": "string",
+  "power": 0,
   "firstName": "string",
-  "lastName": "string"
+  "lastName": "string",
+  "playlistId": "string"
 }
 ```
 
@@ -1245,7 +1560,7 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
-        <td>id</td>
+        <td>email <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -1253,7 +1568,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>email <strong>(required)</strong></td>
+        <td>password <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -1276,14 +1591,6 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
-      <tr>
-        <td>password <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
   </tbody>
 </table>
 
@@ -1292,11 +1599,10 @@ _No headers specified_
 
 ```json
 {
-  "id": "string",
   "email": "string",
+  "password": "string",
   "firstName": "string",
-  "lastName": "string",
-  "password": "string"
+  "lastName": "string"
 }
 ```
 
@@ -1342,6 +1648,14 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>power <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>firstName</td>
         <td>
           string
@@ -1351,6 +1665,14 @@ _No headers specified_
       </tr>
       <tr>
         <td>lastName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>playlistId</td>
         <td>
           string
         </td>
@@ -1367,8 +1689,10 @@ _No headers specified_
 {
   "id": "string",
   "email": "string",
+  "power": 0,
   "firstName": "string",
-  "lastName": "string"
+  "lastName": "string",
+  "playlistId": "string"
 }
 ```
 
@@ -1459,6 +1783,14 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
+        <td>power <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>firstName</td>
         <td>
           string
@@ -1468,6 +1800,14 @@ _No headers specified_
       </tr>
       <tr>
         <td>lastName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>playlistId</td>
         <td>
           string
         </td>
@@ -1484,8 +1824,10 @@ _No headers specified_
 {
   "id": "string",
   "email": "string",
+  "power": 0,
   "firstName": "string",
-  "lastName": "string"
+  "lastName": "string",
+  "playlistId": "string"
 }
 ```
 
@@ -1498,6 +1840,92 @@ _No headers specified_
 
 ## Schemas
 
+<a id="schema-mediacredentials" />
+
+#### MediaCredentials
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>id</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>userId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>token <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>identifier <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>scope</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+##### Example _(generated)_
+
+```json
+{
+  "id": "string",
+  "userId": "string",
+  "type": 0,
+  "token": "string",
+  "identifier": "string",
+  "name": "string",
+  "scope": "string"
+}
+```
 <a id="schema-nowobject" />
 
 #### NowObject
@@ -1586,9 +2014,9 @@ _No headers specified_
   "url": "string"
 }
 ```
-<a id="schema-nowcredentials" />
+<a id="schema-user" />
 
-#### NowCredentials
+#### User
 
 <table>
   <thead>
@@ -1609,7 +2037,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>userId</td>
+        <td>email <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -1617,15 +2045,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>name <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>type <strong>(required)</strong></td>
+        <td>power <strong>(required)</strong></td>
         <td>
           number
         </td>
@@ -1633,7 +2053,23 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>token <strong>(required)</strong></td>
+        <td>firstName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>lastName</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>playlistId</td>
         <td>
           string
         </td>
@@ -1648,10 +2084,11 @@ _No headers specified_
 ```json
 {
   "id": "string",
-  "userId": "string",
-  "name": "string",
-  "type": 0,
-  "token": "string"
+  "email": "string",
+  "power": 0,
+  "firstName": "string",
+  "lastName": "string",
+  "playlistId": "string"
 }
 ```
 <a id="schema-song" />
@@ -1740,65 +2177,6 @@ _No headers specified_
   "userId": "string"
 }
 ```
-<a id="schema-user" />
-
-#### User
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>id</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>email <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>firstName</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>lastName</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-##### Example _(generated)_
-
-```json
-{
-  "id": "string",
-  "email": "string",
-  "firstName": "string",
-  "lastName": "string"
-}
-```
 <a id="schema-newuser" />
 
 #### NewUser
@@ -1814,7 +2192,7 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
-        <td>id</td>
+        <td>email <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -1822,7 +2200,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>email <strong>(required)</strong></td>
+        <td>password <strong>(required)</strong></td>
         <td>
           string
         </td>
@@ -1845,14 +2223,6 @@ _No headers specified_
         <td></td>
         <td><em>Any</em></td>
       </tr>
-      <tr>
-        <td>password <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
   </tbody>
 </table>
 
@@ -1860,11 +2230,10 @@ _No headers specified_
 
 ```json
 {
-  "id": "string",
   "email": "string",
+  "password": "string",
   "firstName": "string",
-  "lastName": "string",
-  "password": "string"
+  "lastName": "string"
 }
 ```
 <a id="schema-logincredentials" />

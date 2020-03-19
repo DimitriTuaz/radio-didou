@@ -44,6 +44,7 @@
     "@loopback/rest-explorer": "^1.4.9",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie": "^0.3.3",
+    "@types/mongodb": "^3.3.16",
     "@types/set-interval-async": "^1.0.0",
     "bcryptjs": "^2.4.3",
     "cookie": "^0.4.0",

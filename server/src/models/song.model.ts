@@ -17,45 +17,14 @@ import { User } from '../models';
   },
 })
 export class Song extends Entity {
-  @property({
-    type: 'string',
-    id: true,
-    generated: true
-  })
-  id: string;
 
-  @property({
-    type: 'string',
-    required: true,
-  })
-  title: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  album: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  artist: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  artwork: string;
-
-  @property({
-    type: 'string',
-    required: true,
-  })
-  url: string;
-
-  @belongsTo(() => User)
-  userId: string;
+  @property({ type: 'string', id: true, generated: true }) id: string;
+  @property({ type: 'string', required: true }) title: string;
+  @property({ type: 'string', required: true }) album: string;
+  @property({ type: 'string', required: true }) artist: string;
+  @property({ type: 'string', required: true }) artwork: string;
+  @property({ type: 'string', required: true }) url: string;
+  @belongsTo(() => User) userId: string;
 
   constructor(data?: Partial<Song>) {
     super(data);
@@ -63,7 +32,6 @@ export class Song extends Entity {
 }
 
 export interface SongRelations {
-
 }
 
 export type SongWithRelations = Song & SongRelations;

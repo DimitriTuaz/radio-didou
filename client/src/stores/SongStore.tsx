@@ -2,15 +2,23 @@ import { observable, action } from 'mobx';
 import { SongController } from '@openapi/routes'
 import { Song } from '@openapi/schemas'
 
+import { RootStore } from '../contexts';
+
 export enum SongState {
     liked,
     unliked
 }
 
 export class SongStore {
-    
+
+    private rootStore: RootStore;
+
     @observable state: SongState = SongState.unliked;
     @observable songs: Song[] = [];
+
+    constructor(rootStore: RootStore) {
+        this.rootStore = rootStore;
+    }
 
     @action
     add = async (url: string) => {
@@ -24,14 +32,14 @@ export class SongStore {
     }
 
     @action
-    remove = async (current_url: string, url: string) => {
+    remove = async (url: string) => {
         try {
             await SongController.remove(url);
             this.songs = this.songs.filter((value: Song) => {
                 return value.url !== url;
             });
-            if (current_url === url) {
-                this.state = SongState.unliked;   
+            if (this.rootStore.nowStore.trackUrl === url) {
+                this.state = SongState.unliked;
             }
         } catch (error) {
             console.error(error);
@@ -39,9 +47,9 @@ export class SongStore {
     }
 
     @action
-    refresh = async (url: string) => {
+    refresh = async () => {
         try {
-            let isLiked: boolean = await SongController.is(url);
+            let isLiked: boolean = await SongController.is(this.rootStore.nowStore.trackUrl);
             this.state = isLiked ? SongState.liked : SongState.unliked;
         } catch (error) {
             console.error(error);

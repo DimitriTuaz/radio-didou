@@ -11,12 +11,12 @@ import {
   Response,
 } from '@loopback/rest';
 import { CookieOptions } from 'express'
-import { User } from '../models';
+import { User, UserPower } from '../models';
 import { UserRepository } from '../repositories';
+import { JWTService } from '../services';
 import { inject } from '@loopback/core';
 import {
   authenticate,
-  TokenService,
   UserService,
 } from '@loopback/authentication';
 import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
@@ -32,8 +32,11 @@ import _ from 'lodash';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 
 @model()
-class NewUser extends User {
+class NewUser {
+  @property({ required: true }) email: string;
   @property({ required: true }) password: string;
+  @property({ required: false }) firstName?: string;
+  @property({ required: false }) lastName?: string;
 }
 
 @model()
@@ -46,7 +49,7 @@ export class UserController {
   constructor(
     @repository(UserRepository) private userRepository: UserRepository,
     @inject(PasswordHasherBindings.PASSWORD_HASHER) private passwordHasher: PasswordHasher,
-    @inject(RadiodBindings.TOKEN_SERVICE) private jwtService: TokenService,
+    @inject(RadiodBindings.TOKEN_SERVICE) private jwtService: JWTService,
     @inject(RadiodBindings.USER_SERVICE) private userService: UserService<User, Credentials>,
     @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any
   ) { }
@@ -77,7 +80,7 @@ export class UserController {
     validateCredentials(_.pick(newUser, ['email', 'password']));
     const password = await this.passwordHasher.hashPassword(newUser.password);
     try {
-      const savedUser = await this.userRepository.create(_.omit(newUser, 'id', 'password'));
+      const savedUser = await this.userRepository.create(_.omit(newUser, 'password'));
       await this.userRepository.userCredentials(savedUser.id).create({ password });
       return savedUser;
 
@@ -123,7 +126,7 @@ export class UserController {
       },
     },
   })
-  @authenticate('jwt')
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async currentUser(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<UserProfile> {
     currentUserProfile.id = currentUserProfile[securityId];
@@ -137,7 +140,7 @@ export class UserController {
         description: 'Grant token in a cookie',
         headers: {
           'Set-Cookie': {
-            description: 'Access token valid for 12 hours',
+            description: 'Access token valid for 48 hours',
             schema: {
               type: 'string',
             }
@@ -158,7 +161,7 @@ export class UserController {
     @inject(TokenServiceBindings.TOKEN_EXPIRES_IN) maxAge: string): Promise<void> {
     const user = await this.userService.verifyCredentials(credentials);
     const userProfile = this.userService.convertToUserProfile(user);
-    const token = await this.jwtService.generateToken(userProfile);
+    const token = await this.jwtService.generateToken(userProfile, user.power);
     let options: CookieOptions = {
       path: "/",
       maxAge: Number.parseInt(maxAge) * 1000,

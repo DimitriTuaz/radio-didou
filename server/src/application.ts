@@ -6,7 +6,7 @@ import {
   AuthenticationComponent,
   registerAuthenticationStrategy
 } from '@loopback/authentication'
-import { JWTAuthenticationStrategy } from './authentication-strategies/jwt-strategy';
+import { JWTAuthenticationStrategy } from './authentication/jwt-strategy';
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 import { RestApplication } from '@loopback/rest';
 
@@ -91,6 +91,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.static('/', path.join(this.rootPath, 'client/build'));
     this.static('/jingles', path.join(this.rootPath, 'client/build'));
+    this.static('/close', path.join(this.rootPath, 'static/close.html'));
     this.setupBindings();
   }
 
@@ -110,7 +111,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(RadiodBindings.TOKEN_SERVICE).toClass(JWTService);
     this.bind(TokenServiceBindings.TOKEN_SECRET).to(this.config.secret);
-    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to('43200');
+    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to((48 * 60 * 60).toString());
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 

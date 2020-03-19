@@ -2,13 +2,14 @@ import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dyna
 import { clearIntervalAsync } from 'set-interval-async';
 import { LifeCycleObserver, Provider, inject } from '@loopback/core';
 
-import request = require('superagent');
 import { RadiodBindings, RadiodKeys } from '../keys';
-import { NowCredentials } from '../models';
+import { MediaCredentials } from '../models';
 import { NowFetcher, NowNone, NowDeezer, NowSpotify, NowObject, NowEnum } from '../now'
 import { PersistentKeyService } from '../services';
 import { repository } from '@loopback/repository';
-import { NowCredentialsRepository } from '../repositories';
+import { MediaCredentialsRepository } from '../repositories';
+
+import request from 'superagent'
 
 export class NowService implements LifeCycleObserver, Provider<NowObject> {
 
@@ -20,7 +21,7 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
     @inject(RadiodBindings.GLOBAL_CONFIG) private configuration: any,
     @inject(RadiodBindings.API_KEY) private api_key: any,
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
-    @repository(NowCredentialsRepository) private credentialRepository: NowCredentialsRepository) {
+    @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository) {
     this.icecastURL = configuration.icecast + '/status-json.xsl';
     this.fetcher = new NowNone();
   }
@@ -32,13 +33,15 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
   public async setDefaultFetcher(): Promise<void> {
     try {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
-      let credential: NowCredentials = await this.credentialRepository.findById(crendentialID);
+      let credential: MediaCredentials = await this.credentialRepository.findById(crendentialID);
       this.setFetcher(credential);
-    } catch (e) { console.log("[NowService] setDefaultFetcher failed"); }
+    } catch (e) {
+      this.setFetcher(undefined);
+    }
   }
 
-  public setFetcher(credentials?: NowCredentials): void {
-    if (credentials == null) {
+  public setFetcher(credentials?: MediaCredentials): void {
+    if (credentials == undefined) {
       this.fetcher = new NowNone();
     }
     else {
