@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import { Grid } from 'semantic-ui-react';
+import { useObserver } from 'mobx-react-lite';
 import '../App.less';
 
 import { UserState } from '../stores';
@@ -33,7 +34,7 @@ export const Home = () => {
     };
   });
 
-  return (
+  return useObserver(() => (
     <>
       <SideMenu />
       <ModalController>
@@ -69,5 +70,5 @@ export const Home = () => {
         </Grid>
       </div>
     </>
-  );
+  ));
 };

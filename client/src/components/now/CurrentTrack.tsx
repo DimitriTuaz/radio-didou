@@ -16,7 +16,7 @@ export const CurrentTrack = () => {
                     <Item.Group>
                         <Item>
                             <Item.Image
-                                size='medium'
+                                size={window.innerWidth <= 1000 ? 'small' : 'medium'}
                                 src={
                                     (nowStore.trackCover !== undefined
                                         && nowStore.trackCover.length === 0) ?

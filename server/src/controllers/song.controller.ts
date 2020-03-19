@@ -154,6 +154,7 @@ export class SongController {
   async synchronize(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
     @param.query.string('name', { required: false }) name?: string,
+    @param.query.string('description', { required: false }) description?: string,
   ) {
     let userId: string = currentUserProfile[securityId];
     let user = await this.userRepository.findOne({
@@ -193,6 +194,7 @@ export class SongController {
         return 'spotify:track:' + (new URL(value.url).pathname.split('/')[2])
       }),
       name,
+      description,
       true);
     user.playlistId = playlistId;
     delete user.mediaCredentials;
@@ -215,6 +217,7 @@ export class SongController {
     access_token: string,
     uris: string[],
     name: string | undefined,
+    description: string | undefined,
     retryOnce: boolean): Promise<string | undefined> {
     try {
       if (playlistId == undefined)
@@ -231,13 +234,15 @@ export class SongController {
         let playlistId = await this.create_playlist(
           spotifyId,
           access_token,
-          name !== undefined ? name : 'Mes <3 Radio Didou');
+          name !== undefined ? name : 'Mes <3 Radio Didou',
+          description !== undefined ? description : 'Mes coups de coeur fraîchement diggés sur www.radio-didou.com');
         return await this.synchronize_playlist(
           spotifyId,
           playlistId,
           access_token,
           uris,
           name,
+          description,
           false);
       } else {
         console.log('[SongController] Error in synchronize_playlist');
@@ -246,13 +251,13 @@ export class SongController {
     }
   }
 
-  private async create_playlist(spotifyId: string, access_token: string, name: string) {
+  private async create_playlist(spotifyId: string, access_token: string, name: string, description: string) {
     const response = await request
       .post(NowSpotify.users_url + '/' + spotifyId + '/playlists')
       .set('Accept', 'application/json')
       .set('Content-Type', 'application/json')
       .set('Authorization', 'Bearer ' + access_token)
-      .send({ name: name });
+      .send({ name: name, description: description });
     return response.body.id;
   }
 
