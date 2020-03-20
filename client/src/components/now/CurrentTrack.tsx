@@ -12,7 +12,10 @@ export const CurrentTrack = () => {
         <div className='current-track-wrapper'>
             <div className='current-track-container'>
                 <div
-                    onClick={() => { window.open(nowStore.trackUrl, '_blank') }}>
+                    onClick={() => { window.open((nowStore.trackTitle !== undefined
+                                        && nowStore.trackTitle.length === 0) ?
+                                        'https://zoom.us/j/874497778' :
+                                        nowStore.trackUrl, '_blank') }}>
                     <Item.Group unstackable>
                         <Item>
                             <Item.Image
@@ -27,11 +30,21 @@ export const CurrentTrack = () => {
                                 <Item.Header>{
                                     (nowStore.trackTitle !== undefined
                                         && nowStore.trackTitle.length === 0) ?
-                                        'Radio Didou revient bientôt...' :
+                                        'Coronight' :
                                         nowStore.trackTitle
                                 }</Item.Header>
-                                <Item.Description>{nowStore.trackArtists}</Item.Description>
-                                <Item.Extra>{nowStore.trackAlbum}</Item.Extra>
+                                <Item.Description>{
+                                    (nowStore.trackTitle !== undefined
+                                        && nowStore.trackTitle.length === 0) ?
+                                        'DJ Didou playing live' :
+                                        nowStore.trackArtists
+                                }</Item.Description>
+                                <Item.Extra>{
+                                    (nowStore.trackTitle !== undefined
+                                        && nowStore.trackTitle.length === 0) ?
+                                        'Rejoins-nous sur https://zoom.us/j/874497778':
+                                        nowStore.trackAlbum
+                                }</Item.Extra>
                             </Item.Content>
                         </Item>
                     </Item.Group >
