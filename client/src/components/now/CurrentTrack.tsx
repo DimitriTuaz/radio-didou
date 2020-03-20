@@ -24,7 +24,12 @@ export const CurrentTrack = () => {
                                         nowStore.trackCover
                                 } />
                             <Item.Content verticalAlign='middle'>
-                                <Item.Header>{nowStore.trackTitle}</Item.Header>
+                                <Item.Header>{
+                                    (nowStore.trackTitle !== undefined
+                                        && nowStore.trackTitle.length === 0) ?
+                                        'Radio Didou revient bientôt...' :
+                                        nowStore.trackTitle
+                                }</Item.Header>
                                 <Item.Description>{nowStore.trackArtists}</Item.Description>
                                 <Item.Extra>{nowStore.trackAlbum}</Item.Extra>
                             </Item.Content>
