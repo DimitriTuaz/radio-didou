@@ -9,7 +9,7 @@ export class NowNone extends NowFetcher {
     this.now = {
       type: NowEnum.None,
       listeners: 0,
-      song: '',
+      song: 'Radio Didou revient bientôt...',
       artists: [],
     };
   }

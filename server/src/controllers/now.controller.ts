@@ -8,7 +8,7 @@ import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 
-import { NowObject, SpotifyScope } from '../now';
+import { NowObject, SpotifyScope, NowEnum } from '../now';
 import { MediaCredentials, User, UserPower } from '../models';
 import { MediaCredentialsRepository, UserRepository } from '../repositories';
 import { PersistentKeyService, NowService } from '../services';
@@ -51,22 +51,29 @@ export class NowController {
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async setMedia(
     @param.query.string('userId') userId: string,
+    @param.query.boolean('live', { required: false }) live?: boolean
   ) {
-    let credential: MediaCredentials | undefined;
-    let data: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
-      where: {
-        scope: SpotifyScope.playback
-      }
-    });
-    if (data.length > 0) {
-      credential = data[0];
-      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
+    if (live !== undefined && live === true) {
+      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, NowEnum.Live.toString());
+      this.nowService.setFetcher(undefined, true);
     }
     else {
-      credential = undefined;
-      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, 'none');
+      let credential: MediaCredentials | undefined;
+      let data: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
+        where: {
+          scope: SpotifyScope.playback
+        }
+      });
+      if (data.length > 0) {
+        credential = data[0];
+        await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
+      }
+      else {
+        credential = undefined;
+        await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, 'none');
+      }
+      this.nowService.setFetcher(credential, false);
     }
-    this.nowService.setFetcher(credential);
   }
 
 

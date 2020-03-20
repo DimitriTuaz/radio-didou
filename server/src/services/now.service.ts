@@ -4,7 +4,7 @@ import { LifeCycleObserver, Provider, inject } from '@loopback/core';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 import { MediaCredentials } from '../models';
-import { NowFetcher, NowNone, NowDeezer, NowSpotify, NowObject, NowEnum } from '../now'
+import { NowFetcher, NowNone, NowDeezer, NowSpotify, NowObject, NowEnum, NowLive } from '../now'
 import { PersistentKeyService } from '../services';
 import { repository } from '@loopback/repository';
 import { MediaCredentialsRepository } from '../repositories';
@@ -34,15 +34,19 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
     try {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: MediaCredentials = await this.credentialRepository.findById(crendentialID);
-      this.setFetcher(credential);
+      let live: boolean = (crendentialID == NowEnum.Live.toString());
+      this.setFetcher(credential, live);
     } catch (e) {
-      this.setFetcher(undefined);
+      this.setFetcher();
     }
   }
 
-  public setFetcher(credentials?: MediaCredentials): void {
+  public setFetcher(credentials?: MediaCredentials, live?: boolean): void {
     if (credentials == undefined) {
-      this.fetcher = new NowNone();
+      if (live)
+        this.fetcher = new NowLive();
+      else
+        this.fetcher = new NowNone();
     }
     else {
       switch (credentials.type) {
