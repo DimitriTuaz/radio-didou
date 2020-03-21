@@ -2,8 +2,8 @@
 export * from './interaction/Like';
 export * from './interaction/Player';
 export * from './interaction/SideMenu';
+export * from './interaction/Soundcloud';
 export * from './interaction/OpenSideMenu';
-export * from './interaction/TopMenu';
 
 // JINGLE
 export * from './jingle/Jingle';

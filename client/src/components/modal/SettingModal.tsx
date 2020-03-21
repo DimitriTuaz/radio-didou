@@ -4,7 +4,7 @@ import { Modal, Header, Button, Card, Image, Icon, Dropdown } from 'semantic-ui-
 
 import { OpenAPI } from '@openapi/.';
 import { useStore } from '../../hooks'
-import { SpotifyScope, UserPower } from '../../stores';
+import { SpotifyScope, UserPower, LiveUser } from '../../stores';
 
 import { spotify } from '../../../../api_key_public.json'
 import { MediaCredentials, User } from '@openapi/schemas';
@@ -46,15 +46,19 @@ const CredentialDropdown = () => {
     const { settingStore } = useStore();
     const [error, setError] = useState(false);
 
-    const defaultOptions: (User | undefined)[] = [undefined];
+    const defaultOptions: (User | undefined)[] = [undefined, LiveUser];
     const options = defaultOptions.concat(settingStore.nowUsers);
 
     const onClick = async (user: (User | undefined)) => {
         try {
             if (user === undefined)
-                await NowController.setMedia('undefined');
-            else if (user.id !== undefined)
-                await NowController.setMedia(user.id);
+                await NowController.setMedia('undefined', false);
+            else if (user.id !== undefined) {
+                if (user.id !== LiveUser.id)
+                    await NowController.setMedia(user.id, false);
+                else
+                    await NowController.setMedia('undefined', true);
+            }
             settingStore.currentNowUser = user;
             setError(false);
         }

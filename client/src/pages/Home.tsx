@@ -11,6 +11,7 @@ import {
   Like,
   AuditorCount,
   SideMenu,
+  Soundcloud,
   OpenSideMenu,
   UserModal,
   SongModal,
@@ -45,6 +46,9 @@ export const Home = () => {
         }}
       </ModalController>
       <div id='main-container'>
+        <div id='soundlcoud-container'>
+          <Soundcloud />
+        </div>
         <div id='open-side-menu-container'>
           <OpenSideMenu />
         </div>
