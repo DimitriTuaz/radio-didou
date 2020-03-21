@@ -89,9 +89,16 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
 
+    // MAIN
     this.static('/', path.join(this.rootPath, 'client/build'));
     this.static('/jingles', path.join(this.rootPath, 'client/build'));
     this.static('/close', path.join(this.rootPath, 'static/close.html'));
+
+    // Low LATENCY
+    this.static('/lowlatency', path.join(this.rootPath, 'static/lowlatency.html'));
+    this.static('/janus.min.js', path.join(this.rootPath, 'static/janus.min.js'));
+    this.static('/lowlatency.js', path.join(this.rootPath, 'static/lowlatency.js'));
+
     this.setupBindings();
   }
 
