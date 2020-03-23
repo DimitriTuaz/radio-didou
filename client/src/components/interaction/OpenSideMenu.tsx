@@ -12,13 +12,14 @@ export const OpenSideMenu = () => {
     interfaceStore.showSidebar(!interfaceStore.activeSidebar);
   }
 
+  const isMobile = window.innerWidth <= 1000;
   return useObserver(() => (
     <Icon
       fitted
       onClick={onShowSidebar}
       name='bars'
       color='teal'
-      size='big'>
+      size={isMobile ? 'large' :'big'}>
     </Icon>
   ));
 };

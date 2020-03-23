@@ -11,7 +11,7 @@ import {
   Like,
   AuditorCount,
   SideMenu,
-  Soundcloud,
+  SocialLink,
   OpenSideMenu,
   UserModal,
   SongModal,
@@ -46,8 +46,9 @@ export const Home = () => {
         }}
       </ModalController>
       <div id='main-container'>
-        <div id='soundlcoud-container'>
-          <Soundcloud />
+        <div id='social-links-container'>
+          <SocialLink url='https://soundcloud.com/radio-didou' iconName='soundcloud' />
+          <SocialLink url='https://fb.me/radiodidou' iconName='facebook' />
         </div>
         <div id='open-side-menu-container'>
           <OpenSideMenu />

@@ -2,7 +2,7 @@
 export * from './interaction/Like';
 export * from './interaction/Player';
 export * from './interaction/SideMenu';
-export * from './interaction/Soundcloud';
+export * from './interaction/SocialLink';
 export * from './interaction/OpenSideMenu';
 
 // JINGLE
