@@ -19,10 +19,9 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
 
   constructor(
     @inject(RadiodBindings.GLOBAL_CONFIG) private configuration: any,
-    @inject(RadiodBindings.API_KEY) private api_key: any,
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository) {
-    this.icecastURL = configuration.icecast + '/status-json.xsl';
+    this.icecastURL = configuration.icecast.url + '/status-json.xsl';
     this.fetcher = new NowNone();
   }
 
@@ -47,7 +46,7 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
     else {
       switch (credentials.type) {
         case NowEnum.Spotify:
-          this.fetcher = new NowSpotify(credentials.token, this.api_key.spotify, this.fetcher.now);
+          this.fetcher = new NowSpotify(credentials.token, this.configuration.spotify, this.fetcher.now);
           break;
         case NowEnum.Deezer:
           this.fetcher = new NowDeezer(credentials.token, this.fetcher.now);

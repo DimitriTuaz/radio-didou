@@ -4,7 +4,6 @@ import { repository } from '@loopback/repository';
 
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
-import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 

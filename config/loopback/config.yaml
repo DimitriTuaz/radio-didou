@@ -1,0 +1,43 @@
+#
+# Main configuration file
+#
+
+# REST configuration of LOOPBACK
+rest:
+  host: localhost
+  port: 8888
+
+#
+# The secret is used to sign the JWT Token
+#
+secret: 'SECRET'
+
+#
+# This is ICECAST URL. It is provided to the client.
+#
+icecast:
+  url: 'ICECAST-URL'
+  mount_point: 'ICECAST-MOUNT-POINT'
+
+#
+# [OPTIONAL] The domain of the COOKIE.
+# In case your website has multiple subdomains.
+#
+domain: '.localhost'
+
+#
+# SPOTIFY
+# This is your secret and client ID.
+#
+spotify:
+  client_id: 'SPOTIFY-CLIENT-ID'
+  secret: 'SPOTIFY-SECRET'
+
+#
+# DEEZER
+# This is your secret and app IP.
+#
+deezer:
+  app_id: 'DEEZER-APP-ID'
+  secret: 'DEEZER-SECRET'
+

@@ -17,7 +17,6 @@ import request from 'superagent'
 @bind({ scope: BindingScope.SINGLETON })
 export class MediaController {
   constructor(
-    @inject(RadiodBindings.API_KEY) private api_key: any,
     @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @repository(UserRepository) private userRepository: UserRepository
@@ -137,7 +136,7 @@ export class MediaController {
   }
 
   private async obtainSpotifyToken(code: string, redirect_uri: string): Promise<any> {
-    const authorization = Buffer.from(this.api_key.spotify.client_id + ':' + this.api_key.spotify.secret)
+    const authorization = Buffer.from(this.global_config.spotify.client_id + ':' + this.global_config.spotify.secret)
       .toString('base64');
     const response = await request
       .post(NowSpotify.token_url)
@@ -170,8 +169,8 @@ export class MediaController {
   private async obtainDeezerToken(code: string) {
     const response = await request
       .get(NowDeezer.auth_url)
-      .query({ app_id: this.api_key.deezer.app_id })
-      .query({ secret: this.api_key.deezer.secret })
+      .query({ app_id: this.global_config.deezer.app_id })
+      .query({ secret: this.global_config.deezer.secret })
       .query({ code: code })
       .query({ output: "json" });
     return response.body.access_token;

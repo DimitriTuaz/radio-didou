@@ -6,6 +6,7 @@
 
 * [Servers](#servers)
 * [Paths](#paths)
+  - [`GET` /configuration](#op-get-configuration) 
   - [`DELETE` /media/delete/{credentialId}](#op-delete-media-delete-credentialid) 
   - [`GET` /media/find](#op-get-media-find) 
   - [`GET` /media/{serviceId}/callback](#op-get-media-serviceid-callback) 
@@ -24,6 +25,7 @@
   - [`POST` /user/register](#op-post-user-register) 
   - [`GET` /user/{userId}](#op-get-user-userid) 
 * [Schemas](#schemas)
+  - [Configuration](#schema-configuration)
   - [MediaCredentials](#schema-mediacredentials)
   - [NowObject](#schema-nowobject)
   - [User](#schema-user)
@@ -79,6 +81,84 @@
 
 ## Paths
 
+
+### `GET` /configuration
+<a id="op-get-configuration" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 200 - Return the client configuration
+
+###### Headers
+_No headers specified_
+
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>icecast_url <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>spotify_id <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>deezer_id <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+{
+  "icecast_url": "string",
+  "spotify_id": "string",
+  "deezer_id": "string"
+}
+```
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
 
 ### `DELETE` /media/delete/{credentialId}
 <a id="op-delete-media-delete-credentialid" />
@@ -1840,6 +1920,56 @@ _No headers specified_
 
 ## Schemas
 
+<a id="schema-configuration" />
+
+#### Configuration
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>icecast_url <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>spotify_id <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>deezer_id <strong>(required)</strong></td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+##### Example _(generated)_
+
+```json
+{
+  "icecast_url": "string",
+  "spotify_id": "string",
+  "deezer_id": "string"
+}
+```
 <a id="schema-mediacredentials" />
 
 #### MediaCredentials

@@ -44,22 +44,24 @@
     "@loopback/rest-explorer": "^1.4.9",
     "@types/bcryptjs": "^2.4.2",
     "@types/cookie": "^0.3.3",
-    "@types/mongodb": "^3.3.16",
+    "@types/mongodb": "^3.5.3",
     "@types/set-interval-async": "^1.0.0",
+    "@types/yaml": "^1.2.0",
     "bcryptjs": "^2.4.3",
     "cookie": "^0.4.0",
     "isemail": "^3.2.0",
     "jsonwebtoken": "^8.5.1",
-    "loopback-connector-mongodb": "^5.2.1",
+    "loopback-connector-mongodb": "^5.2.3",
     "set-interval-async": "1.0.29",
-    "superagent": "^5.2.1"
+    "superagent": "^5.2.2",
+    "yaml": "^1.8.3"
   },
   "devDependencies": {
     "@loopback/build": "^3.1.1",
     "@loopback/testlab": "^1.10.3",
-    "@types/node": "^12.12.26",
+    "@types/node": "^12.12.31",
+    "openapi3-generator": "^0.13.0",
     "source-map-support": "^0.5.16",
-    "typescript": "^3.7.5",
-    "openapi3-generator": "^0.13.0"
+    "typescript": "^3.8.3"
   }
 }

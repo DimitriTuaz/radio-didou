@@ -12,6 +12,7 @@ import { RestApplication } from '@loopback/rest';
 
 import path from 'path';
 import fs from 'fs';
+import YAML from 'yaml';
 
 import { MainSequence } from './sequence';
 
@@ -38,33 +39,9 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     super();
     this.rootPath = path.join(__dirname, '../..');
-    this.config = JSON.parse(fs.readFileSync(path.join(this.rootPath, 'config.json')).toString());
+    this.config = YAML.parse(fs.readFileSync(path.join(this.rootPath, 'config.yaml')).toString());
 
-    if (['127.0.0.1', 'localhost'].includes(this.config.rest.host)) {
-      this.bind(CoreBindings.APPLICATION_CONFIG).to({
-        rest: {
-          host: this.config.rest.host,
-          port: this.config.rest.port,
-          cors: {
-            origin: [
-              'http://localhost:3000',
-              'http://localhost:8888',
-              'http://127.0.0.1:3000',
-              'http://127.0.0.1:8888'
-            ],
-            credentials: true
-          }
-        }
-      });
-    }
-    else {
-      this.bind(CoreBindings.APPLICATION_CONFIG).to({
-        rest: {
-          host: this.config.rest.host,
-          port: this.config.rest.port
-        }
-      });
-    }
+    this.bind(CoreBindings.APPLICATION_CONFIG).to(this.config);
 
     this.api({
       openapi: '3.0.0',
@@ -89,36 +66,36 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
 
+    this.setupStaticBindings();
+    this.setupBindings();
+  }
+
+  private setupStaticBindings(): void {
     // MAIN
     this.static('/', path.join(this.rootPath, 'client/build'));
     this.static('/jingles', path.join(this.rootPath, 'client/build'));
     this.static('/close', path.join(this.rootPath, 'static/close.html'));
 
-    // Low LATENCY
+    // [EXPERIMENTAL] LOW LATENCY
     this.static('/lowlatency', path.join(this.rootPath, 'static/lowlatency.html'));
     this.static('/janus.min.js', path.join(this.rootPath, 'static/janus.min.js'));
     this.static('/lowlatency.js', path.join(this.rootPath, 'static/lowlatency.js'));
-
-    this.setupBindings();
   }
 
   private setupBindings(): void {
 
     this.bind(RadiodBindings.ROOT_PATH).to(this.rootPath);
-    this.bind(RadiodBindings.GLOBAL_CONFIG).to(this.config)
+    this.bind(RadiodBindings.GLOBAL_CONFIG).to(this.config);
     this.bind(RadiodBindings.MONGO_CONFIG)
       .to(JSON.parse(fs.readFileSync(path.join(this.rootPath, 'mongo.config.json')).toString()));
-
-    this.bind(RadiodBindings.API_KEY)
-      .to(JSON.parse(fs.readFileSync(path.join(this.rootPath, 'api_key.json')).toString()));
 
     this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)
       .toClass(PersistentKeyService)
       .inScope(BindingScope.SINGLETON);
 
     this.bind(RadiodBindings.TOKEN_SERVICE).toClass(JWTService);
-    this.bind(TokenServiceBindings.TOKEN_SECRET).to(this.config.secret);
-    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to((48 * 60 * 60).toString());
+    this.bind(TokenServiceBindings.TOKEN_SECRET).to(this.config.jwt.secret);
+    this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(this.config.jwt.expires);
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 

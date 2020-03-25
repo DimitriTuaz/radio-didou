@@ -20,7 +20,7 @@ export class SongController {
   public name: string = 'LikeController';
 
   constructor(
-    @inject(RadiodBindings.API_KEY) private api_key: any,
+    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
     @repository(UserRepository) private userRepository: UserRepository,
   ) { }
 
@@ -178,8 +178,8 @@ export class SongController {
 
     let access_token = await NowSpotify.obtain_user_access_token(
       user.mediaCredentials[0].token,
-      this.api_key.spotify.client_id,
-      this.api_key.spotify.secret
+      this.global_config.spotify.client_id,
+      this.global_config.spotify.secret
     );
 
     if (access_token == undefined)
@@ -287,7 +287,7 @@ export class SongController {
 
   private async obtain_app_access_token(): Promise<void> {
     try {
-      const authorization = Buffer.from(this.api_key.spotify.client_id + ':' + this.api_key.spotify.secret)
+      const authorization = Buffer.from(this.global_config.spotify.client_id + ':' + this.global_config.spotify.secret)
         .toString('base64');
 
       const response = await request

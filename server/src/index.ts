@@ -16,8 +16,8 @@ export async function main() {
 
   console.log(`[Radiod] Server is listening ${host} on port ${port}`);
 
-  if (config.loopback !== undefined)
-    console.log(`[Radiod] Visit ${config.loopback}`);
+  if (host !== undefined && ['127.0.0.1', 'localhost'].includes(host))
+    console.log(`[Radiod] Visit http://${config.rest.host}:${config.rest.port}`);
 
   return app;
 }
