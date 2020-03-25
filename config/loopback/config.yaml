@@ -6,11 +6,15 @@
 rest:
   host: localhost
   port: 8888
-
+  
 #
-# The secret is used to sign the JWT Token
+# JWT TOKEN
+# The secret is used to sign the token,
+# Expires set the token lifetime in seconds.
 #
-secret: 'SECRET'
+jwt:
+  secret: 'SECRET'
+  expires: '172800'
 
 #
 # This is ICECAST URL. It is provided to the client.
