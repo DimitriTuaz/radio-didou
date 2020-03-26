@@ -1,4 +1,4 @@
-# Radiod
+# radiod - A friendly web radio.
 
 
 

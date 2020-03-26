@@ -14,7 +14,7 @@ import { CookieOptions } from 'express'
 import { User, UserPower } from '../models';
 import { UserRepository } from '../repositories';
 import { JWTService } from '../services';
-import { inject } from '@loopback/core';
+import { inject, CoreBindings } from '@loopback/core';
 import {
   authenticate,
   UserService,
@@ -51,7 +51,7 @@ export class UserController {
     @inject(PasswordHasherBindings.PASSWORD_HASHER) private passwordHasher: PasswordHasher,
     @inject(RadiodBindings.TOKEN_SERVICE) private jwtService: JWTService,
     @inject(RadiodBindings.USER_SERVICE) private userService: UserService<User, Credentials>,
-    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any
+    @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any
   ) { }
 
   @post('/user/register', {

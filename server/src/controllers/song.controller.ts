@@ -1,5 +1,5 @@
 import { get, param, getModelSchemaRef, put, del, HttpErrors, post } from '@loopback/rest';
-import { inject, BindingScope, bind } from '@loopback/core';
+import { inject, BindingScope, bind, CoreBindings } from '@loopback/core';
 import { repository } from '@loopback/repository';
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
@@ -20,7 +20,7 @@ export class SongController {
   public name: string = 'LikeController';
 
   constructor(
-    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
+    @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any,
     @repository(UserRepository) private userRepository: UserRepository,
   ) { }
 

@@ -1,6 +1,6 @@
 import { BootMixin } from '@loopback/boot';
 import { RepositoryMixin } from '@loopback/repository';
-import { BindingScope, CoreTags, CoreBindings } from '@loopback/core';
+import { BindingScope, CoreTags, CoreBindings, extensionFor } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import {
   AuthenticationComponent,
@@ -9,6 +9,15 @@ import {
 import { JWTAuthenticationStrategy } from './authentication/jwt-strategy';
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 import { RestApplication } from '@loopback/rest';
+import {
+  WINSTON_TRANSPORT,
+  WINSTON_FORMAT,
+  LoggingBindings,
+  LoggingComponent,
+  format,
+  WinstonFormat,
+  WinstonTransports
+} from '@loopback/extension-logging';
 
 import path from 'path';
 import fs from 'fs';
@@ -43,14 +52,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(CoreBindings.APPLICATION_CONFIG).to(this.config);
 
-    this.api({
-      openapi: '3.0.0',
-      info: { title: "Radiod", version: "0.0.1" },
-      paths: {},
-      components: { securitySchemes: SECURITY_SCHEME_SPEC },
-      servers: [{ url: '/' }],
-    });
-
     this.bootOptions = {
       controllers: {
         dirs: ['controllers'],
@@ -61,13 +62,55 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.projectRoot = __dirname;
     this.sequence(MainSequence);
-    this.bind(RestExplorerBindings.CONFIG).to({ path: '/explorer' });
+
+    this.setupComponents();
+    this.setupStaticBindings();
+    this.setupBindings();
+  }
+
+  private setupComponents(): void {
+    // OPENAPI
+    this.api({
+      openapi: '3.0.0',
+      info: { title: "Radiod", version: "0.0.1" },
+      paths: {},
+      components: { securitySchemes: SECURITY_SCHEME_SPEC },
+      servers: [{ url: '/' }],
+    });
     this.component(RestExplorerComponent);
+    this.bind(RestExplorerBindings.CONFIG).to({ path: '/explorer' });
+
+    // AUTHENTICATION
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
 
-    this.setupStaticBindings();
-    this.setupBindings();
+    // LOGGING
+    this.setupLogger();
+    this.component(LoggingComponent);
+  }
+
+  private setupLogger(): void {
+
+    this.configure(LoggingBindings.COMPONENT).to({
+      enableFluent: false,
+      enableHttpAccessLog: false,
+    });
+
+    this.configure(LoggingBindings.WINSTON_LOGGER).to({
+      level: 'info',
+      format: format.json(),
+    });
+
+    const fileTransport = new WinstonTransports.File({
+      dirname: '/home/paul',
+      filename: 'file.log',
+      level: 'verbose',
+      format: format.combine(format.colorize(), format.simple()),
+    });
+    this
+      .bind('logging.winston.transports.console')
+      .to(fileTransport)
+      .apply(extensionFor(WINSTON_TRANSPORT));
   }
 
   private setupStaticBindings(): void {
@@ -85,7 +128,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
   private setupBindings(): void {
 
     this.bind(RadiodBindings.ROOT_PATH).to(this.rootPath);
-    this.bind(RadiodBindings.GLOBAL_CONFIG).to(this.config);
     this.bind(RadiodBindings.MONGO_CONFIG).to(this.config.datasource);
 
     this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)

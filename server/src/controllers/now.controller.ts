@@ -12,6 +12,9 @@ import { MediaCredentials, User, UserPower } from '../models';
 import { MediaCredentialsRepository, UserRepository } from '../repositories';
 import { PersistentKeyService, NowService } from '../services';
 
+
+import { logInvocation, LoggingBindings, WinstonLogger } from '@loopback/extension-logging';
+
 @bind({ scope: BindingScope.SINGLETON })
 export class NowController {
   constructor(
@@ -19,6 +22,7 @@ export class NowController {
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @repository(UserRepository) private userRepository: UserRepository,
     @inject(RadiodBindings.NOW_SERVICE) private nowService: NowService,
+    @inject(LoggingBindings.WINSTON_LOGGER) private logger: WinstonLogger
   ) { }
 
   @get('/now/get', {
@@ -36,6 +40,7 @@ export class NowController {
     },
   })
   async getNow() {
+    this.logger.log('info', 'lol');
     return this.nowService.value();
   }
 

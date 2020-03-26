@@ -1,5 +1,5 @@
 import { get, param, getModelSchemaRef, RestBindings, Request, Response, del } from '@loopback/rest';
-import { inject, BindingScope, bind } from '@loopback/core';
+import { inject, BindingScope, bind, CoreBindings } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
 import { authenticate } from '@loopback/authentication';
@@ -17,7 +17,7 @@ import request from 'superagent'
 @bind({ scope: BindingScope.SINGLETON })
 export class MediaController {
   constructor(
-    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
+    @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any,
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @repository(UserRepository) private userRepository: UserRepository
   ) { }

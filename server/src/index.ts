@@ -1,6 +1,6 @@
 import { RadiodApplication } from './application';
 import { RestBindings } from '@loopback/rest';
-import { RadiodBindings } from './keys';
+import { CoreBindings } from '@loopback/core';
 
 export async function main() {
 
@@ -12,7 +12,7 @@ export async function main() {
 
   const port = await app.restServer.get(RestBindings.PORT);
   const host = await app.restServer.get(RestBindings.HOST);
-  const config = await app.get(RadiodBindings.GLOBAL_CONFIG);
+  const config = await app.get(CoreBindings.APPLICATION_CONFIG);
 
   console.log(`[Radiod] Server is listening ${host} on port ${port}`);
 

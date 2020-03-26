@@ -1,5 +1,5 @@
 import { get } from '@loopback/rest';
-import { inject, BindingScope, bind } from '@loopback/core';
+import { inject, BindingScope, bind, CoreBindings } from '@loopback/core';
 
 import { RadiodBindings } from '../keys';
 import { model, property } from '@loopback/repository';
@@ -14,7 +14,7 @@ class Configuration {
 @bind({ scope: BindingScope.SINGLETON })
 export class ConfigurationController {
   constructor(
-    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
+    @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any,
   ) { }
 
   @get('/configuration', {
