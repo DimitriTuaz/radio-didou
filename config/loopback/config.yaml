@@ -8,6 +8,23 @@ rest:
   port: 8888
   
 #
+# DATABASE Configuration
+#
+datasource:
+  name: 'mongo'
+  connector: 'mongodb'
+  host: 'localhost'
+  port: 27017
+  database: 'radiod'
+  useNewUrlParser: true
+  
+# [OPTIONAL] Mongo Authentication
+#
+#  authSource: 'admin'
+#  user: 'MONGO-USER'
+#  password: 'MONGO-PASSWORD'
+
+#
 # JWT TOKEN
 # The secret is used to sign the token,
 # Expires set the token lifetime in seconds.

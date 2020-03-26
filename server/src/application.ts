@@ -86,8 +86,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(RadiodBindings.ROOT_PATH).to(this.rootPath);
     this.bind(RadiodBindings.GLOBAL_CONFIG).to(this.config);
-    this.bind(RadiodBindings.MONGO_CONFIG)
-      .to(JSON.parse(fs.readFileSync(path.join(this.rootPath, 'mongo.config.json')).toString()));
+    this.bind(RadiodBindings.MONGO_CONFIG).to(this.config.datasource);
 
     this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)
       .toClass(PersistentKeyService)
