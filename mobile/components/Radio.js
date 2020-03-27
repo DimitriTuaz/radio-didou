@@ -15,7 +15,8 @@ class Radio extends React.Component {
       track: '',
       artist: '',
       album: '',
-      cover: ''
+      cover: '',
+      listeners: 0
     };
 
     this._play = this._play.bind(this)
@@ -37,7 +38,8 @@ class Radio extends React.Component {
         track: data.song,
         artist: data.artists,
         album: data.album,
-        artwork: data.cover
+        artwork: data.cover,
+        listeners: data.listeners
       })
     })
   }
@@ -98,6 +100,7 @@ class Radio extends React.Component {
             <Image style={styles.button_image} source={this._displaySoundIcon()}/>
           </TouchableOpacity>
         </View>
+        <Text style={styles.listeners_count}>{this.state.listeners} auditeurs actuellement</Text>
       </ImageBackground>
     );
   }
@@ -112,10 +115,9 @@ const styles = StyleSheet.create({
     fontSize: 56,
     fontWeight: 'bold',
     color: 'white',
-    marginTop: 55
+    marginTop: 45
   },
   player_container: {
-    marginTop: 55,
     flexDirection: 'row',
     alignItems: 'center',
     height: 240,
@@ -133,14 +135,14 @@ const styles = StyleSheet.create({
   info_container: {
     marginTop: 60,
     padding: 25,
-    height: 360,
-    width: 380,
+    height: 410,
+    width: 410,
     flexDirection: 'column',
     backgroundColor: 'rgba(255, 255, 255, 0.3)'
   },
   artwork: {
-    height: 200,
-    width: 200,
+    height: 240,
+    width: 240,
     alignSelf: 'center',
     marginBottom: 10
   },
@@ -158,6 +160,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 20,
     marginBottom: 5
+  },
+  listeners_count: {
+    alignSelf: 'center',
+    fontSize: 22,
+    color: 'white'
   }
 });
 
