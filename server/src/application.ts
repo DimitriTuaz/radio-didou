@@ -97,7 +97,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     });
 
     this.configure(LoggingBindings.WINSTON_LOGGER).to({
-      level: 'info',
+      level: this.config.logger.level,
       format: format.combine(
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
