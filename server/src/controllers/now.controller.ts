@@ -40,7 +40,7 @@ export class NowController {
     },
   })
   async getNow() {
-    this.logger.log('info', 'lol');
+    this.logger.info('lol');
     return this.nowService.value();
   }
 

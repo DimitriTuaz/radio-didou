@@ -98,18 +98,14 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.configure(LoggingBindings.WINSTON_LOGGER).to({
       level: 'info',
-      format: format.json(),
+      format: format.combine(
+        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
+      )
     });
 
-    const fileTransport = new WinstonTransports.File({
-      dirname: '/home/paul',
-      filename: 'file.log',
-      level: 'verbose',
-      format: format.combine(format.colorize(), format.simple()),
-    });
-    this
-      .bind('logging.winston.transports.console')
-      .to(fileTransport)
+    this.bind('transports.console')
+      .to(new WinstonTransports.Console({}))
       .apply(extensionFor(WINSTON_TRANSPORT));
   }
 
