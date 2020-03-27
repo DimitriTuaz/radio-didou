@@ -143,9 +143,4 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)
       .inScope(BindingScope.SINGLETON);
   }
-
-  public async init(): Promise<void> {
-    let nowService: NowService = await this.get(RadiodBindings.NOW_SERVICE);
-    await nowService.setDefaultFetcher();
-  }
 }

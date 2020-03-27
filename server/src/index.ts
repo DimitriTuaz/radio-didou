@@ -7,7 +7,6 @@ export async function main() {
   const app = new RadiodApplication();
 
   await app.boot();
-  await app.init();
   await app.start();
 
   const port = await app.restServer.get(RestBindings.PORT);

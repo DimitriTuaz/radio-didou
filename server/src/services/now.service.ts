@@ -59,7 +59,8 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
     console.log("[NowService - " + this.fetcher.name + "] setFetcher");
   }
 
-  public start(value?: NowObject, token?: string): void {
+  public async start(): Promise<void> {
+    await this.setDefaultFetcher();
     try {
       if (!this.intervalID) {
         console.log("[NowService - " + this.fetcher.name + "] started");
