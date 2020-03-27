@@ -11,8 +11,8 @@ export class NowLive extends NowFetcher {
       listeners: 0,
       song: 'Coronight',
       artists: ['DJ Didou playing live'],
-      album: 'Clique pour nous rejoindre!',
-      url: 'https://zoom.us/j/874497778'
+      album: 'Clique pour danser avec nous !',
+      url: 'https://zoom.us/j/582964557'
     };
   }
 
