@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
 import ReactNativeTrackPlayer from 'react-native-track-player'
+import { getMetaData } from '../api/ServerAPI'
 
 class Radio extends React.Component {
 
@@ -10,16 +11,34 @@ class Radio extends React.Component {
     this.state = {
       isPlaying: false,
       isMuted: false,
-      currentVolume: 1
+      currentVolume: 1,
+      track: '',
+      artist: '',
+      album: '',
+      cover: ''
     };
 
     this._play = this._play.bind(this)
     this._mute = this._mute.bind(this)
   }
 
+  componentDidMount() {
+    this._getMetaData()
+  }
+
   componentWillUnmount() {
-    console.log("componentWillUnmount")
     ReactNativeTrackPlayer.destroy()
+  }
+
+  _getMetaData() {
+    getMetaData().then(data => {
+      this.setState({
+        track: data.song,
+        artist: data.artists,
+        album: data.album,
+        artwork: data.cover
+      })
+    })
   }
 
   _play() {
@@ -42,24 +61,40 @@ class Radio extends React.Component {
 
     if (this.state.isMuted) {
       ReactNativeTrackPlayer.setVolume(1)
-      this.state.isMuted = false
+      this.setState({ isMuted: false });
     } else {
       ReactNativeTrackPlayer.setVolume(0)
-      this.state.isMuted = true
+      this.setState({ isMuted: true });
     }
     
+  }
+
+  _displaySoundIcon() {
+    let icon = require('../images/icon_sound.png')
+    if (this.state.isMuted) {
+      icon = require('../images/icon_mute.png')
+    }
+    return icon
   }
 
   render() {
     return (
       <ImageBackground style={styles.background} source={require('../images/background.png')}>
         <Text style={styles.title}>Radio Didou</Text>
+        <TouchableOpacity style={styles.info_container}>
+          <Image style={styles.artwork} source={{uri: this.state.artwork}}/>
+          <View style={styles.track_info_container}>
+            <Text style={styles.track_title}>{ this.state.track }</Text>
+            <Text style={styles.track_info}>{ this.state.artist }</Text>
+            <Text style={styles.track_info}>{ this.state.album }</Text>
+          </View>
+        </TouchableOpacity>
         <View style={styles.player_container}>
           <TouchableOpacity style={styles.button_container} onPress={this._play}>
-            <Image style={styles.play_button_image} source={require('../images/icon_play.png')}/>
+            <Image style={styles.button_image} source={require('../images/icon_play.png')}/>
           </TouchableOpacity>
           <TouchableOpacity style={styles.button_container} onPress={this._mute}>
-            <Image style={styles.mute_button_image} source={require('../images/icon_mute.png')}/>
+            <Image style={styles.button_image} source={this._displaySoundIcon()}/>
           </TouchableOpacity>
         </View>
       </ImageBackground>
@@ -79,25 +114,49 @@ const styles = StyleSheet.create({
     marginTop: 55
   },
   player_container: {
+    marginTop: 55,
     flexDirection: 'row',
-    height: 120,
-    width: 200,
-    marginTop: 40
+    alignItems: 'center',
+    height: 240,
+    width: 360,
+    paddingLeft: 45
   },
   button_container: {
-    alignItems: 'center'
+    flex: 1
   },
-  play_button_image: {
-    height: 120,
-    width: 80,
-    resizeMode: 'contain',
-    padding: 55
+  button_image: {
+    height: 160,
+    width: 120,
+    resizeMode: 'contain'
   },
-  mute_button_image: {
-    height: 120,
-    width: 80,
-    resizeMode: 'contain',
-    padding: 55
+  info_container: {
+    marginTop: 60,
+    padding: 25,
+    height: 360,
+    width: 380,
+    flexDirection: 'column',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)'
+  },
+  artwork: {
+    height: 200,
+    width: 200,
+    alignSelf: 'center',
+    marginBottom: 10
+  },
+  track_info_container: {
+    paddingLeft: 15,
+    
+  },
+  track_title: {
+    alignSelf: 'center',
+    fontSize: 28,
+    fontFamily: 'bold',
+    marginBottom: 5
+  },
+  track_info: {
+    alignSelf: 'center',
+    fontSize: 20,
+    marginBottom: 5
   }
 });
 
