@@ -24,6 +24,7 @@ class Radio extends React.Component {
 
   componentDidMount() {
     this._getMetaData()
+    this.timer = setInterval(()=> this._getMetaData(), 3000)
   }
 
   componentWillUnmount() {
