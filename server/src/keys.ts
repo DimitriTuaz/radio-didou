@@ -1,12 +1,9 @@
 import { BindingKey } from '@loopback/context';
-import { NowService, PersistentKeyService, JWTService } from './services';
 import { UserService } from '@loopback/authentication';
-import { PasswordHasher } from './services/hash.password.bcryptjs';
+
+import { NowService, PersistentKeyService, JWTService, PasswordHasher } from './services';
 import { User } from './models';
 import { Credentials } from './repositories';
-import { LOG_LEVEL, LoggerMetadata } from './logger';
-import { LogFn } from './logger';
-import { WinstonLogger } from '@loopback/extension-logging';
 
 export namespace RadiodBindings {
   export const ROOT_PATH = BindingKey.create<string>('radiod.project-root');
@@ -29,11 +26,4 @@ export namespace TokenServiceBindings {
 export namespace PasswordHasherBindings {
   export const PASSWORD_HASHER = BindingKey.create<PasswordHasher>('services.hasher');
   export const ROUNDS = BindingKey.create<number>('services.hasher.round');
-}
-
-export namespace RadiodLogBindings {
-  export const LOGGER = BindingKey.create<WinstonLogger>('radiod.logger');
-  export const LOG_LEVEL = BindingKey.create<LOG_LEVEL>('radiod.logger.level');
-  export const METADATA = BindingKey.create<LoggerMetadata | undefined>('radiod.logger.metadata');
-  export const LOG_ACTION = BindingKey.create<LogFn>('radiod.logger.action');
 }

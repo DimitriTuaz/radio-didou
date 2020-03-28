@@ -4,20 +4,19 @@ import {
   MetadataInspector,
 } from '@loopback/context';
 
-import { LOG_LEVEL } from '../logger'
-import { RadiodLogBindings } from '../keys';
+import { LOGGER_LEVEL, LoggingBindings } from '../logger'
 
-export type LoggerMetadata = { level: LOG_LEVEL };
+export type LoggerMetadata = { level: LOGGER_LEVEL };
 
 /**
  * Mark a controller method as requiring logging
  *
  * @param level - The Log Level
  */
-export function log(level?: LOG_LEVEL) {
-  if (level === undefined) level = LOG_LEVEL.WARN;
+export function logger(level?: LOGGER_LEVEL) {
+  if (level === undefined) level = LOGGER_LEVEL.WARN;
   return MethodDecoratorFactory.createDecorator<LoggerMetadata>(
-    RadiodLogBindings.METADATA,
+    LoggingBindings.METADATA,
     {
       level,
     },
@@ -30,10 +29,10 @@ export function log(level?: LOG_LEVEL) {
  * @param controllerClass - Target controller
  * @param methodName - Target method
  */
-export function getLogMetadata(controllerClass: Constructor<{}>, methodName: string) {
+export function getLoggerMetadata(controllerClass: Constructor<{}>, methodName: string) {
   return (
     MetadataInspector.getMethodMetadata<LoggerMetadata>(
-      RadiodLogBindings.METADATA,
+      LoggingBindings.METADATA,
       controllerClass.prototype,
       methodName,
     )

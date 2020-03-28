@@ -13,8 +13,7 @@ import { MediaCredentialsRepository, UserRepository } from '../repositories';
 import { PersistentKeyService, NowService } from '../services';
 
 
-import { logInvocation, LoggingBindings, WinstonLogger } from '@loopback/extension-logging';
-import { log, LOG_LEVEL } from '../logger'
+import { logger, LOGGER_LEVEL } from '../logger'
 
 @bind({ scope: BindingScope.SINGLETON })
 export class NowController {
@@ -51,7 +50,7 @@ export class NowController {
       },
     },
   })
-  @log(LOG_LEVEL.INFO)
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async setMedia(
     @param.query.string('userId') userId: string,
@@ -90,7 +89,7 @@ export class NowController {
       },
     },
   })
-  @log(LOG_LEVEL.INFO)
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async findMedia() {
     let credentials = await this.credentialRepository.find({
@@ -122,7 +121,7 @@ export class NowController {
       },
     },
   })
-  @log(LOG_LEVEL.INFO)
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async getMedia() {
     let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);

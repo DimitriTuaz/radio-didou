@@ -12,7 +12,7 @@ import { UserRepository } from '../repositories';
 import { NowSpotify, SpotifyScope } from '../now';
 
 import request from 'superagent'
-import { log, LOG_LEVEL } from '../logger';
+import { logger, LOGGER_LEVEL } from '../logger';
 
 @bind({ scope: BindingScope.SINGLETON })
 export class SongController {
@@ -40,7 +40,7 @@ export class SongController {
       },
     },
   })
-  @log(LOG_LEVEL.INFO)
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async add(
     @param.query.string('url') url: string,
@@ -135,7 +135,7 @@ export class SongController {
       },
     },
   })
-  @log(LOG_LEVEL.INFO)
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async remove(
     @param.query.string('url') url: string,
@@ -153,7 +153,7 @@ export class SongController {
       },
     },
   })
-  @log(LOG_LEVEL.INFO)
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async synchronize(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile,

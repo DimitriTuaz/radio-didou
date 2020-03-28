@@ -16,8 +16,8 @@ import {
   AUTHENTICATION_STRATEGY_NOT_FOUND,
   USER_PROFILE_NOT_FOUND,
 } from '@loopback/authentication';
-import { RadiodLogBindings } from './keys';
-import { LogFn } from './logger';
+
+import { LogFn, LoggingBindings } from './logger';
 
 const SequenceActions = RestBindings.SequenceActions;
 
@@ -29,7 +29,7 @@ export class MainSequence implements SequenceHandler {
     @inject(SequenceActions.SEND) public send: Send,
     @inject(SequenceActions.REJECT) public reject: Reject,
     @inject(AuthenticationBindings.AUTH_ACTION) protected authenticateRequest: AuthenticateFn,
-    @inject(RadiodLogBindings.LOG_ACTION) protected logRequest: LogFn,
+    @inject(LoggingBindings.LOGGER_ACTION) protected logRequest: LogFn,
   ) { }
 
   async handle(context: RequestContext) {

@@ -1,11 +1,8 @@
 import { Constructor, inject, Provider } from '@loopback/context';
 import { CoreBindings } from '@loopback/core';
-import { LoggerMetadata, getLogMetadata } from '../logger'
 
-/**
- * Provides logger metadata of a controller method
- * @example `context.bind('logger.metadata').toProvider(LoggerMetadataProvider)`
- */
+import { LoggerMetadata, getLoggerMetadata } from '../logger';
+
 export class LoggerMetadataProvider
   implements Provider<LoggerMetadata | undefined> {
   constructor(
@@ -20,7 +17,7 @@ export class LoggerMetadataProvider
    */
   value(): LoggerMetadata | undefined {
     if (!this.controllerClass || !this.methodName) return;
-    const metadata = getLogMetadata(
+    const metadata = getLoggerMetadata(
       this.controllerClass,
       this.methodName,
     );

@@ -10,12 +10,6 @@ import { JWTAuthenticationStrategy } from './authentication/jwt-strategy';
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 import { RestApplication } from '@loopback/rest';
 
-import {
-  createLogger,
-  format,
-  transports
-} from 'winston';
-
 import path from 'path';
 import fs from 'fs';
 import YAML from 'yaml';
@@ -25,8 +19,7 @@ import { MainSequence } from './sequence';
 import {
   RadiodBindings,
   TokenServiceBindings,
-  PasswordHasherBindings,
-  RadiodLogBindings
+  PasswordHasherBindings
 } from './keys';
 
 import {
@@ -37,7 +30,7 @@ import {
   MainUserService
 } from './services';
 
-import { LogActionProvider, LoggerMetadataProvider } from './logger';
+import { LoggingComponent } from './logger';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -82,6 +75,8 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     // AUTHENTICATION
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
+    // LOGGER
+    this.component(LoggingComponent);
   }
 
   private setupStaticBindings(): void {
@@ -100,20 +95,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(RadiodBindings.ROOT_PATH).to(this.rootPath);
     this.bind(RadiodBindings.MONGO_CONFIG).to(this.config.datasource);
-
-    this.bind(RadiodLogBindings.LOG_LEVEL).to(this.config.logger.level);
-    this.bind(RadiodLogBindings.LOG_ACTION).toProvider(LogActionProvider);
-    this.bind(RadiodLogBindings.METADATA).toProvider(LoggerMetadataProvider);
-    this.bind(RadiodLogBindings.LOGGER).to(
-      createLogger({
-        transports: [new transports.Console({})],
-        level: this.config.logger.level,
-        format: format.combine(
-          format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-          format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
-        ),
-        exitOnError: false
-      }));
 
     this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)
       .toClass(PersistentKeyService)

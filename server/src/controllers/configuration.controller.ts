@@ -1,10 +1,6 @@
 import { get } from '@loopback/rest';
 import { inject, BindingScope, bind, CoreBindings } from '@loopback/core';
-
-import { RadiodBindings } from '../keys';
 import { model, property } from '@loopback/repository';
-import { log } from 'console';
-import { LOG_LEVEL } from '../logger';
 
 @model()
 class Configuration {
