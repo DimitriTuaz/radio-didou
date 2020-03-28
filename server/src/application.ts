@@ -38,7 +38,7 @@ import {
   MainUserService
 } from './services';
 
-import { LogActionProvider } from './logger';
+import { LogActionProvider, LoggerMetadataProvider } from './logger';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -129,6 +129,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(RadiodLogBindings.LOG_LEVEL).to(this.config.logger.level);
     this.bind(RadiodLogBindings.LOG_ACTION).toProvider(LogActionProvider);
+    this.bind(RadiodLogBindings.METADATA).toProvider(LoggerMetadataProvider);
 
     this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)
       .toClass(PersistentKeyService)

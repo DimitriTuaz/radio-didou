@@ -40,7 +40,6 @@ export class NowController {
       },
     },
   })
-  @log(LOG_LEVEL.INFO)
   async getNow() {
     return this.nowService.value();
   }
@@ -53,6 +52,7 @@ export class NowController {
       },
     },
   })
+  @log(LOG_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async setMedia(
     @param.query.string('userId') userId: string,
@@ -91,6 +91,7 @@ export class NowController {
       },
     },
   })
+  @log(LOG_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async findMedia() {
     let credentials = await this.credentialRepository.find({
@@ -122,6 +123,7 @@ export class NowController {
       },
     },
   })
+  @log(LOG_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async getMedia() {
     let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);

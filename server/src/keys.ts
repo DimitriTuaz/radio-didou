@@ -4,7 +4,7 @@ import { UserService } from '@loopback/authentication';
 import { PasswordHasher } from './services/hash.password.bcryptjs';
 import { User } from './models';
 import { Credentials } from './repositories';
-import { LOG_LEVEL } from './logger';
+import { LOG_LEVEL, LoggerMetadata } from './logger';
 import { LogFn } from './logger';
 
 export namespace RadiodBindings {
@@ -32,6 +32,6 @@ export namespace PasswordHasherBindings {
 
 export namespace RadiodLogBindings {
   export const LOG_LEVEL = BindingKey.create<LOG_LEVEL>('radiod.log.level');
-  export const METADATA = BindingKey.create('radiod.log.metadata');
+  export const METADATA = BindingKey.create<LoggerMetadata | undefined>('radiod.log.metadata');
   export const LOG_ACTION = BindingKey.create<LogFn>('radiod.log.action');
 }

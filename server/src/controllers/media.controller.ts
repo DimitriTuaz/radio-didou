@@ -13,6 +13,7 @@ import { MediaCredentials, UserPower, User } from '../models';
 import { UserRepository, MediaCredentialsRepository } from '../repositories';
 
 import request from 'superagent'
+import { log, LOG_LEVEL } from '../logger';
 
 @bind({ scope: BindingScope.SINGLETON })
 export class MediaController {
@@ -83,6 +84,7 @@ export class MediaController {
       },
     },
   })
+  @log(LOG_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async create(
     @param.path.number('serviceId') serviceId: number,

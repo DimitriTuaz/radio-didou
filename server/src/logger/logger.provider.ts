@@ -4,7 +4,7 @@ import { OperationArgs, Request } from '@loopback/rest';
 import { RadiodLogBindings } from '../keys';
 import { LoggingBindings, WinstonLogger } from '@loopback/extension-logging';
 
-import { getLogMetadata } from '../logger'
+import { getLogMetadata, LoggerMetadata } from '../logger'
 import { CoreBindings, Constructor, Getter } from '@loopback/core';
 
 export enum LOG_LEVEL {
@@ -24,10 +24,7 @@ export class LogActionProvider implements Provider<LogFn> {
   @inject(RadiodLogBindings.LOG_LEVEL) private level: string;
 
   constructor(
-    @inject.getter(CoreBindings.CONTROLLER_CLASS)
-    private controllerClass: Getter<Constructor<{}>>,
-    @inject.getter(CoreBindings.CONTROLLER_METHOD_NAME)
-    private methodName: Getter<string>
+    @inject.getter(RadiodLogBindings.METADATA) private metadata: Getter<LoggerMetadata | undefined>
   ) { }
 
   value(): LogFn {
@@ -35,22 +32,13 @@ export class LogActionProvider implements Provider<LogFn> {
   }
 
   private async action(req: Request, args: OperationArgs) {
-    const controllerClass = await this.controllerClass();
-    const methodName = await this.methodName();
-    if (!this.controllerClass || !this.methodName) return;
-    const metadata = getLogMetadata(
-      controllerClass,
-      methodName,
-    );
+    let metadata = await this.metadata();
+    const level: LOG_LEVEL | undefined = metadata ? metadata.level : LOG_LEVEL.DEBUG;
 
-    const level: LOG_LEVEL | undefined = metadata ? metadata.level : undefined;
+    if (args == undefined)
+      args = [];
 
-    if (level !== undefined) {
-      if (args == undefined)
-        args = [];
-      let msg = `${req.url} :: ${controllerClass.name}.`;
-      msg += `${methodName}(${args.join(', ')}) => `;
-      this.logger.log(level, msg);
-    }
+    let msg = `${req.url}`;
+    this.logger.log(level, msg);
   }
 }

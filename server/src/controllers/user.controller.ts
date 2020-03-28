@@ -30,6 +30,7 @@ import {
 } from '../keys';
 import _ from 'lodash';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
+import { log, LOG_LEVEL } from '../logger';
 
 @model()
 class NewUser {
@@ -68,6 +69,7 @@ export class UserController {
       },
     },
   })
+  @log(LOG_LEVEL.INFO)
   async register(
     @requestBody({
       content: {
@@ -149,6 +151,7 @@ export class UserController {
       },
     },
   })
+  @log(LOG_LEVEL.INFO)
   async login(
     @requestBody({
       content: {
@@ -189,6 +192,7 @@ export class UserController {
       },
     },
   })
+  @log(LOG_LEVEL.INFO)
   async logout(
     @inject(RestBindings.Http.RESPONSE) response: Response): Promise<void> {
     let options: CookieOptions = {

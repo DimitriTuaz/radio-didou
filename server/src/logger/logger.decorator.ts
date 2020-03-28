@@ -7,7 +7,7 @@ import {
 import { LOG_LEVEL } from '../logger'
 import { RadiodLogBindings } from '../keys';
 
-export type LevelMetadata = { level: LOG_LEVEL };
+export type LoggerMetadata = { level: LOG_LEVEL };
 
 /**
  * Mark a controller method as requiring logging
@@ -16,7 +16,7 @@ export type LevelMetadata = { level: LOG_LEVEL };
  */
 export function log(level?: LOG_LEVEL) {
   if (level === undefined) level = LOG_LEVEL.WARN;
-  return MethodDecoratorFactory.createDecorator<LevelMetadata>(
+  return MethodDecoratorFactory.createDecorator<LoggerMetadata>(
     RadiodLogBindings.METADATA,
     {
       level,
@@ -32,7 +32,7 @@ export function log(level?: LOG_LEVEL) {
  */
 export function getLogMetadata(controllerClass: Constructor<{}>, methodName: string) {
   return (
-    MetadataInspector.getMethodMetadata<LevelMetadata>(
+    MetadataInspector.getMethodMetadata<LoggerMetadata>(
       RadiodLogBindings.METADATA,
       controllerClass.prototype,
       methodName,
