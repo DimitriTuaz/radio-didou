@@ -20,10 +20,8 @@ export interface LogFn {
 
 export class LogActionProvider implements Provider<LogFn> {
 
-  @inject(LoggingBindings.WINSTON_LOGGER) private logger: WinstonLogger;
-  @inject(RadiodLogBindings.LOG_LEVEL) private level: string;
-
   constructor(
+    @inject(LoggingBindings.WINSTON_LOGGER) private logger: WinstonLogger,
     @inject.getter(RadiodLogBindings.METADATA) private metadata: Getter<LoggerMetadata | undefined>
   ) { }
 
