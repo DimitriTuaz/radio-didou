@@ -1,11 +1,13 @@
 import { Constructor, inject, Provider } from '@loopback/context';
 import { CoreBindings } from '@loopback/core';
 
-import { LoggerMetadata, getLoggerMetadata, LOGGER_LEVEL } from '../logger';
+import { LoggerMetadata, getLoggerMetadata } from '../logger';
+import { UserProfile, SecurityBindings } from '@loopback/security';
 
 export type LoggerEnhancedMetadata = {
   className: string,
-  methodName: string
+  methodName: string,
+  currentUser: UserProfile | undefined
   metadata: LoggerMetadata | undefined,
 }
 
@@ -15,7 +17,9 @@ export class LoggerMetadataProvider
     @inject(CoreBindings.CONTROLLER_CLASS, { optional: true })
     private readonly controllerClass: Constructor<{}>,
     @inject(CoreBindings.CONTROLLER_METHOD_NAME, { optional: true })
-    private readonly methodName: string
+    private readonly methodName: string,
+    @inject(SecurityBindings.USER, { optional: true })
+    private readonly currentUserProfile: UserProfile
   ) { }
 
   /**
@@ -30,6 +34,7 @@ export class LoggerMetadataProvider
     return {
       className: this.controllerClass.name,
       methodName: this.methodName,
+      currentUser: this.currentUserProfile,
       metadata: metadata
     }
   }
