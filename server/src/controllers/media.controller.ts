@@ -6,21 +6,21 @@ import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
-import { RadiodBindings } from '../keys';
+import request from 'superagent'
+import { Logger } from 'winston';
 
 import { NowDeezer, NowSpotify, NowEnum, SpotifyScope } from '../now';
 import { MediaCredentials, UserPower, User } from '../models';
 import { UserRepository, MediaCredentialsRepository } from '../repositories';
-
-import request from 'superagent'
-import { logger, LOGGER_LEVEL } from '../logger';
+import { logger, LOGGER_LEVEL, LoggingBindings } from '../logger';
 
 @bind({ scope: BindingScope.SINGLETON })
 export class MediaController {
   constructor(
     @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any,
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
-    @repository(UserRepository) private userRepository: UserRepository
+    @repository(UserRepository) private userRepository: UserRepository,
+    @inject(LoggingBindings.LOGGER) private logger: Logger
   ) { }
 
   @get('/media/find', {
@@ -163,7 +163,7 @@ export class MediaController {
       return [response.body.id, response.body.display_name];
     }
     catch (e) {
-      console.log('[MediaController] error: unable to obtain spotify name.')
+      this.logger.warn('[MediaController] error: unable to obtain spotify name.');
     }
     return 'Undefined Account';
   }
@@ -187,7 +187,7 @@ export class MediaController {
       return [response.body.id, response.body.name];
     }
     catch (e) {
-      console.log('[MediaController] error: unable to obtain deezer name.')
+      this.logger.warn('[MediaController] error: unable to obtain deezer name.');
     }
     return 'Undefined Account';
   }

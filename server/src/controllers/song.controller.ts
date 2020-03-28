@@ -6,13 +6,14 @@ import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 import _ from 'lodash';
 
-import { RadiodBindings } from '../keys';
 import { Song, UserPower } from '../models';
 import { UserRepository } from '../repositories';
 import { NowSpotify, SpotifyScope } from '../now';
 
-import request from 'superagent'
-import { logger, LOGGER_LEVEL } from '../logger';
+import { Logger } from 'winston';
+import request from 'superagent';
+
+import { logger, LOGGER_LEVEL, LoggingBindings } from '../logger';
 
 @bind({ scope: BindingScope.SINGLETON })
 export class SongController {
@@ -23,6 +24,7 @@ export class SongController {
   constructor(
     @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any,
     @repository(UserRepository) private userRepository: UserRepository,
+    @inject(LoggingBindings.LOGGER) private logger: Logger
   ) { }
 
   @put('/song/add', {
@@ -50,7 +52,7 @@ export class SongController {
     try {
       trackURL = new URL(url);
     } catch (error) {
-      console.log('[' + this.name + '] Invalid URL to add..');
+      this.logger.warn('[' + this.name + '] Invalid URL to add..');
       throw new HttpErrors.BadRequest('Invalid URL')
     }
     let track: any = await this.obtain_track(trackURL, true);
@@ -66,7 +68,7 @@ export class SongController {
       await this.userRepository.songs(userId).create(song);
     } catch (error) {
       if (error.code === 11000 && error.errmsg.includes('index: uniqueURL')) {
-        console.log('[' + this.name + '] Song ' + url + ' is already in DB');
+        this.logger.warn('[' + this.name + '] Song ' + url + ' is already in DB');
       } else {
         throw error;
       }
@@ -211,7 +213,6 @@ export class SongController {
       .set('Accept', 'application/json')
       .set('Content-Type', 'application/json')
       .set('Authorization', 'Bearer ' + access_token);
-    console.log(response.body);
     return response.body;
   }
 
@@ -249,7 +250,7 @@ export class SongController {
           description,
           false);
       } else {
-        console.log('[SongController] Error in synchronize_playlist');
+        this.logger.warn('[SongController] Error in synchronize_playlist');
         return undefined;
       }
     }
@@ -305,7 +306,7 @@ export class SongController {
       const data = response.body;
       if ('access_token' in data) {
         this.access_token = data.access_token;
-        console.log("[" + this.name + "] obtain_app_access_token succeeded")
+        this.logger.debug("[" + this.name + "] obtain_app_access_token succeeded");
       }
     }
     catch (error) {

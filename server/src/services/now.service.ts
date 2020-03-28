@@ -8,8 +8,10 @@ import { NowFetcher, NowNone, NowDeezer, NowSpotify, NowObject, NowEnum } from '
 import { PersistentKeyService } from '../services';
 import { repository } from '@loopback/repository';
 import { MediaCredentialsRepository } from '../repositories';
+import { LoggingBindings } from '../logger';
 
 import request from 'superagent'
+import { Logger } from 'winston';
 
 export class NowService implements LifeCycleObserver, Provider<NowObject> {
 
@@ -20,7 +22,8 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
   constructor(
     @inject(CoreBindings.APPLICATION_CONFIG) private configuration: any,
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
-    @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository) {
+    @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
+    @inject(LoggingBindings.LOGGER) private logger: Logger) {
     this.icecastURL = configuration.icecast.url + '/status-json.xsl';
     this.fetcher = new NowNone();
   }
@@ -56,14 +59,14 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
           break;
       }
     }
-    console.log("[NowService - " + this.fetcher.name + "] setFetcher");
+    this.logger.info("[NowService - " + this.fetcher.name + "] setFetcher");
   }
 
   public async start(): Promise<void> {
     await this.setDefaultFetcher();
     try {
       if (!this.intervalID) {
-        console.log("[NowService - " + this.fetcher.name + "] started");
+        this.logger.info("[NowService - " + this.fetcher.name + "] started");
         this.intervalID = setIntervalAsync(
           async () => {
             await this.fetcher.fetch();
@@ -77,13 +80,13 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
       }
     }
     catch (e) {
-      console.log("[NowService - " + this.fetcher.name + "] Error! Couldn't start the service")
+      this.logger.warn("[NowService - " + this.fetcher.name + "] Error! Couldn't start the service")
     }
   }
 
   public async stop(): Promise<void> {
     if (this.intervalID) {
-      console.log("[NowService - " + this.fetcher.name + "] stopped");
+      this.logger.info("[NowService - " + this.fetcher.name + "] stopped");
       await clearIntervalAsync(this.intervalID);
       this.intervalID = null;
     }
