@@ -13,9 +13,7 @@ import { RestApplication } from '@loopback/rest';
 import {
   createLogger,
   format,
-  Logger,
-  LoggerOptions,
-  transports as commonTransports,
+  transports
 } from 'winston';
 
 import path from 'path';
@@ -40,7 +38,6 @@ import {
 } from './services';
 
 import { LogActionProvider, LoggerMetadataProvider } from './logger';
-import { WinstonTransports } from '@loopback/extension-logging';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -109,7 +106,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.bind(RadiodLogBindings.METADATA).toProvider(LoggerMetadataProvider);
     this.bind(RadiodLogBindings.LOGGER).to(
       createLogger({
-        transports: [new WinstonTransports.Console({})],
+        transports: [new transports.Console({})],
         level: this.config.logger.level,
         format: format.combine(
           format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),

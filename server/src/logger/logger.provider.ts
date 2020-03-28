@@ -2,10 +2,11 @@ import { inject, Provider } from '@loopback/context';
 import { OperationArgs, Request } from '@loopback/rest';
 
 import { RadiodLogBindings } from '../keys';
-import { WinstonLogger } from '@loopback/extension-logging';
+
 
 import { LoggerMetadata } from '../logger'
 import { Getter } from '@loopback/core';
+import { Logger } from 'winston';
 
 export enum LOG_LEVEL {
   DEBUG = 'debug',
@@ -21,7 +22,7 @@ export interface LogFn {
 export class LogActionProvider implements Provider<LogFn> {
 
   constructor(
-    @inject(RadiodLogBindings.LOGGER) private logger: WinstonLogger,
+    @inject(RadiodLogBindings.LOGGER) private logger: Logger,
     @inject.getter(RadiodLogBindings.METADATA) private metadata: Getter<LoggerMetadata | undefined>
   ) { }
 
