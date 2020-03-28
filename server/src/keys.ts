@@ -6,6 +6,7 @@ import { User } from './models';
 import { Credentials } from './repositories';
 import { LOG_LEVEL, LoggerMetadata } from './logger';
 import { LogFn } from './logger';
+import { WinstonLogger } from '@loopback/extension-logging';
 
 export namespace RadiodBindings {
   export const ROOT_PATH = BindingKey.create<string>('radiod.project-root');
@@ -31,7 +32,8 @@ export namespace PasswordHasherBindings {
 }
 
 export namespace RadiodLogBindings {
-  export const LOG_LEVEL = BindingKey.create<LOG_LEVEL>('radiod.log.level');
-  export const METADATA = BindingKey.create<LoggerMetadata | undefined>('radiod.log.metadata');
-  export const LOG_ACTION = BindingKey.create<LogFn>('radiod.log.action');
+  export const LOGGER = BindingKey.create<WinstonLogger>('radiod.logger');
+  export const LOG_LEVEL = BindingKey.create<LOG_LEVEL>('radiod.logger.level');
+  export const METADATA = BindingKey.create<LoggerMetadata | undefined>('radiod.logger.metadata');
+  export const LOG_ACTION = BindingKey.create<LogFn>('radiod.logger.action');
 }

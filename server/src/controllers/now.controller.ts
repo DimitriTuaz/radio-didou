@@ -23,7 +23,6 @@ export class NowController {
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @repository(UserRepository) private userRepository: UserRepository,
     @inject(RadiodBindings.NOW_SERVICE) private nowService: NowService,
-    @inject(LoggingBindings.WINSTON_LOGGER) private logger: WinstonLogger
   ) { }
 
   @get('/now/get', {

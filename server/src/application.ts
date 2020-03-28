@@ -9,13 +9,14 @@ import {
 import { JWTAuthenticationStrategy } from './authentication/jwt-strategy';
 import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 import { RestApplication } from '@loopback/rest';
+
 import {
-  WINSTON_TRANSPORT,
-  LoggingBindings,
-  LoggingComponent,
+  createLogger,
   format,
-  WinstonTransports,
-} from '@loopback/extension-logging';
+  Logger,
+  LoggerOptions,
+  transports as commonTransports,
+} from 'winston';
 
 import path from 'path';
 import fs from 'fs';
@@ -39,6 +40,7 @@ import {
 } from './services';
 
 import { LogActionProvider, LoggerMetadataProvider } from './logger';
+import { WinstonTransports } from '@loopback/extension-logging';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -83,31 +85,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     // AUTHENTICATION
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
-
-    // LOGGING
-    this.setupLogger();
-    this.component(LoggingComponent);
-  }
-
-  private setupLogger(): void {
-
-    this.configure(LoggingBindings.COMPONENT).to({
-      enableFluent: false,
-      enableHttpAccessLog: false,
-    });
-
-    this.configure(LoggingBindings.WINSTON_LOGGER).to({
-      level: this.config.logger.level,
-      format: format.combine(
-        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
-      ),
-      exitOnError: false
-    });
-
-    this.bind('logger.transports.console')
-      .to(new WinstonTransports.Console({}))
-      .apply(extensionFor(WINSTON_TRANSPORT));
   }
 
   private setupStaticBindings(): void {
@@ -130,6 +107,16 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.bind(RadiodLogBindings.LOG_LEVEL).to(this.config.logger.level);
     this.bind(RadiodLogBindings.LOG_ACTION).toProvider(LogActionProvider);
     this.bind(RadiodLogBindings.METADATA).toProvider(LoggerMetadataProvider);
+    this.bind(RadiodLogBindings.LOGGER).to(
+      createLogger({
+        transports: [new WinstonTransports.Console({})],
+        level: this.config.logger.level,
+        format: format.combine(
+          format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+          format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
+        ),
+        exitOnError: false
+      }));
 
     this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)
       .toClass(PersistentKeyService)
