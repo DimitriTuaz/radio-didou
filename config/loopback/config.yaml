@@ -14,7 +14,7 @@ rest:
 #
 logger:
   level: info
-  
+
 #
 # DATABASE Configuration
 #
@@ -25,7 +25,7 @@ datasource:
   port: 27017
   database: 'radiod'
   useNewUrlParser: true
-  
+
 # [OPTIONAL] Mongo Authentication
 #
 #  authSource: 'admin'

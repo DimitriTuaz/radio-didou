@@ -4,6 +4,8 @@ import { UserService } from '@loopback/authentication';
 import { PasswordHasher } from './services/hash.password.bcryptjs';
 import { User } from './models';
 import { Credentials } from './repositories';
+import { LOG_LEVEL } from './logger';
+import { LogFn } from './logger';
 
 export namespace RadiodBindings {
   export const ROOT_PATH = BindingKey.create<string>('radiod.project-root');
@@ -26,4 +28,10 @@ export namespace TokenServiceBindings {
 export namespace PasswordHasherBindings {
   export const PASSWORD_HASHER = BindingKey.create<PasswordHasher>('services.hasher');
   export const ROUNDS = BindingKey.create<number>('services.hasher.round');
+}
+
+export namespace RadiodLogBindings {
+  export const LOG_LEVEL = BindingKey.create<LOG_LEVEL>('radiod.log.level');
+  export const METADATA = BindingKey.create('radiod.log.metadata');
+  export const LOG_ACTION = BindingKey.create<LogFn>('radiod.log.action');
 }

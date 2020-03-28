@@ -14,6 +14,7 @@ import { PersistentKeyService, NowService } from '../services';
 
 
 import { logInvocation, LoggingBindings, WinstonLogger } from '@loopback/extension-logging';
+import { log, LOG_LEVEL } from '../logger'
 
 @bind({ scope: BindingScope.SINGLETON })
 export class NowController {
@@ -39,8 +40,8 @@ export class NowController {
       },
     },
   })
+  @log(LOG_LEVEL.INFO)
   async getNow() {
-    this.logger.info('lol');
     return this.nowService.value();
   }
 

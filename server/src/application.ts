@@ -11,12 +11,10 @@ import { SECURITY_SCHEME_SPEC } from './utils/security-spec';
 import { RestApplication } from '@loopback/rest';
 import {
   WINSTON_TRANSPORT,
-  WINSTON_FORMAT,
   LoggingBindings,
   LoggingComponent,
   format,
-  WinstonFormat,
-  WinstonTransports
+  WinstonTransports,
 } from '@loopback/extension-logging';
 
 import path from 'path';
@@ -28,7 +26,8 @@ import { MainSequence } from './sequence';
 import {
   RadiodBindings,
   TokenServiceBindings,
-  PasswordHasherBindings
+  PasswordHasherBindings,
+  RadiodLogBindings
 } from './keys';
 
 import {
@@ -39,13 +38,14 @@ import {
   MainUserService
 } from './services';
 
+import { LogActionProvider } from './logger';
+
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
   private rootPath: string;
   private config: any;
 
   constructor() {
-
     super();
     this.rootPath = path.join(__dirname, '../..');
     this.config = YAML.parse(fs.readFileSync(path.join(this.rootPath, 'config.yaml')).toString());
@@ -101,10 +101,11 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
       format: format.combine(
         format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
         format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
-      )
+      ),
+      exitOnError: false
     });
 
-    this.bind('transports.console')
+    this.bind('logger.transports.console')
       .to(new WinstonTransports.Console({}))
       .apply(extensionFor(WINSTON_TRANSPORT));
   }
@@ -125,6 +126,9 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(RadiodBindings.ROOT_PATH).to(this.rootPath);
     this.bind(RadiodBindings.MONGO_CONFIG).to(this.config.datasource);
+
+    this.bind(RadiodLogBindings.LOG_LEVEL).to(this.config.logger.level);
+    this.bind(RadiodLogBindings.LOG_ACTION).toProvider(LogActionProvider);
 
     this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)
       .toClass(PersistentKeyService)
