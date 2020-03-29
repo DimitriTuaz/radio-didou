@@ -4,7 +4,7 @@ import { Modal, Header, Button, Card, Image, Icon, Dropdown } from 'semantic-ui-
 
 import { OpenAPI } from '@openapi/.';
 import { useStore } from '../../hooks'
-import { SpotifyScope, UserPower, LiveUser } from '../../stores';
+import { SpotifyScope, UserPower } from '../../stores';
 
 import { MediaCredentials, User } from '@openapi/schemas';
 import { NowController } from '@openapi/routes'
@@ -46,19 +46,15 @@ const CredentialDropdown = () => {
     const { settingStore } = useStore();
     const [error, setError] = useState(false);
 
-    const defaultOptions: (User | undefined)[] = [undefined, LiveUser];
+    const defaultOptions: (User | undefined)[] = [undefined];
     const options = defaultOptions.concat(settingStore.nowUsers);
 
     const onClick = async (user: (User | undefined)) => {
         try {
             if (user === undefined)
-                await NowController.setMedia('undefined', false);
-            else if (user.id !== undefined) {
-                if (user.id !== LiveUser.id)
-                    await NowController.setMedia(user.id, false);
-                else
-                    await NowController.setMedia('undefined', true);
-            }
+                await NowController.setMedia('undefined');
+            else if (user.id !== undefined)
+                await NowController.setMedia(user.id);
             settingStore.currentNowUser = user;
             setError(false);
         }
@@ -81,7 +77,7 @@ const CredentialDropdown = () => {
                             <Dropdown.Header content='Compte Radio-didou' />
                             {options.map((user) => (
                                 <Dropdown.Item
-                                    key={user !== undefined ? user.id : undefined}
+                                    key={user !== undefined ? user.id : 'none'}
                                     text={user !== undefined ? user.email : 'Aucun'}
                                     onClick={() => onClick(user)}
                                     active={user?.id === settingStore.currentNowUser?.id} />
