@@ -11,12 +11,18 @@ rest:
 # LOGGER Configuration
 #
 # LEVEL = (debug|info|warn|error)
+# STACK_TRACE = (true|false)
+# Set stack_trace to true if you want to print stack_trace
+# in the console.
+# They will be logged in the error.log file anyway.
 #
 logger:
   level: info
+  stack_trace: true
   
-# [OPTIONAL] Log directory
-# Absolute path of the log directory
+# [OPTIONAL]
+# DIRECTORY = Absolute path of the log directory
+# If you dont specify one, "logs/" will be used.
 #
 # directory: /var/log/radio-didou
 

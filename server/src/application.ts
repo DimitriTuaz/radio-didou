@@ -83,33 +83,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.component(NowComponent);
   }
 
-  private setupLogging(): void {
-    let directory = path.join(this.rootPath, 'logs');
-    if (this.config.logger.directory !== undefined)
-      directory = this.config.logger.directory;
-
-    this.configure(LoggingBindings.LOGGER).to({
-      transports: [
-        new transports.Console({
-          level: this.config.logger.level,
-          format: format.combine(
-            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
-          )
-        }),
-        new transports.File({
-          dirname: directory,
-          filename: 'error.log',
-          level: LOGGER_LEVEL.ERROR,
-          format: format.combine(
-            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            format.printf(info => `[${info.timestamp}]: ${info.message}\n${info.error}\n`),
-          )
-        })
-      ]
-    });
-  }
-
   private setupStaticBindings(): void {
     // MAIN
     this.static('/', path.join(this.rootPath, 'client/build'));
@@ -136,5 +109,39 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
+  }
+
+  private setupLogging(): void {
+    let directory: string;
+    if (this.config.logger.directory !== undefined)
+      directory = this.config.logger.directory;
+    else
+      directory = path.join(this.rootPath, 'logs');
+
+    this.configure(LoggingBindings.LOGGER).to({
+      transports: [
+        new transports.Console({
+          level: this.config.logger.level,
+          format: format.combine(
+            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+            format.printf(info => {
+              let message = `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`
+              if (info.error !== undefined && this.config.logger.stack_trace)
+                message += `\n${info.error}`;
+              return message;
+            })
+          )
+        }),
+        new transports.File({
+          dirname: directory,
+          filename: 'error.log',
+          level: LOGGER_LEVEL.ERROR,
+          format: format.combine(
+            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+            format.printf(info => `[${info.timestamp}]: ${info.message}\n${info.error}\n`),
+          )
+        })
+      ]
+    });
   }
 }
