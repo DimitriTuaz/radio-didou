@@ -31,6 +31,7 @@ import {
 } from './services';
 
 import { LoggingComponent } from './logger';
+import { NowNone } from './now';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -95,21 +96,24 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(RadiodBindings.ROOT_PATH).to(this.rootPath);
     this.bind(RadiodBindings.MONGO_CONFIG).to(this.config.datasource);
-
     this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)
       .toClass(PersistentKeyService)
       .inScope(BindingScope.SINGLETON);
 
-    this.bind(RadiodBindings.TOKEN_SERVICE).toClass(JWTService);
+    this.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JWTService);
     this.bind(TokenServiceBindings.TOKEN_SECRET).to(this.config.jwt.secret);
     this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(this.config.jwt.expires);
+
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
 
     this.bind(RadiodBindings.USER_SERVICE).toClass(MainUserService);
 
-    this.bind(RadiodBindings.NOW_SERVICE)
-      .toClass(NowService)
+    this.bind(RadiodBindings.NOW_FETCHER)
+      .toClass(NowNone)
+      .inScope(BindingScope.SINGLETON);
+    this.bind(RadiodBindings.NOW_OBJECT)
+      .toProvider(NowService)
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)
       .inScope(BindingScope.SINGLETON);
   }

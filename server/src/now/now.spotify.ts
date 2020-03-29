@@ -1,6 +1,8 @@
 import request from 'superagent'
 
 import { NowFetcher, NowEnum, NowObject } from '../now';
+import { inject, CoreBindings } from '@loopback/core';
+import { RadiodBindings } from '../keys';
 
 export enum SpotifyScope {
   playback = 'user-read-playback-state',
@@ -19,15 +21,17 @@ export class NowSpotify extends NowFetcher {
   public name = "Spotify";
 
   private access_token: string | undefined;
-  private refresh_token: string;
   private api_key: any;
 
-  constructor(token: string, api_key: any, value?: NowObject) {
+  constructor(
+    @inject(RadiodBindings.NOW_TOKEN) private refresh_token: string,
+    @inject(RadiodBindings.NOW_OBJECT, { optional: true }) current_now: NowObject,
+    @inject(CoreBindings.APPLICATION_CONFIG) config: any
+  ) {
     super();
-    this.refresh_token = token;
-    this.api_key = api_key;
-    if (value != null) {
-      this.now = value;
+    this.api_key = config.spotify.api_key;
+    if (current_now != null) {
+      this.now = current_now;
     }
     else {
       this.now = {

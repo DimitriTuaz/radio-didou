@@ -1,5 +1,5 @@
 import { get, param, post, getModelSchemaRef } from '@loopback/rest';
-import { inject, BindingScope, bind } from '@loopback/core';
+import { inject, BindingScope, bind, Binding, Setter } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
 import { authenticate } from '@loopback/authentication';
@@ -7,7 +7,7 @@ import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 
-import { NowObject, SpotifyScope } from '../now';
+import { NowObject, SpotifyScope, NowFetcher } from '../now';
 import { MediaCredentials, User, UserPower } from '../models';
 import { MediaCredentialsRepository, UserRepository } from '../repositories';
 import { PersistentKeyService, NowService } from '../services';
@@ -21,7 +21,9 @@ export class NowController {
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @repository(UserRepository) private userRepository: UserRepository,
-    @inject(RadiodBindings.NOW_SERVICE) private nowService: NowService,
+    @inject(RadiodBindings.NOW_OBJECT) private now: NowObject,
+    @inject.binding(RadiodBindings.NOW_FETCHER) private fetcherBinding: Binding<NowFetcher>,
+    @inject.setter(RadiodBindings.NOW_TOKEN) private tokenSetter: Setter<string>
   ) { }
 
   @get('/now/get', {
@@ -39,7 +41,7 @@ export class NowController {
     },
   })
   async getNow() {
-    return this.nowService.value();
+    return this.now;
   }
 
   @post('/now/set', {
@@ -69,7 +71,7 @@ export class NowController {
       credential = undefined;
       await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, 'none');
     }
-    this.nowService.setFetcher(credential);
+    NowService.setFetcher(this.fetcherBinding, this.tokenSetter, credential);
   }
 
 

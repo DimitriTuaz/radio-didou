@@ -50,7 +50,7 @@ export class UserController {
   constructor(
     @repository(UserRepository) private userRepository: UserRepository,
     @inject(PasswordHasherBindings.PASSWORD_HASHER) private passwordHasher: PasswordHasher,
-    @inject(RadiodBindings.TOKEN_SERVICE) private jwtService: JWTService,
+    @inject(TokenServiceBindings.TOKEN_SERVICE) private jwtService: JWTService,
     @inject(RadiodBindings.USER_SERVICE) private userService: UserService<User, Credentials>,
     @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any
   ) { }
