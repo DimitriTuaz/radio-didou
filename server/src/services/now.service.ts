@@ -39,33 +39,29 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
     try {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: MediaCredentials = await this.credentialRepository.findById(crendentialID);
-      NowService.setFetcher(this.fetcherBinding, this.tokenSetter, credential);
+      this.setFetcher(credential);
     } catch (e) {
-      NowService.setFetcher(this.fetcherBinding, this.tokenSetter, undefined);
+      this.setFetcher(undefined);
     }
   }
 
-  public static setFetcher(
-    fetcherBinding: Binding<NowFetcher>,
-    tokenSetter: Setter<string>,
-    credentials?: MediaCredentials
-  ) {
+  public setFetcher(credentials: MediaCredentials | undefined) {
     if (credentials == undefined) {
-      fetcherBinding.to(new NowNone()).inScope(BindingScope.SINGLETON);
+      this.fetcherBinding.to(new NowNone()).inScope(BindingScope.SINGLETON);
     }
     else {
-      tokenSetter(credentials.token);
+      this.tokenSetter(credentials.token);
       switch (credentials.type) {
         case NowEnum.Spotify:
-          fetcherBinding.toClass(NowSpotify)
+          this.fetcherBinding.toClass(NowSpotify)
             .inScope(BindingScope.SINGLETON);
           break;
         case NowEnum.Deezer:
-          fetcherBinding.toClass(NowDeezer)
+          this.fetcherBinding.toClass(NowDeezer)
             .inScope(BindingScope.SINGLETON);
           break;
         default:
-          fetcherBinding.toClass(NowNone)
+          this.fetcherBinding.toClass(NowNone)
             .inScope(BindingScope.SINGLETON);
           break;
       }
@@ -76,7 +72,7 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
     await this.setDefaultFetcher();
     try {
       if (!this.intervalID) {
-        this.logger.info("[LifeCycleObserver] NowService started");
+        this.logger.info("{LifeCycleObserver} NowService started");
         this.intervalID = setIntervalAsync(
           async () => {
             let fetcher = await this.fetcherGetter();
@@ -91,13 +87,13 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
       }
     }
     catch (e) {
-      this.logger.warn("[NowService] Error! Couldn't start the service")
+      this.logger.warn("{NowService} Error! Couldn't start the service")
     }
   }
 
   public async stop(): Promise<void> {
     if (this.intervalID) {
-      this.logger.info("[LifeCycleObserver] NowService stopped");
+      this.logger.info("{LifeCycleObserver} NowService stopped");
       await clearIntervalAsync(this.intervalID);
       this.intervalID = null;
     }

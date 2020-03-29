@@ -1,8 +1,10 @@
+import { inject, CoreBindings } from '@loopback/core';
 import request from 'superagent'
+import { Logger } from 'winston';
 
 import { NowFetcher, NowEnum } from '../now';
-import { inject, CoreBindings } from '@loopback/core';
 import { RadiodBindings } from '../keys';
+import { LoggingBindings } from '../logger';
 
 export enum SpotifyScope {
   playback = 'user-read-playback-state',
@@ -24,11 +26,12 @@ export class NowSpotify extends NowFetcher {
   private api_key: any;
 
   constructor(
+    @inject(LoggingBindings.LOGGER) private logger: Logger,
     @inject(RadiodBindings.NOW_TOKEN) private refresh_token: string,
     @inject(CoreBindings.APPLICATION_CONFIG) config: any
   ) {
     super();
-    this.api_key = config.spotify.api_key;
+    this.api_key = config.spotify;
     this.now = {
       type: NowEnum.Spotify,
       listeners: 0,
@@ -80,34 +83,34 @@ export class NowSpotify extends NowFetcher {
         await this.obtain_current_playback(false);
       }
       else {
-        console.log("[" + this.name + "] error in obtain_current_playback")
+        this.logger.warn("{" + this.name + "} error in obtain_current_playback")
       }
     }
   }
 
-  public static async obtain_user_access_token(refresh_token: string | undefined, client_id: string, secret: string
+  public static async obtain_user_access_token(
+    refresh_token: string | undefined,
+    client_id: string,
+    secret: string
   ): Promise<string | undefined> {
     if (refresh_token == undefined)
       throw new Error('Please provide a refresh token');
-    try {
-      const authorization = Buffer.from(client_id + ':' + secret)
-        .toString('base64');
 
-      const response = await request
-        .post(NowSpotify.token_url)
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-        .set('Authorization', 'Basic ' + authorization)
-        .send({
-          grant_type: 'refresh_token',
-          refresh_token: refresh_token
-        });
-      const data = response.body;
-      if ('access_token' in data) {
-        return data.access_token;
-      }
-    }
-    catch (error) {
-      console.log("[Spotify] error in obtain_user_access_token")
+    const authorization = Buffer.from(client_id + ':' + secret)
+      .toString('base64');
+
+    const response = await request
+      .post(NowSpotify.token_url)
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set('Authorization', 'Basic ' + authorization)
+      .send({
+        grant_type: 'refresh_token',
+        refresh_token: refresh_token
+      });
+
+    const data = response.body;
+    if ('access_token' in data) {
+      return data.access_token;
     }
   }
 }

@@ -3,6 +3,8 @@ import request from 'superagent'
 import { NowFetcher, NowEnum } from '../now';
 import { inject } from '@loopback/core';
 import { RadiodBindings } from '../keys';
+import { LoggingBindings } from '../logger';
+import { Logger } from 'winston';
 
 export class NowDeezer extends NowFetcher {
 
@@ -13,6 +15,7 @@ export class NowDeezer extends NowFetcher {
   public name = "Deezer";
 
   constructor(
+    @inject(LoggingBindings.LOGGER) private logger: Logger,
     @inject(RadiodBindings.NOW_TOKEN) private access_token: string
   ) {
     super();
@@ -49,7 +52,7 @@ export class NowDeezer extends NowFetcher {
       }
     }
     catch (error) {
-      console.log("[" + this.name + "] error in obtain_current_playback")
+      this.logger.warn("[" + this.name + "] error in obtain_current_playback")
     }
   }
 }
