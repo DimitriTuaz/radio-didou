@@ -1,6 +1,6 @@
 import request from 'superagent'
 
-import { NowFetcher, NowEnum, NowBindings } from '../now';
+import { NowFetcher, NowEnum, NowBindings, NowObject } from '../now';
 import { inject } from '@loopback/core';
 import { LoggingBindings } from '../logger';
 import { Logger } from 'winston';

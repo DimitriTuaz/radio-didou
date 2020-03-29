@@ -1,5 +1,5 @@
 import { get, param, post, getModelSchemaRef } from '@loopback/rest';
-import { inject, BindingScope, bind } from '@loopback/core';
+import { inject, BindingScope, bind, Getter } from '@loopback/core';
 import { repository } from '@loopback/repository';
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
@@ -18,6 +18,7 @@ export class NowController {
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @repository(UserRepository) private userRepository: UserRepository,
     @inject(NowBindings.NOW_SERVICE) private nowService: NowService,
+    @inject.getter(NowBindings.CURRENT_NOW) private nowGetter: Getter<NowObject>
   ) { }
 
   @get('/now/get', {
@@ -35,7 +36,7 @@ export class NowController {
     },
   })
   async getNow() {
-    return this.nowService.value();
+    return await this.nowGetter();
   }
 
   @post('/now/set', {
@@ -67,7 +68,6 @@ export class NowController {
     }
     this.nowService.setFetcher(credential);
   }
-
 
   @get('/now/find', {
     security: OPERATION_SECURITY_SPEC,

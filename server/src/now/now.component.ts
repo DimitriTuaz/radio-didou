@@ -16,7 +16,7 @@ export class NowComponent implements Component {
   bindings: Binding<unknown>[];
 
   constructor(
-    @inject.getter(NowBindings.NOW_FETCHER) private fetcherGetter: Getter<NowFetcher>
+    @inject.getter(NowBindings.NOW_FETCHER) fetcherGetter: Getter<NowFetcher>
   ) {
     this.bindings = [
       Binding.bind(NowBindings.NOW_SERVICE).toClass(NowService)
@@ -24,8 +24,8 @@ export class NowComponent implements Component {
         .inScope(BindingScope.SINGLETON),
       Binding.bind(NowBindings.CURRENT_NOW)
         .toDynamicValue(async () => {
-          let service = await serviceGetter();
-          return service.value
+          let fetcher = await fetcherGetter();
+          return fetcher.now;
         })
     ];
   }
