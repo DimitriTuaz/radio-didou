@@ -51,13 +51,7 @@ export class SongController {
     @param.query.string('url') url: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile
   ) {
-    let trackURL: URL;
-    try {
-      trackURL = new URL(url);
-    } catch (error) {
-      this.logger.warn('[' + this.name + '] Invalid URL to add..');
-      throw new HttpErrors.BadRequest('Invalid URL')
-    }
+    let trackURL = new URL(url);
     let track: any = await this.obtain_track(trackURL, true);
     let userId: string = currentUserProfile[securityId];
     let song: Song = new Song({
