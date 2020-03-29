@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useContext } from 'react'
 import { useObserver } from 'mobx-react-lite'
 import { Modal, Header, Button, Card, Image, Icon, Dropdown } from 'semantic-ui-react'
 
@@ -6,12 +6,12 @@ import { OpenAPI } from '@openapi/.';
 import { useStore } from '../../hooks'
 import { SpotifyScope, UserPower, LiveUser } from '../../stores';
 
-import { spotify } from '../../../../api_key_public.json'
 import { MediaCredentials, User } from '@openapi/schemas';
 import { NowController } from '@openapi/routes'
 
+import { ConfigContext } from '../../contexts';
+
 const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&show_dialog=true';
-const client_id = spotify.client_id;
 
 export const SettingModal = () => {
 
@@ -101,6 +101,8 @@ interface CredentialItemProps {
 const CredentialItem = (props: CredentialItemProps) => {
     const { settingStore } = useStore();
 
+    const config = useContext(ConfigContext);
+
     const onClick = () => {
         (window as any).closeCallback = onClose;
         let left = (window.screen.width - 500) / 2;
@@ -108,7 +110,7 @@ const CredentialItem = (props: CredentialItemProps) => {
 
         window.open(
             spotify_url
-            + '&client_id=' + client_id
+            + '&client_id=' + config.spotify_id
             + '&scope=' + props.scope
             + '&redirect_uri=' + OpenAPI.URL + '/media/1/callback',
             'SpotifyLogin',

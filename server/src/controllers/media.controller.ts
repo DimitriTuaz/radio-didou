@@ -1,26 +1,26 @@
 import { get, param, getModelSchemaRef, RestBindings, Request, Response, del } from '@loopback/rest';
-import { inject, BindingScope, bind } from '@loopback/core';
+import { inject, BindingScope, bind, CoreBindings } from '@loopback/core';
 import { repository } from '@loopback/repository';
 
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
-import { RadiodBindings } from '../keys';
+import request from 'superagent'
+import { Logger } from 'winston';
 
 import { NowDeezer, NowSpotify, NowEnum, SpotifyScope } from '../now';
 import { MediaCredentials, UserPower, User } from '../models';
 import { UserRepository, MediaCredentialsRepository } from '../repositories';
-
-import request from 'superagent'
+import { logger, LOGGER_LEVEL, LoggingBindings } from '../logger';
 
 @bind({ scope: BindingScope.SINGLETON })
 export class MediaController {
   constructor(
-    @inject(RadiodBindings.API_KEY) private api_key: any,
-    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any,
+    @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any,
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
-    @repository(UserRepository) private userRepository: UserRepository
+    @repository(UserRepository) private userRepository: UserRepository,
+    @inject(LoggingBindings.LOGGER) private logger: Logger
   ) { }
 
   @get('/media/find', {
@@ -84,6 +84,7 @@ export class MediaController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async create(
     @param.path.number('serviceId') serviceId: number,
@@ -137,7 +138,7 @@ export class MediaController {
   }
 
   private async obtainSpotifyToken(code: string, redirect_uri: string): Promise<any> {
-    const authorization = Buffer.from(this.api_key.spotify.client_id + ':' + this.api_key.spotify.secret)
+    const authorization = Buffer.from(this.global_config.spotify.client_id + ':' + this.global_config.spotify.secret)
       .toString('base64');
     const response = await request
       .post(NowSpotify.token_url)
@@ -162,7 +163,7 @@ export class MediaController {
       return [response.body.id, response.body.display_name];
     }
     catch (e) {
-      console.log('[MediaController] error: unable to obtain spotify name.')
+      this.logger.warn('[MediaController] error: unable to obtain spotify name.');
     }
     return 'Undefined Account';
   }
@@ -170,8 +171,8 @@ export class MediaController {
   private async obtainDeezerToken(code: string) {
     const response = await request
       .get(NowDeezer.auth_url)
-      .query({ app_id: this.api_key.deezer.app_id })
-      .query({ secret: this.api_key.deezer.secret })
+      .query({ app_id: this.global_config.deezer.app_id })
+      .query({ secret: this.global_config.deezer.secret })
       .query({ code: code })
       .query({ output: "json" });
     return response.body.access_token;
@@ -186,7 +187,7 @@ export class MediaController {
       return [response.body.id, response.body.name];
     }
     catch (e) {
-      console.log('[MediaController] error: unable to obtain deezer name.')
+      this.logger.warn('[MediaController] error: unable to obtain deezer name.');
     }
     return 'Undefined Account';
   }

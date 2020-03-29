@@ -1,17 +1,15 @@
 import { get, param, post, getModelSchemaRef } from '@loopback/rest';
-import { inject, BindingScope, bind } from '@loopback/core';
+import { inject, BindingScope, bind, Getter } from '@loopback/core';
 import { repository } from '@loopback/repository';
-
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
-import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
-
-import { NowObject, SpotifyScope, NowEnum } from '../now';
+import { NowObject, SpotifyScope, NowBindings, NowService } from '../now';
 import { MediaCredentials, User, UserPower } from '../models';
 import { MediaCredentialsRepository, UserRepository } from '../repositories';
-import { PersistentKeyService, NowService } from '../services';
+import { PersistentKeyService } from '../services';
+import { logger, LOGGER_LEVEL } from '../logger'
 
 @bind({ scope: BindingScope.SINGLETON })
 export class NowController {
@@ -19,7 +17,8 @@ export class NowController {
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @repository(UserRepository) private userRepository: UserRepository,
-    @inject(RadiodBindings.NOW_SERVICE) private nowService: NowService,
+    @inject(NowBindings.NOW_SERVICE) private nowService: NowService,
+    @inject.getter(NowBindings.CURRENT_NOW) private nowGetter: Getter<NowObject>
   ) { }
 
   @get('/now/get', {
@@ -37,7 +36,7 @@ export class NowController {
     },
   })
   async getNow() {
-    return this.nowService.value();
+    return await this.nowGetter();
   }
 
   @post('/now/set', {
@@ -48,34 +47,27 @@ export class NowController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async setMedia(
     @param.query.string('userId') userId: string,
-    @param.query.boolean('live', { required: false }) live?: boolean
   ) {
-    if (live !== undefined && live === true) {
-      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, NowEnum.Live.toString());
-      this.nowService.setFetcher(undefined, true);
+    let credential: MediaCredentials | undefined;
+    let data: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
+      where: {
+        scope: SpotifyScope.playback
+      }
+    });
+    if (data.length > 0) {
+      credential = data[0];
+      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
     }
     else {
-      let credential: MediaCredentials | undefined;
-      let data: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
-        where: {
-          scope: SpotifyScope.playback
-        }
-      });
-      if (data.length > 0) {
-        credential = data[0];
-        await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
-      }
-      else {
-        credential = undefined;
-        await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, 'none');
-      }
-      this.nowService.setFetcher(credential, false);
+      credential = undefined;
+      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, 'none');
     }
+    this.nowService.setFetcher(credential);
   }
-
 
   @get('/now/find', {
     security: OPERATION_SECURITY_SPEC,
@@ -93,6 +85,7 @@ export class NowController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async findMedia() {
     let credentials = await this.credentialRepository.find({
@@ -124,6 +117,7 @@ export class NowController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async getMedia() {
     let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);

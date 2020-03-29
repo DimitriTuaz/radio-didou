@@ -49,10 +49,8 @@
 - In your root folder, run the server with './run.sh'
 
 ## How to configure ?
-- Copy the files of '/config/loopback/' in the root folder.
-- 'api_key.json' should contains at least your spotify developper credentials.
-- 'mongo.config.json' should contains your credentials if you enabled authentication.
-- 'config.json' is the main config file.
+- Copy the file ./config/loopback/config.yaml into the root folder.
+- Modify it to fit your needs.
 
 # Contribution
 

@@ -1,6 +1,8 @@
 import React from 'react'
 import { NowStore, UIStore, UserStore, SongStore, SettingStore } from '../stores';
 
+import { Configuration } from '@openapi/schemas'
+
 export class RootStore {
   public readonly nowStore: NowStore;
   public readonly interfaceStore: UIStore;
@@ -26,3 +28,5 @@ export const storesContext = React.createContext({
   songStore: rootStore.songStore,
   settingStore: rootStore.settingStore
 });
+
+export const ConfigContext = React.createContext({} as Configuration);

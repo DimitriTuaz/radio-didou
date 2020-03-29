@@ -1,17 +1,22 @@
 import { get, param, getModelSchemaRef, put, del, HttpErrors, post } from '@loopback/rest';
-import { inject, BindingScope, bind } from '@loopback/core';
+import { inject, BindingScope, bind, CoreBindings } from '@loopback/core';
 import { repository } from '@loopback/repository';
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 import _ from 'lodash';
 
-import { RadiodBindings } from '../keys';
 import { Song, UserPower } from '../models';
 import { UserRepository } from '../repositories';
 import { NowSpotify, SpotifyScope } from '../now';
 
-import request from 'superagent'
+import { Logger } from 'winston';
+import request from 'superagent';
+
+import { logger, LOGGER_LEVEL, LoggingBindings } from '../logger';
+
+const playlist_title = 'Mes <3 Radio Didou';
+const playlist_description = 'Mes coups de coeur fraîchement diggés sur www.radio-didou.com';
 
 @bind({ scope: BindingScope.SINGLETON })
 export class SongController {
@@ -20,8 +25,9 @@ export class SongController {
   public name: string = 'LikeController';
 
   constructor(
-    @inject(RadiodBindings.API_KEY) private api_key: any,
+    @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any,
     @repository(UserRepository) private userRepository: UserRepository,
+    @inject(LoggingBindings.LOGGER) private logger: Logger
   ) { }
 
   @put('/song/add', {
@@ -39,18 +45,13 @@ export class SongController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async add(
     @param.query.string('url') url: string,
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile
   ) {
-    let trackURL: URL;
-    try {
-      trackURL = new URL(url);
-    } catch (error) {
-      console.log('[' + this.name + '] Invalid URL to add..');
-      throw new HttpErrors.BadRequest('Invalid URL')
-    }
+    let trackURL = new URL(url);
     let track: any = await this.obtain_track(trackURL, true);
     let userId: string = currentUserProfile[securityId];
     let song: Song = new Song({
@@ -64,7 +65,7 @@ export class SongController {
       await this.userRepository.songs(userId).create(song);
     } catch (error) {
       if (error.code === 11000 && error.errmsg.includes('index: uniqueURL')) {
-        console.log('[' + this.name + '] Song ' + url + ' is already in DB');
+        this.logger.warn('[' + this.name + '] Song ' + url + ' is already in DB');
       } else {
         throw error;
       }
@@ -133,6 +134,7 @@ export class SongController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async remove(
     @param.query.string('url') url: string,
@@ -150,6 +152,7 @@ export class SongController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.NONE } })
   async synchronize(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile,
@@ -178,8 +181,8 @@ export class SongController {
 
     let access_token = await NowSpotify.obtain_user_access_token(
       user.mediaCredentials[0].token,
-      this.api_key.spotify.client_id,
-      this.api_key.spotify.secret
+      this.global_config.spotify.client_id,
+      this.global_config.spotify.secret
     );
 
     if (access_token == undefined)
@@ -207,7 +210,6 @@ export class SongController {
       .set('Accept', 'application/json')
       .set('Content-Type', 'application/json')
       .set('Authorization', 'Bearer ' + access_token);
-    console.log(response.body);
     return response.body;
   }
 
@@ -234,8 +236,8 @@ export class SongController {
         let playlistId = await this.create_playlist(
           spotifyId,
           access_token,
-          name !== undefined ? name : 'Mes ♡ Radio Didou',
-          description !== undefined ? description : 'Mes coups de coeur fraîchement diggés sur www.radio-didou.com');
+          name !== undefined ? name : playlist_title,
+          description !== undefined ? description : playlist_description);
         return await this.synchronize_playlist(
           spotifyId,
           playlistId,
@@ -245,7 +247,7 @@ export class SongController {
           description,
           false);
       } else {
-        console.log('[SongController] Error in synchronize_playlist');
+        this.logger.warn('[SongController] Error in synchronize_playlist');
         return undefined;
       }
     }
@@ -287,7 +289,7 @@ export class SongController {
 
   private async obtain_app_access_token(): Promise<void> {
     try {
-      const authorization = Buffer.from(this.api_key.spotify.client_id + ':' + this.api_key.spotify.secret)
+      const authorization = Buffer.from(this.global_config.spotify.client_id + ':' + this.global_config.spotify.secret)
         .toString('base64');
 
       const response = await request
@@ -301,7 +303,7 @@ export class SongController {
       const data = response.body;
       if ('access_token' in data) {
         this.access_token = data.access_token;
-        console.log("[" + this.name + "] obtain_app_access_token succeeded")
+        this.logger.debug("[" + this.name + "] obtain_app_access_token succeeded");
       }
     }
     catch (error) {

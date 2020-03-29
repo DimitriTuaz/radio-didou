@@ -14,7 +14,7 @@ import { CookieOptions } from 'express'
 import { User, UserPower } from '../models';
 import { UserRepository } from '../repositories';
 import { JWTService } from '../services';
-import { inject } from '@loopback/core';
+import { inject, CoreBindings } from '@loopback/core';
 import {
   authenticate,
   UserService,
@@ -30,6 +30,7 @@ import {
 } from '../keys';
 import _ from 'lodash';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
+import { logger, LOGGER_LEVEL } from '../logger';
 
 @model()
 class NewUser {
@@ -49,9 +50,9 @@ export class UserController {
   constructor(
     @repository(UserRepository) private userRepository: UserRepository,
     @inject(PasswordHasherBindings.PASSWORD_HASHER) private passwordHasher: PasswordHasher,
-    @inject(RadiodBindings.TOKEN_SERVICE) private jwtService: JWTService,
+    @inject(TokenServiceBindings.TOKEN_SERVICE) private jwtService: JWTService,
     @inject(RadiodBindings.USER_SERVICE) private userService: UserService<User, Credentials>,
-    @inject(RadiodBindings.GLOBAL_CONFIG) private global_config: any
+    @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any
   ) { }
 
   @post('/user/register', {
@@ -68,6 +69,7 @@ export class UserController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   async register(
     @requestBody({
       content: {
@@ -149,6 +151,7 @@ export class UserController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   async login(
     @requestBody({
       content: {
@@ -189,6 +192,7 @@ export class UserController {
       },
     },
   })
+  @logger(LOGGER_LEVEL.INFO)
   async logout(
     @inject(RestBindings.Http.RESPONSE) response: Response): Promise<void> {
     let options: CookieOptions = {

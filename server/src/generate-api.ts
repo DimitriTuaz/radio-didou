@@ -14,7 +14,7 @@ export async function generate(args: string[]) {
   try {
     writeFileSync(
       path.join(output, 'openapi.json'),
-      JSON.stringify(app.restServer.getApiSpec(), null, 2)
+      JSON.stringify(await app.restServer.getApiSpec(), null, 2)
     );
     const promises = template.map(template =>
       generator.generate({

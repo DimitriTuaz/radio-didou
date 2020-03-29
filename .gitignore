@@ -1,8 +1,12 @@
 .DS_Store
 
+# LOGS
+/logs
+
 # CONFIG FILES
 /mongo.config.json
 /config.json
+/config.yaml
 /api_key.json
 /api_key_public.json
 

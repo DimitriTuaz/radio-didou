@@ -1,6 +1,9 @@
 import request from 'superagent'
 
-import { NowFetcher, NowEnum, NowObject } from '../now';
+import { NowFetcher, NowEnum, NowBindings } from '../now';
+import { inject } from '@loopback/core';
+import { LoggingBindings } from '../logger';
+import { Logger } from 'winston';
 
 export class NowDeezer extends NowFetcher {
 
@@ -10,21 +13,16 @@ export class NowDeezer extends NowFetcher {
 
   public name = "Deezer";
 
-  private access_token: string;
-
-  constructor(token: string, value?: NowObject) {
+  constructor(
+    @inject(LoggingBindings.LOGGER) private logger: Logger,
+    @inject(NowBindings.NOW_TOKEN) private access_token: string
+  ) {
     super();
-    this.access_token = token;
-    if (value != null) {
-      this.now = value;
-    }
-    else {
-      this.now = {
-        type: NowEnum.Deezer,
-        listeners: 0,
-        song: '',
-        artists: [],
-      }
+    this.now = {
+      type: NowEnum.Deezer,
+      listeners: 0,
+      song: '',
+      artists: [],
     }
   }
 
@@ -53,7 +51,7 @@ export class NowDeezer extends NowFetcher {
       }
     }
     catch (error) {
-      console.log("[" + this.name + "] error in obtain_current_playback")
+      this.logger.warn("[" + this.name + "] error in obtain_current_playback")
     }
   }
 }

@@ -7,7 +7,7 @@ import { inject } from '@loopback/context';
 import { HttpErrors, Request } from '@loopback/rest';
 import { AuthenticationStrategy, AuthenticationBindings, AuthenticationMetadata } from '@loopback/authentication';
 import { UserProfile } from '@loopback/security';
-import { RadiodBindings } from '../keys';
+import { RadiodBindings, TokenServiceBindings } from '../keys';
 import { JWTService } from '../services';
 import { UserPower } from '../models';
 
@@ -17,7 +17,7 @@ export class JWTAuthenticationStrategy implements AuthenticationStrategy {
   name = 'jwt';
 
   constructor(
-    @inject(RadiodBindings.TOKEN_SERVICE) public tokenService: JWTService,
+    @inject(TokenServiceBindings.TOKEN_SERVICE) public tokenService: JWTService,
     @inject(AuthenticationBindings.METADATA) private metadata: AuthenticationMetadata,
   ) { }
 
