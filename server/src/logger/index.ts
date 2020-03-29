@@ -26,4 +26,5 @@ export interface LogFn {
 export * from './logger-action.provider'
 export * from './logger.component'
 export * from './logger.decorator'
+export * from './logger-error.provider'
 export * from './logger-metadata.provider'

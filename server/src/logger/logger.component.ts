@@ -9,7 +9,13 @@ import {
 
 import { createLogger, LoggerOptions } from 'winston';
 
-import { LoggingBindings, LoggerMetadataProvider, LoggerActionProvider } from '../logger';
+import {
+  LoggingBindings,
+  LoggerMetadataProvider,
+  LoggerActionProvider,
+  LoggerErrorProvider
+} from '../logger';
+import { RestBindings } from '@loopback/rest';
 
 @bind({ tags: { [ContextTags.KEY]: LoggingBindings.COMPONENT } })
 export class LoggingComponent implements Component {
@@ -20,6 +26,7 @@ export class LoggingComponent implements Component {
     @config({ fromBinding: LoggingBindings.LOGGER }) private loggerOptions: LoggerOptions = {},
   ) {
     this.providers = {
+      [RestBindings.SequenceActions.LOG_ERROR.key]: LoggerErrorProvider,
       [LoggingBindings.METADATA.key]: LoggerMetadataProvider,
       [LoggingBindings.LOGGER_ACTION.key]: LoggerActionProvider,
     };

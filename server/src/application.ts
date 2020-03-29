@@ -29,7 +29,7 @@ import {
   MainUserService
 } from './services';
 
-import { LoggingComponent, LoggingBindings } from './logger';
+import { LoggingComponent, LoggingBindings, LOGGER_LEVEL } from './logger';
 import { transports, format } from 'winston';
 import { NowComponent } from './now/now.component';
 
@@ -76,23 +76,37 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     // AUTHENTICATION
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
-
     // LOGGER
     this.setupLogging();
     this.component(LoggingComponent);
-
     // NOW
     this.component(NowComponent);
   }
 
   private setupLogging(): void {
+    let directory = path.join(this.rootPath, 'logs');
+    if (this.config.logger.directory !== undefined)
+      directory = this.config.logger.directory;
+
     this.configure(LoggingBindings.LOGGER).to({
-      transports: [new transports.Console({})],
-      level: this.config.logger.level,
-      format: format.combine(
-        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-        format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
-      ),
+      transports: [
+        new transports.Console({
+          level: this.config.logger.level,
+          format: format.combine(
+            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+            format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
+          )
+        }),
+        new transports.File({
+          dirname: directory,
+          filename: 'error.log',
+          level: LOGGER_LEVEL.ERROR,
+          format: format.combine(
+            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+            format.printf(info => `[${info.timestamp}]: ${info.message}\n${info.error}`),
+          )
+        })
+      ],
       exitOnError: false
     });
   }
