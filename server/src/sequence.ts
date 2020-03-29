@@ -38,8 +38,8 @@ export class MainSequence implements SequenceHandler {
       const route = this.findRoute(request);
       await this.authenticateRequest(request);
       const args = await this.parseParams(request, route);
-      const result = await this.invoke(route, args);
       await this.logRequest(request, args);
+      const result = await this.invoke(route, args);
       this.send(response, result);
     } catch (err) {
       if (err.code === AUTHENTICATION_STRATEGY_NOT_FOUND || err.code === USER_PROFILE_NOT_FOUND) {

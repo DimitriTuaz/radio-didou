@@ -7,7 +7,6 @@ import { LoggerEnhancedMetadata } from './logger-metadata.provider'
 
 export namespace LoggingBindings {
   export const LOGGER = BindingKey.create<Logger>('logger.winston');
-  export const LOGGER_LEVEL = BindingKey.create<LOGGER_LEVEL>('logger.level');
   export const LOGGER_ACTION = BindingKey.create<LogFn>('logger.action');
   export const METADATA = BindingKey.create<LoggerEnhancedMetadata | undefined>('logger.metadata');
   export const COMPONENT = BindingKey.create<LoggingComponent>('components.LoggingComponent');

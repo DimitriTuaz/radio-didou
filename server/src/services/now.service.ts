@@ -45,7 +45,7 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
     }
   }
 
-  public setFetcher(credentials: MediaCredentials | undefined) {
+  public async setFetcher(credentials: MediaCredentials | undefined) {
     if (credentials == undefined) {
       this.fetcherBinding.to(new NowNone()).inScope(BindingScope.SINGLETON);
     }
@@ -66,6 +66,8 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
           break;
       }
     }
+    let fetcher = await this.fetcherGetter();
+    this.logger.info("{NowService} setFetcher to " + fetcher.name);
   }
 
   public async start(): Promise<void> {
@@ -87,7 +89,7 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
       }
     }
     catch (e) {
-      this.logger.warn("{NowService} Error! Couldn't start the service")
+      this.logger.warn("{NowService} Error! Couldn't start the service");
     }
   }
 

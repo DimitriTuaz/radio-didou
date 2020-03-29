@@ -31,8 +31,9 @@ import {
   MainUserService
 } from './services';
 
-import { LoggingComponent } from './logger';
+import { LoggingComponent, LoggingBindings } from './logger';
 import { NowNone } from './now';
+import { transports, format } from 'winston';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -78,6 +79,15 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
     // LOGGER
+    this.configure(LoggingBindings.COMPONENT).to({
+      transports: [new transports.Console({})],
+      level: this.config.logger.level,
+      format: format.combine(
+        format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
+        format.printf(info => `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`)
+      ),
+      exitOnError: false
+    });
     this.component(LoggingComponent);
   }
 
