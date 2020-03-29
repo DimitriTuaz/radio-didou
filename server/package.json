@@ -42,11 +42,6 @@
     "@loopback/repository": "latest",
     "@loopback/rest": "latest",
     "@loopback/rest-explorer": "latest",
-    "@types/bcryptjs": "latest",
-    "@types/cookie": "latest",
-    "@types/mongodb": "latest",
-    "@types/set-interval-async": "latest",
-    "@types/yaml": "latest",
     "bcryptjs": "latest",
     "cookie": "latest",
     "isemail": "latest",
@@ -60,9 +55,14 @@
   "devDependencies": {
     "@loopback/build": "latest",
     "@loopback/testlab": "latest",
+    "typescript": "latest",
     "@types/node": "latest",
+    "@types/bcryptjs": "latest",
+    "@types/cookie": "latest",
+    "@types/mongodb": "latest",
+    "@types/set-interval-async": "latest",
+    "@types/yaml": "latest",
     "openapi3-generator": "latest",
-    "source-map-support": "latest",
-    "typescript": "latest"
+    "source-map-support": "latest"
   }
 }
