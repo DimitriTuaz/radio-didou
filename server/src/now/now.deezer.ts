@@ -1,6 +1,6 @@
 import request from 'superagent'
 
-import { NowFetcher, NowEnum, NowObject } from '../now';
+import { NowFetcher, NowEnum } from '../now';
 import { inject } from '@loopback/core';
 import { RadiodBindings } from '../keys';
 
@@ -13,20 +13,14 @@ export class NowDeezer extends NowFetcher {
   public name = "Deezer";
 
   constructor(
-    @inject(RadiodBindings.NOW_TOKEN) private access_token: string,
-    @inject(RadiodBindings.NOW_OBJECT, { optional: true }) current_now: NowObject,
+    @inject(RadiodBindings.NOW_TOKEN) private access_token: string
   ) {
     super();
-    if (current_now != null) {
-      this.now = current_now;
-    }
-    else {
-      this.now = {
-        type: NowEnum.Deezer,
-        listeners: 0,
-        song: '',
-        artists: [],
-      }
+    this.now = {
+      type: NowEnum.Deezer,
+      listeners: 0,
+      song: '',
+      artists: [],
     }
   }
 

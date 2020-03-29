@@ -1,6 +1,6 @@
 import request from 'superagent'
 
-import { NowFetcher, NowEnum, NowObject } from '../now';
+import { NowFetcher, NowEnum } from '../now';
 import { inject, CoreBindings } from '@loopback/core';
 import { RadiodBindings } from '../keys';
 
@@ -25,21 +25,15 @@ export class NowSpotify extends NowFetcher {
 
   constructor(
     @inject(RadiodBindings.NOW_TOKEN) private refresh_token: string,
-    @inject(RadiodBindings.NOW_OBJECT, { optional: true }) current_now: NowObject,
     @inject(CoreBindings.APPLICATION_CONFIG) config: any
   ) {
     super();
     this.api_key = config.spotify.api_key;
-    if (current_now != null) {
-      this.now = current_now;
-    }
-    else {
-      this.now = {
-        type: NowEnum.Spotify,
-        listeners: 0,
-        song: '',
-        artists: [],
-      }
+    this.now = {
+      type: NowEnum.Spotify,
+      listeners: 0,
+      song: '',
+      artists: [],
     }
   }
 

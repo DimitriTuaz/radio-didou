@@ -109,11 +109,8 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(RadiodBindings.USER_SERVICE).toClass(MainUserService);
 
-    this.bind(RadiodBindings.NOW_FETCHER)
-      .toClass(NowNone)
-      .inScope(BindingScope.SINGLETON);
-    this.bind(RadiodBindings.NOW_OBJECT)
-      .toProvider(NowService)
+    this.bind(RadiodBindings.NOW_SERVICE)
+      .toClass(NowService)
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)
       .inScope(BindingScope.SINGLETON);
   }
