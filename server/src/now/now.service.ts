@@ -2,7 +2,6 @@ import { setIntervalAsync, SetIntervalAsyncTimer } from 'set-interval-async/dyna
 import { clearIntervalAsync } from 'set-interval-async';
 import {
   LifeCycleObserver,
-  Provider,
   inject,
   CoreBindings,
   Getter,
@@ -22,7 +21,6 @@ import {
   NowNone,
   NowDeezer,
   NowSpotify,
-  NowObject,
   NowEnum,
   NowBindings
 } from '../now'
@@ -30,7 +28,7 @@ import { PersistentKeyService } from '../services';
 import { MediaCredentialsRepository } from '../repositories';
 import { LoggingBindings } from '../logger';
 
-export class NowService implements LifeCycleObserver, Provider<NowObject> {
+export class NowService implements LifeCycleObserver {
 
   private icecastURL: string;
   private intervalID: SetIntervalAsyncTimer | null;
@@ -45,11 +43,6 @@ export class NowService implements LifeCycleObserver, Provider<NowObject> {
     @inject.setter(NowBindings.NOW_TOKEN) private tokenSetter: Setter<string>
   ) {
     this.icecastURL = configuration.icecast.url + '/status-json.xsl';
-  }
-
-  public async value() {
-    let fetcher = await this.fetcherGetter();
-    return fetcher.now;
   }
 
   public async setDefaultFetcher(): Promise<void> {
