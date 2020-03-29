@@ -19,7 +19,8 @@ import { MainSequence } from './sequence';
 import {
   RadiodBindings,
   TokenServiceBindings,
-  PasswordHasherBindings
+  PasswordHasherBindings,
+  NowServiceBindings
 } from './keys';
 
 import {
@@ -109,7 +110,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(RadiodBindings.USER_SERVICE).toClass(MainUserService);
 
-    this.bind(RadiodBindings.NOW_SERVICE)
+    this.bind(NowServiceBindings.NOW_SERVICE)
       .toClass(NowService)
       .tag(CoreTags.LIFE_CYCLE_OBSERVER)
       .inScope(BindingScope.SINGLETON);

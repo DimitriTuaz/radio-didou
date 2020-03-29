@@ -4,20 +4,23 @@ import { UserService } from '@loopback/authentication';
 import { PersistentKeyService, JWTService, PasswordHasher, NowService } from './services';
 import { User } from './models';
 import { Credentials } from './repositories';
-import { NowFetcher, NowObject } from './now';
+import { NowFetcher } from './now';
 
 export namespace RadiodBindings {
   export const ROOT_PATH = BindingKey.create<string>('radiod.project-root');
   export const MONGO_CONFIG = BindingKey.create<object>('datasources.config.mongo');
-  export const NOW_SERVICE = BindingKey.create<NowService>('radiod.now-service');
-  export const NOW_FETCHER = BindingKey.create<NowFetcher>('radiod.now-fetcher');
-  export const NOW_TOKEN = BindingKey.create<string>('radiod.now-token');
   export const PERSISTENT_KEY_SERVICE = BindingKey.create<PersistentKeyService>('radiod.config-service');
   export const USER_SERVICE = BindingKey.create<UserService<User, Credentials>>('services.user.service');
 }
 
 export namespace RadiodKeys {
   export const DEFAULT_CREDENTIAL = 'default_credential'
+}
+
+export namespace NowServiceBindings {
+  export const NOW_SERVICE = BindingKey.create<NowService>('radiod.now-service');
+  export const NOW_FETCHER = BindingKey.create<NowFetcher>('radiod.now-fetcher');
+  export const NOW_TOKEN = BindingKey.create<string>('radiod.now-token');
 }
 
 export namespace TokenServiceBindings {
