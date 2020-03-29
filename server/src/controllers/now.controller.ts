@@ -1,18 +1,14 @@
 import { get, param, post, getModelSchemaRef } from '@loopback/rest';
 import { inject, BindingScope, bind } from '@loopback/core';
 import { repository } from '@loopback/repository';
-
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 
-import { RadiodBindings, RadiodKeys, NowServiceBindings } from '../keys';
-
-import { NowObject, SpotifyScope } from '../now';
+import { RadiodBindings, RadiodKeys } from '../keys';
+import { NowObject, SpotifyScope, NowBindings, NowService } from '../now';
 import { MediaCredentials, User, UserPower } from '../models';
 import { MediaCredentialsRepository, UserRepository } from '../repositories';
-import { PersistentKeyService, NowService } from '../services';
-
-
+import { PersistentKeyService } from '../services';
 import { logger, LOGGER_LEVEL } from '../logger'
 
 @bind({ scope: BindingScope.SINGLETON })
@@ -21,7 +17,7 @@ export class NowController {
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @repository(UserRepository) private userRepository: UserRepository,
-    @inject(NowServiceBindings.NOW_SERVICE) private nowService: NowService,
+    @inject(NowBindings.NOW_SERVICE) private nowService: NowService,
   ) { }
 
   @get('/now/get', {

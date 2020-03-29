@@ -2,8 +2,7 @@ import { inject, CoreBindings } from '@loopback/core';
 import request from 'superagent'
 import { Logger } from 'winston';
 
-import { NowFetcher, NowEnum } from '../now';
-import { RadiodBindings, NowServiceBindings } from '../keys';
+import { NowFetcher, NowEnum, NowBindings } from '../now';
 import { LoggingBindings } from '../logger';
 
 export enum SpotifyScope {
@@ -27,7 +26,7 @@ export class NowSpotify extends NowFetcher {
 
   constructor(
     @inject(LoggingBindings.LOGGER) private logger: Logger,
-    @inject(NowServiceBindings.NOW_TOKEN) private refresh_token: string,
+    @inject(NowBindings.NOW_TOKEN) private refresh_token: string,
     @inject(CoreBindings.APPLICATION_CONFIG) config: any
   ) {
     super();

@@ -1,10 +1,9 @@
 import { BindingKey } from '@loopback/context';
 import { UserService } from '@loopback/authentication';
 
-import { PersistentKeyService, JWTService, PasswordHasher, NowService } from './services';
+import { PersistentKeyService, JWTService, PasswordHasher } from './services';
 import { User } from './models';
 import { Credentials } from './repositories';
-import { NowFetcher } from './now';
 
 export namespace RadiodBindings {
   export const PERSISTENT_KEY_SERVICE = BindingKey.create<PersistentKeyService>('radiod.config-service');
@@ -12,13 +11,7 @@ export namespace RadiodBindings {
 }
 
 export namespace RadiodKeys {
-  export const DEFAULT_CREDENTIAL = 'default_credential'
-}
-
-export namespace NowServiceBindings {
-  export const NOW_SERVICE = BindingKey.create<NowService>('radiod.now-service');
-  export const NOW_FETCHER = BindingKey.create<NowFetcher>('radiod.now-fetcher');
-  export const NOW_TOKEN = BindingKey.create<string>('radiod.now-token');
+  export const DEFAULT_CREDENTIAL = 'default_credential';
 }
 
 export namespace TokenServiceBindings {

@@ -1,6 +1,6 @@
 import { BootMixin } from '@loopback/boot';
 import { RepositoryMixin } from '@loopback/repository';
-import { BindingScope, CoreTags, CoreBindings, extensionFor } from '@loopback/core';
+import { BindingScope, CoreBindings } from '@loopback/core';
 import { RestExplorerBindings, RestExplorerComponent } from '@loopback/rest-explorer';
 import {
   AuthenticationComponent,
@@ -20,20 +20,18 @@ import {
   RadiodBindings,
   TokenServiceBindings,
   PasswordHasherBindings,
-  NowServiceBindings
 } from './keys';
 
 import {
   PersistentKeyService,
-  NowService,
   JWTService,
   BcryptHasher,
   MainUserService
 } from './services';
 
 import { LoggingComponent, LoggingBindings } from './logger';
-import { NowNone } from './now';
 import { transports, format } from 'winston';
+import { NowComponent } from './now/now.component';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
 
@@ -78,9 +76,13 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     // AUTHENTICATION
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
+
     // LOGGER
     this.setupLogging();
     this.component(LoggingComponent);
+
+    // NOW
+    this.component(NowComponent);
   }
 
   private setupLogging(): void {
@@ -94,6 +96,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
       exitOnError: false
     });
   }
+
   private setupStaticBindings(): void {
     // MAIN
     this.static('/', path.join(this.rootPath, 'client/build'));
@@ -112,18 +115,13 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
       .toClass(PersistentKeyService)
       .inScope(BindingScope.SINGLETON);
 
+    this.bind(RadiodBindings.USER_SERVICE).toClass(MainUserService);
+
     this.bind(TokenServiceBindings.TOKEN_SERVICE).toClass(JWTService);
     this.bind(TokenServiceBindings.TOKEN_SECRET).to(this.config.jwt.secret);
     this.bind(TokenServiceBindings.TOKEN_EXPIRES_IN).to(this.config.jwt.expires);
 
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
-
-    this.bind(RadiodBindings.USER_SERVICE).toClass(MainUserService);
-
-    this.bind(NowServiceBindings.NOW_SERVICE)
-      .toClass(NowService)
-      .tag(CoreTags.LIFE_CYCLE_OBSERVER)
-      .inScope(BindingScope.SINGLETON);
   }
 }

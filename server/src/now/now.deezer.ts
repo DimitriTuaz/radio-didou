@@ -1,8 +1,7 @@
 import request from 'superagent'
 
-import { NowFetcher, NowEnum } from '../now';
+import { NowFetcher, NowEnum, NowBindings } from '../now';
 import { inject } from '@loopback/core';
-import { RadiodBindings, NowServiceBindings } from '../keys';
 import { LoggingBindings } from '../logger';
 import { Logger } from 'winston';
 
@@ -16,7 +15,7 @@ export class NowDeezer extends NowFetcher {
 
   constructor(
     @inject(LoggingBindings.LOGGER) private logger: Logger,
-    @inject(NowServiceBindings.NOW_TOKEN) private access_token: string
+    @inject(NowBindings.NOW_TOKEN) private access_token: string
   ) {
     super();
     this.now = {
