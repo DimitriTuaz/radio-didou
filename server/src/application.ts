@@ -79,7 +79,12 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.component(AuthenticationComponent);
     registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
     // LOGGER
-    this.configure(LoggingBindings.COMPONENT).to({
+    this.setupLogging();
+    this.component(LoggingComponent);
+  }
+
+  private setupLogging(): void {
+    this.configure(LoggingBindings.LOGGER).to({
       transports: [new transports.Console({})],
       level: this.config.logger.level,
       format: format.combine(
@@ -88,9 +93,7 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
       ),
       exitOnError: false
     });
-    this.component(LoggingComponent);
   }
-
   private setupStaticBindings(): void {
     // MAIN
     this.static('/', path.join(this.rootPath, 'client/build'));
@@ -105,8 +108,6 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
   private setupBindings(): void {
 
-    this.bind(RadiodBindings.ROOT_PATH).to(this.rootPath);
-    this.bind(RadiodBindings.MONGO_CONFIG).to(this.config.datasource);
     this.bind(RadiodBindings.PERSISTENT_KEY_SERVICE)
       .toClass(PersistentKeyService)
       .inScope(BindingScope.SINGLETON);

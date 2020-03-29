@@ -17,7 +17,7 @@ export class LoggingComponent implements Component {
   bindings: Binding<unknown>[];
 
   constructor(
-    @config() private options: LoggerOptions = {},
+    @config({ fromBinding: LoggingBindings.LOGGER }) private loggerOptions: LoggerOptions = {},
   ) {
     this.providers = {
       [LoggingBindings.METADATA.key]: LoggerMetadataProvider,
@@ -26,7 +26,7 @@ export class LoggingComponent implements Component {
 
     this.bindings = [
       Binding.bind(LoggingBindings.LOGGER).to(createLogger({
-        ...this.options
+        ...this.loggerOptions
       }))
     ];
   }

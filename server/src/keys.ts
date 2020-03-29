@@ -7,8 +7,6 @@ import { Credentials } from './repositories';
 import { NowFetcher } from './now';
 
 export namespace RadiodBindings {
-  export const ROOT_PATH = BindingKey.create<string>('radiod.project-root');
-  export const MONGO_CONFIG = BindingKey.create<object>('datasources.config.mongo');
   export const PERSISTENT_KEY_SERVICE = BindingKey.create<PersistentKeyService>('radiod.config-service');
   export const USER_SERVICE = BindingKey.create<UserService<User, Credentials>>('services.user.service');
 }

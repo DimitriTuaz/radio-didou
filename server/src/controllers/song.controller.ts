@@ -15,6 +15,9 @@ import request from 'superagent';
 
 import { logger, LOGGER_LEVEL, LoggingBindings } from '../logger';
 
+const playlist_title = 'Mes <3 Radio Didou';
+const playlist_description = 'Mes coups de coeur fraîchement diggés sur www.radio-didou.com';
+
 @bind({ scope: BindingScope.SINGLETON })
 export class SongController {
 
@@ -239,8 +242,8 @@ export class SongController {
         let playlistId = await this.create_playlist(
           spotifyId,
           access_token,
-          name !== undefined ? name : 'Mes <3 Radio Didou',
-          description !== undefined ? description : 'Mes coups de coeur fraîchement diggés sur www.radio-didou.com');
+          name !== undefined ? name : playlist_title,
+          description !== undefined ? description : playlist_description);
         return await this.synchronize_playlist(
           spotifyId,
           playlistId,
