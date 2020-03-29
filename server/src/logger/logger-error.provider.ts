@@ -25,7 +25,7 @@ export class LoggerErrorProvider implements Provider<LogError> {
     let metadata = await this.metadata();
 
     if (metadata !== undefined)
-      message = `{statusCode=${statusCode}} |> Unhandled error in ${metadata.className}.${metadata.methodName}`;
+      message = `{url=${req.url}, statusCode=${statusCode}} |> Unhandled error in ${metadata.className}.${metadata.methodName}`;
     else
       message = `{statusCode=${statusCode}} |> Unhandled error in ${req.url}`;
 

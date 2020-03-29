@@ -103,11 +103,10 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
           level: LOGGER_LEVEL.ERROR,
           format: format.combine(
             format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            format.printf(info => `[${info.timestamp}]: ${info.message}\n${info.error}`),
+            format.printf(info => `[${info.timestamp}]: ${info.message}\n${info.error}\n`),
           )
         })
-      ],
-      exitOnError: false
+      ]
     });
   }
 
