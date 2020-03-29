@@ -11,6 +11,7 @@ static/sounds
 
 # MISC
 *.code-workspace
+.vscode
 package-lock.json
 deploy.sh
 asset_src

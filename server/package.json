@@ -18,7 +18,8 @@
     "migrate": "node ./dist/migrate",
     "prestart": "npm run build",
     "start": "node -r source-map-support/register .",
-    "prepublishOnly": "npm run test"
+    "prepublishOnly": "npm run test",
+    "debug": "npm run build && node -r source-map-support/register --nolazy --inspect-brk=9229 ."
   },
   "repository": {
     "type": "git"
