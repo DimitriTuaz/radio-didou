@@ -29,8 +29,7 @@ import {
   MainUserService
 } from './services';
 
-import { LoggingComponent, LoggingBindings, LOGGER_LEVEL } from './logger';
-import { transports, format } from 'winston';
+import { LoggingComponent, LoggingBindings, LoggingComponentConfig } from './logger';
 import { NowComponent } from './now/now.component';
 
 export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication)) {
@@ -73,14 +72,26 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
     this.component(RestExplorerComponent);
     this.bind(RestExplorerBindings.CONFIG).to({ path: '/explorer' });
 
-    // AUTHENTICATION
-    this.component(AuthenticationComponent);
-    registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
     // LOGGER
     this.setupLogging();
     this.component(LoggingComponent);
+    // AUTHENTICATION
+    this.component(AuthenticationComponent);
+    registerAuthenticationStrategy(this, JWTAuthenticationStrategy);
     // NOW
     this.component(NowComponent);
+  }
+
+  private setupLogging(): void {
+    let directory = this.config.logger.directory ?
+      this.config.logger.directory :
+      path.join(this.rootPath, 'logs');
+
+    this.configure<LoggingComponentConfig>(LoggingBindings.COMPONENT).to({
+      directory: directory,
+      level: this.config.logger.level,
+      stack_trace: this.config.logger.stack_trace
+    })
   }
 
   private setupStaticBindings(): void {
@@ -109,39 +120,5 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
 
     this.bind(PasswordHasherBindings.ROUNDS).to(10);
     this.bind(PasswordHasherBindings.PASSWORD_HASHER).toClass(BcryptHasher);
-  }
-
-  private setupLogging(): void {
-    let directory: string;
-    if (this.config.logger.directory !== undefined)
-      directory = this.config.logger.directory;
-    else
-      directory = path.join(this.rootPath, 'logs');
-
-    this.configure(LoggingBindings.LOGGER).to({
-      transports: [
-        new transports.Console({
-          level: this.config.logger.level,
-          format: format.combine(
-            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            format.printf(info => {
-              let message = `<${info.level.toUpperCase()}> - [${info.timestamp}]: ${info.message}`
-              if (info.error !== undefined && this.config.logger.stack_trace)
-                message += `\n${info.error}`;
-              return message;
-            })
-          )
-        }),
-        new transports.File({
-          dirname: directory,
-          filename: 'error.log',
-          level: LOGGER_LEVEL.ERROR,
-          format: format.combine(
-            format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
-            format.printf(info => `[${info.timestamp}]: ${info.message}\n${info.error}\n`),
-          )
-        })
-      ]
-    });
   }
 }
