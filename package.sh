@@ -20,11 +20,11 @@ cp -r static package/static
 
 echo '# INSTALL NODE-MODULES'
 cd package/server
-npm install --only=prod --loglevel=error
+yarn install --production
 
 echo '# CLEAN PACKAGE.JSON'
 rm package.json
-rm package-lock.json
+rm yarn.lock
 
 echo '# COMPRESS PACKAGE'
 cd ..

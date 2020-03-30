@@ -1,6 +1,6 @@
 ## GITIGNORE ##
 package-lock.json
-
+yarn.lock
 # Optional npm cache directory
 .npm
 

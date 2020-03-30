@@ -12,14 +12,8 @@
   },
   "scripts": {
     "build": "lb-tsc",
-    "build:watch": "lb-tsc --watch",
-    "clean": "lb-clean dist *.tsbuildinfo",
-    "pretest": "npm run clean && npm run build",
-    "migrate": "node ./dist/migrate",
-    "prestart": "npm run build",
     "start": "node -r source-map-support/register .",
-    "prepublishOnly": "npm run test",
-    "debug": "npm run build && node -r source-map-support/register --nolazy --inspect-brk=9229 ."
+    "debug": "node -r source-map-support/register --nolazy --inspect-brk=9229 ."
   },
   "repository": {
     "type": "git"
@@ -31,13 +25,12 @@
     "index.js",
     "index.d.ts",
     "dist",
-    "src",
-    "!*/__tests__"
+    "src"
   ],
   "dependencies": {
     "@loopback/authentication": "latest",
     "@loopback/boot": "latest",
-    "@loopback/core": "^2.2.0",
+    "@loopback/core": "latest",
     "@loopback/openapi-v3": "latest",
     "@loopback/repository": "latest",
     "@loopback/rest": "latest",
@@ -49,7 +42,7 @@
     "loopback-connector-mongodb": "latest",
     "set-interval-async": "latest",
     "superagent": "latest",
-    "winston": "^3.2.1",
+    "winston": "latest",
     "yaml": "latest"
   },
   "devDependencies": {
