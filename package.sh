@@ -11,6 +11,7 @@ mkdir -p package/static/
 echo '# COPY BUILT FILES'
 cp LICENSE package
 cp run.sh package
+cp config-files/config.yaml package
 cp -r client/build package/client
 cp -r server/dist package/server
 cp server/index.js package/server
@@ -20,7 +21,7 @@ cp -r static package/static
 
 echo '# INSTALL NODE-MODULES'
 cd package/server
-yarn install --production
+yarn install --production --prefer-offline 2> >(grep -v warning 1>&2)
 
 echo '# CLEAN PACKAGE.JSON'
 rm package.json

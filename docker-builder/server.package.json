@@ -19,7 +19,7 @@
     "type": "git"
   },
   "author": "",
-  "license": "SEE LICENSE",
+  "license": "",
   "files": [
     "README.md",
     "index.js",
@@ -55,7 +55,6 @@
     "@types/mongodb": "latest",
     "@types/set-interval-async": "latest",
     "@types/yaml": "latest",
-    "@types/superagent": "latest",
     "openapi3-generator": "latest"
   }
 }

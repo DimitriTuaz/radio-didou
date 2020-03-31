@@ -1,7 +1,6 @@
 {
   "name": "client",
   "version": "0.1.0",
-  "license": "SEE LICENSE",
   "private": true,
   "proxy": "http://localhost:8888",
   "dependencies": {
