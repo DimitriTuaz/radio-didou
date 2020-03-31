@@ -24,4 +24,9 @@ yarn build
 echo '# CREATE PACKAGE'
 cd ..
 ./package.sh
+mkdir /artifacts
+mv radio-didou.tar.gz /artifacts
 
+echo '# CLEAN'
+cd ..
+rm -rf radio-didou
