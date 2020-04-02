@@ -9,10 +9,10 @@ export class NowLive extends NowFetcher {
     this.now = {
       type: NowEnum.Live,
       listeners: 0,
-      song: 'Coronight',
+      song: 'Coronight III - La Revanche de la Cigale',
       artists: ['DJ Didou playing live'],
       album: 'Clique pour danser avec nous !',
-      url: 'https://zoom.us/j/582964557'
+      url: 'https://zoom.us/j/206002178'
     };
   }
 
