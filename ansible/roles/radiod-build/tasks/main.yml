@@ -1,0 +1,51 @@
+- name: CREATE artifact directory
+  file:
+    path: artifacts
+    state: directory
+    mode: '0755'
+    
+- name: PULL the repository
+  git:
+    repo: "{{ repository_url }}"
+    version: "{{ repository_branch }}"
+    dest: "radio-didou"
+    
+- name: INSTALL server dependencies
+  yarn:
+    path: "radio-didou/server"
+    
+- name: INSTALL client dependencies
+  yarn:
+    path: "radio-didou/client"
+    
+- name: INSTALL openapi dependencies
+  yarn:
+    path: "radio-didou/openapi"
+    
+- name: COPY config file
+  copy:
+    src: radio-didou/config-files/config.yaml
+    dest: radio-didou/
+    
+- name: BUILD server
+  command: 
+    chdir: radio-didou/server
+    cmd: ./build.sh
+    
+- name: BUILD client
+  command: 
+    chdir: radio-didou/client
+    cmd: yarn build
+    
+- name: PACKAGE
+  command: 
+    chdir: radio-didou
+    cmd: ./package.sh
+    
+- name: MOVE artifact
+  command:
+    argv:
+      - mv
+      - radio-didou/radio-didou.tar.gz
+      - artifacts/{{ repository_branch }}-{{ansible_date_time.iso8601}}.tar.gz
+    
