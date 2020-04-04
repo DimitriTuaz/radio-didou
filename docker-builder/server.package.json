@@ -1,0 +1,60 @@
+{
+  "name": "radiod",
+  "version": "1.0.0",
+  "description": "A friendly web radio.",
+  "keywords": [
+    "loopback-application",
+    "loopback"
+  ],
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.9"
+  },
+  "scripts": {
+    "build": "lb-tsc",
+    "start": "node -r source-map-support/register .",
+    "debug": "node -r source-map-support/register --nolazy --inspect-brk=9229 ."
+  },
+  "repository": {
+    "type": "git"
+  },
+  "author": "",
+  "license": "",
+  "files": [
+    "README.md",
+    "index.js",
+    "index.d.ts",
+    "dist",
+    "src"
+  ],
+  "dependencies": {
+    "@loopback/authentication": "latest",
+    "@loopback/boot": "latest",
+    "@loopback/core": "latest",
+    "@loopback/openapi-v3": "latest",
+    "@loopback/repository": "latest",
+    "@loopback/rest": "latest",
+    "@loopback/rest-explorer": "latest",
+    "bcryptjs": "latest",
+    "cookie": "latest",
+    "isemail": "latest",
+    "jsonwebtoken": "latest",
+    "loopback-connector-mongodb": "latest",
+    "set-interval-async": "latest",
+    "superagent": "latest",
+    "winston": "latest",
+    "yaml": "latest"
+  },
+  "devDependencies": {
+    "typescript": "latest",
+    "source-map-support": "latest",
+    "@loopback/build": "latest",
+    "@types/node": "latest",
+    "@types/bcryptjs": "latest",
+    "@types/cookie": "latest",
+    "@types/mongodb": "latest",
+    "@types/set-interval-async": "latest",
+    "@types/yaml": "latest",
+    "openapi3-generator": "latest"
+  }
+}
