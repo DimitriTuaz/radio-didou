@@ -1,0 +1,17 @@
+kind: pipeline
+name: developpement
+when:
+  event: [ push ]
+  branch: [ dev ]
+  
+steps:
+  - name: build
+    image: paeolo/radiod-builder
+    commands:
+      - echo '# INSTALL NODE MODULES'
+      - echo '# SERVER'
+      - yarn install --cwd server/ --prefer-offline
+      - echo '# CLIENT'
+      - yarn install --cwd client/ --prefer-offline
+      - echo '# OPENAPI'
+      - yarn install --cwd openapi/ --prefer-offline

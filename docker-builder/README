@@ -2,14 +2,13 @@
 # Docker Builder for Radio-didou
 #
 
-This image is meant to be a builder for radio-didou. It contains the latest version of
-NodeJS and the necessary Node Modules are cached when you build the image.
+This image is meant to be a builder for radio-didou.
+
+It contains the latest version of NodeJS and the necessary node modules
+are cached when you build the image.
 
 To build the image, run this command from this folder:
 
 docker build -t paeolo/radiod-builder .
 
-To use the builder image, just run:
-
-docker run paeolo/radiod-builder
-
+This image is meant to be used with the .drone.yml file.
