@@ -1,9 +1,8 @@
 ---
 - name: Build RD
-  hosts:
-    - localhost
+  hosts: all
   become: false
-  gather_facts: yes
+  gather_facts: no
   tasks:
   - import_role:
       name: radiod-build
