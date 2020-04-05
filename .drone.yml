@@ -1,5 +1,5 @@
 kind: pipeline
-name: build-deploy-dev
+name: build-deploy
 when:
   event: [ push ]
   branch: [ dev ]
@@ -8,5 +8,4 @@ steps:
   - name: build
     image: paeolo/radiod-builder
     commands:
-      - ./build.sh
-      
+      - docker-build/build.sh
