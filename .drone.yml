@@ -1,5 +1,5 @@
 kind: pipeline
-name: developpement
+name: build-deploy-dev
 when:
   event: [ push ]
   branch: [ dev ]
@@ -8,13 +8,5 @@ steps:
   - name: build
     image: paeolo/radiod-builder
     commands:
-      - echo '# INSTALL nodes modules'
-      - yarn install --cwd server/ --prefer-offline
-      - yarn install --cwd client/ --prefer-offline
-      - yarn install --cwd openapi/ --prefer-offline
-      - echo '# BUILD server'
-      - cd server && ./build.sh
-      - echo '# BUILD client'
-      - cd ../client && yarn build
-      - echo '# CREATE package'
-      - cd .. && ./package.sh
+      - ./build.sh
+      
