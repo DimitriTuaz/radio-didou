@@ -18,32 +18,32 @@ steps:
     webhook_token:
       from_secret: discord_webhook_token
     
-  - name: build
-    image: paeolo/radiod-builder
-    commands:
-    - docker-build/build.sh
+- name: build
+  image: paeolo/radiod-builder
+  commands:
+  - docker-build/build.sh
       
-  - name: deploy-dev
-    image: drillster/drone-rsync
-    settings:
-      source: ./radio-didou.tar.gz
-      target: ~/packages/dev
-      hosts:
-        from_secret: ssh_host
-      user:
-        from_secret: ssh_user
-      key:
-        from_secret: ssh_key
-      script:
-      - echo 'STOPPING radio-didou-dev'
-      - sudo service radio-didou-dev stop
-      - rm -rf /opt/radio/dev/
-      - mkdir dev/
-      - tar -zxf packages/dev/radio-didou.tar.gz --directory dev/
-      - cp config-files/dev/config.yaml dev/
-      - sudo service radio-didou-dev start
-      - echo 'STARTED radio-didou-dev'
-    when:
-      branch:
-      - dev
+- name: deploy-dev
+  image: drillster/drone-rsync
+  settings:
+    source: ./radio-didou.tar.gz
+    target: ~/packages/dev
+    hosts:
+      from_secret: ssh_host
+    user:
+      from_secret: ssh_user
+    key:
+      from_secret: ssh_key
+    script:
+    - echo 'STOPPING radio-didou-dev'
+    - sudo service radio-didou-dev stop
+    - rm -rf /opt/radio/dev/
+    - mkdir dev/
+    - tar -zxf packages/dev/radio-didou.tar.gz --directory dev/
+    - cp config-files/dev/config.yaml dev/
+    - sudo service radio-didou-dev start
+    - echo 'STARTED radio-didou-dev'
+  when:
+    branch:
+    - dev
 
