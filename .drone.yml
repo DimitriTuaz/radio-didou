@@ -26,8 +26,13 @@ steps:
       key:
         from_secret: ssh_key
       script:
-      - echo 'Hello World'
-      - pwd
+      - sudo service radio-didou-dev stop
+      - rm -rf /opt/radio/dev/
+      - mkdir dev/
+      - tar -zxf packages/dev/radio-didou.tar.gz --directory dev/
+      - cp config-files/dev/config.yaml dev/
+      - sudo service radio-didou-dev start
     when:
       branch:
       - dev
+
