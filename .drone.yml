@@ -9,9 +9,9 @@ steps:
     image: paeolo/radiod-builder
     commands:
       - echo '# INSTALL nodes modules'
-      - yarn install --cwd server/ --prefer-offline 2> >(grep -v warning 1>&2)
-      - yarn install --cwd client/ --prefer-offline 2> >(grep -v warning 1>&2)
-      - yarn install --cwd openapi/ --prefer-offline 2> >(grep -v warning 1>&2)
+      - yarn install --cwd server/ --prefer-offline
+      - yarn install --cwd client/ --prefer-offline
+      - yarn install --cwd openapi/ --prefer-offline
       - echo '# BUILD server'
       - cd server && ./build.sh
       - echo '# BUILD client'
