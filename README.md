@@ -52,6 +52,9 @@
 - Copy the file ./config/loopback/config.yaml into the root folder.
 - Modify it to fit your needs.
 
+# CI
+CI is done by Drone CI
+
 # Contribution
 
 If you want to contribute to this fun, full-stack typescript project, we welcome you on discord : https://discord.gg/CJrZDrt. We could also help you if you plan to set-up your own server.
