@@ -10,8 +10,9 @@ when:
   
 steps:
 
-- name: discord-notification
+- name: discord-push
   image: appleboy/drone-discord
+  failure: ignore
   settings:
     webhook_id:
       from_secret: discord_webhook_id
@@ -22,6 +23,25 @@ steps:
   image: paeolo/radiod-builder
   commands:
   - docker-build/build.sh
+  
+- name: discord-build
+  image: appleboy/drone-discord
+  failure: ignore
+  settings:
+    webhook_id:
+      from_secret: discord_webhook_id
+    webhook_token:
+      from_secret: discord_webhook_token
+    message: >
+      {{#success build.status}}
+        build {{build.number}} succeeded. Good job.
+      {{else}}
+        build {{build.number}} failed. Fix me please.
+      {{/success}}
+  when:
+    status:
+    - failure
+    - success
       
 - name: deploy-dev
   image: drillster/drone-rsync
