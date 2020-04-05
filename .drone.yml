@@ -1,11 +1,33 @@
+---
 kind: pipeline
-name: build-deploy
+name: default
 when:
-  event: [ push ]
-  branch: [ dev ]
+  event:
+  - push
+  branch:
+  - master
+  - dev
   
 steps:
   - name: build
     image: paeolo/radiod-builder
     commands:
-      - docker-build/build.sh
+    - docker-build/build.sh
+      
+  - name: deploy-dev
+    image: drillster/drone-rsync
+    settings:
+      source: ./radio-didou.tar.gz
+      target: ~/packages/dev
+      hosts:
+        from_secret: ssh_host
+      user:
+        from_secret: ssh_user
+      key:
+        from_secret: ssh_key
+      script:
+      - echo 'Hello World'
+      - pwd
+    when:
+      branch:
+      - dev

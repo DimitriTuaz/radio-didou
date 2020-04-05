@@ -3,6 +3,7 @@
 # Create a tarball from a RADIO-DIDOU build.
 #
 #
+
 echo '# CREATE PACKAGE HIERARCHY'
 mkdir -p package/client/
 mkdir -p package/server/
