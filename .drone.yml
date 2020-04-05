@@ -34,9 +34,9 @@ steps:
       from_secret: discord_webhook_token
     message: >
       {{#success build.status}}
-        build {{build.number}} succeeded. Good job.
+        Build {{build.number}} succeeded. Good job {{build.author}}.
       {{else}}
-        build {{build.number}} failed. Fix me please.
+        Build {{build.number}} failed. Fix me please.
       {{/success}}
   when:
     status:
@@ -55,15 +55,30 @@ steps:
     key:
       from_secret: ssh_key
     script:
-    - echo 'STOPPING radio-didou-dev'
+    - echo 'STOPPING DEV'
     - sudo service radio-didou-dev stop
     - rm -rf /opt/radio/dev/
     - mkdir dev/
     - tar -zxf packages/dev/radio-didou.tar.gz --directory dev/
     - cp config-files/dev/config.yaml dev/
     - sudo service radio-didou-dev start
-    - echo 'STARTED radio-didou-dev'
+    - echo 'STARTED DEV'
   when:
     branch:
     - dev
+
+- name: deploy-prod
+  image: drillster/drone-rsync
+  settings:
+    source: ./radio-didou.tar.gz
+    target: ~/packages/prod
+    hosts:
+      from_secret: ssh_host
+    user:
+      from_secret: ssh_user
+    key:
+      from_secret: ssh_key
+  when:
+    branch:
+    - master
 
