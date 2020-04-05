@@ -53,7 +53,7 @@
 - Modify it to fit your needs.
 
 # CI
-CI is done by Drone CI
+CI is done by Drone CI !
 
 # Contribution
 
