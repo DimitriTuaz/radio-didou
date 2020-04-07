@@ -57,6 +57,15 @@ const CredentialDropdown = () => {
         )
     );
 
+    const color = (state: NowState) => {
+        if (state.type === NowEnum.None)
+            return 'brown'
+        else if (state.type === NowEnum.Live)
+            return 'grey'
+        else
+            return 'blue';
+    }
+
     const onClick = async (state: NowState) => {
         try {
             NowController.setMedia(state);
@@ -74,25 +83,33 @@ const CredentialDropdown = () => {
             {settingStore.nowUsers.length > 0 &&
                 <React.Fragment>
                     <Dropdown
-                        selection
-                        text='Qui on écoute?'
+                        text='Qui on écoute ?'
+                        icon='music'
                         error={error}
-                        item
-                        options={options.map((state) => (
-                            <Dropdown.Item
-                                key={state.userId !== undefined ? state.userId : state.name}
-                                text={state.name}
-                                onClick={() => onClick(state)}
-                                active={(() => {
-                                    if (settingStore.nowState !== undefined) {
-                                        if (settingStore.nowState.userId !== undefined)
-                                            return state.userId === settingStore.nowState.userId;
-                                        else
-                                            return state.type === settingStore.nowState.type;
-                                    }
-                                    return state.type === NowEnum.None
-                                })()} />
-                        ))}>
+                        floating
+                        labeled
+                        button
+                        className='icon'>
+                        <Dropdown.Menu>
+                            <Dropdown.Header icon='user circle' content='Compte Radio-didou' />
+                            <Dropdown.Divider />
+                            {options.map((state) => (
+                                <Dropdown.Item
+                                    label={{ color: color(state), empty: true, circular: true }}
+                                    key={state.userId !== undefined ? state.userId : state.name}
+                                    text={state.name}
+                                    onClick={() => onClick(state)}
+                                    active={(() => {
+                                        if (settingStore.nowState !== undefined) {
+                                            if (settingStore.nowState.userId !== undefined)
+                                                return state.userId === settingStore.nowState.userId;
+                                            else
+                                                return state.type === settingStore.nowState.type;
+                                        }
+                                        return state.type === NowEnum.None
+                                    })()} />
+                            ))}
+                        </Dropdown.Menu>
                     </Dropdown>
                 </React.Fragment>
             }

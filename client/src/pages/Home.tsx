@@ -40,9 +40,9 @@ export const Home = () => {
       <SideMenu />
       <ModalController>
         {{
-          [ModalKey.USER]: <UserModal />,
-          [ModalKey.SONG]: <SongModal />,
-          [ModalKey.SETTING]: <SettingModal />
+          [ModalKey.USER]: { element: <UserModal /> },
+          [ModalKey.SONG]: { element: <SongModal />, attributes: { size: 'small' } },
+          [ModalKey.SETTING]: { element: <SettingModal />, attributes: { size: 'tiny' } }
         }}
       </ModalController>
       <div id='main-container'>
@@ -61,13 +61,13 @@ export const Home = () => {
         </div>
         <Grid columns={1} padded centered style={{ flexGrow: 1 }}>
           <Grid.Row >
-              <CurrentTrack />
-              {
-                userStore.userState === UserState.connected &&
-                <div id={'heart-container'}>
-                  <Like />
-                </div>
-              }
+            <CurrentTrack />
+            {
+              userStore.userState === UserState.connected &&
+              <div id={'heart-container'}>
+                <Like />
+              </div>
+            }
           </Grid.Row>
           <Grid.Row>
             <AuditorCount />
