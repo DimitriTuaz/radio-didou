@@ -14,6 +14,7 @@
   - [`GET` /now/get](#op-get-now-get) 
   - [`POST` /now/set](#op-post-now-set) 
   - [`GET` /now/who](#op-get-now-who) 
+  - [`GET` /ping](#op-get-ping) 
   - [`PUT` /song/add](#op-put-song-add) 
   - [`DELETE` /song/delete](#op-delete-song-delete) 
   - [`GET` /song/get](#op-get-song-get) 
@@ -698,6 +699,34 @@ _No headers specified_
 
 #### Query parameters
 
+##### &#9655; type
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>In</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>type </td>
+        <td>
+          number
+        </td>
+        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
 ##### &#9655; userId
 
 
@@ -852,6 +881,103 @@ _No headers specified_
     "playlistId": "string"
   }
 ]
+```
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `GET` /ping
+<a id="op-get-ping" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 200 - Ping Response
+
+###### Headers
+_No headers specified_
+
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>greeting</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>date</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>headers</td>
+        <td>
+          object
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>headers.Content-Type</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+{
+  "greeting": "string",
+  "date": "string",
+  "url": "string",
+  "headers": {
+    "Content-Type": "string"
+  }
+}
 ```
 
 #### Tags

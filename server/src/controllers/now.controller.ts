@@ -1,15 +1,21 @@
 import { get, param, post, getModelSchemaRef } from '@loopback/rest';
 import { inject, BindingScope, bind, Getter } from '@loopback/core';
-import { repository } from '@loopback/repository';
+import { repository, model, property } from '@loopback/repository';
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
-import { NowObject, SpotifyScope, NowBindings, NowService } from '../now';
+import { NowObject, SpotifyScope, NowBindings, NowService, NowEnum } from '../now';
 import { MediaCredentials, User, UserPower } from '../models';
 import { MediaCredentialsRepository, UserRepository } from '../repositories';
 import { PersistentKeyService } from '../services';
 import { logger, LOGGER_LEVEL } from '../logger'
+
+@model()
+class NowInfo {
+  @property({ required: true, type: 'number' }) type: NowEnum;
+  @property({ required: false }) userId: string;
+}
 
 @bind({ scope: BindingScope.SINGLETON })
 export class NowController {
@@ -21,6 +27,9 @@ export class NowController {
     @inject.getter(NowBindings.CURRENT_NOW) private nowGetter: Getter<NowObject>
   ) { }
 
+  /**
+  ** Return informations about the current song
+  **/
   @get('/now/get', {
     responses: {
       '200': {
@@ -39,6 +48,9 @@ export class NowController {
     return await this.nowGetter();
   }
 
+  /**
+  ** Set the default credential
+  **/
   @post('/now/set', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -50,6 +62,7 @@ export class NowController {
   @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async setMedia(
+    @param.query.number('type') type: NowEnum,
     @param.query.string('userId') userId: string,
   ) {
     let credential: MediaCredentials | undefined;
@@ -69,6 +82,9 @@ export class NowController {
     this.nowService.setFetcher(credential);
   }
 
+  /**
+  ** Return an array with all the available credentials
+  **/
   @get('/now/find', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -101,6 +117,9 @@ export class NowController {
     return credentials.map(value => value.user);
   }
 
+  /**
+  ** Return an array with the selected credential
+  **/
   @get('/now/who', {
     security: OPERATION_SECURITY_SPEC,
     responses: {

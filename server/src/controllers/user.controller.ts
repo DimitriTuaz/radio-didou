@@ -55,6 +55,9 @@ export class UserController {
     @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any
   ) { }
 
+  /**
+  ** Register a new user
+  **/
   @post('/user/register', {
     responses: {
       '200': {
@@ -95,6 +98,9 @@ export class UserController {
     }
   }
 
+  /**
+  ** Get user info from userID
+  **/
   @get('/user/{userId}', {
     responses: {
       '200': {
@@ -113,6 +119,9 @@ export class UserController {
     return this.userRepository.findById(userId);
   }
 
+  /**
+  ** Get the current user
+  **/
   @get('/user/me', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -136,6 +145,9 @@ export class UserController {
     return currentUserProfile;
   }
 
+  /**
+  ** Grant a token embedded in a cookie
+  **/
   @post('/user/login', {
     responses: {
       '204': {
@@ -177,6 +189,9 @@ export class UserController {
     response.cookie("RADIO-DIDOU-AUTH", token, options);
   }
 
+  /**
+  ** Revoke the cookie
+  **/
   @post('/user/logout', {
     responses: {
       '204': {

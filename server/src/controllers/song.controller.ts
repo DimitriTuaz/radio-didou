@@ -30,6 +30,9 @@ export class SongController {
     @inject(LoggingBindings.LOGGER) private logger: Logger
   ) { }
 
+  /**
+  ** Add a song to user and return information about it.
+  **/
   @put('/song/add', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -73,6 +76,9 @@ export class SongController {
     return song;
   }
 
+  /**
+  ** Get all the user's songs.
+  **/
   @get('/song/get', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -97,6 +103,9 @@ export class SongController {
     return this.userRepository.songs(userId).find();
   }
 
+  /**
+  ** Return true is this is an user song.
+  **/
   @get('/song/is', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -126,6 +135,9 @@ export class SongController {
     return songs.length > 0;
   }
 
+  /**
+  ** Delete the song with given ID
+  **/
   @del('/song/delete', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -144,6 +156,9 @@ export class SongController {
     await this.userRepository.songs(userId).delete({ url: url });
   }
 
+  /**
+  ** Synchronize with Spotify
+  **/
   @post('/song/synchronize', {
     security: OPERATION_SECURITY_SPEC,
     responses: {

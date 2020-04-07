@@ -15,6 +15,9 @@ export class ConfigurationController {
     @inject(CoreBindings.APPLICATION_CONFIG) private global_config: any,
   ) { }
 
+  /**
+  ** Return the client configuration
+  **/
   @get('/configuration', {
     responses: {
       '200': {

@@ -23,6 +23,9 @@ export class MediaController {
     @inject(LoggingBindings.LOGGER) private logger: Logger
   ) { }
 
+  /**
+  ** For a given scope, return an array with the user crendential
+  **/
   @get('/media/find', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -51,7 +54,9 @@ export class MediaController {
     });
   }
 
-
+  /**
+  ** Delete the crendential with the given ID.
+  **/
   @del('/media/delete/{credentialId}', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
@@ -76,6 +81,9 @@ export class MediaController {
     }
   }
 
+  /**
+  ** Callback to add the credentials.
+  **/
   @get('/media/{serviceId}/callback', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
