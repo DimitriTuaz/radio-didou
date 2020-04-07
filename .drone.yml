@@ -1,15 +1,13 @@
 ---
 kind: pipeline
 name: default
-when:
-  event:
-  - push
+
+trigger:
   branch:
-  - master
   - dev
+  - master
   
 steps:
-
 - name: discord-push
   image: appleboy/drone-discord
   failure: ignore
@@ -34,7 +32,7 @@ steps:
       from_secret: discord_webhook_token
     message: >
       {{#success build.status}}
-        Build {{build.number}} succeeded. Good job {{build.author}}.
+        Build {{build.number}} succeeded. Good job.
       {{else}}
         Build {{build.number}} failed. Fix me please.
       {{/success}}
