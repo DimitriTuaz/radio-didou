@@ -88,9 +88,9 @@ const CredentialDropdown = () => {
                                         if (settingStore.nowState.userId !== undefined)
                                             return state.userId === settingStore.nowState.userId;
                                         else
-                                            return state.name === settingStore.nowState.name;
+                                            return state.type === settingStore.nowState.type;
                                     }
-                                    return state.name === 'Aucun'
+                                    return state.type === NowEnum.None
                                 })()} />
                         ))}>
                     </Dropdown>
