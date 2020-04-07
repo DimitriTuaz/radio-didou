@@ -22,11 +22,13 @@ import {
   NowDeezer,
   NowSpotify,
   NowEnum,
-  NowBindings
+  NowBindings,
+  NowLive
 } from '../now'
 import { PersistentKeyService } from '../services';
 import { MediaCredentialsRepository } from '../repositories';
 import { LoggingBindings } from '../logger';
+import { NowInfo } from '../controllers';
 
 export class NowService implements LifeCycleObserver {
 
@@ -40,7 +42,8 @@ export class NowService implements LifeCycleObserver {
     @inject(LoggingBindings.LOGGER) private logger: Logger,
     @inject.getter(NowBindings.NOW_FETCHER) private fetcherGetter: Getter<NowFetcher>,
     @inject.binding(NowBindings.NOW_FETCHER) private fetcherBinding: Binding<NowFetcher>,
-    @inject.setter(NowBindings.NOW_TOKEN) private tokenSetter: Setter<string>
+    @inject.setter(NowBindings.NOW_TOKEN) private tokenSetter: Setter<string>,
+    @inject.setter(NowBindings.NOW_INFO) private infoSetter: Setter<NowInfo>
   ) {
     this.icecastURL = configuration.icecast.url + '/status-json.xsl';
   }
@@ -49,30 +52,32 @@ export class NowService implements LifeCycleObserver {
     try {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: MediaCredentials = await this.credentialRepository.findById(crendentialID);
-      this.setFetcher(credential);
+      this.setFetcher({ type: credential.type }, credential);
     } catch (e) {
-      this.setFetcher(undefined);
+      this.setFetcher({ type: NowEnum.None }, undefined);
     }
   }
 
-  public async setFetcher(credentials: MediaCredentials | undefined) {
-    if (credentials == undefined) {
-      this.fetcherBinding.to(new NowNone()).inScope(BindingScope.SINGLETON);
+  public async setFetcher(info: NowInfo, credential: MediaCredentials | undefined) {
+    if (credential === undefined) {
+      if (info.type === NowEnum.Live) {
+        this.infoSetter(info);
+        this.fetcherBinding.toClass(NowLive).inScope(BindingScope.SINGLETON);
+      }
+      else
+        this.fetcherBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
     }
     else {
-      this.tokenSetter(credentials.token);
-      switch (credentials.type) {
+      this.tokenSetter(credential.token);
+      switch (credential.type) {
         case NowEnum.Spotify:
-          this.fetcherBinding.toClass(NowSpotify)
-            .inScope(BindingScope.SINGLETON);
+          this.fetcherBinding.toClass(NowSpotify).inScope(BindingScope.SINGLETON);
           break;
         case NowEnum.Deezer:
-          this.fetcherBinding.toClass(NowDeezer)
-            .inScope(BindingScope.SINGLETON);
+          this.fetcherBinding.toClass(NowDeezer).inScope(BindingScope.SINGLETON);
           break;
         default:
-          this.fetcherBinding.toClass(NowNone)
-            .inScope(BindingScope.SINGLETON);
+          this.fetcherBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
           break;
       }
     }

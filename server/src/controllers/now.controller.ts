@@ -1,5 +1,5 @@
-import { get, param, post, getModelSchemaRef } from '@loopback/rest';
-import { inject, BindingScope, bind, Getter } from '@loopback/core';
+import { get, post, getModelSchemaRef, requestBody } from '@loopback/rest';
+import { inject, BindingScope, bind, Getter, Setter } from '@loopback/core';
 import { repository, model, property } from '@loopback/repository';
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
@@ -12,9 +12,14 @@ import { PersistentKeyService } from '../services';
 import { logger, LOGGER_LEVEL } from '../logger'
 
 @model()
-class NowInfo {
+export class NowInfo {
   @property({ required: true, type: 'number' }) type: NowEnum;
-  @property({ required: false }) userId: string;
+  @property({ required: false }) userId?: string;
+  @property({ required: false }) email?: string;
+  @property({ required: false }) song?: string;
+  @property({ required: false }) artist?: string;
+  @property({ required: false }) album?: string;
+  @property({ required: false }) url?: string;
 }
 
 @bind({ scope: BindingScope.SINGLETON })
@@ -62,24 +67,29 @@ export class NowController {
   @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async setMedia(
-    @param.query.number('type') type: NowEnum,
-    @param.query.string('userId') userId: string,
-  ) {
-    let credential: MediaCredentials | undefined;
-    let data: MediaCredentials[] = await this.userRepository.mediaCredentials(userId).find({
-      where: {
-        scope: SpotifyScope.playback
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(NowInfo)
+        },
+      },
+    }) info: NowInfo) {
+    let credential: MediaCredentials | undefined = undefined;
+    if (info.userId !== undefined) {
+      let data: MediaCredentials[] = await this.userRepository.mediaCredentials(info.userId).find({
+        where: {
+          scope: SpotifyScope.playback
+        }
+      });
+      if (data.length > 0) {
+        credential = data[0];
+        await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
       }
-    });
-    if (data.length > 0) {
-      credential = data[0];
-      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
     }
-    else {
-      credential = undefined;
-      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, 'none');
+    else if (info.type !== NowEnum.Live) {
+      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, NowEnum.None.toString());
     }
-    this.nowService.setFetcher(credential);
+    this.nowService.setFetcher(info, credential);
   }
 
   /**

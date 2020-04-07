@@ -29,6 +29,7 @@
   - [Configuration](#schema-configuration)
   - [MediaCredentials](#schema-mediacredentials)
   - [NowObject](#schema-nowobject)
+  - [NowInfo](#schema-nowinfo)
   - [User](#schema-user)
   - [Song](#schema-song)
   - [NewUser](#schema-newuser)
@@ -697,9 +698,10 @@ _No headers specified_
 
 
 
-#### Query parameters
 
-##### &#9655; type
+
+#### Request body
+###### application/json
 
 
 
@@ -708,46 +710,64 @@ _No headers specified_
     <tr>
       <th>Name</th>
       <th>Type</th>
-      <th>In</th>
       <th>Description</th>
       <th>Accepted values</th>
     </tr>
   </thead>
   <tbody>
       <tr>
-        <td>type </td>
+        <td>type <strong>(required)</strong></td>
         <td>
           number
         </td>
-        <td>query</td>
         <td></td>
         <td><em>Any</em></td>
       </tr>
-  </tbody>
-</table>
-
-
-##### &#9655; userId
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>In</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
       <tr>
-        <td>userId </td>
+        <td>userId</td>
         <td>
           string
         </td>
-        <td>query</td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>email</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>song</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artist</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>album</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>
+          string
+        </td>
         <td></td>
         <td><em>Any</em></td>
       </tr>
@@ -755,6 +775,19 @@ _No headers specified_
 </table>
 
 
+##### Example _(generated)_
+
+```json
+{
+  "type": 0,
+  "userId": "string",
+  "email": "string",
+  "song": "string",
+  "artist": "string",
+  "album": "string",
+  "url": "string"
+}
+```
 
 
 
@@ -2267,6 +2300,92 @@ _No headers specified_
   "album": "string",
   "release_date": "string",
   "cover": "string",
+  "url": "string"
+}
+```
+<a id="schema-nowinfo" />
+
+#### NowInfo
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>userId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>email</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>song</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artist</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>album</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+##### Example _(generated)_
+
+```json
+{
+  "type": 0,
+  "userId": "string",
+  "email": "string",
+  "song": "string",
+  "artist": "string",
+  "album": "string",
   "url": "string"
 }
 ```
