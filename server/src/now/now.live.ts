@@ -1,6 +1,10 @@
 
-import { NowFetcher, NowEnum, NowBindings } from '../now';
-import { NowInfo } from '../controllers';
+import {
+  NowFetcher,
+  NowEnum,
+  NowBindings,
+  NowState
+} from '../now';
 import { inject } from '@loopback/core';
 
 export class NowLive extends NowFetcher {
@@ -8,20 +12,19 @@ export class NowLive extends NowFetcher {
   public name = "Live";
 
   constructor(
-    @inject(NowBindings.NOW_INFO) info: NowInfo
+    @inject(NowBindings.NOW_STATE) state: NowState
   ) {
     super();
     this.now = {
       type: NowEnum.Live,
       listeners: 0,
-      song: info.song !== undefined ? info.song : 'Live',
-      artists: [info.artist !== undefined ? info.artist : 'DJ'],
-      album: info.album,
-      url: info.url
+      song: state.song !== undefined ? state.song : 'Live',
+      artists: [state.artist !== undefined ? state.artist : 'DJ'],
+      album: state.album,
+      url: state.url
     };
   }
 
   public async fetch(): Promise<void> { }
 
 }
-

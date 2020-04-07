@@ -1,26 +1,27 @@
-import { get, post, getModelSchemaRef, requestBody } from '@loopback/rest';
-import { inject, BindingScope, bind, Getter, Setter } from '@loopback/core';
-import { repository, model, property } from '@loopback/repository';
+import {
+  get,
+  post,
+  getModelSchemaRef,
+  requestBody
+} from '@loopback/rest';
+import { inject, BindingScope, bind, Getter } from '@loopback/core';
+import { repository } from '@loopback/repository';
 import { authenticate } from '@loopback/authentication';
 import { OPERATION_SECURITY_SPEC } from '../utils/security-spec';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
-import { NowObject, SpotifyScope, NowBindings, NowService, NowEnum } from '../now';
+import {
+  NowObject,
+  SpotifyScope,
+  NowBindings,
+  NowService,
+  NowEnum,
+  NowState
+} from '../now';
 import { MediaCredentials, User, UserPower } from '../models';
 import { MediaCredentialsRepository, UserRepository } from '../repositories';
 import { PersistentKeyService } from '../services';
-import { logger, LOGGER_LEVEL } from '../logger'
-
-@model()
-export class NowInfo {
-  @property({ required: true, type: 'number' }) type: NowEnum;
-  @property({ required: false }) userId?: string;
-  @property({ required: false }) email?: string;
-  @property({ required: false }) song?: string;
-  @property({ required: false }) artist?: string;
-  @property({ required: false }) album?: string;
-  @property({ required: false }) url?: string;
-}
+import { logger, LOGGER_LEVEL } from '../logger';
 
 @bind({ scope: BindingScope.SINGLETON })
 export class NowController {
@@ -70,13 +71,13 @@ export class NowController {
     @requestBody({
       content: {
         'application/json': {
-          schema: getModelSchemaRef(NowInfo)
+          schema: getModelSchemaRef(NowState)
         },
       },
-    }) info: NowInfo) {
+    }) state: NowState) {
     let credential: MediaCredentials | undefined = undefined;
-    if (info.userId !== undefined) {
-      let data: MediaCredentials[] = await this.userRepository.mediaCredentials(info.userId).find({
+    if (state.userId !== undefined) {
+      let data: MediaCredentials[] = await this.userRepository.mediaCredentials(state.userId).find({
         where: {
           scope: SpotifyScope.playback
         }
@@ -86,10 +87,10 @@ export class NowController {
         await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
       }
     }
-    else if (info.type !== NowEnum.Live) {
+    else if (state.type !== NowEnum.Live) {
       await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, NowEnum.None.toString());
     }
-    this.nowService.setFetcher(info, credential);
+    this.nowService.setFetcher(state, credential);
   }
 
   /**
@@ -128,18 +129,17 @@ export class NowController {
   }
 
   /**
-  ** Return an array with the selected credential
+  ** Return the current state of NowService.
   **/
   @get('/now/who', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '200': {
-        description: 'Return the selected user for displaying the current track',
+        description: 'Return the current state of NowService',
         content: {
           'application/json': {
             schema: {
-              type: 'array',
-              items: getModelSchemaRef(User),
+              'x-ts-type': NowState,
             },
           },
         },
@@ -148,18 +148,8 @@ export class NowController {
   })
   @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
-  async getMedia() {
-    let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
-    let credentials = await this.credentialRepository.find({
-      include: [
-        {
-          relation: 'user',
-        },
-      ],
-      where: {
-        id: crendentialID
-      }
-    });
-    return credentials.map(value => value.user);
+  async getMedia(
+    @inject(NowBindings.NOW_STATE, { optional: true }) state: NowState | undefined) {
+    return state !== undefined ? state : { type: NowEnum.None };
   }
 }

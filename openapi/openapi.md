@@ -29,7 +29,7 @@
   - [Configuration](#schema-configuration)
   - [MediaCredentials](#schema-mediacredentials)
   - [NowObject](#schema-nowobject)
-  - [NowInfo](#schema-nowinfo)
+  - [NowState](#schema-nowstate)
   - [User](#schema-user)
   - [Song](#schema-song)
   - [NewUser](#schema-newuser)
@@ -822,7 +822,7 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Return the selected user for displaying the current track
+##### ▶ 200 - Return the current state of NowService
 
 ###### Headers
 _No headers specified_
@@ -842,31 +842,7 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
-        <td>Response</td>
-        <td>
-          array
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.id</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.email <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.power <strong>(required)</strong></td>
+        <td>type <strong>(required)</strong></td>
         <td>
           number
         </td>
@@ -874,7 +850,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.firstName</td>
+        <td>userId</td>
         <td>
           string
         </td>
@@ -882,7 +858,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.lastName</td>
+        <td>email</td>
         <td>
           string
         </td>
@@ -890,7 +866,31 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.playlistId</td>
+        <td>song</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artist</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>album</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
         <td>
           string
         </td>
@@ -904,16 +904,15 @@ _No headers specified_
 ##### Example _(generated)_
 
 ```json
-[
-  {
-    "id": "string",
-    "email": "string",
-    "power": 0,
-    "firstName": "string",
-    "lastName": "string",
-    "playlistId": "string"
-  }
-]
+{
+  "type": 0,
+  "userId": "string",
+  "email": "string",
+  "song": "string",
+  "artist": "string",
+  "album": "string",
+  "url": "string"
+}
 ```
 
 #### Tags
@@ -2303,9 +2302,9 @@ _No headers specified_
   "url": "string"
 }
 ```
-<a id="schema-nowinfo" />
+<a id="schema-nowstate" />
 
-#### NowInfo
+#### NowState
 
 <table>
   <thead>

@@ -9,7 +9,7 @@ import {
   Binding,
   BindingScope
 } from '@loopback/core';
-import { repository } from '@loopback/repository';
+import { repository, model, property } from '@loopback/repository';
 
 import request from 'superagent'
 import { Logger } from 'winston';
@@ -28,7 +28,17 @@ import {
 import { PersistentKeyService } from '../services';
 import { MediaCredentialsRepository } from '../repositories';
 import { LoggingBindings } from '../logger';
-import { NowInfo } from '../controllers';
+
+@model()
+export class NowState {
+  @property({ required: true, type: 'number' }) type: NowEnum;
+  @property({ required: false }) userId?: string;
+  @property({ required: false }) email?: string;
+  @property({ required: false }) song?: string;
+  @property({ required: false }) artist?: string;
+  @property({ required: false }) album?: string;
+  @property({ required: false }) url?: string;
+}
 
 export class NowService implements LifeCycleObserver {
 
@@ -43,7 +53,7 @@ export class NowService implements LifeCycleObserver {
     @inject.getter(NowBindings.NOW_FETCHER) private fetcherGetter: Getter<NowFetcher>,
     @inject.binding(NowBindings.NOW_FETCHER) private fetcherBinding: Binding<NowFetcher>,
     @inject.setter(NowBindings.NOW_TOKEN) private tokenSetter: Setter<string>,
-    @inject.setter(NowBindings.NOW_INFO) private infoSetter: Setter<NowInfo>
+    @inject.setter(NowBindings.NOW_STATE) private stateSetter: Setter<NowState>
   ) {
     this.icecastURL = configuration.icecast.url + '/status-json.xsl';
   }
@@ -52,16 +62,16 @@ export class NowService implements LifeCycleObserver {
     try {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: MediaCredentials = await this.credentialRepository.findById(crendentialID);
-      this.setFetcher({ type: credential.type }, credential);
+      this.setFetcher({ type: credential.type, userId: credential.userId }, credential);
     } catch (e) {
       this.setFetcher({ type: NowEnum.None }, undefined);
     }
   }
 
-  public async setFetcher(info: NowInfo, credential: MediaCredentials | undefined) {
+  public async setFetcher(state: NowState, credential: MediaCredentials | undefined) {
+    this.stateSetter(state);
     if (credential === undefined) {
-      if (info.type === NowEnum.Live) {
-        this.infoSetter(info);
+      if (state.type === NowEnum.Live) {
         this.fetcherBinding.toClass(NowLive).inScope(BindingScope.SINGLETON);
       }
       else
