@@ -20,7 +20,7 @@ export class NowLive extends NowFetcher {
       listeners: 0,
       song: state.song !== undefined ? state.song : 'DJ Set Live',
       artists: [state.artist !== undefined ? state.artist : 'DJ'],
-      album: state.album,
+      album: state.album !== undefined ? state.album : 'Direct LIVE',
       url: state.url
     };
   }

@@ -609,6 +609,14 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>listeners <strong>(required)</strong></td>
         <td>
           number
@@ -672,6 +680,7 @@ _No headers specified_
 
 ```json
 {
+  "type": 0,
   "listeners": 0,
   "song": "string",
   "artists": [
@@ -2229,6 +2238,14 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>listeners <strong>(required)</strong></td>
         <td>
           number
@@ -2291,6 +2308,7 @@ _No headers specified_
 
 ```json
 {
+  "type": 0,
   "listeners": 0,
   "song": "string",
   "artists": [

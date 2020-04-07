@@ -9,7 +9,7 @@ export enum NowEnum {
 
 @model()
 export class NowObject {
-  type: NowEnum;
+  @property({ required: true, type: 'number' }) type: NowEnum;
   @property({ required: true }) listeners: number;
   @property({ required: true }) song: string;
   @property.array(String, { required: true }) artists: string[];
