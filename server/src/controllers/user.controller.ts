@@ -72,7 +72,7 @@ export class UserController {
       },
     },
   })
-  @logger(LOGGER_LEVEL.INFO)
+  @logger(LOGGER_LEVEL.INFO, false)
   async register(
     @requestBody({
       content: {
@@ -163,7 +163,7 @@ export class UserController {
       },
     },
   })
-  @logger(LOGGER_LEVEL.INFO)
+  @logger(LOGGER_LEVEL.INFO, false)
   async login(
     @requestBody({
       content: {

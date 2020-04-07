@@ -4,9 +4,9 @@ import { Modal, Header, Button, Card, Image, Icon, Dropdown } from 'semantic-ui-
 
 import { OpenAPI } from '@openapi/.';
 import { useStore } from '../../hooks'
-import { SpotifyScope, UserPower } from '../../stores';
+import { SpotifyScope, UserPower, NowEnum } from '../../stores';
 
-import { MediaCredentials, User } from '@openapi/schemas';
+import { MediaCredentials, User, NowState } from '@openapi/schemas';
 import { NowController } from '@openapi/routes'
 
 import { ConfigContext } from '../../contexts';
@@ -46,16 +46,21 @@ const CredentialDropdown = () => {
     const { settingStore } = useStore();
     const [error, setError] = useState(false);
 
-    const defaultOptions: (User | undefined)[] = [undefined];
-    const options = defaultOptions.concat(settingStore.nowUsers);
+    const defaultOptions: NowState[] = [
+        { type: NowEnum.None, name: 'Aucun' },
+        { type: NowEnum.Live, name: 'DJ Set' }
+    ];
 
-    const onClick = async (user: (User | undefined)) => {
+    const options = defaultOptions.concat(
+        settingStore.nowUsers.map((user: User) =>
+            ({ type: NowEnum.Spotify, name: user.email, userId: user.id })
+        )
+    );
+
+    const onClick = async (state: NowState) => {
         try {
-            if (user === undefined)
-                await NowController.setMedia('undefined');
-            else if (user.id !== undefined)
-                await NowController.setMedia(user.id);
-            settingStore.currentNowUser = user;
+            NowController.setMedia(state);
+            settingStore.nowState = state;
             setError(false);
         }
         catch (error) {
@@ -69,20 +74,25 @@ const CredentialDropdown = () => {
             {settingStore.nowUsers.length > 0 &&
                 <React.Fragment>
                     <Dropdown
-                        text='Qui on écoute?'
                         selection
+                        text='Qui on écoute?'
                         error={error}
-                        item>
-                        <Dropdown.Menu>
-                            <Dropdown.Header content='Compte Radio-didou' />
-                            {options.map((user) => (
-                                <Dropdown.Item
-                                    key={user !== undefined ? user.id : 'none'}
-                                    text={user !== undefined ? user.email : 'Aucun'}
-                                    onClick={() => onClick(user)}
-                                    active={user?.id === settingStore.currentNowUser?.id} />
-                            ))}
-                        </Dropdown.Menu>
+                        item
+                        options={options.map((state) => (
+                            <Dropdown.Item
+                                key={state.userId !== undefined ? state.userId : state.name}
+                                text={state.name}
+                                onClick={() => onClick(state)}
+                                active={(() => {
+                                    if (settingStore.nowState !== undefined) {
+                                        if (settingStore.nowState.userId !== undefined)
+                                            return state.userId === settingStore.nowState.userId;
+                                        else
+                                            return state.name === settingStore.nowState.name;
+                                    }
+                                    return state.name === 'Aucun'
+                                })()} />
+                        ))}>
                     </Dropdown>
                 </React.Fragment>
             }

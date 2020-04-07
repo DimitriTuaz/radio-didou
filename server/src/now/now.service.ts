@@ -32,8 +32,8 @@ import { LoggingBindings } from '../logger';
 @model()
 export class NowState {
   @property({ required: true, type: 'number' }) type: NowEnum;
+  @property({ required: false }) name?: string;
   @property({ required: false }) userId?: string;
-  @property({ required: false }) email?: string;
   @property({ required: false }) song?: string;
   @property({ required: false }) artist?: string;
   @property({ required: false }) album?: string;
@@ -62,7 +62,9 @@ export class NowService implements LifeCycleObserver {
     try {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: MediaCredentials = await this.credentialRepository.findById(crendentialID);
-      this.setFetcher({ type: credential.type, userId: credential.userId }, credential);
+      this.setFetcher(
+        { type: credential.type, userId: credential.userId }, credential
+      );
     } catch (e) {
       this.setFetcher({ type: NowEnum.None }, undefined);
     }

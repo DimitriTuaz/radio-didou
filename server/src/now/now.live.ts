@@ -18,7 +18,7 @@ export class NowLive extends NowFetcher {
     this.now = {
       type: NowEnum.Live,
       listeners: 0,
-      song: state.song !== undefined ? state.song : 'Live',
+      song: state.song !== undefined ? state.song : 'DJ Set Live',
       artists: [state.artist !== undefined ? state.artist : 'DJ'],
       album: state.album,
       url: state.url

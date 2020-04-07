@@ -724,7 +724,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>userId</td>
+        <td>name</td>
         <td>
           string
         </td>
@@ -732,7 +732,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>email</td>
+        <td>userId</td>
         <td>
           string
         </td>
@@ -780,8 +780,8 @@ _No headers specified_
 ```json
 {
   "type": 0,
+  "name": "string",
   "userId": "string",
-  "email": "string",
   "song": "string",
   "artist": "string",
   "album": "string",
@@ -850,7 +850,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>userId</td>
+        <td>name</td>
         <td>
           string
         </td>
@@ -858,7 +858,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>email</td>
+        <td>userId</td>
         <td>
           string
         </td>
@@ -906,8 +906,8 @@ _No headers specified_
 ```json
 {
   "type": 0,
+  "name": "string",
   "userId": "string",
-  "email": "string",
   "song": "string",
   "artist": "string",
   "album": "string",
@@ -2325,7 +2325,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>userId</td>
+        <td>name</td>
         <td>
           string
         </td>
@@ -2333,7 +2333,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>email</td>
+        <td>userId</td>
         <td>
           string
         </td>
@@ -2380,8 +2380,8 @@ _No headers specified_
 ```json
 {
   "type": 0,
+  "name": "string",
   "userId": "string",
-  "email": "string",
   "song": "string",
   "artist": "string",
   "album": "string",
