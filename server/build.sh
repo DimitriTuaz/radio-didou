@@ -1,13 +1,13 @@
 #!/bin/bash
 if [[ (-z "$1") || (! $1 == "openapi") ]];
 then
-echo "## BUILD SERVER ##"
+echo "# LOOPBACK APPLICATION"
 rm -rf dist/
-npm run build
+yarn build
 fi
-echo "## GENERATE OPENAPI CLIENT ##"
+echo "# GENERATE OPENAPI CLIENT"
 node ./dist/generate-api
-echo "## BUILD OPENAPI CLIENT ##"
+echo "# OPENAPI CLIENT"
 cd ../openapi
-npm run build
+yarn build
 

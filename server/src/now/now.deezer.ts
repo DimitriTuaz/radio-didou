@@ -1,6 +1,12 @@
-import request from 'superagent'
+import { inject, Setter, Getter } from '@loopback/core';
+import { LoggingBindings } from '../logger';
 
-import { NowFetcher, NowEnum, NowObject } from '../now';
+import request from 'superagent'
+import { Logger } from 'winston';
+
+import { NowFetcher, NowEnum } from './now.fetcher';
+import { NowBindings } from './now.keys';
+import { NowObject } from './now.component';
 
 export class NowDeezer extends NowFetcher {
 
@@ -10,22 +16,13 @@ export class NowDeezer extends NowFetcher {
 
   public name = "Deezer";
 
-  private access_token: string;
-
-  constructor(token: string, value?: NowObject) {
+  constructor(
+    @inject(LoggingBindings.LOGGER) private logger: Logger,
+    @inject(NowBindings.NOW_TOKEN) private access_token: string,
+    @inject.getter(NowBindings.CURRENT_NOW) private nowGetter: Getter<NowObject>,
+    @inject.setter(NowBindings.CURRENT_NOW) private nowSetter: Setter<NowObject>
+  ) {
     super();
-    this.access_token = token;
-    if (value != null) {
-      this.now = value;
-    }
-    else {
-      this.now = {
-        type: NowEnum.Deezer,
-        listeners: 0,
-        song: '',
-        artists: [],
-      }
-    }
   }
 
   public async fetch(): Promise<void> {
@@ -33,6 +30,7 @@ export class NowDeezer extends NowFetcher {
   }
 
   private async obtain_current_playback(): Promise<void> {
+    let now: NowObject = await this.nowGetter();
     try {
       const response = await request
         .get(NowDeezer.history_url)
@@ -41,19 +39,19 @@ export class NowDeezer extends NowFetcher {
         .query({ limit: 1 })
 
       if (response.body.data != undefined) {
-        this.now = {
+        this.nowSetter({
           type: NowEnum.Deezer,
-          listeners: this.now.listeners,
+          listeners: now.listeners,
           song: response.body.data[0].title,
           artists: [response.body.data[0].artist.name],
           album: response.body.data[0].album.title,
           cover: response.body.data[0].album.cover_medium,
           url: response.body.data[0].album.link
-        }
+        });
       }
     }
     catch (error) {
-      console.log("[" + this.name + "] error in obtain_current_playback")
+      this.logger.warn("[" + this.name + "] error in obtain_current_playback")
     }
   }
 }

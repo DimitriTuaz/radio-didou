@@ -1,26 +1,21 @@
 import { BindingKey } from '@loopback/context';
-import { NowService, PersistentKeyService, JWTService } from './services';
 import { UserService } from '@loopback/authentication';
-import { PasswordHasher } from './services/hash.password.bcryptjs';
+
+import { PersistentKeyService, JWTService, PasswordHasher } from './services';
 import { User } from './models';
 import { Credentials } from './repositories';
 
 export namespace RadiodBindings {
-  export const ROOT_PATH = BindingKey.create<string>('radiod.project-root');
-  export const GLOBAL_CONFIG = BindingKey.create<any>('radiod.global-config');
-  export const MONGO_CONFIG = BindingKey.create<object>('datasources.config.mongo');
-  export const API_KEY = BindingKey.create<any>('radiod.api-key');
-  export const NOW_SERVICE = BindingKey.create<NowService>('radiod.now-service');
   export const PERSISTENT_KEY_SERVICE = BindingKey.create<PersistentKeyService>('radiod.config-service');
   export const USER_SERVICE = BindingKey.create<UserService<User, Credentials>>('services.user.service');
-  export const TOKEN_SERVICE = BindingKey.create<JWTService>('services.authentication.jwt.tokenservice');
 }
 
 export namespace RadiodKeys {
-  export const DEFAULT_CREDENTIAL = 'default_credential'
+  export const DEFAULT_CREDENTIAL = 'default_credential';
 }
 
 export namespace TokenServiceBindings {
+  export const TOKEN_SERVICE = BindingKey.create<JWTService>('services.authentication.jwt.tokenservice');
   export const TOKEN_SECRET = BindingKey.create<string>('authentication.jwt.secret');
   export const TOKEN_EXPIRES_IN = BindingKey.create<string>('authentication.jwt.expires.in.seconds');
 }

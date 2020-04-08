@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Attributes } from 'react'
 import { Modal } from 'semantic-ui-react';
 
 import { useStore } from '../../hooks';
@@ -10,8 +10,13 @@ export enum ModalKey {
   USER = 'User-Modal'
 };
 
+interface ElementWithAttributes {
+  element: JSX.Element,
+  attributes?: Attributes
+}
+
 interface ModalControllerProps {
-  children: { [key in ModalKey]?: JSX.Element }
+  children: { [key in ModalKey]: ElementWithAttributes }
 }
 
 export const ModalController = (props: ModalControllerProps) => {
@@ -21,15 +26,17 @@ export const ModalController = (props: ModalControllerProps) => {
   return useObserver(() => (
     <React.Fragment>
       {
-        Object.entries(props.children).map(([key, element]) => {
+        Object.entries(props.children).map(([key, value]) => {
           return (
             <Modal
+              {...value.attributes}
               key={key}
               open={interfaceStore.activeModal === key}
               closeOnDimmerClick={true}
               onClose={() => { interfaceStore.showModal(key, false) }}
-              closeIcon>
-              {element}
+              closeIcon
+            >
+              {value.element}
             </Modal>
           );
         })

@@ -17,12 +17,6 @@ export enum UserState {
     connected
 }
 
-export const LiveUser: User = {
-    id: 'live',
-    email: 'DJ Set',
-    power: 0
-}
-
 export class UserStore {
 
     private rootStore: RootStore;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import icon_play from '../../images/icon_play.png'
 import icon_sound from '../../images/icon_sound.png'
 import icon_sound_low from '../../images/icon_sound_low.png'
@@ -6,11 +6,12 @@ import icon_mute from '../../images/icon_mute.png'
 
 import "@reach/slider/styles.css";
 
-import * as config from '../../../../config.json';
 import { Icon } from 'semantic-ui-react';
-const STREAM_URL: string = config.icecast + '/radio-didou';
+import { ConfigContext } from '../../contexts'
 
 export const Player = () => {
+
+    const config = useContext(ConfigContext);
 
     const [mute, setMute] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -27,7 +28,7 @@ export const Player = () => {
 
     const onPlay = () => {
         setLoading(true);
-        audio.src = STREAM_URL;
+        audio.src = config.icecast_url;
         audio.load();
         audio.play();
     };
@@ -44,7 +45,7 @@ export const Player = () => {
 
     const isMobile = window.innerWidth <= 1000;
     return (
-        <>  
+        <React.Fragment>
             <button className={'icon-sound'} onClick={onPlay}>
                 {
                     loading &&
@@ -73,6 +74,6 @@ export const Player = () => {
                     value={volume}
                 />
             </div>
-        </>
+        </React.Fragment>
     );
 }
