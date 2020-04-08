@@ -30,7 +30,8 @@ export class NowController {
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @repository(UserRepository) private userRepository: UserRepository,
     @inject(NowBindings.NOW_SERVICE) private nowService: NowService,
-    @inject.getter(NowBindings.CURRENT_NOW) private nowGetter: Getter<NowObject>
+    @inject.getter(NowBindings.CURRENT_NOW) private nowGetter: Getter<NowObject>,
+    @inject.getter(NowBindings.NOW_STATE) private stateGetter: Getter<NowState>,
   ) { }
 
   /**
@@ -116,6 +117,12 @@ export class NowController {
       else {
         await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, NowMode.Normal.toString());
       }
+      // KEEPING SOME VALUES
+      let current_state = await this.stateGetter();
+      state.song = current_state.song;
+      state.artist = current_state.artist;
+      state.album = current_state.album;
+      state.url = current_state.url;
     }
     this.nowService.setFetcher(state, credential);
   }

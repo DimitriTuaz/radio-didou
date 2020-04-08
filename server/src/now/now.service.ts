@@ -56,12 +56,14 @@ export class NowService implements LifeCycleObserver {
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @inject(LoggingBindings.LOGGER) private logger: Logger,
     @inject.setter(NowBindings.NOW_TOKEN) private tokenSetter: Setter<string>,
+    @inject.getter(NowBindings.NOW_STATE) private stateGetter: Getter<NowState>,
     @inject.setter(NowBindings.NOW_STATE) private stateSetter: Setter<NowState>,
     @inject.getter(NowBindings.NOW_FETCHER) private fetcherGetter: Getter<NowFetcher>,
     @inject.binding(
-      NowBindings.NOW_FETCHER, {
-      bindingCreation: BindingCreationPolicy.ALWAYS_CREATE
-    }) private fetcherBinding: Binding<NowFetcher>,
+      NowBindings.NOW_FETCHER,
+      { bindingCreation: BindingCreationPolicy.ALWAYS_CREATE }
+    )
+    private fetcherBinding: Binding<NowFetcher>,
     @inject.getter(NowBindings.CURRENT_NOW) private nowGetter: Getter<NowObject>,
     @inject.setter(NowBindings.CURRENT_NOW) private nowSetter: Setter<NowObject>
   ) {
@@ -69,12 +71,22 @@ export class NowService implements LifeCycleObserver {
   }
 
   public async setDefaultFetcher(): Promise<void> {
+    // KEEPING SOME VALUES
+    let state: NowState;
+    try {
+      state = await this.stateGetter();
+      state.type = NowMode.Normal;
+    } catch (e) {
+      state = { type: NowMode.Normal };
+    }
     try {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: MediaCredentials = await this.credentialRepository.findById(crendentialID);
-      this.setFetcher({ type: NowMode.Normal, userId: credential.userId }, credential);
+      state.userId = credential.userId;
+      this.setFetcher(state, credential);
     } catch (e) {
-      this.setFetcher({ type: NowMode.Normal, userId: undefined }, undefined);
+      state.userId = undefined;
+      this.setFetcher(state, undefined);
     }
   }
 
