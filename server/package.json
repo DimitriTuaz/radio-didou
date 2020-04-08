@@ -19,7 +19,7 @@
     "type": "git"
   },
   "author": "",
-  "license": "SEE LICENSE",
+  "license": "MIT",
   "files": [
     "README.md",
     "index.js",
