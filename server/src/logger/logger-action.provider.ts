@@ -30,9 +30,13 @@ export class LoggerActionProvider implements Provider<LogFn> {
       string = string.map(value => JSON.stringify(value));
 
     if (enhancedMetadata.currentUser !== undefined)
-      msg += `{userID=${enhancedMetadata.currentUser[securityId]}} `
+      msg += `{userID=${enhancedMetadata.currentUser[securityId]}}`
 
-    msg += `|> ${enhancedMetadata.className}.${enhancedMetadata.methodName}(${string.join(', ')})`;
+    msg += `\n| Method > ${enhancedMetadata.className}.${enhancedMetadata.methodName}`;
+
+    if (string.length > 0)
+      msg += `\n| Args > ${string.join(', ')}`;
+
     this.logger.log(level, msg);
   }
 }
