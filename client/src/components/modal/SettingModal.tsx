@@ -1,14 +1,24 @@
 import React, { useState, useContext } from 'react'
 import { useObserver } from 'mobx-react-lite'
-import { Modal, Header, Button, Card, Image, Icon, Dropdown } from 'semantic-ui-react'
+import {
+    Modal,
+    Header,
+    Button,
+    Card,
+    Image,
+    Icon,
+    Dropdown,
+    Segment,
+    Checkbox
+} from 'semantic-ui-react'
+
 
 import { OpenAPI } from '@openapi/.';
-import { useStore } from '../../hooks'
-import { SpotifyScope, UserPower, NowEnum } from '../../stores';
-
 import { MediaCredentials, User, NowState } from '@openapi/schemas';
 import { NowController } from '@openapi/routes'
 
+import { useStore } from '../../hooks'
+import { SpotifyScope, UserPower, NowEnum } from '../../stores';
 import { ConfigContext } from '../../contexts';
 
 const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&show_dialog=true';
@@ -23,7 +33,16 @@ export const SettingModal = () => {
             <Modal.Content scrolling>
                 <Modal.Description>
                     {userStore.user.power >= UserPower.ADMIN &&
-                        <CredentialDropdown />
+                        <React.Fragment>
+                            <Header>
+                                Gestion...
+                            </Header>
+                            <CredentialDropdown />
+                            <Header>
+                                Mode DJ...
+                            </Header>
+                            <CheckboxExampleFitted />
+                        </React.Fragment>
                     }
                     {userStore.user.power >= UserPower.DJ &&
                         <React.Fragment >
@@ -40,6 +59,12 @@ export const SettingModal = () => {
         </React.Fragment >
     );
 }
+
+const CheckboxExampleFitted = () => (
+    <Segment compact>
+        <Checkbox toggle />
+    </Segment>
+)
 
 const CredentialDropdown = () => {
 
