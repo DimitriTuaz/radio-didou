@@ -24,7 +24,7 @@ export const CurrentTrack = () => {
                                     else if (nowStore.trackType !== undefined) {
                                         switch (nowStore.trackType) {
                                             case NowEnum.Live:
-                                                return 'live-alt.png';
+                                                return 'live.png';
                                             default:
                                                 return 'none.png'
                                         }
