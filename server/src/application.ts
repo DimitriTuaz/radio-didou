@@ -95,15 +95,16 @@ export class RadiodApplication extends BootMixin(RepositoryMixin(RestApplication
   }
 
   private setupStaticBindings(): void {
-    // MAIN
-    this.static('/', path.join(this.rootPath, 'client/build'));
-    this.static('/jingles', path.join(this.rootPath, 'client/build'));
+    // JAVASCRIPT TO CLOSE WINDOW
     this.static('/close', path.join(this.rootPath, 'static/close.html'));
-
+    // JINGLE PAGE
+    this.static('/jingles', path.join(this.rootPath, 'client/build'));
     // [EXPERIMENTAL] LOW LATENCY
     this.static('/lowlatency', path.join(this.rootPath, 'static/lowlatency.html'));
     this.static('/janus.min.js', path.join(this.rootPath, 'static/janus.min.js'));
     this.static('/lowlatency.js', path.join(this.rootPath, 'static/lowlatency.js'));
+    // MAIN
+    this.static('/', path.join(this.rootPath, 'client/build'));
   }
 
   private setupBindings(): void {
