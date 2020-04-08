@@ -9,7 +9,9 @@ import {
     Icon,
     Dropdown,
     Segment,
-    Checkbox
+    Checkbox,
+    CheckboxProps,
+    ButtonProps
 } from 'semantic-ui-react'
 
 
@@ -41,7 +43,7 @@ export const SettingModal = () => {
                             <Header>
                                 Mode DJ...
                             </Header>
-                            <CheckboxExampleFitted />
+                            <LiveCheckbox />
                         </React.Fragment>
                     }
                     {userStore.user.power >= UserPower.DJ &&
@@ -60,11 +62,43 @@ export const SettingModal = () => {
     );
 }
 
-const CheckboxExampleFitted = () => (
-    <Segment compact>
-        <Checkbox toggle />
-    </Segment>
-)
+const LiveCheckbox = () => {
+
+    const [open, setOpen] = useState(false);
+    const { settingStore } = useStore();
+
+    const handleChange = (event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
+        if (data.checked !== undefined && data.checked)
+            setOpen(true);
+    }
+
+    const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
+        setOpen(false);
+    }
+
+    return useObserver(() => (
+        <React.Fragment>
+            <Modal
+                open={open}
+                closeOnDimmerClick={true}
+                onClose={() => { setOpen(false) }}
+                size='tiny'>
+                <Modal.Header>Gère ton live.</Modal.Header>
+                <Modal.Content>Formulaire</Modal.Content>
+                <Modal.Actions>
+                    <Button icon='check' content='Valider' onClick={handleClick} />
+                </Modal.Actions>
+            </Modal>
+            <Segment compact>
+                <Checkbox
+                    toggle
+                    checked={settingStore.nowState?.type === NowEnum.Live}
+                    onChange={handleChange}
+                />
+            </Segment>
+        </React.Fragment>
+    ));
+}
 
 const CredentialDropdown = () => {
 
