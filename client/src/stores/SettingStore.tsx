@@ -4,7 +4,7 @@ import { MediaCredentials, User, NowState } from '@openapi/schemas'
 
 import { RootStore } from '../contexts';
 import { UserPower } from '../stores';
-import { NowEnum } from './SongStore';
+import { NowMode } from './NowStore';
 
 export enum SpotifyScope {
     playback = 'user-read-playback-state',
@@ -24,7 +24,8 @@ export class SettingStore {
 
     @observable nowUsers: User[] = [];
     @observable nowState: NowState = {
-        type: NowEnum.None
+        type: NowMode.Normal,
+        userId: undefined
     };
 
     constructor(rootStore: RootStore) {
@@ -60,7 +61,7 @@ export class SettingStore {
                     await MediaController.deleteById(credentialId);
                     if (scope === SpotifyScope.playback) {
                         if (this.nowState.userId === this.rootStore.userStore.user.id) {
-                            await this.setNowState({ type: NowEnum.None });
+                            await this.setNowState({ type: NowMode.Normal, userId: undefined });
                         }
                         this.obtainNowUsers();
                     }

@@ -1,5 +1,18 @@
-import { get, param, getModelSchemaRef, RestBindings, Request, Response, del } from '@loopback/rest';
-import { inject, BindingScope, bind, CoreBindings } from '@loopback/core';
+import {
+  get,
+  param,
+  getModelSchemaRef,
+  RestBindings,
+  Request,
+  Response,
+  del
+} from '@loopback/rest';
+import {
+  inject,
+  BindingScope,
+  bind,
+  CoreBindings
+} from '@loopback/core';
 import { repository } from '@loopback/repository';
 
 import { authenticate } from '@loopback/authentication';
@@ -9,7 +22,7 @@ import { UserProfile, securityId, SecurityBindings } from '@loopback/security';
 import request from 'superagent'
 import { Logger } from 'winston';
 
-import { NowDeezer, NowSpotify, NowEnum, SpotifyScope } from '../now';
+import { NowSpotify, SpotifyScope, NowEnum, NowDeezer } from '../now';
 import { MediaCredentials, UserPower, User } from '../models';
 import { UserRepository, MediaCredentialsRepository } from '../repositories';
 import { logger, LOGGER_LEVEL, LoggingBindings } from '../logger';

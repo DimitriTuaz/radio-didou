@@ -4,10 +4,11 @@ import {
   LifeCycleObserver,
   inject,
   CoreBindings,
-  Getter,
   Setter,
+  BindingScope,
+  Getter,
   Binding,
-  BindingScope
+  BindingCreationPolicy
 } from '@loopback/core';
 import { repository, model, property } from '@loopback/repository';
 
@@ -16,22 +17,26 @@ import { Logger } from 'winston';
 
 import { RadiodBindings, RadiodKeys } from '../keys';
 import { MediaCredentials } from '../models';
-import {
-  NowFetcher,
-  NowNone,
-  NowDeezer,
-  NowSpotify,
-  NowEnum,
-  NowBindings,
-  NowLive
-} from '../now'
 import { PersistentKeyService } from '../services';
 import { MediaCredentialsRepository } from '../repositories';
 import { LoggingBindings } from '../logger';
 
+import { NowBindings } from './now.keys';
+import { NowEnum, NowFetcher } from './now.fetcher';
+import { NowLive } from './now.live';
+import { NowSpotify } from './now.spotify';
+import { NowDeezer } from './now.deezer';
+import { NowNone } from './now.none';
+import { NowObject } from './now.component';
+
+export enum NowMode {
+  Normal = 0,
+  Live = 1
+}
+
 @model()
 export class NowState {
-  @property({ required: true, type: 'number' }) type: NowEnum;
+  @property({ required: true, type: 'number' }) type: NowMode;
   @property({ required: false }) name?: string;
   @property({ required: false }) userId?: string;
   @property({ required: false }) song?: string;
@@ -50,10 +55,15 @@ export class NowService implements LifeCycleObserver {
     @inject(RadiodBindings.PERSISTENT_KEY_SERVICE) private params: PersistentKeyService,
     @repository(MediaCredentialsRepository) private credentialRepository: MediaCredentialsRepository,
     @inject(LoggingBindings.LOGGER) private logger: Logger,
-    @inject.getter(NowBindings.NOW_FETCHER) private fetcherGetter: Getter<NowFetcher>,
-    @inject.binding(NowBindings.NOW_FETCHER) private fetcherBinding: Binding<NowFetcher>,
     @inject.setter(NowBindings.NOW_TOKEN) private tokenSetter: Setter<string>,
-    @inject.setter(NowBindings.NOW_STATE) private stateSetter: Setter<NowState>
+    @inject.setter(NowBindings.NOW_STATE) private stateSetter: Setter<NowState>,
+    @inject.getter(NowBindings.NOW_FETCHER) private fetcherGetter: Getter<NowFetcher>,
+    @inject.binding(
+      NowBindings.NOW_FETCHER, {
+      bindingCreation: BindingCreationPolicy.ALWAYS_CREATE
+    }) private fetcherBinding: Binding<NowFetcher>,
+    @inject.getter(NowBindings.CURRENT_NOW) private nowGetter: Getter<NowObject>,
+    @inject.setter(NowBindings.CURRENT_NOW) private nowSetter: Setter<NowObject>
   ) {
     this.icecastURL = configuration.icecast.url + '/status-json.xsl';
   }
@@ -62,35 +72,31 @@ export class NowService implements LifeCycleObserver {
     try {
       let crendentialID: string = await this.params.get(RadiodKeys.DEFAULT_CREDENTIAL);
       let credential: MediaCredentials = await this.credentialRepository.findById(crendentialID);
-      this.setFetcher(
-        { type: credential.type, userId: credential.userId }, credential
-      );
+      this.setFetcher({ type: NowMode.Normal, userId: credential.userId }, credential);
     } catch (e) {
-      this.setFetcher({ type: NowEnum.None }, undefined);
+      this.setFetcher({ type: NowMode.Normal, userId: undefined }, undefined);
     }
   }
 
   public async setFetcher(state: NowState, credential: MediaCredentials | undefined) {
     this.stateSetter(state);
-    if (credential === undefined) {
-      if (state.type === NowEnum.Live) {
-        this.fetcherBinding.toClass(NowLive).inScope(BindingScope.SINGLETON);
-      }
-      else
-        this.fetcherBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
+    if (state.type === NowMode.Live) {
+      this.fetcherBinding.toClass(NowLive).inScope(BindingScope.SINGLETON);
     }
     else {
-      this.tokenSetter(credential.token);
-      switch (credential.type) {
-        case NowEnum.Spotify:
-          this.fetcherBinding.toClass(NowSpotify).inScope(BindingScope.SINGLETON);
-          break;
-        case NowEnum.Deezer:
-          this.fetcherBinding.toClass(NowDeezer).inScope(BindingScope.SINGLETON);
-          break;
-        default:
-          this.fetcherBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
-          break;
+      if (credential !== undefined) {
+        this.tokenSetter(credential.token);
+        switch (credential.type) {
+          case NowEnum.Spotify:
+            this.fetcherBinding.toClass(NowSpotify).inScope(BindingScope.SINGLETON);
+            break;
+          case NowEnum.Deezer:
+            this.fetcherBinding.toClass(NowDeezer).inScope(BindingScope.SINGLETON);
+            break;
+        }
+      }
+      else {
+        this.fetcherBinding.toClass(NowNone).inScope(BindingScope.SINGLETON);
       }
     }
     let fetcher = await this.fetcherGetter();
@@ -106,10 +112,12 @@ export class NowService implements LifeCycleObserver {
           async () => {
             let fetcher = await this.fetcherGetter();
             await fetcher.fetch();
+            let now: NowObject = await this.nowGetter();
             const response = await request
               .get(this.icecastURL)
               .set('Accept', 'application/json');
-            fetcher.now.listeners = response.body.icestats.source.listeners;
+            now.listeners = response.body.icestats.source.listeners;
+            this.nowSetter(now);
           },
           5000
         );

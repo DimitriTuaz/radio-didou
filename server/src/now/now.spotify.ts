@@ -1,9 +1,11 @@
-import { inject, CoreBindings } from '@loopback/core';
+import { inject, CoreBindings, Getter, Setter } from '@loopback/core';
 import request from 'superagent'
 import { Logger } from 'winston';
 
-import { NowFetcher, NowEnum, NowBindings } from '../now';
 import { LoggingBindings } from '../logger';
+import { NowBindings } from './now.keys';
+import { NowObject } from './now.component';
+import { NowFetcher, NowEnum } from './now.fetcher';
 
 export enum SpotifyScope {
   playback = 'user-read-playback-state',
@@ -27,16 +29,12 @@ export class NowSpotify extends NowFetcher {
   constructor(
     @inject(LoggingBindings.LOGGER) private logger: Logger,
     @inject(NowBindings.NOW_TOKEN) private refresh_token: string,
-    @inject(CoreBindings.APPLICATION_CONFIG) config: any
+    @inject(CoreBindings.APPLICATION_CONFIG) config: any,
+    @inject.getter(NowBindings.CURRENT_NOW) private nowGetter: Getter<NowObject>,
+    @inject.setter(NowBindings.CURRENT_NOW) private nowSetter: Setter<NowObject>
   ) {
     super();
     this.api_key = config.spotify;
-    this.now = {
-      type: NowEnum.Spotify,
-      listeners: 0,
-      song: '',
-      artists: [],
-    }
   }
 
   public async fetch(): Promise<void> {
@@ -44,6 +42,7 @@ export class NowSpotify extends NowFetcher {
   }
 
   private async obtain_current_playback(retryOnce: boolean): Promise<void> {
+    let now: NowObject = await this.nowGetter();
     try {
       const response = await request
         .get(NowSpotify.player_url)
@@ -52,24 +51,24 @@ export class NowSpotify extends NowFetcher {
         .set('Authorization', 'Bearer ' + this.access_token);
 
       if (response.body.item != undefined) {
-        this.now = {
+        this.nowSetter({
           type: NowEnum.Spotify,
-          listeners: this.now.listeners,
+          listeners: now.listeners,
           song: response.body.item.name,
           artists: Array.from(response.body.item.artists, (item: any) => item.name),
           album: response.body.item.album.name,
           release_date: response.body.item.album.release_date,
           cover: response.body.item.album.images[1].url,
           url: response.body.item.external_urls.spotify
-        }
+        });
       }
       else {
-        this.now = {
+        this.nowSetter({
           type: NowEnum.Spotify,
-          listeners: this.now.listeners,
+          listeners: now.listeners,
           song: '',
           artists: [],
-        }
+        });
       }
     }
     catch (error) {

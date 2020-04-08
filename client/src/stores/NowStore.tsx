@@ -4,7 +4,18 @@ import { NowObject } from '@openapi/schemas';
 
 import { RootStore } from "../contexts";
 import { UserState } from "../stores";
-import { NowEnum } from "./SongStore";
+
+export enum NowMode {
+    Normal = 0,
+    Live = 1
+}
+
+export enum NowEnum {
+    None = 0,
+    Spotify = 1,
+    Deezer = 2,
+    Live = 3
+}
 
 export class NowStore {
 

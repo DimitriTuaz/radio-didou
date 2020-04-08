@@ -15,7 +15,7 @@ import {
   SpotifyScope,
   NowBindings,
   NowService,
-  NowEnum,
+  NowMode,
   NowState
 } from '../now';
 import { MediaCredentials, User, UserPower } from '../models';
@@ -76,7 +76,7 @@ export class NowController {
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
   async getState(
     @inject(NowBindings.NOW_STATE, { optional: true }) state: NowState | undefined) {
-    return state !== undefined ? state : { type: NowEnum.None };
+    return state !== undefined ? state : { type: NowMode.Normal, userId: undefined };
   }
 
   /**
@@ -101,19 +101,21 @@ export class NowController {
       },
     }) state: NowState) {
     let credential: MediaCredentials | undefined = undefined;
-    if (state.userId !== undefined) {
-      let data: MediaCredentials[] = await this.userRepository.mediaCredentials(state.userId).find({
-        where: {
-          scope: SpotifyScope.playback
+    if (state.type !== NowMode.Live) {
+      if (state.userId !== undefined) {
+        let data: MediaCredentials[] = await this.userRepository.mediaCredentials(state.userId).find({
+          where: {
+            scope: SpotifyScope.playback
+          }
+        });
+        if (data.length > 0) {
+          credential = data[0];
+          await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
         }
-      });
-      if (data.length > 0) {
-        credential = data[0];
-        await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, credential.getId());
       }
-    }
-    else if (state.type !== NowEnum.Live) {
-      await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, NowEnum.None.toString());
+      else {
+        await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, NowMode.Normal.toString());
+      }
     }
     this.nowService.setFetcher(state, credential);
   }

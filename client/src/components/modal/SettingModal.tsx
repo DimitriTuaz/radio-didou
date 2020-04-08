@@ -19,7 +19,7 @@ import { OpenAPI } from '@openapi/.';
 import { MediaCredentials, User, NowState } from '@openapi/schemas';
 
 import { useStore } from '../../hooks'
-import { SpotifyScope, UserPower, NowEnum } from '../../stores';
+import { SpotifyScope, UserPower, NowMode } from '../../stores';
 import { ConfigContext } from '../../contexts';
 import { NowController } from '@openapi/routes';
 
@@ -82,7 +82,7 @@ const LiveCheckbox = () => {
     const handleClick = async () => {
         try {
             await settingStore.setNowState({
-                type: NowEnum.Live,
+                type: NowMode.Live,
                 song: settingStore.nowState.song,
                 artist: settingStore.nowState.artist,
                 album: settingStore.nowState.album,
@@ -144,11 +144,11 @@ const LiveCheckbox = () => {
                 <Segment style={{ display: "inline-block" }}
                     compact>
                     <Checkbox toggle
-                        checked={settingStore.nowState.type === NowEnum.Live}
+                        checked={settingStore.nowState.type === NowMode.Live}
                         onChange={handleChange}
                     />
                 </Segment>
-                <Button disabled={settingStore.nowState.type !== NowEnum.Live}
+                <Button disabled={settingStore.nowState.type !== NowMode.Live}
                     onClick={async () => {
                         await settingStore.obtainNowState();
                         setOpen(true);
@@ -169,20 +169,20 @@ const CredentialDropdown = () => {
     const [error, setError] = useState(false);
 
     const defaultOptions: NowState[] = [
-        { type: NowEnum.None, name: 'Aucun' }
+        { type: NowMode.Normal, name: 'Aucun' }
     ];
 
     const options = defaultOptions.concat(
         settingStore.nowUsers.map((user: User) =>
-            ({ type: NowEnum.Spotify, name: user.email, userId: user.id })
+            ({ type: NowMode.Normal, userId: user.id, name: user.email })
         )
     );
 
     const color = (state: NowState) => {
-        if (state.type === NowEnum.None)
-            return 'grey'
+        if (state.userId !== undefined)
+            return 'blue'
         else
-            return 'blue';
+            return 'grey';
     }
 
     const onClick = async (state: NowState) => {
@@ -218,13 +218,12 @@ const CredentialDropdown = () => {
                                     text={state.name}
                                     onClick={() => onClick(state)}
                                     active={(() => {
-                                        if (settingStore.nowState !== undefined) {
-                                            if (settingStore.nowState.userId !== undefined)
-                                                return state.userId === settingStore.nowState.userId;
-                                            else
-                                                return state.type === settingStore.nowState.type;
+                                        if (settingStore.nowState !== undefined
+                                            && settingStore.nowState.userId !== undefined) {
+                                            return state.userId === settingStore.nowState.userId;
+                                        } else {
+                                            return state.userId === undefined
                                         }
-                                        return state.type === NowEnum.None
                                     })()} />
                             ))}
                         </Dropdown.Menu>
