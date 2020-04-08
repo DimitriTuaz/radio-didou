@@ -13,6 +13,7 @@
   - [`GET` /now/find](#op-get-now-find) 
   - [`GET` /now/get](#op-get-now-get) 
   - [`GET` /now/getState](#op-get-now-getstate) 
+  - [`POST` /now/setDefaultState](#op-post-now-setdefaultstate) 
   - [`POST` /now/setState](#op-post-now-setstate) 
   - [`GET` /ping](#op-get-ping) 
   - [`PUT` /song/add](#op-put-song-add) 
@@ -714,7 +715,7 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Return the current state of NowService
+##### ▶ 200 - Return the state of NowService
 
 ###### Headers
 _No headers specified_
@@ -806,6 +807,33 @@ _No headers specified_
   "url": "string"
 }
 ```
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `POST` /now/setDefaultState
+<a id="op-post-now-setdefaultstate" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 204 - Set the state of NowService to the default state
+
+###### Headers
+_No headers specified_
+
 
 #### Tags
 
@@ -918,7 +946,7 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 204 - Set the default credential succeeed
+##### ▶ 204 - Set the state of NowService
 
 ###### Headers
 _No headers specified_

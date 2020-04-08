@@ -11,18 +11,17 @@ import {
     Segment,
     Checkbox,
     CheckboxProps,
-    ButtonProps,
     Form
 } from 'semantic-ui-react'
 
 
 import { OpenAPI } from '@openapi/.';
 import { MediaCredentials, User, NowState } from '@openapi/schemas';
-import { NowController } from '@openapi/routes'
 
 import { useStore } from '../../hooks'
 import { SpotifyScope, UserPower, NowEnum } from '../../stores';
 import { ConfigContext } from '../../contexts';
+import { NowController } from '@openapi/routes';
 
 const spotify_url = 'https://accounts.spotify.com/authorize?response_type=code&show_dialog=true';
 
@@ -74,6 +73,9 @@ const LiveCheckbox = () => {
         if (data.checked !== undefined && data.checked) {
             await settingStore.obtainNowState();
             setOpen(true);
+        } else {
+            await NowController.setDefaultState();
+            await settingStore.obtainNowState();
         }
     }
 
@@ -97,8 +99,7 @@ const LiveCheckbox = () => {
 
     return useObserver(() => (
         <React.Fragment>
-            <Modal
-                open={open}
+            <Modal open={open}
                 closeOnDimmerClick={true}
                 onClose={() => { setOpen(false) }}
                 size='tiny'>
@@ -107,32 +108,28 @@ const LiveCheckbox = () => {
                     <Form error={error}>
                         <Form.Field>
                             <label>Titre de la session</label>
-                            <Form.Input
-                                placeholder='Coronight III'
+                            <Form.Input placeholder='Coronight III'
                                 value={settingStore.nowState.song}
                                 onChange={(e) => { settingStore.nowState.song = e.currentTarget.value }}
                             />
                         </Form.Field>
                         <Form.Field>
                             <label>DJ</label>
-                            <Form.Input
-                                placeholder='DJ Didou'
+                            <Form.Input placeholder='DJ Didou'
                                 value={settingStore.nowState.artist}
                                 onChange={(e) => { settingStore.nowState.artist = e.currentTarget.value }}
                             />
                         </Form.Field>
                         <Form.Field>
                             <label>Information</label>
-                            <Form.Input
-                                placeholder='Ce soir 22h - 2h'
+                            <Form.Input placeholder='Ce soir 22h - 2h'
                                 value={settingStore.nowState.album}
                                 onChange={(e) => { settingStore.nowState.album = e.currentTarget.value }}
                             />
                         </Form.Field>
                         <Form.Field>
                             <label>URL</label>
-                            <Form.Input
-                                placeholder='https://zoom.us/'
+                            <Form.Input placeholder='https://zoom.us/'
                                 value={settingStore.nowState.url}
                                 onChange={(e) => { settingStore.nowState.url = e.currentTarget.value }}
                             />
@@ -143,14 +140,22 @@ const LiveCheckbox = () => {
                     <Button icon='check' content='Valider' onClick={handleClick} />
                 </Modal.Actions>
             </Modal>
-            <Segment compact>
-                <Checkbox
-                    toggle
-                    checked={settingStore.nowState.type === NowEnum.Live}
-                    onChange={handleChange}
-                />
-            </Segment>
-        </React.Fragment>
+            <div>
+                <Segment style={{ display: "inline-block" }}
+                    compact>
+                    <Checkbox toggle
+                        checked={settingStore.nowState.type === NowEnum.Live}
+                        onChange={handleChange}
+                    />
+                </Segment>
+                <Button disabled={settingStore.nowState.type !== NowEnum.Live}
+                    icon='edit'
+                    size='big'
+                    basic
+                    style={{ display: "inline-block", marginLeft: "10px" }} />
+            </div>
+
+        </React.Fragment >
     ));
 }
 
@@ -160,8 +165,7 @@ const CredentialDropdown = () => {
     const [error, setError] = useState(false);
 
     const defaultOptions: NowState[] = [
-        { type: NowEnum.None, name: 'Aucun' },
-        { type: NowEnum.Live, name: 'DJ Set' }
+        { type: NowEnum.None, name: 'Aucun' }
     ];
 
     const options = defaultOptions.concat(
@@ -172,8 +176,6 @@ const CredentialDropdown = () => {
 
     const color = (state: NowState) => {
         if (state.type === NowEnum.None)
-            return 'brown'
-        else if (state.type === NowEnum.Live)
             return 'grey'
         else
             return 'blue';

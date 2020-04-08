@@ -34,7 +34,7 @@ export class NowController {
   ) { }
 
   /**
-  ** Return informations about the current song
+  ** Get informations about the current song.
   **/
   @get('/now/get', {
     responses: {
@@ -55,13 +55,38 @@ export class NowController {
   }
 
   /**
-  ** Set the default credential
+  ** Get the state of NowService
+  **/
+  @get('/now/getState', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Return the state of NowService',
+        content: {
+          'application/json': {
+            schema: {
+              'x-ts-type': NowState,
+            },
+          },
+        },
+      },
+    },
+  })
+  @logger(LOGGER_LEVEL.INFO)
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
+  async getState(
+    @inject(NowBindings.NOW_STATE, { optional: true }) state: NowState | undefined) {
+    return state !== undefined ? state : { type: NowEnum.None };
+  }
+
+  /**
+  ** Set the state of NowService
   **/
   @post('/now/setState', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '204': {
-        description: 'Set the default credential succeeed',
+        description: 'Set the state of NowService',
       },
     },
   })
@@ -94,32 +119,24 @@ export class NowController {
   }
 
   /**
-  ** Return the current state of NowService.
+  ** Set the state of NowService to the default state
   **/
-  @get('/now/getState', {
+  @post('/now/setDefaultState', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
-      '200': {
-        description: 'Return the current state of NowService',
-        content: {
-          'application/json': {
-            schema: {
-              'x-ts-type': NowState,
-            },
-          },
-        },
+      '204': {
+        description: 'Set the state of NowService to the default state',
       },
     },
   })
   @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
-  async getState(
-    @inject(NowBindings.NOW_STATE, { optional: true }) state: NowState | undefined) {
-    return state !== undefined ? state : { type: NowEnum.None };
+  async setDefaultState() {
+    this.nowService.setDefaultFetcher();
   }
 
   /**
-  ** Return an array with all the available credentials
+  ** Get an array with all the available credentials.
   **/
   @get('/now/find', {
     security: OPERATION_SECURITY_SPEC,
