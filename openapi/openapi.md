@@ -12,8 +12,10 @@
   - [`GET` /media/{serviceId}/callback](#op-get-media-serviceid-callback) 
   - [`GET` /now/find](#op-get-now-find) 
   - [`GET` /now/get](#op-get-now-get) 
-  - [`POST` /now/set](#op-post-now-set) 
-  - [`GET` /now/who](#op-get-now-who) 
+  - [`GET` /now/getState](#op-get-now-getstate) 
+  - [`POST` /now/setDefaultState](#op-post-now-setdefaultstate) 
+  - [`POST` /now/setState](#op-post-now-setstate) 
+  - [`GET` /ping](#op-get-ping) 
   - [`PUT` /song/add](#op-put-song-add) 
   - [`DELETE` /song/delete](#op-delete-song-delete) 
   - [`GET` /song/get](#op-get-song-get) 
@@ -28,6 +30,7 @@
   - [Configuration](#schema-configuration)
   - [MediaCredentials](#schema-mediacredentials)
   - [NowObject](#schema-nowobject)
+  - [NowState](#schema-nowstate)
   - [User](#schema-user)
   - [Song](#schema-song)
   - [NewUser](#schema-newuser)
@@ -607,6 +610,14 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>listeners <strong>(required)</strong></td>
         <td>
           number
@@ -670,6 +681,7 @@ _No headers specified_
 
 ```json
 {
+  "type": 0,
   "listeners": 0,
   "song": "string",
   "artists": [
@@ -689,65 +701,8 @@ _No headers specified_
 </div>
 </div>
 
-### `POST` /now/set
-<a id="op-post-now-set" />
-
-
-
-
-
-#### Query parameters
-
-##### &#9655; userId
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>In</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>userId </td>
-        <td>
-          string
-        </td>
-        <td>query</td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-
-
-
-
-#### Responses
-
-
-##### ▶ 204 - Set the default credential succeeed
-
-###### Headers
-_No headers specified_
-
-
-#### Tags
-
-<div class="tags">
-  <div class="tags__tag"></div>
-</div>
-</div>
-
-### `GET` /now/who
-<a id="op-get-now-who" />
+### `GET` /now/getState
+<a id="op-get-now-getstate" />
 
 
 
@@ -760,7 +715,7 @@ _No headers specified_
 #### Responses
 
 
-##### ▶ 200 - Return the selected user for displaying the current track
+##### ▶ 200 - Return the state of NowService
 
 ###### Headers
 _No headers specified_
@@ -780,31 +735,7 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
-        <td>Response</td>
-        <td>
-          array
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.id</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.email <strong>(required)</strong></td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>Response.power <strong>(required)</strong></td>
+        <td>type <strong>(required)</strong></td>
         <td>
           number
         </td>
@@ -812,7 +743,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.firstName</td>
+        <td>name</td>
         <td>
           string
         </td>
@@ -820,7 +751,7 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.lastName</td>
+        <td>userId</td>
         <td>
           string
         </td>
@@ -828,7 +759,31 @@ _No headers specified_
         <td><em>Any</em></td>
       </tr>
       <tr>
-        <td>Response.playlistId</td>
+        <td>song</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artist</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>album</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
         <td>
           string
         </td>
@@ -842,16 +797,256 @@ _No headers specified_
 ##### Example _(generated)_
 
 ```json
-[
-  {
-    "id": "string",
-    "email": "string",
-    "power": 0,
-    "firstName": "string",
-    "lastName": "string",
-    "playlistId": "string"
+{
+  "type": 0,
+  "name": "string",
+  "userId": "string",
+  "song": "string",
+  "artist": "string",
+  "album": "string",
+  "url": "string"
+}
+```
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `POST` /now/setDefaultState
+<a id="op-post-now-setdefaultstate" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 204 - Set the state of NowService to the default state
+
+###### Headers
+_No headers specified_
+
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `POST` /now/setState
+<a id="op-post-now-setstate" />
+
+
+
+
+
+
+
+#### Request body
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>userId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>song</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artist</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>album</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+{
+  "type": 0,
+  "name": "string",
+  "userId": "string",
+  "song": "string",
+  "artist": "string",
+  "album": "string",
+  "url": "string"
+}
+```
+
+
+
+
+#### Responses
+
+
+##### ▶ 204 - Set the state of NowService
+
+###### Headers
+_No headers specified_
+
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `GET` /ping
+<a id="op-get-ping" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 200 - Ping Response
+
+###### Headers
+_No headers specified_
+
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>greeting</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>date</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>headers</td>
+        <td>
+          object
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>headers.Content-Type</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+{
+  "greeting": "string",
+  "date": "string",
+  "url": "string",
+  "headers": {
+    "Content-Type": "string"
   }
-]
+}
 ```
 
 #### Tags
@@ -2071,6 +2266,14 @@ _No headers specified_
   </thead>
   <tbody>
       <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
         <td>listeners <strong>(required)</strong></td>
         <td>
           number
@@ -2133,6 +2336,7 @@ _No headers specified_
 
 ```json
 {
+  "type": 0,
   "listeners": 0,
   "song": "string",
   "artists": [
@@ -2141,6 +2345,92 @@ _No headers specified_
   "album": "string",
   "release_date": "string",
   "cover": "string",
+  "url": "string"
+}
+```
+<a id="schema-nowstate" />
+
+#### NowState
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>userId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>song</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artist</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>album</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+##### Example _(generated)_
+
+```json
+{
+  "type": 0,
+  "name": "string",
+  "userId": "string",
+  "song": "string",
+  "artist": "string",
+  "album": "string",
   "url": "string"
 }
 ```

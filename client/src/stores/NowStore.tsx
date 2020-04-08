@@ -4,11 +4,13 @@ import { NowObject } from '@openapi/schemas';
 
 import { RootStore } from "../contexts";
 import { UserState } from "../stores";
+import { NowEnum } from "./SongStore";
 
 export class NowStore {
 
     private rootStore: RootStore;
 
+    @observable trackType: NowEnum | undefined;
     @observable trackCover: string | undefined = undefined;
     @observable trackTitle: string | undefined = undefined;
     @observable trackArtists: string | undefined = undefined;
@@ -27,6 +29,7 @@ export class NowStore {
         try {
             let now: NowObject = await NowController.getNow();
 
+            let trackType: NowEnum = now.type;
             let trackCover: string = now.cover ? now.cover : '';
             let trackAlbum: string = now.album ? now.album : '';
             let trackTitle: string = now.song;
@@ -47,6 +50,7 @@ export class NowStore {
             }
             if (trackTitle !== this.trackTitle || trackArtists !== this.trackArtists) {
 
+                this.trackType = trackType;
                 this.trackCover = trackCover;
                 this.trackTitle = trackTitle;
                 this.trackArtists = trackArtists;

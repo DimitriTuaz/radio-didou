@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "The OpenAPI Client for Radio-didou",
   "author": "",
-  "license": "SEE LICENSE",
+  "license": "MIT",
   "repository": {
     "type": "git"
   },

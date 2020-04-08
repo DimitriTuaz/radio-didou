@@ -1,9 +1,10 @@
 import { observable, action } from 'mobx';
 import { MediaController, NowController } from '@openapi/routes'
-import { MediaCredentials, User } from '@openapi/schemas'
+import { MediaCredentials, User, NowState } from '@openapi/schemas'
 
 import { RootStore } from '../contexts';
 import { UserPower } from '../stores';
+import { NowEnum } from './SongStore';
 
 export enum SpotifyScope {
     playback = 'user-read-playback-state',
@@ -22,7 +23,9 @@ export class SettingStore {
     };
 
     @observable nowUsers: User[] = [];
-    @observable currentNowUser: User | undefined;
+    @observable nowState: NowState = {
+        type: NowEnum.None
+    };
 
     constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
@@ -32,8 +35,8 @@ export class SettingStore {
     refresh = async () => {
         this.obtainCredential(SpotifyScope.playback);
         this.obtainCredential(SpotifyScope.playlist);
-        this.obtainCurrentNowUser();
         this.obtainNowUsers();
+        this.obtainNowState();
     }
 
     @action
@@ -56,9 +59,8 @@ export class SettingStore {
                 if (credentialId !== undefined) {
                     await MediaController.deleteById(credentialId);
                     if (scope === SpotifyScope.playback) {
-                        if (this.currentNowUser?.id === this.rootStore.userStore.user.id) {
-                            await NowController.setMedia('undefined');
-                            this.currentNowUser = undefined;
+                        if (this.nowState.userId === this.rootStore.userStore.user.id) {
+                            await this.setNowState({ type: NowEnum.None });
                         }
                         this.obtainNowUsers();
                     }
@@ -82,14 +84,21 @@ export class SettingStore {
     }
 
     @action
-    obtainCurrentNowUser = async () => {
+    obtainNowState = async () => {
         if (this.rootStore.userStore.user.power >= UserPower.ADMIN) {
             try {
-                let users: User[] = await NowController.getMedia();
-                this.currentNowUser = users[0];
+                this.nowState = await NowController.getState();
             } catch (error) {
                 console.error(error);
             }
+        }
+    }
+
+    @action
+    setNowState = async (state: NowState) => {
+        if (this.rootStore.userStore.user.power >= UserPower.ADMIN) {
+            await NowController.setState(state);
+            this.nowState = state;
         }
     }
 }

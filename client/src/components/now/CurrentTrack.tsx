@@ -3,6 +3,7 @@ import { useObserver } from 'mobx-react-lite';
 import { Item } from 'semantic-ui-react';
 
 import { useStore } from '../../hooks';
+import { NowEnum } from '../../stores';
 
 export const CurrentTrack = () => {
 
@@ -17,11 +18,18 @@ export const CurrentTrack = () => {
                         <Item>
                             <Item.Image
                                 size={window.innerWidth <= window.innerHeight ? 'small' : 'medium'}
-                                src={
-                                    (nowStore.trackCover !== undefined
-                                        && nowStore.trackCover.length === 0) ?
-                                        'cover.png' :
-                                        nowStore.trackCover
+                                src={(() => {
+                                    if (nowStore.trackCover !== undefined && nowStore.trackCover.length > 0)
+                                        return nowStore.trackCover;
+                                    else if (nowStore.trackType !== undefined) {
+                                        switch (nowStore.trackType) {
+                                            case NowEnum.Live:
+                                                return 'live-alt.png';
+                                            default:
+                                                return 'none.png'
+                                        }
+                                    }
+                                })()
                                 } />
                             <Item.Content verticalAlign='middle'>
                                 <Item.Header>{

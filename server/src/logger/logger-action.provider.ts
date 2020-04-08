@@ -22,15 +22,21 @@ export class LoggerActionProvider implements Provider<LogFn> {
     if (enhancedMetadata == undefined) return;
 
     const level = enhancedMetadata.metadata ? enhancedMetadata.metadata.level : LOGGER_LEVEL.DEBUG;
+    const showArgs = enhancedMetadata.metadata ? enhancedMetadata.metadata.showArgs : true;
 
     let msg = '';
-    if (args == undefined)
-      args = [];
+    let string = args !== undefined ? args : [];
+    if (showArgs)
+      string = string.map(value => JSON.stringify(value));
 
     if (enhancedMetadata.currentUser !== undefined)
-      msg += `{userID=${enhancedMetadata.currentUser[securityId]}} `
+      msg += `{userID=${enhancedMetadata.currentUser[securityId]}}`
 
-    msg += `|> ${enhancedMetadata.className}.${enhancedMetadata.methodName}(${args.join(', ')})`;
+    msg += `\n| Method > ${enhancedMetadata.className}.${enhancedMetadata.methodName}`;
+
+    if (string.length > 0)
+      msg += `\n| Args > ${string.join(', ')}`;
+
     this.logger.log(level, msg);
   }
 }
