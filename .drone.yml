@@ -6,6 +6,8 @@ trigger:
   branch:
   - dev
   - master
+  event:
+  - push
   
 steps:
 - name: discord-push
