@@ -218,11 +218,13 @@ const CredentialDropdown = () => {
                                     text={state.name}
                                     onClick={() => onClick(state)}
                                     active={(() => {
-                                        if (settingStore.nowState !== undefined
-                                            && settingStore.nowState.userId !== undefined) {
-                                            return state.userId === settingStore.nowState.userId;
+                                        if (settingStore.nowState !== undefined) {
+                                            if (settingStore.nowState.type === NowMode.Live)
+                                                return false;
+                                            else
+                                                return state.userId === settingStore.nowState.userId;
                                         } else {
-                                            return state.userId === undefined
+                                            return state.userId === undefined;
                                         }
                                     })()} />
                             ))}
