@@ -18,7 +18,7 @@ cp -r server/dist package/server
 cp server/index.js package/server
 cp server/migrate.sh package/server
 cp server/package.json package/server
-cp -r static package/static
+cp -r static package
 
 echo '# INSTALL NODE-MODULES'
 cd package/server
