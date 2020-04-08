@@ -81,7 +81,7 @@ export class NowSpotify extends NowFetcher {
         await this.obtain_current_playback(false);
       }
       else {
-        this.logger.warn("{" + this.name + "} error in obtain_current_playback")
+        this.logger.warn("[" + this.name + "] error in obtain_current_playback")
       }
     }
   }

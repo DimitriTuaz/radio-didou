@@ -100,22 +100,22 @@ export class NowService implements LifeCycleObserver {
       }
     }
     let fetcher = await this.fetcherGetter();
-    this.logger.info("{NowService} setFetcher to " + fetcher.name);
+    this.logger.info("[NowService] setFetcher to " + fetcher.name);
   }
 
   public async start(): Promise<void> {
     await this.setDefaultFetcher();
     try {
       if (!this.intervalID) {
-        this.logger.info("{LifeCycleObserver} NowService started");
+        this.logger.info("[LifeCycleObserver] NowService started");
         this.intervalID = setIntervalAsync(
           async () => {
-            let fetcher = await this.fetcherGetter();
-            await fetcher.fetch();
-            let now: NowObject = await this.nowGetter();
             const response = await request
               .get(this.icecastURL)
               .set('Accept', 'application/json');
+            let fetcher = await this.fetcherGetter();
+            await fetcher.fetch();
+            let now: NowObject = await this.nowGetter();
             now.listeners = response.body.icestats.source.listeners;
             this.nowSetter(now);
           },
@@ -124,13 +124,13 @@ export class NowService implements LifeCycleObserver {
       }
     }
     catch (e) {
-      this.logger.warn("{NowService} Error! Couldn't start the service");
+      this.logger.warn("[NowService] Error! Couldn't start the service");
     }
   }
 
   public async stop(): Promise<void> {
     if (this.intervalID) {
-      this.logger.info("{LifeCycleObserver} NowService stopped");
+      this.logger.info("[LifeCycleObserver] NowService stopped");
       await clearIntervalAsync(this.intervalID);
       this.intervalID = null;
     }

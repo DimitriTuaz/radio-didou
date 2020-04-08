@@ -39,11 +39,11 @@ export class LoggingComponent implements Component {
     };
 
     const console_format = format.printf(info =>
-      `<${info.level.toUpperCase()}> : ${info.message}` +
+      `<${info.level.toUpperCase()}> ${info.message}` +
       `${options.stack_trace && info.error ? '\n' + info.error : ''}`);
 
     const file_format = format.printf(info =>
-      `[${info.timestamp}] - <${info.level.toUpperCase()}> : ${info.message}`);
+      `[${info.timestamp}] - <${info.level.toUpperCase()}> ${info.message}`);
 
     const error_format = format.printf(info =>
       `[${info.timestamp}]: ${info.message}\n${info.error}\n`);

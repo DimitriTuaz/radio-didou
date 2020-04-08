@@ -29,13 +29,11 @@ export class LoggerActionProvider implements Provider<LogFn> {
     if (showArgs)
       string = string.map(value => JSON.stringify(value));
 
-    if (enhancedMetadata.currentUser !== undefined)
-      msg += `{userID=${enhancedMetadata.currentUser[securityId]}}`
-
     msg += `\n| Method > ${enhancedMetadata.className}.${enhancedMetadata.methodName}`;
-
     if (string.length > 0)
       msg += `\n| Args > ${string.join(', ')}`;
+    if (enhancedMetadata.currentUser !== undefined)
+      msg += `\n| UserID > ${enhancedMetadata.currentUser[securityId]}`
 
     this.logger.log(level, msg);
   }
