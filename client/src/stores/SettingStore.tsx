@@ -23,7 +23,9 @@ export class SettingStore {
     };
 
     @observable nowUsers: User[] = [];
-    @observable nowState: NowState | undefined;
+    @observable nowState: NowState = {
+        type: NowEnum.None
+    };
 
     constructor(rootStore: RootStore) {
         this.rootStore = rootStore;
@@ -57,9 +59,8 @@ export class SettingStore {
                 if (credentialId !== undefined) {
                     await MediaController.deleteById(credentialId);
                     if (scope === SpotifyScope.playback) {
-                        if (this.nowState?.userId === this.rootStore.userStore.user.id) {
-                            await NowController.setMedia({ type: NowEnum.None });
-                            this.nowState = undefined;
+                        if (this.nowState.userId === this.rootStore.userStore.user.id) {
+                            await this.setNowState({ type: NowEnum.None });
                         }
                         this.obtainNowUsers();
                     }
@@ -86,10 +87,18 @@ export class SettingStore {
     obtainNowState = async () => {
         if (this.rootStore.userStore.user.power >= UserPower.ADMIN) {
             try {
-                this.nowState = await NowController.getMedia();
+                this.nowState = await NowController.getState();
             } catch (error) {
                 console.error(error);
             }
+        }
+    }
+
+    @action
+    setNowState = async (state: NowState) => {
+        if (this.rootStore.userStore.user.power >= UserPower.ADMIN) {
+            await NowController.setState(state);
+            this.nowState = state;
         }
     }
 }

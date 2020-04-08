@@ -12,8 +12,8 @@
   - [`GET` /media/{serviceId}/callback](#op-get-media-serviceid-callback) 
   - [`GET` /now/find](#op-get-now-find) 
   - [`GET` /now/get](#op-get-now-get) 
-  - [`POST` /now/set](#op-post-now-set) 
-  - [`GET` /now/who](#op-get-now-who) 
+  - [`GET` /now/getState](#op-get-now-getstate) 
+  - [`POST` /now/setState](#op-post-now-setstate) 
   - [`GET` /ping](#op-get-ping) 
   - [`PUT` /song/add](#op-put-song-add) 
   - [`DELETE` /song/delete](#op-delete-song-delete) 
@@ -700,8 +700,122 @@ _No headers specified_
 </div>
 </div>
 
-### `POST` /now/set
-<a id="op-post-now-set" />
+### `GET` /now/getState
+<a id="op-get-now-getstate" />
+
+
+
+
+
+
+
+
+
+#### Responses
+
+
+##### ▶ 200 - Return the current state of NowService
+
+###### Headers
+_No headers specified_
+
+###### application/json
+
+
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Accepted values</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td>type <strong>(required)</strong></td>
+        <td>
+          number
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>name</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>userId</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>song</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>artist</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>album</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+      <tr>
+        <td>url</td>
+        <td>
+          string
+        </td>
+        <td></td>
+        <td><em>Any</em></td>
+      </tr>
+  </tbody>
+</table>
+
+
+##### Example _(generated)_
+
+```json
+{
+  "type": 0,
+  "name": "string",
+  "userId": "string",
+  "song": "string",
+  "artist": "string",
+  "album": "string",
+  "url": "string"
+}
+```
+
+#### Tags
+
+<div class="tags">
+  <div class="tags__tag"></div>
+</div>
+</div>
+
+### `POST` /now/setState
+<a id="op-post-now-setstate" />
 
 
 
@@ -809,120 +923,6 @@ _No headers specified_
 ###### Headers
 _No headers specified_
 
-
-#### Tags
-
-<div class="tags">
-  <div class="tags__tag"></div>
-</div>
-</div>
-
-### `GET` /now/who
-<a id="op-get-now-who" />
-
-
-
-
-
-
-
-
-
-#### Responses
-
-
-##### ▶ 200 - Return the current state of NowService
-
-###### Headers
-_No headers specified_
-
-###### application/json
-
-
-
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-      <th>Accepted values</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td>type <strong>(required)</strong></td>
-        <td>
-          number
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>name</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>userId</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>song</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>artist</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>album</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-      <tr>
-        <td>url</td>
-        <td>
-          string
-        </td>
-        <td></td>
-        <td><em>Any</em></td>
-      </tr>
-  </tbody>
-</table>
-
-
-##### Example _(generated)_
-
-```json
-{
-  "type": 0,
-  "name": "string",
-  "userId": "string",
-  "song": "string",
-  "artist": "string",
-  "album": "string",
-  "url": "string"
-}
-```
 
 #### Tags
 

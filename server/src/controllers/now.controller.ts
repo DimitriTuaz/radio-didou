@@ -57,7 +57,7 @@ export class NowController {
   /**
   ** Set the default credential
   **/
-  @post('/now/set', {
+  @post('/now/setState', {
     security: OPERATION_SECURITY_SPEC,
     responses: {
       '204': {
@@ -67,7 +67,7 @@ export class NowController {
   })
   @logger(LOGGER_LEVEL.INFO)
   @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
-  async setMedia(
+  async setState(
     @requestBody({
       content: {
         'application/json': {
@@ -91,6 +91,31 @@ export class NowController {
       await this.params.set(RadiodKeys.DEFAULT_CREDENTIAL, NowEnum.None.toString());
     }
     this.nowService.setFetcher(state, credential);
+  }
+
+  /**
+  ** Return the current state of NowService.
+  **/
+  @get('/now/getState', {
+    security: OPERATION_SECURITY_SPEC,
+    responses: {
+      '200': {
+        description: 'Return the current state of NowService',
+        content: {
+          'application/json': {
+            schema: {
+              'x-ts-type': NowState,
+            },
+          },
+        },
+      },
+    },
+  })
+  @logger(LOGGER_LEVEL.INFO)
+  @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
+  async getState(
+    @inject(NowBindings.NOW_STATE, { optional: true }) state: NowState | undefined) {
+    return state !== undefined ? state : { type: NowEnum.None };
   }
 
   /**
@@ -126,30 +151,5 @@ export class NowController {
       }
     });
     return credentials.map(value => value.user);
-  }
-
-  /**
-  ** Return the current state of NowService.
-  **/
-  @get('/now/who', {
-    security: OPERATION_SECURITY_SPEC,
-    responses: {
-      '200': {
-        description: 'Return the current state of NowService',
-        content: {
-          'application/json': {
-            schema: {
-              'x-ts-type': NowState,
-            },
-          },
-        },
-      },
-    },
-  })
-  @logger(LOGGER_LEVEL.INFO)
-  @authenticate({ strategy: 'jwt', options: { power: UserPower.ADMIN } })
-  async getMedia(
-    @inject(NowBindings.NOW_STATE, { optional: true }) state: NowState | undefined) {
-    return state !== undefined ? state : { type: NowEnum.None };
   }
 }

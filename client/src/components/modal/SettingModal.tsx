@@ -11,7 +11,8 @@ import {
     Segment,
     Checkbox,
     CheckboxProps,
-    ButtonProps
+    ButtonProps,
+    Form
 } from 'semantic-ui-react'
 
 
@@ -65,15 +66,33 @@ export const SettingModal = () => {
 const LiveCheckbox = () => {
 
     const [open, setOpen] = useState(false);
+    const [error, setError] = useState(false);
+
     const { settingStore } = useStore();
 
-    const handleChange = (event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
-        if (data.checked !== undefined && data.checked)
+    const handleChange = async (event: React.FormEvent<HTMLInputElement>, data: CheckboxProps) => {
+        if (data.checked !== undefined && data.checked) {
+            await settingStore.obtainNowState();
             setOpen(true);
+        }
     }
 
-    const handleClick = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, data: ButtonProps) => {
-        setOpen(false);
+    const handleClick = async () => {
+        try {
+            await settingStore.setNowState({
+                type: NowEnum.Live,
+                song: settingStore.nowState.song,
+                artist: settingStore.nowState.artist,
+                album: settingStore.nowState.album,
+                url: settingStore.nowState.url
+            });
+            setError(false);
+            setOpen(false);
+        }
+        catch (error) {
+            setError(true);
+            console.error(error);
+        }
     }
 
     return useObserver(() => (
@@ -84,7 +103,42 @@ const LiveCheckbox = () => {
                 onClose={() => { setOpen(false) }}
                 size='tiny'>
                 <Modal.Header>Gère ton live.</Modal.Header>
-                <Modal.Content>Formulaire</Modal.Content>
+                <Modal.Content>
+                    <Form error={error}>
+                        <Form.Field>
+                            <label>Titre de la session</label>
+                            <Form.Input
+                                placeholder='Coronight III'
+                                value={settingStore.nowState.song}
+                                onChange={(e) => { settingStore.nowState.song = e.currentTarget.value }}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <label>DJ</label>
+                            <Form.Input
+                                placeholder='DJ Didou'
+                                value={settingStore.nowState.artist}
+                                onChange={(e) => { settingStore.nowState.artist = e.currentTarget.value }}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <label>Information</label>
+                            <Form.Input
+                                placeholder='Ce soir 22h - 2h'
+                                value={settingStore.nowState.album}
+                                onChange={(e) => { settingStore.nowState.album = e.currentTarget.value }}
+                            />
+                        </Form.Field>
+                        <Form.Field>
+                            <label>URL</label>
+                            <Form.Input
+                                placeholder='https://zoom.us/'
+                                value={settingStore.nowState.url}
+                                onChange={(e) => { settingStore.nowState.url = e.currentTarget.value }}
+                            />
+                        </Form.Field>
+                    </Form>
+                </Modal.Content>
                 <Modal.Actions>
                     <Button icon='check' content='Valider' onClick={handleClick} />
                 </Modal.Actions>
@@ -92,7 +146,7 @@ const LiveCheckbox = () => {
             <Segment compact>
                 <Checkbox
                     toggle
-                    checked={settingStore.nowState?.type === NowEnum.Live}
+                    checked={settingStore.nowState.type === NowEnum.Live}
                     onChange={handleChange}
                 />
             </Segment>
@@ -127,8 +181,7 @@ const CredentialDropdown = () => {
 
     const onClick = async (state: NowState) => {
         try {
-            NowController.setMedia(state);
-            settingStore.nowState = state;
+            await settingStore.setNowState(state);
             setError(false);
         }
         catch (error) {
