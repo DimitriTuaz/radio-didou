@@ -149,6 +149,10 @@ const LiveCheckbox = () => {
                     />
                 </Segment>
                 <Button disabled={settingStore.nowState.type !== NowEnum.Live}
+                    onClick={async () => {
+                        await settingStore.obtainNowState();
+                        setOpen(true);
+                    }}
                     icon='edit'
                     size='big'
                     basic
