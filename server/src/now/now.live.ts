@@ -23,9 +23,12 @@ export class NowLive extends NowFetcher {
     this.nowSetter({
       type: NowEnum.Live,
       listeners: now.listeners,
-      song: this.state.song !== undefined ? this.state.song : 'DJ Set Live',
-      artists: [this.state.artist !== undefined ? this.state.artist : 'DJ'],
-      album: this.state.album !== undefined ? this.state.album : 'Direct LIVE',
+      song: this.state.song !== undefined && this.state.song.length > 0 ?
+        this.state.song : 'DJ Set Live',
+      artists: [this.state.artist !== undefined && this.state.artist.length > 0 ?
+        this.state.artist : 'DJ'],
+      album: this.state.album !== undefined && this.state.album.length > 0 ?
+        this.state.album : 'Direct LIVE',
       url: this.state.url
     });
   }
