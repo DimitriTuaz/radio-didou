@@ -62,7 +62,7 @@ steps:
     - tar -zxf packages/dev/radio-didou.tar.gz --directory dev/
     - cp config-files/dev/config.yaml dev/
     - echo 'MIGRATION SCRIPT'
-    - ./dev/server/migration.sh
+    - ./dev/server/migrate.sh
     - sudo service radio-didou-dev start
     - echo 'STARTED DEV'
   when:
@@ -88,7 +88,7 @@ steps:
     - tar -zxf packages/prod/radio-didou.tar.gz --directory prod/
     - cp config-files/prod/config.yaml prod/
     - echo 'MIGRATION SCRIPT'
-    - ./prod/server/migration.sh
+    - ./prod/server/migrate.sh
     - sudo service radio-didou-prod start
     - echo 'STARTED PROD'
   when:
