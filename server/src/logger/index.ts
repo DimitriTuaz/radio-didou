@@ -20,7 +20,7 @@ export enum LOGGER_LEVEL {
 }
 
 export interface LogFn {
-  (req: Request, args: OperationArgs): Promise<void>;
+  (req: Request, args: OperationArgs, start: bigint): Promise<void>;
 }
 
 export * from './logger-action.provider'

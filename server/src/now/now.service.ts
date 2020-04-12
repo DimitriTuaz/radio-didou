@@ -112,14 +112,14 @@ export class NowService implements LifeCycleObserver {
       }
     }
     let fetcher = await this.fetcherGetter();
-    this.logger.info("[NowService] setFetcher to " + fetcher.name);
+    this.logger.debug("[NowService] setFetcher to " + fetcher.name);
   }
 
   public async start(): Promise<void> {
     await this.setDefaultFetcher();
     try {
       if (!this.intervalID) {
-        this.logger.info("[LifeCycleObserver] NowService started");
+        this.logger.debug("[LifeCycleObserver] NowService started");
         this.intervalID = setIntervalAsync(
           async () => {
             const response = await request
@@ -142,7 +142,7 @@ export class NowService implements LifeCycleObserver {
 
   public async stop(): Promise<void> {
     if (this.intervalID) {
-      this.logger.info("[LifeCycleObserver] NowService stopped");
+      this.logger.debug("[LifeCycleObserver] NowService stopped");
       await clearIntervalAsync(this.intervalID);
       this.intervalID = null;
     }

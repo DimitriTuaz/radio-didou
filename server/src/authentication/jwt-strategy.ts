@@ -7,7 +7,7 @@ import { inject } from '@loopback/context';
 import { HttpErrors, Request } from '@loopback/rest';
 import { AuthenticationStrategy, AuthenticationBindings, AuthenticationMetadata } from '@loopback/authentication';
 import { UserProfile } from '@loopback/security';
-import { RadiodBindings, TokenServiceBindings } from '../keys';
+import { TokenServiceBindings } from '../keys';
 import { JWTService } from '../services';
 import { UserPower } from '../models';
 

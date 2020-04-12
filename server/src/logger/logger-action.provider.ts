@@ -13,27 +13,30 @@ export class LoggerActionProvider implements Provider<LogFn> {
     @inject.getter(LoggingBindings.METADATA) private metadata: Getter<LoggerEnhancedMetadata | undefined>
   ) { }
 
-  value(): LogFn {
-    return (req: Request, args: OperationArgs) => this.action(req, args);
-  }
+  value(): LogFn { return (req, args, start) => this.action(req, args, start); }
 
-  private async action(req: Request, args: OperationArgs) {
+  private async action(req: Request, args: OperationArgs, start: bigint) {
+
+    let timems: bigint = (process.hrtime.bigint() - start) / BigInt(1e+6);
     let enhancedMetadata = await this.metadata();
+    let msg: string = '';
+
     if (enhancedMetadata == undefined) return;
 
     const level = enhancedMetadata.metadata ? enhancedMetadata.metadata.level : LOGGER_LEVEL.DEBUG;
     const showArgs = enhancedMetadata.metadata ? enhancedMetadata.metadata.showArgs : true;
 
-    let msg = '';
     let string = args !== undefined ? args : [];
     if (showArgs)
       string = string.map(value => JSON.stringify(value));
 
-    msg += `\n| Method > ${enhancedMetadata.className}.${enhancedMetadata.methodName}`;
-    if (string.length > 0)
-      msg += `\n| Args > ${string.join(', ')}`;
+    msg += `ip=${req.ip} - `;
     if (enhancedMetadata.currentUser !== undefined)
-      msg += `\n| UserID > ${enhancedMetadata.currentUser[securityId]}`
+      msg += `userId=${enhancedMetadata.currentUser[securityId]} - `
+    msg += `time=${timems}ms - `;
+    msg += `method=${enhancedMetadata.className}.${enhancedMetadata.methodName}`;
+    if (string.length > 0)
+      msg += `\n| args > ${string.join(', ')}`;
 
     this.logger.log(level, msg);
   }

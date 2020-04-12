@@ -6,7 +6,11 @@
 rest:
   host: localhost
   port: 8888
-
+# EXPRESS configuration
+# http://expressjs.com/en/guide/behind-proxies.html
+#
+  expressSettings:
+    'trust proxy': true
 #
 # LOGGER Configuration
 #

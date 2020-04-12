@@ -129,8 +129,6 @@ export class MediaController {
           }
           else {
             let protocol: string = request.protocol;
-            if (request.headers['x_forwarded_proto'])
-              protocol = request.headers['x_forwarded_proto'] as string;
             redirect_uri = protocol + '://' + request.headers.host + '/media/1/callback';
           }
 
