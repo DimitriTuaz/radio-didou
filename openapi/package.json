@@ -1,7 +1,7 @@
 {
-  "name": "radiod-openapi",
+  "name": "typestack-openapi-client",
   "version": "1.0.0",
-  "description": "The OpenAPI Client for Radio-didou",
+  "description": "An OpenAPI client for Typestack",
   "author": "",
   "license": "MIT",
   "repository": {
@@ -11,10 +11,11 @@
     "build": "tsc"
   },
   "dependencies": {
-    "superagent": "latest"
+    "superagent": "^5.2.2"
   },
   "devDependencies": {
-    "@types/superagent": "latest",
+    "@types/superagent": "^4.1.7",
     "typescript": "latest"
   }
 }
+
