@@ -35,11 +35,16 @@ export class MainSequence implements SequenceHandler {
   async handle(context: RequestContext) {
     try {
       const { request, response } = context;
+      let start: bigint = process.hrtime.bigint();
+      // FIND
       const route = this.findRoute(request);
       await this.authenticateRequest(request);
       const args = await this.parseParams(request, route);
+      // INVOKE
       const result = await this.invoke(route, args);
-      this.logRequest(request, args);
+      // LOG
+      this.logRequest(request, args, start);
+      // SEND
       this.send(response, result);
     } catch (err) {
       if (err.code === AUTHENTICATION_STRATEGY_NOT_FOUND || err.code === USER_PROFILE_NOT_FOUND) {

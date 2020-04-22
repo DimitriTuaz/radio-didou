@@ -1,0 +1,105 @@
+<%
+const getType = value => {
+  if ('type' in value)
+    return value.type;
+  else if ('title' in value)
+    return 'schema.' + value.title;
+  else
+    return 'any';
+}
+
+const getSchemaType = schema => {
+  if ('items' in schema)
+    return getType(schema.items).concat('[]');
+  else
+    return getType(schema);
+}
+
+const getTypeInfo = content => {
+  let contentType = Object.keys(content)[0];
+  let returnType = 'any';
+  if (contentType === 'application/json') {
+    let schema = content['application/json'].schema;
+    returnType = getSchemaType(schema);
+  }
+  return [contentType, returnType];
+}
+-%>
+/*
+** OpenAPI Client - CONTROLLER: <%- controllerName %>
+*/
+
+import request from 'superagent';
+import { OpenAPI } from '..';
+import * as schema from '../schemas';
+
+export namespace <%- controllerName %> {
+<%
+for (let route of routes) {
+  let operation = route.operation;
+  let response = Object.values(operation.responses)[0];
+
+  let returnType = 'void';
+  let contentType = undefined;
+  let parameters = [];
+  let queryParameters = [];
+
+  // CONTENT/RETURN TYPE
+  if ('content' in response) {
+    [contentType, returnType] = getTypeInfo(response.content);
+  }
+
+  // REQUEST BODY
+  if ('requestBody' in operation) {
+    if ('content' in operation.requestBody) {
+      let [, type] =  getTypeInfo(operation.requestBody.content)
+      parameters.push('value: ' + type);
+    }
+    else {
+      parameters.push('value: any');
+    }
+  }
+
+  // PARAMETERS
+  if ('parameters' in operation) {
+    for (let parameter of operation.parameters) {
+      let required = parameter.required ? '' : '?';
+      parameters
+        .push(parameter.name + required + ': ' + getSchemaType(parameter.schema));
+      if (parameter.in === 'query')
+        queryParameters.push(parameter.name);
+    }
+  }
+
+  // PATH
+  let path = route.path
+    .replace(/{/g, '\' + ')
+    .replace(/}/g, ' + \'')
+  path = `'${path}'`.replace(/ \+ ''$/, '');
+-%>
+
+  export function <%- route.operationName %>(<%- parameters.join(', ') %>) : Promise<<%- returnType %>> {
+    return new Promise<<%- returnType %>>(async (resolve, reject) => {
+      try {
+        const response = await request
+          .<%- route.operationType %>(OpenAPI.URL + <%- path %>)
+<% if ('requestBody' in operation) { -%>
+          .send(value)
+<% } if (contentType !== undefined) { -%>
+          .set('Accept', '<%- contentType %>')
+<% } for (let queryParameter of queryParameters) { -%>
+          .query({<%- queryParameter %> : <%- queryParameter %>})
+<% } if (operation.security !== undefined) { -%>
+          .withCredentials()
+<% } -%>
+        resolve(response.body);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+<%
+}
+-%>
+}
+

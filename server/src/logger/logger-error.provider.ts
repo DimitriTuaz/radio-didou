@@ -21,17 +21,20 @@ export class LoggerErrorProvider implements Provider<LogError> {
     if (statusCode < 500) {
       return;
     }
-    let message: string;
-    let metadata = await this.metadata();
+    let msg: string = '';
+    let info = await this.metadata();
 
-    if (metadata !== undefined)
-      message = `{url=${req.url}, statusCode=${statusCode}} |> Unhandled error in ${metadata.className}.${metadata.methodName}`;
+    msg += `ip=${req.ip} - `;
+    msg += `statusCode=${statusCode} - `;
+
+    if (info !== undefined)
+      msg += `Unhandled error in ${info.className}.${info.methodName}`;
     else
-      message = `{statusCode=${statusCode}} |> Unhandled error in ${req.url}`;
+      msg += `Unhandled error in ${req.url}`;
 
     this.logger.log({
       level: LOGGER_LEVEL.ERROR,
-      message: message,
+      message: msg,
       error: err.stack ?? err
     })
   }

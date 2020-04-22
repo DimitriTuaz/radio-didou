@@ -3,12 +3,6 @@
 set -e
 
 ####
-## CONFIG
-####
-echo '# COPY CONFIG'
-cp config-files/config.yaml .
-
-####
 ## INSTALL
 ####
 echo '# INSTALL NODE MODULES'

@@ -14,26 +14,24 @@ export class LoggerActionProvider implements Provider<LogFn> {
   ) { }
 
   value(): LogFn {
-    return (req: Request, args: OperationArgs) => this.action(req, args);
+    return (req, args, start) => this.action(req, args, start);
   }
 
-  private async action(req: Request, args: OperationArgs) {
-    let enhancedMetadata = await this.metadata();
-    if (enhancedMetadata == undefined) return;
+  private async action(req: Request, args: OperationArgs, start: bigint) {
 
-    const level = enhancedMetadata.metadata ? enhancedMetadata.metadata.level : LOGGER_LEVEL.DEBUG;
-    const showArgs = enhancedMetadata.metadata ? enhancedMetadata.metadata.showArgs : true;
+    let time: bigint = (process.hrtime.bigint() - start) / BigInt(1e+6);
+    let info = await this.metadata();
+    let msg: string = '';
 
-    let msg = '';
-    let string = args !== undefined ? args : [];
-    if (showArgs)
-      string = string.map(value => JSON.stringify(value));
+    if (info == undefined) return;
 
-    msg += `\n| Method > ${enhancedMetadata.className}.${enhancedMetadata.methodName}`;
-    if (string.length > 0)
-      msg += `\n| Args > ${string.join(', ')}`;
-    if (enhancedMetadata.currentUser !== undefined)
-      msg += `\n| UserID > ${enhancedMetadata.currentUser[securityId]}`
+    const level = info.metadata ? info.metadata.level : LOGGER_LEVEL.DEBUG;
+
+    msg += `ip=${req.ip} - `;
+    if (info.currentUser !== undefined)
+      msg += `userId=${info.currentUser[securityId]} - `
+    msg += `time=${time}ms - `;
+    msg += `method=${info.className}.${info.methodName}`;
 
     this.logger.log(level, msg);
   }

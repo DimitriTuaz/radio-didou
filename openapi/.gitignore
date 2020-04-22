@@ -1,21 +1,19 @@
-## GITIGNORE ##
+## YARN/NPM ##
 package-lock.json
 yarn.lock
-# Optional npm cache directory
 .npm
 
-# Transpiled JavaScript files from Typescript
+# TRANSPILED JAVASCRIPT
 dist
 
-# Cache used by TypeScript's incremental build
+# CACHE
 *.tsbuildinfo
 
-# Modules
+# MODULES
 node_modules
 
-# Generated Code
-openapi.json
-index.ts
-schemas.d.ts
-routes
+# GENERATED CODE
+/index.ts
+/schemas.d.ts
+/routes
 

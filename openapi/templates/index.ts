@@ -1,5 +1,8 @@
-/** Loopback 4 - OpenApi Configuration **/
+/*
+** OpenAPI Client - CONFIGURATION
+*/
 
 export namespace OpenAPI {
   export var URL: string = '';
 }
+
