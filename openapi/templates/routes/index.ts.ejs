@@ -1,12 +1,12 @@
 /*
 ** OpenAPI Client - ROUTES
 */
-
+ 
 <%
  Object.entries(controllers).map(([key, value]) => {
 -%>
-export * from './<%- value.fileName %>'
+export * from './<%- value.fileName %>';
 <%
  })
- %>
- 
+-%>
+
