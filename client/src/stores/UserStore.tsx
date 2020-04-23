@@ -1,9 +1,15 @@
 import { observable, action } from 'mobx';
 import { UserController } from '@openapi/routes'
 import { User } from '@openapi/schemas'
-import { CommonStore } from './CommonStore';
-import { MainStore } from './MainStore';
-import { SongStore, SongState } from './SongStore';
+
+import { SongState } from '../stores';
+import { RootStore } from '../contexts';
+
+export enum UserPower {
+    NONE = 0,
+    DJ = 5,
+    ADMIN = 10
+}
 
 export enum UserState {
     login,
@@ -13,35 +19,36 @@ export enum UserState {
 
 export class UserStore {
 
-    private commonStore: CommonStore;
-    private mainStore: MainStore;
-    private songStore: SongStore;
+    private rootStore: RootStore;
 
     @observable loginLoading: boolean = false;
     @observable signupLoading: boolean = false;
     @observable userNotFound: boolean = false;
-    @observable emailError: string | null = null;
+    @observable emailError: string | null = null;
     @observable passwordError: boolean = false;
     @observable lastNameError: boolean = false;
     @observable firstNameError: boolean = false;
+
+    @observable userState: UserState = UserState.login;
+
     @observable user: User = {
         email: '',
         firstName: '',
-        lastName: ''
+        lastName: '',
+        power: UserPower.NONE
     };
+
     @observable password: string = '';
 
-    constructor(commonStore: CommonStore, mainStore: MainStore, songStore: SongStore) {
-        this.commonStore = commonStore;
-        this.mainStore = mainStore;
-        this.songStore = songStore;
+    constructor(rootStore: RootStore) {
+        this.rootStore = rootStore;
     }
 
     @action
     createAccount = async () => {
         try {
             this.emailError = (this.user.email === '' ? 'L’email ne peut pas être vide' : null);
-            this.passwordError = (this.password.length < 6); 
+            this.passwordError = (this.password.length < 6);
             this.firstNameError = (this.user.firstName === '');
             this.lastNameError = (this.user.lastName === '');
             if (this.emailError || this.firstNameError || this.lastNameError || this.passwordError) {
@@ -78,9 +85,8 @@ export class UserStore {
             });
             this.loginLoading = false;
             this.userNotFound = false;
-            if (!(this.commonStore.userState === UserState.connected)) {
-                this.commonStore.userState = UserState.connected;
-                await this.songStore.refresh(this.mainStore.trackUrl);
+            if (!(this.userState === UserState.connected)) {
+                await this.cookieLogin();
             }
 
         } catch (error) {
@@ -108,9 +114,10 @@ export class UserStore {
         try {
             if (this.user.id !== undefined) {
                 this.user = await UserController.findById(this.user.id);
-                if (!(this.commonStore.userState === UserState.connected)) {
-                    this.commonStore.userState = UserState.connected;
-                    await this.songStore.refresh(this.mainStore.trackUrl);
+                if (!(this.userState === UserState.connected)) {
+                    this.userState = UserState.connected;
+                    this.rootStore.songStore.refresh();
+                    this.rootStore.settingStore.refresh();
                 }
             }
         } catch (error) {
@@ -125,11 +132,12 @@ export class UserStore {
             this.user = {
                 email: '',
                 firstName: '',
-                lastName: ''
+                lastName: '',
+                power: UserPower.NONE
             };
             this.password = '';
-            this.commonStore.userState = UserState.login;
-            this.songStore.state = SongState.unliked;
+            this.userState = UserState.login;
+            this.rootStore.songStore.state = SongState.unliked;
         } catch (error) {
             console.error(error);
         }

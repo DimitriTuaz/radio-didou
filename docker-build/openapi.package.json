@@ -1,0 +1,20 @@
+{
+  "name": "radiod-openapi",
+  "version": "1.0.0",
+  "description": "The OpenAPI Client for Radio-didou",
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git"
+  },
+  "scripts": {
+    "build": "tsc"
+  },
+  "dependencies": {
+    "superagent": "latest"
+  },
+  "devDependencies": {
+    "@types/superagent": "latest",
+    "typescript": "latest"
+  }
+}

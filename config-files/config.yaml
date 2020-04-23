@@ -1,0 +1,87 @@
+#
+# Main configuration file
+#
+
+# REST configuration of LOOPBACK
+rest:
+  host: localhost
+  port: 8888
+# EXPRESS configuration
+# http://expressjs.com/en/guide/behind-proxies.html
+#
+  expressSettings:
+    'trust proxy': true
+#
+# LOGGER Configuration
+#
+# LEVEL = (debug|info|warn|error)
+# STACK_TRACE = (true|false)
+# Set stack_trace to true if you want to print stack_trace
+# in the console.
+# They will be logged in the error.log file anyway.
+#
+logger:
+  level: info
+  stack_trace: true
+  
+# [OPTIONAL]
+# DIRECTORY = Absolute path of the log directory
+# If you dont specify one, "logs/" will be used.
+#
+# directory: /var/log/radio-didou
+
+#
+# DATABASE Configuration
+#
+datasource:
+  name: 'mongo'
+  connector: 'mongodb'
+  host: 'localhost'
+  port: 27017
+  database: 'radiod'
+  useNewUrlParser: true
+
+# [OPTIONAL] Mongo Authentication
+#
+#  authSource: 'admin'
+#  user: 'MONGO-USER'
+#  password: 'MONGO-PASSWORD'
+
+#
+# JWT TOKEN
+# The secret is used to sign the token,
+# Expires set the token lifetime in seconds.
+#
+jwt:
+  secret: 'SECRET'
+  expires: '172800'
+
+#
+# This is ICECAST URL. It is provided to the client.
+#
+icecast:
+  url: 'ICECAST-URL'
+  mount_point: 'ICECAST-MOUNT-POINT'
+
+#
+# [OPTIONAL] The domain of the COOKIE.
+# In case your website has multiple subdomains.
+#
+domain: '.localhost'
+
+#
+# SPOTIFY
+# This is your secret and client ID.
+#
+spotify:
+  client_id: 'SPOTIFY-CLIENT-ID'
+  secret: 'SPOTIFY-SECRET'
+
+#
+# DEEZER
+# This is your secret and app IP.
+#
+deezer:
+  app_id: 'DEEZER-APP-ID'
+  secret: 'DEEZER-SECRET'
+

@@ -1,7 +1,0 @@
-{{~#if response.content}}
-  {{~#each response.content as | content |}}
-    {{~#if @first}}
-.set('Accept', '{{@key}}')
-    {{/if}}
-  {{/each}}
-{{/if}}

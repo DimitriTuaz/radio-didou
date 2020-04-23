@@ -3,9 +3,9 @@ import {
   lifeCycleObserver,
   LifeCycleObserver,
   ValueOrPromise,
+  CoreBindings,
 } from '@loopback/core';
 import { juggler } from '@loopback/repository';
-import { RadiodBindings } from '../keys';
 
 @lifeCycleObserver('datasource')
 export class MongoDataSource extends juggler.DataSource
@@ -13,10 +13,9 @@ export class MongoDataSource extends juggler.DataSource
   static dataSourceName = 'mongo';
 
   constructor(
-    @inject('datasources.config.mongo', { optional: true })
-    dsConfig: object
+    @inject(CoreBindings.APPLICATION_CONFIG) config: any
   ) {
-    super(dsConfig);
+    super(config.datasource);
   }
 
   /**

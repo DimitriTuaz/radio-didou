@@ -1,4 +1,4 @@
-export * from './now-credentials.repository';
+export * from './media-credentials.repository';
 export * from './persistent-key.repository';
 export * from './song.repository';
 export * from './user.repository';

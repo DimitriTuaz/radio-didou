@@ -10,9 +10,7 @@ import Jingles from './pages/Jingles'
 export default function App() {
   return (
     <Router>
-      <div>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
+      <div className='full-height'>
         <Switch>
           <Route path="/jingles">
             <Jingles />

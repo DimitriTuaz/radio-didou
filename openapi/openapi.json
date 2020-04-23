@@ -1,0 +1,859 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "radiod - A friendly web radio.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "paths": {
+    "/configuration": {
+      "get": {
+        "x-controller-name": "ConfigurationController",
+        "x-operation-name": "getConfiguration",
+        "tags": [
+          "ConfigurationController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the client configuration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Configuration"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "ConfigurationController.getConfiguration"
+      }
+    },
+    "/media/delete/{credentialId}": {
+      "delete": {
+        "x-controller-name": "MediaController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "MediaController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Credential DELETE success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "credentialId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "MediaController.deleteById"
+      }
+    },
+    "/media/find": {
+      "get": {
+        "x-controller-name": "MediaController",
+        "x-operation-name": "find",
+        "tags": [
+          "MediaController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Credential model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MediaCredentials"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "operationId": "MediaController.find"
+      }
+    },
+    "/media/{serviceId}/callback": {
+      "get": {
+        "x-controller-name": "MediaController",
+        "x-operation-name": "create",
+        "tags": [
+          "MediaController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Add your credential to Radiod and redirect to /close"
+          }
+        },
+        "parameters": [
+          {
+            "name": "serviceId",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "operationId": "MediaController.create"
+      }
+    },
+    "/now/find": {
+      "get": {
+        "x-controller-name": "NowController",
+        "x-operation-name": "findMedia",
+        "tags": [
+          "NowController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return an array of users with a Spotify account.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "NowController.findMedia"
+      }
+    },
+    "/now/get": {
+      "get": {
+        "x-controller-name": "NowController",
+        "x-operation-name": "getNow",
+        "tags": [
+          "NowController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return informations about the current song",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NowObject"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "NowController.getNow"
+      }
+    },
+    "/now/getState": {
+      "get": {
+        "x-controller-name": "NowController",
+        "x-operation-name": "getState",
+        "tags": [
+          "NowController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the state of NowService",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NowState"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "NowController.getState"
+      }
+    },
+    "/now/setDefaultState": {
+      "post": {
+        "x-controller-name": "NowController",
+        "x-operation-name": "setDefaultState",
+        "tags": [
+          "NowController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Set the state of NowService to the default state"
+          }
+        },
+        "operationId": "NowController.setDefaultState"
+      }
+    },
+    "/now/setState": {
+      "post": {
+        "x-controller-name": "NowController",
+        "x-operation-name": "setState",
+        "tags": [
+          "NowController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Set the state of NowService"
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NowState"
+              }
+            }
+          }
+        },
+        "operationId": "NowController.setState"
+      }
+    },
+    "/ping": {
+      "get": {
+        "x-controller-name": "PingController",
+        "x-operation-name": "ping",
+        "tags": [
+          "PingController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ping Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "greeting": {
+                      "type": "string"
+                    },
+                    "date": {
+                      "type": "string"
+                    },
+                    "url": {
+                      "type": "string"
+                    },
+                    "headers": {
+                      "type": "object",
+                      "properties": {
+                        "Content-Type": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": false
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "PingController.ping"
+      }
+    },
+    "/song/add": {
+      "put": {
+        "x-controller-name": "SongController",
+        "x-operation-name": "add",
+        "tags": [
+          "SongController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Informations about the current song",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Song"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "operationId": "SongController.add"
+      }
+    },
+    "/song/delete": {
+      "delete": {
+        "x-controller-name": "SongController",
+        "x-operation-name": "remove",
+        "tags": [
+          "SongController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The user's song is deleted with success"
+          }
+        },
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "operationId": "SongController.remove"
+      }
+    },
+    "/song/get": {
+      "get": {
+        "x-controller-name": "SongController",
+        "x-operation-name": "get",
+        "tags": [
+          "SongController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of user's songs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Song"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "SongController.get"
+      }
+    },
+    "/song/is": {
+      "get": {
+        "x-controller-name": "SongController",
+        "x-operation-name": "is",
+        "tags": [
+          "SongController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Return true is this is an user's song, false otherwise.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "url",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "operationId": "SongController.is"
+      }
+    },
+    "/song/synchronize": {
+      "post": {
+        "x-controller-name": "SongController",
+        "x-operation-name": "synchronize",
+        "tags": [
+          "SongController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The synchronization with Spotify is a success."
+          }
+        },
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          },
+          {
+            "name": "description",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "required": false
+          }
+        ],
+        "operationId": "SongController.synchronize"
+      }
+    },
+    "/user/login": {
+      "post": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "login",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "204": {
+            "description": "Grant token in a cookie",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Access token valid for 48 hours",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginCredentials"
+              }
+            }
+          }
+        },
+        "operationId": "UserController.login"
+      }
+    },
+    "/user/logout": {
+      "post": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "logout",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "204": {
+            "description": "Revoke the token",
+            "headers": {
+              "Set-Cookie": {
+                "description": "Expire the token cookie.",
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "UserController.logout"
+      }
+    },
+    "/user/me": {
+      "get": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "currentUser",
+        "tags": [
+          "UserController"
+        ],
+        "security": [
+          {
+            "jwt": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The current user profile",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "UserController.currentUser"
+      }
+    },
+    "/user/register": {
+      "post": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "register",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUser"
+              }
+            }
+          }
+        },
+        "operationId": "UserController.register"
+      }
+    },
+    "/user/{userId}": {
+      "get": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "findById",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "UserController.findById"
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "jwt": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "RADIO-DIDOU-AUTH"
+      }
+    },
+    "schemas": {
+      "Configuration": {
+        "title": "Configuration",
+        "properties": {
+          "icecast_url": {
+            "type": "string"
+          },
+          "spotify_id": {
+            "type": "string"
+          },
+          "deezer_id": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "icecast_url",
+          "spotify_id",
+          "deezer_id"
+        ],
+        "additionalProperties": false
+      },
+      "MediaCredentials": {
+        "title": "MediaCredentials",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "type": {
+            "type": "number"
+          },
+          "token": {
+            "type": "string"
+          },
+          "identifier": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "token",
+          "identifier"
+        ],
+        "additionalProperties": false
+      },
+      "NowObject": {
+        "title": "NowObject",
+        "properties": {
+          "type": {
+            "type": "number"
+          },
+          "listeners": {
+            "type": "number"
+          },
+          "song": {
+            "type": "string"
+          },
+          "artists": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "album": {
+            "type": "string"
+          },
+          "release_date": {
+            "type": "string"
+          },
+          "cover": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type",
+          "listeners",
+          "song",
+          "artists"
+        ],
+        "additionalProperties": false
+      },
+      "NowState": {
+        "title": "NowState",
+        "properties": {
+          "type": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          },
+          "song": {
+            "type": "string"
+          },
+          "artist": {
+            "type": "string"
+          },
+          "album": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      "User": {
+        "title": "User",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "power": {
+            "type": "number"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "playlistId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "power"
+        ],
+        "additionalProperties": false
+      },
+      "Song": {
+        "title": "Song",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "album": {
+            "type": "string"
+          },
+          "artist": {
+            "type": "string"
+          },
+          "artwork": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "userId": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "album",
+          "artist",
+          "artwork",
+          "url"
+        ],
+        "additionalProperties": false
+      },
+      "NewUser": {
+        "title": "NewUser",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "additionalProperties": false
+      },
+      "LoginCredentials": {
+        "title": "LoginCredentials",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ]
+}

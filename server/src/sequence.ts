@@ -17,6 +17,8 @@ import {
   USER_PROFILE_NOT_FOUND,
 } from '@loopback/authentication';
 
+import { LogFn, LoggingBindings } from './logger';
+
 const SequenceActions = RestBindings.SequenceActions;
 
 export class MainSequence implements SequenceHandler {
@@ -27,15 +29,22 @@ export class MainSequence implements SequenceHandler {
     @inject(SequenceActions.SEND) public send: Send,
     @inject(SequenceActions.REJECT) public reject: Reject,
     @inject(AuthenticationBindings.AUTH_ACTION) protected authenticateRequest: AuthenticateFn,
+    @inject(LoggingBindings.LOGGER_ACTION) protected logRequest: LogFn,
   ) { }
 
   async handle(context: RequestContext) {
     try {
       const { request, response } = context;
+      let start: bigint = process.hrtime.bigint();
+      // FIND
       const route = this.findRoute(request);
       await this.authenticateRequest(request);
       const args = await this.parseParams(request, route);
+      // INVOKE
       const result = await this.invoke(route, args);
+      // LOG
+      this.logRequest(request, args, start);
+      // SEND
       this.send(response, result);
     } catch (err) {
       if (err.code === AUTHENTICATION_STRATEGY_NOT_FOUND || err.code === USER_PROFILE_NOT_FOUND) {

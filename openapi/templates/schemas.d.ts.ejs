@@ -1,0 +1,26 @@
+/*
+** OpenAPI Client - SCHEMAS
+*/
+<%
+Object.entries(openAPI.components.schemas).map(([key, value]) => {
+  let required = value.required;
+-%>
+
+export interface <%= key %> {
+<%
+  Object.entries(value.properties).map(([key, value]) => {
+    let name = key;
+    let type = value.type === 'array' ? value.items.type.concat('[]') : value.type;
+    let isRequired = required !== undefined && required.includes(name);
+    if (!isRequired)
+      name = name.concat('?');
+-%>
+  <%= name %>: <%- type %>
+<%
+  })
+-%>
+}
+<%
+})
+-%>
+

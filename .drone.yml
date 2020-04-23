@@ -1,0 +1,97 @@
+---
+kind: pipeline
+name: default
+
+trigger:
+  branch:
+  - dev
+  - master
+  event:
+  - push
+  
+steps:
+- name: discord-push
+  image: appleboy/drone-discord
+  failure: ignore
+  settings:
+    webhook_id:
+      from_secret: discord_webhook_id
+    webhook_token:
+      from_secret: discord_webhook_token
+    
+- name: build
+  image: paeolo/radiod-builder
+  commands:
+  - docker-build/build.sh
+  
+- name: discord-build
+  image: appleboy/drone-discord
+  failure: ignore
+  settings:
+    webhook_id:
+      from_secret: discord_webhook_id
+    webhook_token:
+      from_secret: discord_webhook_token
+    message: >
+      {{#success build.status}}
+        Build {{build.number}} succeeded. Good job.
+      {{else}}
+        Build {{build.number}} failed. Fix me please.
+      {{/success}}
+  when:
+    status:
+    - failure
+    - success
+      
+- name: deploy-dev
+  image: drillster/drone-rsync
+  settings:
+    source: ./radio-didou.tar.gz
+    target: ~/packages/dev/radio-didou.tar.gz
+    hosts:
+      from_secret: ssh_host
+    user:
+      from_secret: ssh_user
+    key:
+      from_secret: ssh_key
+    script:
+    - echo 'STOPPING DEV'
+    - sudo service radio-didou-dev stop
+    - rm -rf /opt/radio/dev/
+    - mkdir dev/
+    - tar -zxf packages/dev/radio-didou.tar.gz --directory dev/
+    - cp config-files/dev/config.yaml dev/
+    - echo 'MIGRATION SCRIPT'
+    - cd dev/server && ./migrate.sh
+    - sudo service radio-didou-dev start
+    - echo 'STARTED DEV'
+  when:
+    branch:
+    - dev
+
+- name: deploy-prod
+  image: drillster/drone-rsync
+  settings:
+    source: ./radio-didou.tar.gz
+    target: ~/packages/prod/radio-didou.tar.gz
+    hosts:
+      from_secret: ssh_host
+    user:
+      from_secret: ssh_user
+    key:
+      from_secret: ssh_key
+    script:
+    - echo 'STOPPING PROD'
+    - sudo service radio-didou-prod stop
+    - rm -rf /opt/radio/prod/
+    - mkdir prod/
+    - tar -zxf packages/prod/radio-didou.tar.gz --directory prod/
+    - cp config-files/prod/config.yaml prod/
+    - echo 'MIGRATION SCRIPT'
+    - cd prod/server && ./migrate.sh
+    - sudo service radio-didou-prod start
+    - echo 'STARTED PROD'
+  when:
+    branch:
+    - master
+

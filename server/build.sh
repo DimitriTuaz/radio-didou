@@ -1,11 +1,16 @@
 #!/bin/bash
+
+set -e
+
 if [[ (-z "$1") || (! $1 == "openapi") ]];
 then
-echo "## BUILD SERVER ##"
-npm run build
+echo "# TRANSPILE APPLICATION"
+rm -rf dist/
+yarn build
 fi
-echo "## GENERATE OPENAPI CLIENT ##"
-node ./dist/generate-api
-echo "## BUILD OPENAPI CLIENT ##"
+echo "# GENERATE OPENAPI CLIENT"
+node ./dist/codegen/
+echo "# TRANSPILE OPENAPI CLIENT"
 cd ../openapi
-npm run build
+yarn build
+

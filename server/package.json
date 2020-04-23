@@ -12,53 +12,54 @@
   },
   "scripts": {
     "build": "lb-tsc",
-    "build:watch": "lb-tsc --watch",
-    "clean": "lb-clean dist *.tsbuildinfo",
-    "pretest": "npm run clean && npm run build",
-    "migrate": "node ./dist/migrate",
-    "prestart": "npm run build",
     "start": "node -r source-map-support/register .",
-    "prepublishOnly": "npm run test"
+    "debug": "node -r source-map-support/register --nolazy --inspect-brk=9229 ."
   },
   "repository": {
     "type": "git"
   },
   "author": "",
-  "license": "",
+  "license": "MIT",
   "files": [
     "README.md",
     "index.js",
     "index.d.ts",
     "dist",
-    "src",
-    "!*/__tests__"
+    "src"
   ],
   "dependencies": {
-    "@loopback/authentication": "^3.3.2",
-    "@loopback/boot": "^1.7.3",
-    "@loopback/context": "^2.1.0",
-    "@loopback/core": "^1.12.3",
-    "@loopback/openapi-v3": "^1.13.0",
-    "@loopback/repository": "^1.19.0",
-    "@loopback/rest": "^1.26.1",
-    "@loopback/rest-explorer": "^1.4.9",
-    "@types/bcryptjs": "^2.4.2",
-    "@types/cookie": "^0.3.3",
-    "@types/set-interval-async": "^1.0.0",
-    "bcryptjs": "^2.4.3",
-    "cookie": "^0.4.0",
-    "isemail": "^3.2.0",
-    "jsonwebtoken": "^8.5.1",
-    "loopback-connector-mongodb": "^5.2.1",
-    "set-interval-async": "1.0.29",
-    "superagent": "^5.2.1"
+    "@loopback/authentication": "latest",
+    "@loopback/boot": "latest",
+    "@loopback/core": "latest",
+    "@loopback/openapi-v3": "latest",
+    "@loopback/repository": "latest",
+    "@loopback/rest": "latest",
+    "@loopback/rest-explorer": "latest",
+    "bcryptjs": "latest",
+    "cookie": "latest",
+    "isemail": "latest",
+    "jsonwebtoken": "latest",
+    "loopback-connector-mongodb": "latest",
+    "set-interval-async": "latest",
+    "superagent": "latest",
+    "winston": "latest",
+    "yaml": "latest"
   },
   "devDependencies": {
-    "@loopback/build": "^3.1.1",
-    "@loopback/testlab": "^1.10.3",
-    "@types/node": "^12.12.26",
-    "source-map-support": "^0.5.16",
-    "typescript": "^3.7.5",
-    "openapi3-generator": "^0.13.0"
+    "@loopback/build": "latest",
+    "@types/ejs": "^3.0.2",
+    "@types/fs-extra": "^8.1.0",
+    "@types/klaw": "^3.0.1",
+    "@types/node": "latest",
+    "@types/bcryptjs": "latest",
+    "@types/cookie": "latest",
+    "@types/mongodb": "latest",
+    "@types/set-interval-async": "latest",
+    "@types/yaml": "latest",
+    "@types/superagent": "latest",
+    "ejs": "^3.0.2",
+    "fs-extra": "^9.0.0",
+    "json-schema-ref-parser": "^8.0.0",
+    "klaw": "^3.0.0"
   }
 }

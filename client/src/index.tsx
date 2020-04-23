@@ -6,18 +6,22 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import { OpenAPI } from '@openapi/.';
-const config = require('../../config.json');
+import { ConfigurationController } from '@openapi/routes'
+import { ConfigContext } from './contexts'
 
-if (config.loopback !== undefined) {
-    OpenAPI.URL = config.loopback;
-}
-else {
-    OpenAPI.URL = window.location.origin;
-}
+// CONFIGURATION
+OpenAPI.URL = window.location.origin;
+export const Configuration = React.createContext({});
 
-ReactDOM.render(<App />, document.getElementById('root'));
+//RENDER
+ConfigurationController.getConfiguration()
+    .then(configuration => {
+        ReactDOM.render(
+            <ConfigContext.Provider value={configuration}>
+                <App />
+            </ConfigContext.Provider>,
+            document.getElementById('root')
+        );
+    })
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();

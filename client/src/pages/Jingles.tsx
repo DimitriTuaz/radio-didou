@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react'
 import '../App.less';
-import Jingle from '../components/Jingle'
+import '../Jingles.less'
+import Jingle from '../components/jingle/Jingle'
 
-function Jingles() {    
+function Jingles() {
     useEffect(() => {
         document.title = 'Radio Didou - Jingles';
     });
@@ -123,7 +124,7 @@ function Jingles() {
                 </div>
             </div>
         </div>
-    ); 
+    );
 }
 
 export default Jingles;
