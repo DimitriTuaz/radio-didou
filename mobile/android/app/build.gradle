@@ -103,8 +103,18 @@ android {
         applicationId "com.radiodidou"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
+    }
+    signingConfigs {
+        release {
+            if (project.hasProperty('RADIO_DIDOU_RELEASE_STORE_FILE')) {
+                storeFile file(RADIO_DIDOU_RELEASE_STORE_FILE)
+                storePassword RADIO_DIDOU_RELEASE_STORE_PASSWORD
+                keyAlias RADIO_DIDOU_RELEASE_KEY_ALIAS
+                keyPassword RADIO_DIDOU_RELEASE_KEY_PASSWORD
+            }
+        }
     }
     splits {
         abi {
@@ -118,6 +128,7 @@ android {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release

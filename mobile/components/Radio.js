@@ -152,13 +152,15 @@ const styles = StyleSheet.create({
   },
   track_title: {
     alignSelf: 'center',
-    fontSize: 28,
+    fontSize: 26,
     fontFamily: 'bold',
+    color: 'white',
     marginBottom: 5
   },
   track_info: {
     alignSelf: 'center',
     fontSize: 20,
+    color: 'white',
     marginBottom: 5
   },
   listeners_count: {
