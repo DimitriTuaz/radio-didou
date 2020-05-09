@@ -13,7 +13,7 @@ class Radio extends React.Component {
       isMuted: false,
       currentVolume: 1,
       track: '',
-      artist: '',
+      artists: [],
       album: '',
       cover: '',
       listeners: 0
@@ -21,6 +21,7 @@ class Radio extends React.Component {
 
     this._play = this._play.bind(this)
     this._mute = this._mute.bind(this)
+    this._displayArtists = this._displayArtists.bind(this)
   }
 
   componentDidMount() {
@@ -36,7 +37,7 @@ class Radio extends React.Component {
     getMetaData().then(data => {
       this.setState({
         track: data.song,
-        artist: data.artists,
+        artists: data.artists,
         album: data.album,
         artwork: data.cover,
         listeners: data.listeners
@@ -80,18 +81,36 @@ class Radio extends React.Component {
     return icon
   }
 
+  _displayArtists() {
+    if (this.state.artists.length === 1) {
+        return this.state.artists
+    } else if (this.state.artists.length > 1) {
+      let artistsList = '';
+      for (var i = 0; i < this.state.artists.length; i++) {
+        artistsList.concat(', ', this.state.artists[i])
+      }
+      return artistsList
+    } else {
+      return 'Unknown Artist'
+    }
+  }
+
   render() {
     return (
       <ImageBackground style={styles.background} source={require('../images/background.png')}>
-        <Text style={styles.title}>Radio Didou</Text>
+        <View style={styles.title_container}>
+          <Text style={styles.title}>Radio Didou</Text>
+        </View>
+        
         <TouchableOpacity style={styles.info_container}>
           <Image style={styles.artwork} source={{uri: this.state.artwork}}/>
-          <View style={styles.track_info_container}>
-            <Text style={styles.track_title}>{ this.state.track }</Text>
-            <Text style={styles.track_info}>{ this.state.artist }</Text>
-            <Text style={styles.track_info}>{ this.state.album }</Text>
-          </View>
+            <View style={styles.track_info_container}>
+              <Text style={styles.track_title}>{ this.state.track }</Text>
+              <Text style={styles.track_info}>{ this._displayArtists() }</Text>
+              <Text style={styles.track_info}>{ this.state.album }</Text>
+            </View>
         </TouchableOpacity>
+
         <View style={styles.player_container}>
           <TouchableOpacity style={styles.button_container} onPress={this._play}>
             <Image style={styles.button_image} source={require('../images/icon_play.png')}/>
@@ -100,58 +119,60 @@ class Radio extends React.Component {
             <Image style={styles.button_image} source={this._displaySoundIcon()}/>
           </TouchableOpacity>
         </View>
-        <Text style={styles.listeners_count}>{this.state.listeners} auditeurs actuellement</Text>
+
+        <View style={styles.listeners_container}>
+          <Text style={styles.listeners_count}>{this.state.listeners} auditeurs actuellement</Text>
+        </View>
+
       </ImageBackground>
     );
   }
 }
 
 const styles = StyleSheet.create({
+
+  // -- Background --
+
   background: {
     flex: 1,
+    flexDirection: 'column',
     alignItems: 'center'
   },
+
+  // -- Title --
+
+  title_container: {
+    flex: 12,
+    justifyContent: 'center',
+    margin: 10
+  },
   title: {
-    fontSize: 56,
+    fontSize: 54,
     fontWeight: 'bold',
-    color: 'white',
-    marginTop: 45
+    textAlign: 'center',
+    color: 'white'
   },
-  player_container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    height: 240,
-    width: 360,
-    paddingLeft: 45
-  },
-  button_container: {
-    flex: 1
-  },
-  button_image: {
-    height: 160,
-    width: 120,
-    resizeMode: 'contain'
-  },
+
+  // -- Track Info --
+
   info_container: {
-    marginTop: 60,
-    padding: 25,
-    height: 410,
-    width: 410,
-    flexDirection: 'column',
-    backgroundColor: 'rgba(255, 255, 255, 0.3)'
+    flex: 75,
+    justifyContent: 'center',
+    width: '90%',
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   artwork: {
-    height: 240,
-    width: 240,
-    alignSelf: 'center',
-    marginBottom: 10
+    width: '90%',
+    height: '70%',
+    resizeMode: 'contain',
+    alignSelf: 'center'
   },
   track_info_container: {
-    paddingLeft: 15,
-    
+    flex: 0
   },
   track_title: {
     alignSelf: 'center',
+    textAlign: 'center',
     fontSize: 26,
     fontFamily: 'bold',
     color: 'white',
@@ -159,9 +180,36 @@ const styles = StyleSheet.create({
   },
   track_info: {
     alignSelf: 'center',
-    fontSize: 20,
+    fontSize: 22,
     color: 'white',
-    marginBottom: 5
+    marginBottom: 5,
+    textAlign: 'center',
+  },
+
+  // -- Player --
+
+  player_container: {
+    flex: 18,
+    paddingLeft: 20,
+    width: '70%',
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  button_container: {
+    flex: 1,
+  },
+  button_image: {
+    height: 160,
+    width: 120,
+    resizeMode: 'contain'
+  },
+
+  // -- Listeners --
+
+  listeners_container: {
+    flex: 15,
+    width: '100%',
+    justifyContent: 'center'
   },
   listeners_count: {
     alignSelf: 'center',
