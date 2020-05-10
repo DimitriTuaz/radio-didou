@@ -47,6 +47,35 @@ class Radio extends React.Component {
 
   _play() {
     ReactNativeTrackPlayer.setupPlayer().then(async () => {
+      
+      ReactNativeTrackPlayer.updateOptions({
+          // Whether the player should stop running when the app is closed on Android
+          stopWithApp: false,
+          alwaysPauseOnInterruption: false,
+          capabilities: [
+            ReactNativeTrackPlayer.CAPABILITY_PLAY,
+            ReactNativeTrackPlayer.CAPABILITY_PAUSE,
+            ReactNativeTrackPlayer.CAPABILITY_STOP
+          ],
+
+          // Capabilities of the deployed notification on Android
+          notificationCapabilities: [
+            ReactNativeTrackPlayer.CAPABILITY_PLAY,
+            ReactNativeTrackPlayer.CAPABILITY_PAUSE,
+            ReactNativeTrackPlayer.CAPABILITY_STOP
+          ],
+          
+          // Capabilities of the compact notification on Android
+          compactCapabilities: [
+            ReactNativeTrackPlayer.CAPABILITY_PLAY,
+            ReactNativeTrackPlayer.CAPABILITY_PAUSE,
+            ReactNativeTrackPlayer.CAPABILITY_STOP
+          ],
+
+          // Notification icon
+          icon: require('../images/logo-bw.png')
+      });
+
       await ReactNativeTrackPlayer.add({
           id: '',
           url: 'https://www.radio-didou.com:8895/radio-didou',
@@ -162,7 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
   },
   artwork: {
-    width: '90%',
+    width: '86%',
     height: '70%',
     resizeMode: 'contain',
     alignSelf: 'center'
@@ -173,14 +202,14 @@ const styles = StyleSheet.create({
   track_title: {
     alignSelf: 'center',
     textAlign: 'center',
-    fontSize: 26,
+    fontSize: 24,
     fontFamily: 'bold',
     color: 'white',
     marginBottom: 5
   },
   track_info: {
     alignSelf: 'center',
-    fontSize: 22,
+    fontSize: 20,
     color: 'white',
     marginBottom: 5,
     textAlign: 'center',
