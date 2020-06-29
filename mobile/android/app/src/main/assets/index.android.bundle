@@ -406,7 +406,7 @@ __d(function(g,r,i,a,m,e,d){m.exports=r(d[0]).registerAsset({__packager_asset:!0
 __d(function(g,r,i,a,m,e,d){m.exports=r(d[0]).registerAsset({__packager_asset:!0,httpServerLocation:"/assets/images",width:512,height:512,scales:[1],hash:"14979299b3a70361fc9dacafeb0d12ea",name:"icon_mute",type:"png"})},400,[188]);
 __d(function(e,s,a,t,c,r,g){c.exports=s(g[0]).registerAsset({__packager_asset:!0,httpServerLocation:"/assets/images",width:2560,height:1600,scales:[1],hash:"f57278c8320a9220c08a8826d818ebbc",name:"background",type:"png"})},401,[188]);
 __d(function(g,r,i,a,m,e,d){m.exports=r(d[0]).registerAsset({__packager_asset:!0,httpServerLocation:"/assets/images",width:512,height:512,scales:[1],hash:"79c6cf1f04791a7a185cd1900bbde5ba",name:"icon_play",type:"png"})},402,[188]);
-__d(function(d,i,o,a,e,n,u){e.exports={name:"RadioDidou",displayName:"RadioDidou"}},403,[]);
+__d(function(d,i,o,a,e,n,u){e.exports={name:"RadioDidou",displayName:"Radio Didou"}},403,[]);
 __d(function(g,r,i,a,m,e,d){var t=r(d[0]),n=t(r(d[1])),u=t(r(d[2]));m.exports=function(){return n.default.async(function(t){for(;;)switch(t.prev=t.next){case 0:u.default.addEventListener('remote-stop',function(){u.default.stop()}),u.default.addEventListener('remote-play',function(){u.default.play()}),u.default.addEventListener('remote-pause',function(){u.default.pause()});case 3:case"end":return t.stop()}},null,null,null,Promise)}},404,[1,101,392]);
 __r(88);
 __r(0);
