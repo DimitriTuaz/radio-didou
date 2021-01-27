@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   // -- Track Info --
 
   info_container: {
-    flex: 75,
+    flex: 70,
     justifyContent: 'center',
     width: '90%',
     backgroundColor: 'rgba(255, 255, 255, 0.3)',
@@ -225,25 +225,26 @@ const styles = StyleSheet.create({
   // -- Player --
 
   player_container: {
-    flex: 18,
-    paddingLeft: 20,
-    width: '70%',
+    flex: 22,
     flexDirection: 'row',
     justifyContent: 'center'
   },
   button_container: {
-    flex: 1,
+    marginTop: '5%',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1
   },
   button_image: {
-    height: 160,
-    width: 120,
+    height: '90%',
+    width: '90%',
     resizeMode: 'contain'
   },
 
   // -- Listeners --
 
   listeners_container: {
-    flex: 15,
+    flex: 12,
     width: '100%',
     justifyContent: 'center'
   },
