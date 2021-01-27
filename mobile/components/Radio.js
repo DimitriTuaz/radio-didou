@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground, TouchableOpacity, Linking } from 'react-native';
 import ReactNativeTrackPlayer from 'react-native-track-player'
 import { getMetaData } from '../api/ServerAPI'
 
@@ -16,12 +16,14 @@ class Radio extends React.Component {
       artists: [],
       album: '',
       cover: '',
+      url: '',
       listeners: 0
     };
 
     this._play = this._play.bind(this)
     this._mute = this._mute.bind(this)
     this._displayArtists = this._displayArtists.bind(this)
+    this._openSpotify = this._openSpotify.bind(this)
   }
 
   componentDidMount() {
@@ -40,6 +42,7 @@ class Radio extends React.Component {
         artists: data.artists,
         album: data.album,
         artwork: data.cover,
+        url: data.url,
         listeners: data.listeners
       })
     })
@@ -124,6 +127,10 @@ class Radio extends React.Component {
     }
   }
 
+  _openSpotify() {
+    Linking.openURL(this.state.url);
+  }
+
   render() {
     return (
       <ImageBackground style={styles.background} source={require('../images/background.png')}>
@@ -131,7 +138,7 @@ class Radio extends React.Component {
           <Text style={styles.title}>Radio Didou</Text>
         </View>
         
-        <TouchableOpacity style={styles.info_container}>
+        <TouchableOpacity style={styles.info_container} onPress={this._openSpotify}>
           <Image style={styles.artwork} source={{uri: this.state.artwork}}/>
             <View style={styles.track_info_container}>
               <Text style={styles.track_title}>{ this.state.track }</Text>
