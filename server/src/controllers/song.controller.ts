@@ -215,7 +215,7 @@ export class SongController {
       description,
       true);
     user.playlistId = playlistId;
-    delete user.mediaCredentials;
+    user.mediaCredentials = [];
     await this.userRepository.update(user);
   }
 

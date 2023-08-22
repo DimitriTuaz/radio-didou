@@ -141,7 +141,7 @@ export class UserController {
   async currentUser(
     @inject(SecurityBindings.USER) currentUserProfile: UserProfile): Promise<UserProfile> {
     currentUserProfile.id = currentUserProfile[securityId];
-    delete currentUserProfile[securityId];
+    currentUserProfile.securityId = undefined;
     return currentUserProfile;
   }
 

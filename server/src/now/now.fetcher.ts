@@ -6,6 +6,6 @@ export enum NowEnum {
 }
 
 export abstract class NowFetcher {
-  public abstract async fetch(): Promise<void>;
+  public abstract fetch(): Promise<void>;
   public abstract name: string;
 }

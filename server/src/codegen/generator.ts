@@ -107,7 +107,7 @@ function handleFile(source: string, target: string, data: Data) {
 
 function walk(path: string, handleFile: (item: Item) => void) {
 
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     klaw(path)
       .on("data", item => {
         if (!item.stats.isDirectory())

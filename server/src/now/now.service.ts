@@ -48,7 +48,7 @@ export class NowState {
 export class NowService implements LifeCycleObserver {
 
   private icecastURL: string;
-  private intervalID: SetIntervalAsyncTimer | null;
+  private intervalID: SetIntervalAsyncTimer<[]> | null;
 
   constructor(
     @inject(CoreBindings.APPLICATION_CONFIG) configuration: any,
