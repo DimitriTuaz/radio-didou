@@ -23,7 +23,7 @@ export class SongStore {
     @action
     add = async (url: string) => {
         try {
-            let song: Song = await SongController.add(url);
+            let song: Song = (await SongController.add(url)) as Song;
             this.songs.push(song);
             this.state = SongState.liked;
         } catch (error) {
@@ -59,7 +59,7 @@ export class SongStore {
     @action
     get = async () => {
         try {
-            this.songs = await SongController.get();
+            this.songs = (await SongController.get()) as Song[];
         } catch (error) {
             console.error(error);
         }

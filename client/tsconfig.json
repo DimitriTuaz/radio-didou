@@ -19,7 +19,8 @@
     "noEmit": true,
     "jsx": "react",
     "forceConsistentCasingInFileNames": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "useUnknownInCatchVariables": false
   },
   "include": [
     "src"

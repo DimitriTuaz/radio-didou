@@ -38,7 +38,7 @@ export class NowStore {
     @action
     getCurrentTrack = async () => {
         try {
-            let now: NowObject = await NowController.getNow();
+            let now: NowObject = (await NowController.getNow()) as NowObject;
 
             let trackType: NowEnum = now.type;
             let trackCover: string = now.cover ? now.cover : '';

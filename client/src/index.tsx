@@ -8,16 +8,17 @@ import * as serviceWorker from './serviceWorker';
 import { OpenAPI } from '@openapi/.';
 import { ConfigurationController } from '@openapi/routes'
 import { ConfigContext } from './contexts'
+import { Configuration } from '@openapi/schemas';
 
 // CONFIGURATION
 OpenAPI.URL = window.location.origin;
-export const Configuration = React.createContext({});
+export const ConfigurationCtx = React.createContext({});
 
 //RENDER
 ConfigurationController.getConfiguration()
     .then(configuration => {
         ReactDOM.render(
-            <ConfigContext.Provider value={configuration}>
+            <ConfigContext.Provider value={configuration as Configuration}>
                 <App />
             </ConfigContext.Provider>,
             document.getElementById('root')

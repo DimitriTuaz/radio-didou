@@ -44,7 +44,7 @@ export class SettingStore {
     obtainCredential = async (scope: SpotifyScope) => {
         try {
             this.credentials[scope] = undefined;
-            let data: MediaCredentials[] = await MediaController.find(scope);
+            let data: MediaCredentials[] = (await MediaController.find(scope)) as MediaCredentials[];
             if (data.length > 0)
                 this.credentials[scope] = data[0];
         } catch (error) {
@@ -77,7 +77,7 @@ export class SettingStore {
     obtainNowUsers = async () => {
         if (this.rootStore.userStore.user.power >= UserPower.ADMIN) {
             try {
-                this.nowUsers = await NowController.findMedia();
+                this.nowUsers = (await NowController.findMedia()) as User[];
             } catch (error) {
                 console.error(error);
             }
@@ -88,7 +88,7 @@ export class SettingStore {
     obtainNowState = async () => {
         if (this.rootStore.userStore.user.power >= UserPower.ADMIN) {
             try {
-                this.nowState = await NowController.getState();
+                this.nowState = (await NowController.getState()) as NowState;
             } catch (error) {
                 console.error(error);
             }

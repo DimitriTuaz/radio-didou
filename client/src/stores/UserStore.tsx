@@ -55,17 +55,16 @@ export class UserStore {
                 return;
             }
             this.signupLoading = true;
-            this.user = await UserController.register({
+            this.user = (await UserController.register({
                 firstName: this.user.firstName,
                 lastName: this.user.lastName,
                 email: this.user.email,
                 password: this.password
-            });
+            })) as User;
             this.signupLoading = false;
             await this.login();
 
         } catch (error) {
-            this.signupLoading = false;
             if (error.status === 409) {
                 this.emailError = 'Cette addresse email est déjà utilisée';
             }
@@ -101,7 +100,7 @@ export class UserStore {
     @action
     cookieLogin = async () => {
         try {
-            let user: User = await UserController.currentUser()
+            let user: User = (await UserController.currentUser()) as User;
             this.user.id = user.id;
             await this.userInfo();
         } catch (error) {
@@ -113,7 +112,7 @@ export class UserStore {
     userInfo = async () => {
         try {
             if (this.user.id !== undefined) {
-                this.user = await UserController.findById(this.user.id);
+                this.user = (await UserController.findById(this.user.id)) as User;
                 if (!(this.userState === UserState.connected)) {
                     this.userState = UserState.connected;
                     this.rootStore.songStore.refresh();

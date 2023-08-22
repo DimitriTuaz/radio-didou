@@ -1,4 +1,4 @@
-import React, { Attributes } from 'react'
+import React from 'react'
 import { Modal } from 'semantic-ui-react';
 
 import { useStore } from '../../hooks';
@@ -12,7 +12,7 @@ export enum ModalKey {
 
 interface ElementWithAttributes {
   element: JSX.Element,
-  attributes?: Attributes
+  attributes?: object
 }
 
 interface ModalControllerProps {
